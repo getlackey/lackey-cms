@@ -1,0 +1,62 @@
+{
+    "paging": {
+        "total": 12333,
+        "page": 1,
+        "pages": 1234,
+        "perPage": 10,
+        "offset": 0,
+        "filters" : {}
+    },
+    "columns": [
+        {
+            "label": "code",
+            "type": "string",
+            "name": "code"
+        },
+        {
+            "label": "field",
+            "type": "string",
+            "name": "field"
+        },
+        {
+            "label": "other",
+            "type": "string",
+            "name": "other"
+        }
+    ],
+    "rows": [
+        {
+            "columns": [
+                {
+                    "value": "fr"
+                },
+                {
+                    "value": "French field"
+                },
+                {
+                    "value": false
+                }
+            ]
+        },
+        {
+            "columns": [
+                {},
+                {
+                    "value": "none"
+                },
+                {}
+            ]
+        },
+        {
+            "columns": [
+                {
+                    "value": "de"
+                },
+                {},
+                {
+                    "value": true
+                }
+            ]
+        }
+    ]
+}

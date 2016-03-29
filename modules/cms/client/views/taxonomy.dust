@@ -1,0 +1,43 @@
+{>"cms/core/modal"/}
+
+{<body}
+  <div class="bt">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-lky-hook="close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Taxonomy</h4>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs">
+          {#types}
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-name="{name}" data-lky-hook="taxonomyTab">{label}</a>
+          </li>
+          {/types}
+        </ul>
+        <div>
+          <h5>Selected</h5>
+          <div data-lky-hook="items" data-lky-template="cms/cms/bullets"></div>
+          <h5>Library</h5>
+          <div data-lky-hook="cloud" data-lky-template="cms/cms/bullets"></div>
+          <h5>Create</h5>
+            <form data-lky-hook="add-taxonomy">
+              <div class="input-group">
+                <input type="text" name="label" class="form-control" data-lky-hook="search"/>
+                <span class="input-group-btn">
+                  <button class="btn btn-sm">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </span>
+            </div>
+          </form>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"data-lky-hook="close">Close</button>
+        </div>
+    </div><!-- /.modal-content -->
+  </div>
+{/body}

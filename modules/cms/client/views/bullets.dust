@@ -1,0 +1,10 @@
+{#bullets}
+<button type="button" class="btn btn-sm btn-secondary" data-name="{name}">
+    {?remove}
+        <i class="fa fa-minus"></i>
+    {:else}
+        <i class="fa fa-plus"></i>
+    {/remove}
+    {label}
+</button>
+{/bullets}

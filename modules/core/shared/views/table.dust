@@ -1,0 +1,27 @@
+{!}http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api{!}
+<table class="table" data-lky-table="{table.paging.api}" data-lky-paging="{table.paging|js}" data-lky-columns="{table.columns|js}">
+    <thead>
+        <tr>
+            {#table.columns}
+            <th>{label}</th>
+            {/.table.columns}
+        </tr>
+        <form data-lky-hook="filters">
+        <tr>
+            {#table.columns}
+                <th><input class="form-control" type="text" name="{name}" value="{table.paging.filters[name]}"/></th>
+            {/table.columns}
+            <th>
+                <button class="btn btn-primary" type="submit">Filter</button>
+            </th>
+        </tr>
+        </form>
+    </thead>
+    <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
+        {>"cms/core/table-body"/}
+
+    </tbody>
+    <tfoot data-lky-hook="table-footer" data-lky-template="cms/core/table-footer">
+        {>"cms/core/table-footer"/}
+    </tfoot>
+</table>

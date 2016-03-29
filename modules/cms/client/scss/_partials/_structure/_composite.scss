@@ -1,0 +1,58 @@
+.structure-Composite,
+.structure-doc,
+.structure-Block,
+.structure-List {
+    padding: 10px 5px;
+    ul {
+        padding: 0;
+        list-style: none;
+        li {
+            font-size: 12px;
+        }
+        h5 {
+            margin: 0px;
+            text-align: center;
+        }
+    }
+}
+
+.structure-Composite {
+    border: 1px dotted #666;
+    padding: 5px;
+    h5 {
+        color: white;
+    }
+}
+
+.structure-doc {
+    border: 1px dotted white;
+    background-color: #666;
+}
+
+.structure-Block {
+    border: 1px dotted white;
+    background-color: #666;
+}
+
+.structure-Block > h5:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1b2";
+    padding-right: 5px;
+}
+
+.structure-List {
+    border: 1px dotted white;
+    background-color: #666;
+}
+
+.structure-List > h5:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f03a";
+    padding-right: 5px;
+}
+
+.structure-doc > h5:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f15c";
+    padding-right: 5px;
+}

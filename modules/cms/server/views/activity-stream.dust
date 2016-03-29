@@ -1,0 +1,38 @@
+{>"cms/cms/main"/}
+
+{<body}
+<div class="lackey-cms">
+    <table>
+        <thead>
+            <tr>
+                <th>Date / Time</th>
+                <th>User</th>
+                <th>Method</th>
+                <th>Path</th>
+                <th>Response</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {#data.list}
+            <tr>
+                <td>{createdAt}</td>
+                <td>{author.name}</td>
+                <td>{method}</td>
+                <td>{url}</td>
+                <td>{response.status}</td>
+            </tr>
+            {/list}
+        </tbody>
+    </table>
+</div>
+{/body}

@@ -1,0 +1,10 @@
+{>"cms/core/main"/}
+
+{<body}
+<div>
+{@markdown file=data.md path=route root=data.root/}
+</div>
+{/body}
+
+
+

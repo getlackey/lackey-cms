@@ -1,0 +1,6 @@
+{>"cms/core/main"/}
+
+{<body}
+{@editable content=data.content editMode=edit path=path}{/editable}
+<pre id="debug"></pre>
+{/body}

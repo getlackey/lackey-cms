@@ -1,0 +1,12 @@
+name : 'Core'
+require: ['cms/cms']
+
+# Init data
+init:
+    # System roles
+    Role:
+        -
+            name: developer
+            label: 'Developer'
+            acl:
+                easteregg: 'death star'

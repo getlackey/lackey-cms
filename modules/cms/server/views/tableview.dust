@@ -1,0 +1,7 @@
+{>"cms/cms/main"/}
+
+{<body}
+<div class="bt">
+    {>"cms/core/table" table=data.table/}
+</div>
+{/body}

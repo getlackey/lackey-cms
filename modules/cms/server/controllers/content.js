@@ -1,0 +1,170 @@
+/* jslint esnext:true, node:true */
+'use strict';
+/*
+    Copyright 2016 Enigma Marketing Services Limited
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+const SUtils = require(LACKEY_PATH).utils;
+
+module.exports = SUtils.deps(
+        require('../models/content'),
+        require('../models/template'),
+        require('../models/taxonomy'),
+        SUtils.cmsMod('core').controller('crud')
+    )
+    .promised((Model, Template, Taxonomy, Crud) => {
+        class ContentCtrl extends Crud {
+
+            static get model() {
+                return Model;
+            }
+
+            static get field() {
+                return 'content';
+            }
+
+            static get tableConfig() {
+                return {
+                    createdAt: {
+                        label: 'Created at'
+                    },
+                    author: {
+                        label: 'Author',
+                        parse: 'return arguments[0] ? arguments[0].name : \'\''
+                    },
+                    name: {
+                        label: 'name',
+                        like: true
+                    },
+                    route: {
+                        label: 'Route'
+                    },
+                    template: {
+                        name: 'Template',
+                        parse: 'return arguments[0] ? arguments[0].name : \'\''
+                    },
+                    type: {
+                        name: 'Type'
+                    },
+                    status: {
+                        name: 'Status'
+                    }
+                };
+            }
+
+            static cmsList(req, res) {
+                Model.list({
+                        type: 'page'
+                    })
+                    .then((data) => {
+                        res.send({
+                            template: 'cms/cms/pages',
+                            javascripts: [
+                'js/cms/pages.js'
+            ],
+                            data: {
+
+                                list: data.map((content) => {
+                                    return content.toJSON();
+                                })
+                            }
+                        });
+                    }, (error) => {
+                        res.error(req, error);
+                    });
+
+            }
+
+            static cmsEdit(req, res) {
+                if (req.content) {
+                    Template.list()
+                        .then((templates) => {
+
+                            res.send({
+                                template: 'cms/cms/contentedit',
+                                javascripts: [
+                    'js/cms/pages.js'
+                ],
+                                data: {
+                                    content: req.content.toJSON(),
+                                    types: Model.getTypes(),
+                                    templates: templates.map((template) => {
+                                        return template.toJSON();
+                                    })
+                                }
+                            });
+                        }, req.error);
+                } else {
+                    res.error404(req);
+                }
+            }
+
+            static taxonomyFromQuery(body) {
+                let promise = null;
+                if(!body.type) {
+                    throw new Error('Type required');
+                }
+                if (body.name) {
+                    promise = Taxonomy.byTypeAndName(body.type, body.name);
+                } else if (body.label) {
+                    promise = Taxonomy.byTypeAndLabel(body.type, body.label);
+                }
+
+                if (!promise) {
+                    return Promise.reject(new Error('Wrong params'));
+                }
+                return promise;
+            }
+
+            static addTaxonomy(req, res) {
+                this.taxonomyFromQuery(req.body).then((taxonomy) => {
+                    return req.content.addTaxonomy(taxonomy);
+                }).then(() => {
+                    return res.api(req.content);
+                }, (error) => {
+                    console.log(error.message);
+                    console.log(error.stack);
+                    return res.error(error);
+                });
+            }
+
+            static removeTaxonomy(req, res) {
+                this.taxonomyFromQuery(req.body).then((taxonomy) => {
+                    return req.content.removeTaxonomy(taxonomy);
+                }).then(() => {
+                    return res.api(req.content);
+                }, (error) => {
+                    return res.error(error);
+                });
+            }
+
+
+            static generateSitemap() {
+
+                return Model.list({
+                    type: 'page'
+                }).then((list) => {
+                    return list.map((item) => {
+                        return {
+                            url: item.route,
+                            lastmod: new Date()
+                        };
+                    });
+                });
+            }
+
+        }
+        return Promise.resolve(ContentCtrl);
+    });

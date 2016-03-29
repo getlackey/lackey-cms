@@ -1,0 +1,91 @@
+{>"cms/cms/main"/}
+
+{<body}
+<div class="lackey-cms">
+    <div class="bt">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <h4>Account Details</h4>
+                    <form>
+                        <dl>
+                            <dt>Name</dt>
+                            <dd>
+                                <input type="text"
+                                       name="name"
+                                       class="form-control"
+                                       value="{user.name|h}"/>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>Image</dt>
+                            <dd>
+                                <img src="{user.image.default.src}"
+                                     data-lky-hook="avatar"
+                                     data-lky-image="{admin.image|js}"
+                                     />
+                            </dd>
+                        </dl>
+                    </form>
+                    <h4>Credentials</h4>
+                    <form data-lky-hook="password">
+                        <dl>
+                            <dt>Password</dt>
+                            <dd>
+                                <input type="password"
+                                        name="newPassword"
+                                        class="form-control"
+                                        placeholder="New password"
+                                       />
+                                <input type="password"
+                                        name="newPassword2"
+                                        class="form-control"
+                                        placeholder="Repeat new password"/>
+                            </dd>
+                        </dl>
+                        <button class="btn btn-block btn-primary">
+                            Change Password
+                        </button>
+                    </form>
+                    <dl>
+                        <dt>Emails</dt>
+                        <dd>
+                            {#data.emails}
+                            <div class="input-group">
+                                <input type="email"
+                                       readonly="readonly"
+                                       value="{email|h}"
+                                       class="form-control"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" type="button">
+                                        <i class="fa fa-trash"></i>&nbsp;
+                                    </button>
+                                </span>
+                            </div>
+                            {@ne key=confirmed value=true}
+                                <div class="alert alert-warning">
+                                    <h5>This email is not confirmed.</h5>
+                                    <button class="btn btn-sm btn-warning" data-lky-hook="confirm-email" data-lky-email="{email|h}">
+                                        <i class="fa fa-envelope"></i> Resend Email
+                                    </button>
+                                </div>
+                            {/ne}
+                            {/data.emails}
+                            <div class="input-group">
+                                <input type="email"
+                                       name="email"
+                                       class="form-control"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" type="button">
+                                        <i class="fa fa-plus"></i>&nbsp;
+                                    </button>
+                                </span>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/body}

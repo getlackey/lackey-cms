@@ -1,0 +1,19 @@
+{
+    "type": "page",
+    "template": {
+        "path": "cms/cms/status",
+        "name": "Version Status"
+    },
+    "route": "/cms/status",
+    "state": "published",
+    "layout": {
+        "type": "Fields",
+        "title": {
+            "type": "Variants",
+            "variants": {
+                "*:*:en": "Lackey Status",
+                "*:*:pl": "Status Lackey"
+            }
+        }
+    }
+}

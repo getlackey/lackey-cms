@@ -1,0 +1,45 @@
+
+
+{>"cms/core/main"/}
+
+{<body}
+<style>
+
+    .facebook-embed {
+        background-color: white;
+        width: 474px;
+        box-shadow: 0 0 0 1.5px rgba(0, 0, 0, .1) inset, 0 1px 1px rgba(0, 0, 0, .05);
+        margin: auto;
+        margin-top: 50px;
+
+        font-family: helvetica, arial, sans-serif;
+        color: rgb(59,89,152);
+    }
+    .facebook-embed h2 {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 22px;
+        margin-bottom: 5px;
+    }
+    .facebook-embed .facebook-image div {
+        height: 246px;
+    }
+
+
+</style>
+
+<section class="facebook-embed">
+    <div class="facebook-image">
+        {@image content=data.content editMode=edit path="image" route=path default="img/core/lackey-logo-x2.png"/}
+    </div>
+    <h2>{@editable content=data.content editMode=edit path="title" type="heading" route=path}{/editable}</h2>
+    <p>
+        {@editable content=data.content editMode=edit path="description" route=path}{/editable}
+    </p>
+</section>
+
+
+
+
+{/body}
+

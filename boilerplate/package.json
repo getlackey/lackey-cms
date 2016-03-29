@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "bluebird": "^3.2.2",
+    "lackey-cms": "git+git@bitbucket.org:enigmamarketingdigital/enigma-15894-lackey.git"
+  },
+  "scripts": {
+    "debug": "./node_modules/lackey-cms/bin/lackey site debug --site default",
+    "run": "./node_modules/lackey-cms/bin/lackey site run --site default"
+  }
+}
