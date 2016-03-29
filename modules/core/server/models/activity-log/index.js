@@ -70,6 +70,19 @@ module.exports = SUtils.deps(
                 return this._doc.duration;
             }
 
+            _populate() {
+                if(typeof this._doc.body === 'string') {
+                    this._doc.body = JSON.parse(this._doc.body);
+                }
+                if(typeof this._doc.response === 'string') {
+                    this._doc.response = JSON.parse(this._doc.response);
+                }
+                if(typeof this._doc.headers === 'string') {
+                    this._doc.headers = JSON.parse(this._doc.headers);
+                }
+                return Promise.resolve(this);
+            }
+
             static log(data) {
 
                 if (typeof data.body === 'string') {

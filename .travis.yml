@@ -1,9 +1,26 @@
 language: node_js
 node_js:
-  - "4.2"
+  - "5"
+  - "4"
+  #- "4.1"
+  #- "4.0"
 env:
-  - NODE_ENV=travis
-services:
-  - postgresql
+  - CXX=g++-4.8 debug='sql,lackey*'
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - precise-pgdg-9.5
+    packages:
+      - g++-4.8
+    postgresql: 9.5
+before_install:
+  - $CXX --version
+  - if [ "$TRAVIS_NODE_VERSION" = "0.8" ]; then npm install -g npm@2.7.3; fi;
+
+# NPM
 before_script:
-  - psql -c 'create database lackey-cms-test;' -U postgres
+  - npm install -g gulp
+  - psql -c 'create database "lackey-cms-test";' -U postgres
+script: 'gulp test'
+sudo: required

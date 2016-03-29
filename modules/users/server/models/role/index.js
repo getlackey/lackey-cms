@@ -145,6 +145,13 @@ module.exports = SUtils.deps(
                 return super.removeAll();
             }
 
+            _populate() {
+                if(typeof this._doc.acl === 'string') {
+                    this._doc.acl = JSON.parse(this._doc.acl);
+                }
+                return Promise.resolve(this);
+            }
+
         }
 
         return reload().then(() => Role);

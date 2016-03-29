@@ -115,7 +115,10 @@ gulp.task('test', ['pre-test'], function () {
             thresholds: {
                 global: 1
             }
-        }));
+        }))
+        .once('end', function () {
+            process.exit();
+        });
 });
 
 gulp.task('mocha', ['pre-test:clean'], function () {
