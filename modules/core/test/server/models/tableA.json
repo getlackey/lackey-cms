@@ -1,0 +1,78 @@
+{
+    "paging": {
+        "total": 12333,
+        "page": 11,
+        "pages" : 112,
+        "perPage": 111,
+        "offset": 1110,
+        "sort": {
+            "date": -1
+        },
+        "filters" : {
+            "test" : "1"
+        }
+    },
+    "columns": [
+        {
+            "label": "Code",
+            "type": "string",
+            "name": "code"
+        },
+        {
+            "label": "Field",
+            "type": "string",
+            "name": "field"
+        },
+        {
+            "label": "Other",
+            "parse": "return val ? 'Y' : 'N'",
+            "type": "string",
+            "name": "other"
+        },
+        {
+            "type": "date",
+            "label": "any",
+            "name": "any"
+        }
+    ],
+    "rows": [
+        {
+            "columns": [
+                {
+                    "value": "fr"
+                },
+                {
+                    "value": "French field"
+                },
+                {
+                    "value": "N"
+                },
+                {}
+            ]
+        },
+        {
+            "columns": [
+                {},
+                {
+                    "value": "none"
+                },
+                {
+                    "value": "N"
+                },
+                {}
+            ]
+        },
+        {
+            "columns": [
+                {
+                    "value": "de"
+                },
+                {},
+                {
+                    "value": "Y"
+                },
+                {}
+            ]
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+name : 'Lackey - CMS'
+
+testStages: &routes
+    /api/media: [get, post]
+    /api/media/*: [get, delete, put, post]
+
+# Init data
+init:
+    # System roles
+    Role:
+        -   name: developer
+            acl: *routes
+        -   name : admin
+            acl: *routes
+    #Media:
+    #    -   http://lorempixel.com/400/200/?rnd=test
+    #    -
+    #        source: http://lorempixel.com/400/200/?rnd=test
+    #    -
+    #        source:
+    #            video/mp4:
+    #                -
+    #                    media: "all and (min-width: 300px)"
+    #                    src: http://clips.vorwaerts-gmbh.de/VfE_html5.mp4
+    #                -
+    #                    media: "all and (min-width: 600px)"
+    #                    src: http://clips.vorwaerts-gmbh.de/VfE_html5.mp4
+    #            video/webm: http://clips.vorwaerts-gmbh.de/VfE.webm
+    #            video/ogg: http://clips.vorwaerts-gmbh.de/VfE.ogv
+    #            image: http://lorempixel.com/400/200/?rnd=symantec
+    #    -
+    #        source:
+    #            -
+    #                http://lorempixel.com/600/200/?rnd=test
+    #            -
+    #                dimension: '600w 200h 1x'
+    #                src: http://lorempixel.com/600/200/?rnd=test
+    #            -
+    #                dimension: '600w 200h 2x'
+    #                src: http://lorempixel.com/1200/400/?rnd=test
+    #            -
+    #                dimension: '1200w'
+    #                src: http://lorempixel.com/1200/400/?rnd=test
+    #            -
+    #                dimension: '200w 200h'
+    #                src: http://lorempixel.com/200/200/?rnd=test
+    #            -
+    #                dimension: '3x'
+    #                src: http://lorempixel.com/1800/600/?rnd=test

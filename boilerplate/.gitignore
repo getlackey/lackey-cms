@@ -1,0 +1,4 @@
+sites/*/htdocs
+uploads
+node_modules
+*.log

@@ -1,0 +1,167 @@
+header {
+    background-color: $color-dark-gray;
+    color: white;
+    height: 50px;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 1000;
+    button,
+    label,
+    a {
+        text-decoration: none;
+        color: $color-green;
+        &:hover {
+            color: $color-white;
+        }
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    > nav {
+        > ul {
+            list-style: none;
+            padding: 0px;
+            margin: 0px;
+            height: inherit;
+            display: block;
+            a,
+            label,
+            button {
+                font-size: 26px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+            }
+            a[data-lky-hook="cms.actions.visibility"] {
+                i:before {
+                    content: "\f070";
+                }
+                &.published {
+                    i:before {
+                        content: "\f06e";
+                    }
+                }
+            }
+            li {
+                color: #aaa;
+                display: block;
+                height: inherit;
+                vertical-align: middle;
+                padding: 9px 10px;
+                &.user {
+                    background-color: $color-green;
+                    color: $color-white;
+                    min-width: 250px;
+                    > label {
+                        color: $color-white;
+                        > img {
+                            border: 2px solid $color-white;
+                            border-radius: 3px;
+                            float: left;
+                        }
+                        > div {
+                            min-width: 200px;
+                            a {
+                                color: $color-white;
+                            }
+                            span {
+                                display: block;
+                                font-size: 14px;
+                            }
+                            > span:first-child {
+                                font-size: 18px;
+                            }
+                        }
+                    }
+                }
+            }
+            > li {
+                img {
+                    height: 35px;
+                    margin-top: -4px;
+                    margin-left: -5px;
+                    margin-right: 5px;
+                    margin-bottom: -3px;
+                }
+            }
+            &.left {
+                float: left;
+                > li {
+                    float: left;
+                }
+            }
+            &.right {
+                float: right;
+                > li {
+                    float: right;
+                }
+            }
+        }
+    }
+    .dropdown,
+    .dropdown-settings,
+    .dropdown-right {
+        position: fixed;
+        background: rgb(0, 0, 0);
+        top: 50px;
+        height: 100%;
+        width: 50%;
+        display: block;
+        list-style: none;
+        padding: 10px;
+        li {
+            height: auto;
+            display: block;
+            padding: 5px 15px;
+            font-size: 16px;
+            button,
+            a {
+                font-size: 16px !important;
+            }
+            &.divider {
+                font-weight: bolder;
+                border-bottom: 1px solid darken($color-green, 50%);
+            }
+        }
+    }
+    .dropdown,
+    .dropdown-settings {
+        left: 0px;
+        -webkit-transform: translateX(-100%) translateX(-.2em);
+        transform: translateX(-100%) translateX(-.2em);
+        -webkit-transition: -webkit-transform .3s;
+        transition: transform .3s
+    }
+    .dropdown-right {
+        left: 50%;
+        -webkit-transform: translateX(100%) translateX(-.2em);
+        transform: translateX(100%) translateX(-.2em);
+        -webkit-transition: -webkit-transform .3s;
+        transition: transform .3s
+    }
+    #lk-cms-menu-toggle,
+    #lk-cms-settings-toggle,
+    #lk-cms-menu-toggle-right {
+        position: fixed;
+        top: .3em;
+        right: .3em;
+        pointer-events: none;
+        visibility: hidden;
+    }
+    #lk-cms-menu-toggle:checked ~ .dropdown {
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
+    }
+    #lk-cms-settings-toggle:checked ~ .dropdown-settings {
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
+    }
+    #lk-cms-menu-toggle-right:checked ~ .dropdown-right {
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
+    }
+}

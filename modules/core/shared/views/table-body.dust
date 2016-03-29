@@ -1,0 +1,7 @@
+{#table.rows}
+<tr>
+    {#columns}
+    <td>{value}</td>
+    {/columns}
+</tr>
+{/table.rows}

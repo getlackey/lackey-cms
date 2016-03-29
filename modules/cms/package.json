@@ -1,0 +1,20 @@
+{
+  "name": "lackey-mod-cms",
+  "version": "0.0.1",
+  "description": "Lackey CMS module",
+  "main": "index.js",
+  "private": true,
+  "author": {
+    "name": "Enigma Marketing",
+    "email": "admin@enigma-marketing.co.uk",
+    "url": "http://www.enigma-marketing.co.uk"
+  },
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "dependencies": {
+  }
+}

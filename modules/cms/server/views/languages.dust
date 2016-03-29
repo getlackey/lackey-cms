@@ -1,0 +1,57 @@
+{>"cms/cms/main"/}
+
+{<body}
+<div class="lackey-cms">
+    <table>
+        <thead>
+            <tr>
+                <th>Enablede</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Native Name</th>
+                <th>
+                    <button data-lky-show="#new">New</button>
+                </th>
+            </tr>
+            <tr>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th>
+                    <button>Search</button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {#data.list}
+            <tr>
+                <td>{enabled}</td>
+                <td>{code}</td>
+                <td>{name}</td>
+                <td>{nativeName}</td>
+                <td>
+                    <ul>
+                        {?path}
+                            <li><a href="/{path}">view</a></li>
+                        {/path}
+                        <li><a href="/cms/media/{id}">edit</a></li>
+                    </ul>
+                </td>
+            </tr>
+            {/data.list}
+        </tbody>
+    </table>
+    <div class="overlay" id="new">
+        <h2>Add new page</h2>
+        <form data-lky-hook="cms.page.new">
+            <label for="new_page_name">Name</label>
+            <input type="text" id="new_page_name" name="name"/>
+            <label for="new_page_path">Path</label>
+            <input type="text" id="new_page_path" name="path"/>
+            <button type="submit">Add</button>
+            <button type="reset" data-lky-hide="#new">Cancel</button>
+        </form>
+    </div>
+</div>
+{/body}

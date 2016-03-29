@@ -1,0 +1,26 @@
+<tr>
+    <td colspan="{table.columns.length+1}">
+        <pre>{table.paging|js|s}</pre>
+        <nav>
+            <ul class="pagination">
+            {@iterate from=1 to=table.paging.pages}
+                {@eq value=$idx key=table.paging.page}
+                    <li class="page-item  active">
+                        <a class="page-link" href="#">
+                            {$idx}
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                {:else}
+                    <li class="page-item">
+                        <a href="#"
+                           class="page-link"
+                           data-lky-hook="table-paging"
+                           data-page="{$idx}">{$idx}</a>
+                    </li>
+                {/eq}
+            {/iterate}
+            </ul>
+        </nav>
+    </td>
+</tr>

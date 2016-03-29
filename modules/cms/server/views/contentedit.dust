@@ -1,0 +1,33 @@
+{>"cms/cms/main"/}
+
+{<body}
+<div class="lackey-cms">
+<h2>Content Edit</h2>
+<form>
+    {#data.content}
+        <label for="name">Name</label>
+        <input type="text" value="{name|h}" name="name"/>
+        <label for="name">Path</label>
+        <input type="text" value="{path|h}" name="path"/>
+        <label for="templatename">Template</label>
+        <select name="template">
+            {#data.templates templateId=template.id}
+            <option value="{id}"
+                    {@eq key=id value=templateId}selected{/eq}
+                    >{name}</option>
+            {/data.templates}
+        </select>
+         <label for="type">Type</label>
+        <select name="type">
+            {#data.types type=type}
+            <option value="{.}"
+                    {@eq key=. value=type}selected{/eq}
+                    >{.}</option>
+            {/data.types}
+        </select>
+        <label for="layout">Layout</label>
+        <textarea name="layout">{{layout|js|s}}</textarea>
+    {/data.content}
+</form>
+</div>
+{/body}

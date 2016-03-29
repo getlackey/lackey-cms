@@ -1,0 +1,10 @@
+<ul class="miniatures">
+    {#uploaded}
+        <li>
+            <a href="#" data-lky-hook="image" data-lky-id="{id}" data-lky-src="{default.src}">
+                <img src="{default.src}"/>
+            </a>
+        </li>
+    {/uploaded}
+</ul>
+<div style="clear:both"></div>

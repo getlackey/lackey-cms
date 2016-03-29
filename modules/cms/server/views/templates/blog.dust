@@ -1,0 +1,31 @@
+{>"cms/core/main"/}
+
+{<body}
+    <article>
+        {@image content=data.content editMode=edit path="image" path=path default="img/cms/cms/Star-Wars-Trilogy-Poster-2.jpg"/}
+        <header>
+            <nav>
+                <ol>
+                    <li>
+                        TEAM
+                    </li>
+                    <li>
+                        <time datetime="">
+                            DATE
+                        </time>
+                    </li>
+                </ol>
+            </nav>
+            <h2>
+                {@editable content=data.content editMode=edit path="title" type="inline" route=path}{/editable}
+            </h2>
+        </header>
+        <section>
+            {@editable content=data.content editMode=edit path="excert" route=path}{/editable}
+        </section>
+        <section>
+            {@editable content=data.content editMode=edit path="body" route=path}{/editable}
+        </section>
+    </article>
+    <pre id="debug"></pre>
+{/body}

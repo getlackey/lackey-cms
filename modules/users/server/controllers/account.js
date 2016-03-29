@@ -1,0 +1,149 @@
+/* jslint node:true, esnext:true */
+'use strict';
+/*
+    Copyright 2016 Enigma Marketing Services Limited
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+const mailer = require(LACKEY_PATH).mailer,
+    configuration = require(LACKEY_PATH).configuration,
+    SCli = require(LACKEY_PATH).cli,
+    __MODULE_NAME = 'lackey-cms/modules/user/server/controllers/account';
+
+module.exports = require('../models/user')
+    .then((User) => {
+        return {
+            index: (req, res) => {
+
+                let data = {};
+
+                req.admin.getIdentities('email')
+                    .then((emails) => {
+                        data.emails = emails.map((email) => {
+                            return {
+                                email: email.accountId,
+                                confirmed: email.confirmed
+                            };
+                        });
+                        res.js('js/cms/users/account.js');
+                        res.print('cms/users/account', data);
+                    });
+            },
+            /**
+             *
+             */
+            sendConfirmationEmail: (req, res) => {
+                let lib, config;
+                SCli.debug(__MODULE_NAME, 'Respond');
+                configuration()
+                    .then((cfg) => {
+                        SCli.debug(__MODULE_NAME, 'Got config');
+                        config = cfg;
+                        return mailer();
+                    })
+                    .then((mail) => {
+                        SCli.debug(__MODULE_NAME, 'Got mailer');
+                        lib = mail;
+                        return req.user.getIdentity('email', req.body.email);
+                    })
+                    .then((email) => {
+                        if (!email) {
+                            return res.error403('Nasty nasty one');
+                        }
+                        SCli.debug(__MODULE_NAME, 'Got email');
+                        return lib({
+                            from: config.get('mailer.from'),
+                            to: email.accountId,
+                            template: ['cms/users/emails/confirm-email']
+                        });
+                    })
+                    .then((success) => {
+                        res.api(success);
+                    }, (error) => {
+                        res.error(error);
+                    });
+            },
+            forgotIndex: (req, res) => {
+                res.js('js/cms/users/forgot.js');
+                res.print('cms/users/forgot-password');
+            },
+            forgot: (req, res) => {
+                let userId;
+                if (!req.body.username.length) { //TODO improve
+                    return res.api('ok');
+                }
+                User.getByProvider(User.EMAIL, req.body.username)
+                    .then((user) => {
+                        if (!user) {
+                            return res.api('ok');
+                        }
+                        userId = user.id;
+                        return user.loginToken(req.body.username);
+                    })
+                    .then((token) => {
+                        return mailer({
+                            to: req.body.username,
+                            template: ['cms/users/emails/forgot-password'],
+                            token: token,
+                            id: userId,
+                            subject: 'Remind me my pass'
+                        });
+                    })
+                    .then(() => {
+                        return res.api('ok');
+                    }, (error) => {
+                        res.error(error);
+                    });
+            },
+            forgotValidate: (req, res) => {
+                let user;
+                User.findById(req.forgotPasswordUid)
+                    .then((usr) => {
+                        user = usr;
+                        return user.invalidateToken(req.forgotPasswordToken);
+                    })
+                    .then(() => {
+                        req.login(user, function (error) {
+                            if (error) {
+                                /* istanbul ignore next */
+                                res.status(400).error(error);
+                            } else {
+                                res.redirect('/cms/account');
+                            }
+                        });
+                    }, (error) => {
+                        res.error(error);
+                    });
+            },
+            changePassword: (req, res) => {
+                req.admin.password = req.body.password;
+                req.admin.save()
+                    .then(() => {
+                        res.api('ok');
+                    });
+            },
+            me: (req, res) => {
+                res.api(req.admin.toJSON());
+            },
+            update: (req, res) => {
+                req.admin.update(req.body)
+                    .then((data) => {
+                        res.api(data);
+                    }, (error) => {
+                        res.error(error);
+                    });
+            }
+
+        };
+    });

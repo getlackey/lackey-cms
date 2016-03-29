@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "4.2"
+env:
+  - NODE_ENV=travis
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database lackey-cms-test;' -U postgres

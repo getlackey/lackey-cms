@@ -1,0 +1,14 @@
+{>"cms/core/main"/}
+
+{<body}
+<div>
+    <h1>Directory index</h1>
+    <ul>
+        {#data.files}
+            <li>
+                <a href="{path}">{label}</a>
+            </li>
+        {/data.files}
+    </ul>
+</div>
+{/body}

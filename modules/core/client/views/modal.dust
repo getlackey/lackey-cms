@@ -1,0 +1,5 @@
+<div class="lackey-cms">
+    <div class="modal">
+        {+body/}
+    </div>
+</div>

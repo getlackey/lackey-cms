@@ -1,0 +1,43 @@
+{>"cms/core/main"/}
+
+{<body}
+<div class="lackey-cms">
+    <div class="bt">
+        <div class="container">
+
+            <div class="jumbotron">
+                <img src="img/cms/core/lackey-logo.png"
+            </div>
+
+            <h2>Login</h2>
+
+            <section>
+                <form method="post">
+                    <dl>
+                        <dt>
+                            <label for="username">
+                            Username
+                            </label>
+                        </dt>
+                        <dd>
+                            <input type="text" name="username" id="username" class="form-control"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>
+                            <label for="password">
+                            Password
+                            </label>
+                        </dt>
+                        <dd>
+                            <input type="password" name="password" id="password" class="form-control"/>
+                        </dd>
+                    </dl>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <a href="/cms/account/forgot-password">Forgot Password</a>
+            </section>
+        </div>
+    </div>
+</div>
+{/body}

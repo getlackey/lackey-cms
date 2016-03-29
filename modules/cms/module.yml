@@ -1,0 +1,51 @@
+name : 'Lackey - CMS'
+
+require:
+    - cms/core
+    - cms/users
+    - cms/media
+    - cms/i18n
+
+testStages: &routes
+    /admin*: [get]
+    /cms*: [get]
+    /api/cms/*: [get, delete, put, post]
+    viewInVariant: '*'
+    edit: '*'
+
+# Init data
+init:
+    # System roles
+    Role:
+        -   name: developer
+            acl: *routes
+        -   name : admin
+            acl: *routes
+
+    TaxonomyType:
+        # Tags
+        -   &tag
+            name: tag
+            label: Tag
+        # Categories
+        -   &category
+            name: category
+            label: Category
+
+    Template:
+        -   &status
+            path: cms/cms/status
+            name: Version Status
+
+        -   path: cms/cms/facebook
+            name: Facebook
+            type: variant
+    Content:
+        -   type: page
+            template: *status
+            route: /cms/status
+            state: published
+            layout:
+                type: Fields
+                title:
+                    abc

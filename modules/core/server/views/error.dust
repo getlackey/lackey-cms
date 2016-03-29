@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <base href="/"/>
+        {! to migrate elseewhre !}
+        <link rel="stylesheet" href="css/cms/core/base.css"/>
+        <link rel="stylesheet" href="css/cms/cms/base.css"/>
+    </head>
+    <body>
+        <h1>Error</h1>
+        <pre>
+        {data|js|s}
+        </pre>
+    </body>
+</html>
