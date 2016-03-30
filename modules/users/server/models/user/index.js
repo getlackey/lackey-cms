@@ -736,7 +736,7 @@ module.exports = SUtils.deps(
             }
 
             return SCli.sql(query).then((list) => {
-                return list.shift();
+                return User.formatIdentity(list.shift());
             });
         }
 
@@ -755,8 +755,17 @@ module.exports = SUtils.deps(
             }
 
             return SCli.sql(query).then((list) => {
-                return list;
+                return list.map(User.formatIdentity);
             });
+        }
+
+        static formatIdentity(identity) {
+            if (!identity) return identity;
+            if (typeof identity.providerData === 'string') {
+                identity.providerData = JSON.parse(identity.providerData);
+            }
+
+            return identity;
         }
 
         static removeAll() {

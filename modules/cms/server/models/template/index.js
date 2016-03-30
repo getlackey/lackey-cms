@@ -98,6 +98,16 @@ module.exports = SUtils.deps(
         static getByPath(path) {
             return this.findOneBy('path', path);
         }
+
+        _populate() {
+            if(typeof this._doc.javascripts === 'string') {
+                this._doc.javascripts = JSON.parse(this._doc.javascripts);
+            }
+            if(typeof this._doc.stylesheets === 'string') {
+                this._doc.stylesheets = JSON.parse(this._doc.stylesheets);
+            }
+            return Promise.resolve(this);
+        }
     }
 
     require('./generator');
