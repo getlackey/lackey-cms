@@ -23,33 +23,32 @@ const
 module.exports = SUtils
     .deps(
         require(LACKEY_PATH).datasources.get('knex', 'default'),
+        require(LACKEY_PATH).datasources.getManager('knex', 'default'),
         require(LACKEY_PATH).configuration()
     )
-    .promised((knex, config) => {
-        return Promise
-            .resolve()
-            .then(() => {
-                if (!config.get('datasources.pg.default.truncate')) return null;
-                return knex
-                    .raw('DROP TABLE IF EXISTS media CASCADE');
-            })
-            .then(() => {
-                return knex.schema.hasTable('media');
-            })
-            .then((exists) => {
-                if (exists) return Promise.resolve();
-                return knex.schema.createTableIfNotExists('media', (table) => {
-                    table.increments();
-                    table.string('name');
-                    table.json('source');
-                    table.json('attributes');
-                    table.bigInteger('userId')
-                        .unsigned()
-                        .references('id')
-                        .inTable('users')
-                        .onDelete('CASCADE');
-                    table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
-                    table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
-                });
-            });
+    .promised((knex, manager, config) => {
+        let Schema = {
+            tableName: 'media',
+            build: (table) => {
+                table.increments();
+                table.string('mime');
+                table.string('name');
+                table.string('source');
+                table.json('attributes');
+                table.json('alternatives');
+                table.bigInteger('userId')
+                    .unsigned()
+                    .references('id')
+                    .inTable('users')
+                    .onDelete('CASCADE');
+                table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
+                table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
+            }
+        };
+        return manager.sync([Schema]).then(() => {
+            if (!config.get('datasources.pg.default.truncate')) {
+                return null;
+            }
+            return manager.reset([Schema]);
+        });
     });

@@ -25,7 +25,7 @@ const browser = require('../../lib/dust/editable').browser,
     SUtils = require(LACKEY_PATH).utils,
     mediaModule = SUtils.cmsMod('media');
 
-let mediaGenerator;
+let mediaGenerator, Media;
 
 module.exports.deserializeText = (text) => {
     return browser.then((window) => {
@@ -60,26 +60,31 @@ function crawl(data) {
         });
     }
 
-    let promises = [];
+    let calls = [];
 
     ['fields', 'variants'].forEach((group) => {
         if (data[group]) {
             Object.keys(data[group]).forEach((key) => {
                 let content = data[group][key];
-                promises.push(crawl(content).then((output) => {
-                    data[group][key] = output;
-                }));
+                calls.push(() => {
+                    return crawl(content).then((output) => {
+                        data[group][key] = output;
+                    });
+                });
             });
         }
     });
+
 
     if (data.type === 'Fields') {
         Object.keys(data).forEach((key) => {
             if (['type'].indexOf(key) === -1) {
                 let content = data[key];
-                promises.push(crawl(content).then((output) => {
-                    data[key] = output;
-                }));
+                calls.push(() => {
+                    return crawl(content).then((output) => {
+                        data[key] = output;
+                    });
+                });
             }
         });
     }
@@ -87,16 +92,18 @@ function crawl(data) {
     ['items'].forEach((group) => {
         if (data[group]) {
             data[group].forEach((content, idx) => {
-                promises.push(crawl(content).then((output) => {
-                    data[group][idx] = output;
-                }));
+                calls.push(() => {
+                    return crawl(content).then((output) => {
+                        data[group][idx] = output;
+                    });
+                });
             });
         }
     });
 
 
-    if (promises.length) {
-        return BbPromise.all(promises).then(() => {
+    if (calls.length) {
+        return SUtils.serialPromise(calls, (call) => call()).then(() => {
             return data;
         });
     }
@@ -104,21 +111,27 @@ function crawl(data) {
 }
 
 function crawlBack(data) {
-
-    if (data && data.type === 'doc') {
-        return module.exports.serializeText(data);
+    if (data) {
+        if (data.type === 'doc') {
+            return module.exports.serializeText(data);
+        } else if (data.type === 'Media' && data.id) {
+            return Media.findById(data.id)
+                .then((medium) => {
+                    let med = {
+                        type: 'Media',
+                        source: medium.source
+                    };
+                    if (medium.attributes && Object.keys(medium.attributes).length) {
+                        med.attributes = medium.attributes;
+                    }
+                    return med;
+                });
+        }
     }
 
     let promises = [];
-    /*
-    if (data.content && data.content.length) {
-        data.content.forEach((content, index) => {
-            promises.push(crawlBack(content).then((output) => {
-                data.content[index] = output;
-            }));
-        });
-    }*/
-    ['fields', 'variants'].forEach((group) => {
+
+    ['fields', 'variants', 'items'].forEach((group) => {
         if (data[group]) {
             Object.keys(data[group]).forEach((key) => {
                 let content = data[group][key];
@@ -150,10 +163,14 @@ function crawlBack(data) {
 
 module.exports.serialize = (content) => {
     let output = _.cloneDeep(content);
-    return crawlBack(output.layout).then((layout) => {
-        output.layout = JSON.parse(JSON.stringify(layout));
-        return output;
-    });
+    return mediaModule.model('media')
+        .then((media) => {
+            Media = media;
+            return crawlBack(output.layout).then((layout) => {
+                output.layout = JSON.parse(JSON.stringify(layout));
+                return output;
+            });
+        });
 };
 
 module.exports.deserialize = (content) => {
@@ -162,6 +179,7 @@ module.exports.deserialize = (content) => {
     return mediaModule.model('media')
         .then((media) => {
             mediaGenerator = media.generator;
+            Media = media;
             return crawl(output.layout, true);
         }).then((layout) => {
             output.layout = layout;

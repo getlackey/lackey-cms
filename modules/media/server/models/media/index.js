@@ -22,9 +22,14 @@ if (!GLOBAL.LACKEY_PATH) {
 
 const SUtils = require(LACKEY_PATH).utils,
     objection = require('objection'),
+    mimeLib = require('mime'),
+    fileType = require('file-type'),
+    http = require('http'),
+    https = require('https'),
+    _ = require('lodash'),
     SCli = require(LACKEY_PATH).cli,
-    Model = objection.Model;
-
+    Model = objection.Model,
+    OCTET = 'application/octet-stream';
 
 module.exports = SUtils.deps(
     SUtils.cmsMod('core').model('objection'),
@@ -43,7 +48,13 @@ module.exports = SUtils.deps(
                     name: {
                         type: 'string'
                     },
+                    mime: {
+                        type: 'string'
+                    },
                     source: {
+                        type: 'string'
+                    },
+                    alternatives: {
                         type: ['object', 'array']
                     },
                     attributes: {
@@ -56,164 +67,235 @@ module.exports = SUtils.deps(
             };
         }
     }
-    /**
-     * @class
-     */
 
-    function format(source, mime) {
-        let obj = {
-            type: mime ? (mime.split('/')[0]) : 'image',
-            src: source
-        };
-        if (mime) {
-            obj.mime = mime;
-        }
-        return obj;
-    }
+    let __debug = (typeof global.it === 'function') ? 'image/jpeg' : false;
 
     class Media extends ObjectionWrapper {
+
+        static get api() {
+            return '/cms/media';
+        }
+
+        static _preQuery(query, options) {
+            if (options.textSearch) {
+                query.$or = [{
+                    name: {
+                        operator: 'like',
+                        value: '%' + options.textSearch + '%'
+                    }
+                }, {
+                    source: {
+                        operator: 'like',
+                        value: '%' + options.textSearch + '%'
+                    }
+                }];
+            }
+            return super._preQuery(query, options);
+        }
 
         static get model() {
             return MediaModel;
         }
 
-        static defaultSource(source) {
-            let i, keys, key, entry, j, it;
-            if (typeof source === 'string') {
-                return format(source);
-            }
-
-            if (source.source) {
-                return Media.defaultSource(source.source);
-            }
-
-            if (Array.isArray(source)) {
-                for (i = 0; i < source.length; i++) {
-                    entry = source[i];
-                    if (typeof entry === 'string') {
-                        return format(entry);
-                    }
-                }
-                for (i = 0; i < source.length; i++) {
-                    entry = source[i];
-                    if (entry.src) {
-                        return format(entry.src);
-                    }
-                }
-            } else {
-                keys = Object.keys(source);
-                for (i = 0; i < keys.length; i++) {
-                    key = keys[i];
-                    if (key !== 'image') {
-                        entry = source[key];
-                        if (typeof entry === 'string') {
-                            return format(entry, key, key);
-                        }
-                        if (Array.isArray(entry)) {
-                            for (j = 0; j < entry.length; j++) {
-                                it = entry[j];
-                                if (typeof it === 'string') {
-                                    return format(it, key, key);
-                                } else if (it.src) {
-                                    return format(it.src, key, key);
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-            return {};
+        static set debug(value) {
+            __debug = value;
         }
 
-        static videoSources(source) {
-            if (typeof source === 'string') {
-                return {
-                    src: source
-                };
-            }
-            if (source.source) {
-                return Media.videoSources(source.source);
-            }
-            if (!Array.isArray(source)) {
-                let sources = [];
-                Object.keys(source).forEach((key) => {
-                    if (key === 'image') return null;
-                    if (typeof source[key] === 'string') {
-                        return sources.push({
-                            type: key,
-                            src: source[key]
-                        });
-                    }
-                    source[key].forEach((elem) => {
-                        sources.push({
-                            type: key,
-                            src: elem.src,
-                            media: elem.media
+        static get debug() {
+            return __debug;
+        }
+
+        static lookupMime(path) {
+            SCli.debug('lackey-cms/modules/media/server/models/media', 'lookupMime', path);
+            let mime = mimeLib.lookup(path),
+                isWeb = path.match(/^(http|https|)\:\/\/.+$/) !== null;
+
+            mime = mime === OCTET ? null : mime;
+
+            if (!mime) {
+                if (!isWeb) {
+                    return Promise.resolve(OCTET);
+                } else {
+                    return new Promise((resolve, reject) => {
+                        if (__debug) {
+                            return resolve(__debug);
+                        }
+                        (path.match(/^https/) ? https : http).get(path, (res) => {
+                            try {
+                                res.once('data', chunk => {
+                                    try {
+                                        res.destroy();
+                                        resolve(fileType(chunk).mime);
+                                    } catch (e) {
+                                        reject(e);
+                                    }
+                                });
+                            } catch (e) {
+                                reject(e);
+                            }
                         });
                     });
-                });
-                return sources;
+                }
             }
-            return null;
+            return Promise.resolve(mime);
+        }
+
+        static mimeToType(mime) {
+            SCli.debug('lackey-cms/modules/media/server/models/media', 'mimeToType', mime);
+            return mime.split('/')[0];
+        }
+
+        static mapSource(source) {
+            SCli.debug('lackey-cms/modules/media/server/models/media', 'mapSource', source);
+            if (typeof source === 'string') {
+                return Media.lookupMime(source).then((mime) => {
+                    return {
+                        type: Media.mimeToType(mime),
+                        mime: mime,
+                        source: source,
+                        alternatives: []
+                    };
+                });
+            }
+            if (source.source) {
+                return Media.mapSource(source.source);
+            }
+            if (Array.isArray(source)) {
+                return Promise.all(source.map((entry) => {
+                    if (typeof entry === 'string') {
+                        return Media.lookupMime(entry)
+                            .then((mime) => {
+                                return {
+                                    mime: mime,
+                                    source: entry
+                                };
+                            });
+                    }
+                    return Media.lookupMime(entry.src)
+                        .then((mime) => {
+                            return {
+                                mime: mime,
+                                source: entry.src,
+                                dimension: entry.dimension
+                            };
+                        });
+                })).then((list) => {
+                    let main,
+                        output,
+                        srcset = [];
+
+                    list.forEach((elem) => {
+                        if (typeof elem === 'string' && !main) {
+                            main = elem;
+                            srcset.push(elem);
+                            return;
+                        }
+                        if (!main) {
+                            main = elem;
+                        }
+                        srcset.push(elem.source + (elem.dimension ? ' ' + elem.dimension : ''));
+                    });
+                    output = {
+                        type: Media.mimeToType(main.mime),
+                        mime: main.mime,
+                        source: main.source
+                    };
+                    if (srcset.length) {
+                        output.srcset = srcset.join(',');
+                    }
+
+                    return output;
+                });
+            } else {
+                return Promise.all(Object
+                    .keys(source)
+                    .map((key) => {
+
+                        if (Array.isArray(source[key])) {
+                            return Promise.all(source[key].map((item) => {
+                                return Media._wrapInLoop(key, item.src, item.media);
+                            }));
+                        }
+
+                        return Media._wrapInLoop(key, source[key]);
+
+                    })).then((list) => {
+
+                    let main,
+                        _list = [];
+
+                    list.forEach((item) => {
+                        if (!Array.isArray(item)) {
+                            return _list.push(item);
+                        }
+                        _list = _list.concat(item);
+
+                    });
+
+                    main = _list[0];
+
+                    return {
+                        alternatives: _list,
+                        type: Media.mimeToType(main.type),
+                        mime: main.type,
+                        source: main.src
+                    };
+
+                });
+            }
+
+        }
+
+        static _wrapInLoop(mime, src, media) {
+            SCli.debug('lackey-cms/modules/media/server/models/media', 'wrapInLoop', mime, src, media);
+            let promise;
+            if (!mime || mime.indexOf('/') === -1) {
+                promise = Media.lookupMime(src)
+                    .then((_mime) => {
+                        return {
+                            type: _mime,
+                            src: src,
+                            media: media
+                        };
+                    });
+            } else {
+                promise = Promise.resolve({
+                    type: mime,
+                    src: src,
+                    media: media
+                });
+            }
+            return promise.then((item) => {
+                if (!item.media) {
+                    delete item.media;
+                }
+                return item;
+            });
         }
 
         _preSave() {
-            if (this._doc) {
-                if (typeof this._doc.source !== 'object') {
-                    this._doc.source = {
-                        src: this._doc.source
-                    };
-                } else if (Array.isArray(this._doc.source)) {
-                    //this._doc.source = JSON.stringify(this._doc.source);
-                }
-                delete this._doc.type;
+            SCli.debug('lackey-cms/modules/media/server/models/media', 'preSave');
+            let self = this,
+                isString = (typeof this._doc.source !== 'string'),
+                promise = Promise.resolve();
+
+            if (isString) {
+                promise = Media.mapSource(this._doc.source)
+                    .then((mixin) => {
+                        _.merge(self._doc, mixin);
+                    });
             }
 
-            return Promise.resolve(this);
-        }
-
-        static imageSources(source) {
-            if (typeof source === 'string') {
-                return {
-                    src: source,
-                    type: 'image'
-                };
-            }
-            if (source.source) {
-                return Media.imageSources(source.source);
-            }
-            console.log(source);
-            if (Array.isArray(source)) {
-                let out = {
-                        type: 'image'
-                    },
-                    srcset = [];
-                source.forEach((elem) => {
-                    if (typeof elem === 'string' && !out.src) {
-                        out.src = elem;
-                        srcset.push(elem);
-                        return;
+            return promise
+                .then(() => {
+                    if (!self._doc.mime) {
+                        return Media.lookupMime(self._doc.source)
+                            .then((mime) => {
+                                self._doc.mime = mime;
+                            });
                     }
-                    if (!out.src) {
-                        out.src = elem.src;
-                    }
-                    srcset.push(elem.src + ' ' + elem.dimension);
-                });
-                if (srcset.length) {
-                    out.srcset = srcset.join(',');
-                }
-                return out;
-            }
-            return source;
-        }
-
-        static sources(source) {
-            let def = Media.defaultSource(source);
-            if (def.type === 'video') {
-                return Media.videoSources(source);
-            }
-            return Media.imageSources(source);
+                })
+                .then(() => self);
         }
 
         get source() {
@@ -221,23 +303,15 @@ module.exports = SUtils.deps(
         }
 
         get type() {
-            let type = this.default.type;
-            if (type === 'src') return 'image';
-            return type;
+            return Media.mimeToType(this._doc.mime);
         }
 
         get mime() {
-            let mime = this.default.mime;
-            if (mime === 'src') return 'image/*';
-            return mime;
+            return this._doc.mime;
         }
 
-        get default() {
-            return Media.defaultSource(this.source);
-        }
-
-        get sources() {
-            return Media.sources(this.source);
+        get alternatives() {
+            return this._doc.alternatives;
         }
 
         toJSON() {
@@ -245,12 +319,13 @@ module.exports = SUtils.deps(
                 id: this.id,
                 $uri: this.uri,
                 name: this.name,
-                sources: this._doc.source,
-                default: this.default,
+                source: this.source,
+                alternatives: this.alternatives,
                 mime: this.mime,
                 type: this.type,
                 createdAt: this._doc.createdAt,
-                author: this._doc._userId
+                author: this._doc._userId,
+                attributes: this._doc.attributes
             };
         }
 
@@ -258,17 +333,18 @@ module.exports = SUtils.deps(
             return '/api/media/' + this._doc.id.toString();
         }
 
-        static findByPath(path) {
-            SCli.debug('lackey-cms/modules/media/server/models/media', 'findByPath ' + path);
+        static findByPathAndType(path, mime) {
+            SCli.debug('lackey-cms/modules/media/server/models/media', 'findByPathAndType ' + path);
             return SCli.sql(MediaModel
-                    .query()
-                    .whereRaw("source->>'src' = ?", [path]))
-                .then((result) => {
-                    if (!result) {
-                        return null;
-                    }
-                    return new Media(result[0]);
-                });
+                .query()
+                .where('source', path)
+                .where('mime', mime)
+            ).then((result) => {
+                if (!result || !result.length) {
+                    return null;
+                }
+                return new Media(result[0]);
+            });
         }
 
     }

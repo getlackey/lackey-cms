@@ -20,8 +20,7 @@ if (!GLOBAL.LACKEY_PATH) {
   GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
 }
 
-const _ = require('lodash'),
-  SCli = require(LACKEY_PATH).cli,
+const SCli = require(LACKEY_PATH).cli,
   treeParser = require('../../../shared/treeparser');
 
 module.exports = (dust) => {
@@ -45,9 +44,13 @@ module.exports = (dust) => {
 
 };
 
-module.exports.block = (config, injectedChunk, context, bodies, params, dust, contentId) => {
+module.exports.block = (config, injectedChunk, context, bodies, params, dust) => {
 
   SCli.debug('lackey-cms/modules/cms/server/lib/dust/block');
+
+  if (!config) {
+    return Promise.resolve(injectedChunk);
+  }
 
   return new Promise((resolve, reject) => {
 
@@ -56,8 +59,6 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust, co
     let promise = Promise.resolve(),
       data = context,
       document;
-
-    injectedChunk.write('<pre>BLOCK PATH: ' + params.path + '</pre>');
 
     if (config.route) {
 
@@ -80,11 +81,11 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust, co
         });
     } else {
       data = data.push({
-        path : params.path + '.fields'
+        path: params.path + '.fields'
       });
     }
 
-    if(!config.template && promise.route) {
+    if (!config.template && promise.route) {
       promise = promise.then(() => {
         if (!document) return;
         return require('../../models/template')
@@ -99,23 +100,12 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust, co
       });
     }
 
-    /*if (config.fields) {
-      promise = promise
-        .then(() => {
-          data = data.push({
-            path : params.path,
-            parent: params.parent,
-            data: {
-              content: {
-                id : contentId,
-                layout: config.fields
-              }
-            }
-          });
-        });
-    }*/
 
     promise.then(() => {
+
+      if (!config.template) {
+        return resolve(injectedChunk);
+      }
 
       dust.render(config.template, data, (err, out) => {
         if (err) {

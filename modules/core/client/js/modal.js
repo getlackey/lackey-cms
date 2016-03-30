@@ -33,7 +33,7 @@ class Modal {
                 }, 100);
 
                 return new Promise((resolve, reject) => {
-                    controller(root, vars, resolve, reject);
+                    setTimeout(() => controller(root, vars, resolve, reject), 0);
                 }).then((data) => {
                     top.document.body.removeChild(root);
                     return data;

@@ -24,6 +24,7 @@ const
     dbsInit = require('../../../../../test/mockup/dbs'),
     fs = require('fs'),
     Generator = require(LACKEY_PATH).generator,
+    SUtils = require(LACKEY_PATH).utils,
     should = require('should');
 
 describe('models/cms/server/models/content', () => {
@@ -99,7 +100,25 @@ describe('models/cms/server/models/content', () => {
         }).should.finally.be.True;
     });
 
-
+    it('Serializes complex layouts', () => {
+        return SUtils
+            .cmsMod('media')
+            .model('media')
+            .then((Media) => {
+                return Media.generator({
+                    type: 'Media',
+                    source: '/img/core/404.jpg'
+                })
+            })
+            .then((medium) => {
+                let input = fs.readFileSync(__dirname + '/complex-toserialize.json', 'utf8').replace(/<% media %>/g, medium.id);
+                return ContentSerializer.serialize(JSON.parse(input));
+            })
+            .then((output) => {
+                output.should.be.eql(require('./complex-serialized.json'));
+                return true;
+            }).should.finally.be.eql(true);
+    });
 
     it('Generates init data', function () {
 

@@ -20,12 +20,74 @@ const SCli = require(LACKEY_PATH).cli;
 
 module.exports = require('../models/content')
     .then((Model) => {
-        return {
-            capture: (req, res, next) => {
+
+        class PageController {
+            static preview(req, res, next) {
+                let data = JSON.parse(req.body.preview),
+                    fullPath = req.protocol + '://' + req.get('host') + data.location;
+
+                Model
+                    .findByRoute(data.location)
+                    .then((page) => {
+                        if (page) {
+                            page.layout = data.contents.layout;
+                            page.props = data.contents.props;
+                            return PageController.print(page, fullPath, res, req, true);
+                        }
+                        next();
+                    });
+
+
+            }
+            static print(page, fullPath, res, req, preview) {
+
+
+                let path, edit = req.user && req.user.getACL('edit').length > 0,
+                    javascripts = req.user ? [
+                                    preview ? 'js/cms/cms/preview.js' : 'js/cms/cms/page.js'
+                                ] : [],
+                    stylesheets = [],
+                    pageJson = page.toJSON();
+
+                if (page.state !== 'published' && !edit) {
+                    return res.error403(req);
+                }
+
+                if (pageJson.template) {
+                    if (pageJson.template.javascripts) {
+                        javascripts = javascripts.concat(pageJson.template.javascripts);
+                    }
+                    if (pageJson.template.stylesheets) {
+                        stylesheets = stylesheets.concat(pageJson.template.stylesheets);
+                    }
+                }
+
+                res.css(stylesheets);
+                res.js(javascripts);
+
+                path = page.getTemplatePath();
+
+                SCli.debug('lackey-cms/modules/cms/server/controllers/page', path);
+
+                if (req.query.variant && req.query.variant) {
+                    if (req.user && req.user.getACL('viewInContext')) {
+                        path = req.query.variant;
+                    }
+                }
+
+                res.edit(edit);
+
+                res.print(path, {
+                    route: fullPath,
+                    content: pageJson
+                });
+
+
+            }
+            static capture(req, res, next) {
 
                 let route = req.route.replace(/\..*$/, ''),
-                    fullPath = req.protocol + '://' + req.get('host') + route,
-                    path;
+                    fullPath = req.protocol + '://' + req.get('host') + route;
 
                 route = route.replace(/\?.*$/, '');
 
@@ -39,47 +101,12 @@ module.exports = require('../models/content')
                     .findByRoute(route)
                     .then((page) => {
                         if (page) {
-
-                            let javascripts = req.user ? [
-                                    'js/cms/cms/page.js'
-                                ] : [],
-                                stylesheets = [],
-                                pageJson = page.toJSON();
-
-                            if (pageJson.template) {
-                                if (pageJson.template.javascripts) {
-                                    javascripts = javascripts.concat(pageJson.template.javascripts);
-                                }
-                                if (pageJson.template.stylesheets) {
-                                    stylesheets = stylesheets.concat(pageJson.template.stylesheets);
-                                }
-                            }
-
-                            res.css(stylesheets);
-                            res.js(javascripts);
-
-                            path = page.getTemplatePath();
-
-                            SCli.debug('lackey-cms/modules/cms/server/controllers/page', path);
-
-                            if (req.query.variant && req.query.variant) {
-                                if (req.user && req.user.getACL('viewInContext')) {
-                                    path = req.query.variant;
-                                }
-                            }
-
-                            res.edit(req.user && req.user.getACL('edit').length > 0);
-
-                            res.print(path, {
-                                route: fullPath,
-                                content: pageJson
-                            });
-
-                            return;
+                            return PageController.print(page, fullPath, res, req);
                         }
                         next();
                     });
-
             }
-        };
+        }
+
+        return PageController;
     });

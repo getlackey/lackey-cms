@@ -1,0 +1,36 @@
+{>"cms/cms/main"/}
+
+{<body}
+<div class="bt">
+    <div class="container">
+        <form data-lky-hook="create">
+            <h2>Create Page</h2>
+            <dl>
+                <dt>Title</dt>
+                <dd>
+                    <input type="text" class="form-control" name="name"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>Route</dt>
+                <dd>
+                    <input type="text" class="form-control" name="route"/>
+                </dd>
+            </dl>
+            <ul class="templates">
+                {#data.templates}
+                    <li>
+                        <label for="template_{id}">
+                            <span>
+                                <input id="template_{id}" type="radio" name="templateId" value="{id}"/>{name}
+                            </span>
+                        <img src="{thumb}"/>
+                        </label>
+                    </li>
+                {/data.templates}
+            </ul>
+            <button class="btn btn-block btn-default" type="submit">Create</button>
+        </form>
+    </div>
+</div>
+{/body}

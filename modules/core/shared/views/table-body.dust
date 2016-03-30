@@ -3,5 +3,16 @@
     {#columns}
     <td>{value}</td>
     {/columns}
+    <td>
+        {#actions}
+            {?href}
+                <a href="{href}">{label}</a>
+            {:else}
+                <button data-lky-hook="{hook}"
+                        data-lky-id="{id}"
+                        >{label}</button>
+            {/href}
+        {/actions}
+    </td>
 </tr>
 {/table.rows}

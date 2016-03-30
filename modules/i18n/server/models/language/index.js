@@ -41,6 +41,10 @@ module.exports = SUtils.deps(
      */
     class Language extends ObjectionWrapper {
 
+        static get api() {
+            return '/cms/language';
+        }
+
         static get model() {
             return LanguageModel;
         }
@@ -55,6 +59,18 @@ module.exports = SUtils.deps(
 
         get enabled() {
             return this._doc.enabled;
+        }
+
+        static get default() {
+            return SCli.sql(LanguageModel
+                .query()
+                .where('default', true)
+            ).then((list) => {
+                if (list.length) {
+                    return list[0].code;
+                }
+                return null;
+            });
         }
 
         toJSON() {

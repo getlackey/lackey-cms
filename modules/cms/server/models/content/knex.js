@@ -23,7 +23,8 @@ const
 module.exports = SUtils
     .deps(
         require(LACKEY_PATH).datasources.get('knex', 'default'),
-        require(LACKEY_PATH).configuration()
+        require(LACKEY_PATH).configuration(),
+        require('../template')
     )
     .promised((knex, config) => {
         return Promise

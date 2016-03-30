@@ -1,4 +1,4 @@
-<html lang="{locale}">
+<html lang="{locale}" data-default-locale="{defaultLocale}">
     <head>
         <base href="/"/>
         {! to migrate elseewhre !}

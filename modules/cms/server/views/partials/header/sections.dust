@@ -1,0 +1,34 @@
+<ul class="dropdown">
+    <li>
+        <a href="/admin/">Homepage</a>
+    <li>
+        <a href="cms">Dashboard</a>
+    </li>
+    <li>
+        <a href="cms/activity">Activity</a>
+    </li>
+    <li>
+        <a href="cms/user">Users</a>
+    </li>
+    <li>
+        <a href="cms/role">Role</a>
+    </li>
+    <li>
+        <a href="cms/content">Content</a>
+    </li>
+    <li>
+        <a href="cms/media">Media</a>
+    </li>
+    <li>
+        <a href="cms/taxonomy">Taxonomy</a>
+    </li>
+    <li>
+        <a href="cms/taxonomy-type">Taxonomy Types</a>
+    </li>
+    <li>
+        <a href="cms/template">Templates</a>
+    </li>
+    <li>
+        <a href="cms/language">Languages</a>
+    </li>
+</ul>

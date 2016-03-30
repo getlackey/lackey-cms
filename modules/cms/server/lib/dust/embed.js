@@ -20,8 +20,7 @@ if (!GLOBAL.LACKEY_PATH) {
   GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
 }
 
-const _ = require('lodash'),
-  SCli = require(LACKEY_PATH).cli;
+const SCli = require(LACKEY_PATH).cli;
 
 module.exports = (dust) => {
 
@@ -30,6 +29,7 @@ module.exports = (dust) => {
     let
       route = params.route + '',
       template = params.template || false,
+      data = context,
       type = params.type || 'page';
 
     SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', route, template);
@@ -50,11 +50,12 @@ module.exports = (dust) => {
           function render() {
 
             SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'Content', route, template);
-            dust.render(template, _.merge({}, context, {
+            data = data.push({
               data: {
                 content: document.toJSON()
               }
-            }, params), (err, out) => {
+            }).push(params);
+            dust.render(template, data, (err, out) => {
               if (err) {
                 SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'Error', route, template);
                 dust.helpers.error(injectedChunk, err, null, err);

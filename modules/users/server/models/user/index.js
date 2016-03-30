@@ -79,6 +79,11 @@ module.exports = SUtils.deps(
      */
     class User extends ObjectionWrapper {
 
+        static get api() {
+            return '/cms/user';
+        }
+
+
         constructor(data) {
                 super(data);
                 this._roles = this._roles || [];
@@ -203,17 +208,13 @@ module.exports = SUtils.deps(
         }
 
         _populateImage(imagePath) {
+            console.log('_populateImage', imagePath);
             let self = this;
             return SUtils
                 .cmsMod('media')
                 .model('media')
                 .then((Media) => {
-                    let media = new Media({
-                        source: {
-                            src: imagePath
-                        }
-                    });
-                    return media.save();
+                    return Media.generator(imagePath);
                 })
                 .then((image) => {
                     self._doc.avatar = image.id;
@@ -247,27 +248,22 @@ module.exports = SUtils.deps(
 
             if (email) {
 
+                let image = gravatar.url(email.accountId, {
+                    s: '250',
+                    r: 'x',
+                    d: 'retro'
+                }, true);
+
                 return SUtils
                     .cmsMod('media')
                     .model('media')
                     .then((Media) => {
 
-                        let avatar = new Media({
-                            source: {
-                                src: gravatar.url(email.accountId, {
-                                    s: '250',
-                                    r: 'x',
-                                    d: 'retro'
-                                }, true)
-                            }
-                        });
+                        return Media.generator(image).then((media) => {
+                            this._doc.avatar = media.id;
+                            return this.save();
 
-                        return avatar
-                            .save()
-                            .then((media) => {
-                                this._doc.avatar = media.id;
-                                return this.save();
-                            });
+                        });
                     });
             }
             return this;

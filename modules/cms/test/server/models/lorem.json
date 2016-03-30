@@ -3,7 +3,7 @@
     "content": [{
         "type": "heading",
         "attrs": {
-            "level": 1
+            "level": "1"
         },
         "content": [{
             "type": "text",
@@ -12,7 +12,7 @@
     }, {
         "type": "heading",
         "attrs": {
-            "level": 2
+            "level": "2"
         },
         "content": [{
             "type": "text",
@@ -78,7 +78,7 @@
     }, {
         "type": "heading",
         "attrs": {
-            "level": 2
+            "level": "2"
         },
         "content": [{
             "type": "text",
@@ -99,7 +99,7 @@
     }, {
         "type": "heading",
         "attrs": {
-            "level": 2
+            "level": "2"
         },
         "content": [{
             "type": "text",

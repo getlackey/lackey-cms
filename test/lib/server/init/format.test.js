@@ -65,7 +65,7 @@ describe('lib/server/init/format', () => {
             res = {
                 _headers: {},
                 header: (name, value) => res._headers[name] = value,
-                send: function () {
+                send: function (output) {
                     callback(new Error('Shouldn\'t be here'));
                 },
                 render: function (template, data) {
@@ -84,6 +84,7 @@ describe('lib/server/init/format', () => {
                         data: {},
                         locale: undefined,
                         user: undefined,
+                        defaultLocale: undefined,
                         admin: undefined,
                         edit: false,
                         route: '/hakuna/matata'
@@ -128,6 +129,7 @@ describe('lib/server/init/format', () => {
                         user: undefined,
                         admin: undefined,
                         locale: undefined,
+                        defaultLocale: undefined,
                         edit: false,
                         route: '/hakuna/matata.json'
                     });
@@ -177,6 +179,7 @@ describe('lib/server/init/format', () => {
                         user: undefined,
                         admin: undefined,
                         locale: undefined,
+                        defaultLocale: undefined,
                         edit: false,
                         route: '/hakuna/matata.json'
                     });
@@ -231,6 +234,7 @@ describe('lib/server/init/format', () => {
                         user: undefined,
                         admin: undefined,
                         locale: undefined,
+                        defaultLocale: undefined,
                         edit: false,
                         route: '/hakuna/matata.json'
                     });

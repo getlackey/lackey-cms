@@ -22,12 +22,14 @@ var
     helpers = require('dustjs-helpers'),
     iterate = require('../../shared/dust/iterate'),
     hashmap = require('../../shared/dust/hashmap'),
-    list = require('../../shared/dust/list');
+    list = require('../../shared/dust/list'),
+    path = require('../../shared/dust/path');
 
 engine.helpers = helpers.helpers;
 iterate(engine);
 hashmap(engine);
 list(engine);
+path(engine);
 
 function load(name) {
     return xhr.get('dust/' + name + '.js').then((template) => {

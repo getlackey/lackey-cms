@@ -16,7 +16,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
 const url = require('url');
 
 window.addEventListener('unload', () => {
@@ -31,6 +30,11 @@ if (top === window) {
 } else {
     let left = top.location.pathname.replace(/\/$/, ''),
         right = '/admin' + document.location.pathname.replace(/\/$/, '');
+
+    if(right === '/admin/cms/preview') {
+        // something goes wrong here
+        return;
+    }
 
     if (left !== right) {
         top.location.href = right + document.location.search;

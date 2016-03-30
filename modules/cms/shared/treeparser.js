@@ -22,30 +22,33 @@ const bestmatch = require('bestmatch'),
 
 function parse(value, variant, state, locale) {
 
-    if (!value || !value.type || !value.variants) {
+    if (!value || value.type !== 'Variants') {
         return value;
     }
 
     let
         filter = module.exports.pattern(variant, state, locale),
         map = {},
-        variants = Object.keys(value.variants).map(function (rule) {
+        variants = Object.keys(value).map(function (rule) {
             let ruleParts = rule.split(SEP),
                 result;
-            while (ruleParts.length < 3) {
-                ruleParts.push('*');
-            }
-            result = ruleParts.join(SEP);
+            result = module.exports.pattern(ruleParts[0], ruleParts[1], ruleParts[2]);
             map[result] = rule;
             return result;
+        }).filter((val) => {
+            return val !== 'type';
         }),
         key = map[bestmatch(variants, filter)];
-    return value.variants[key];
+
+    return value[key];
 }
 
 module.exports.pattern = (variant, state, locale) => {
-    if (!variant && !state && !locale) return '*';
-    let output = variant;
+    if (!variant && !state && !locale) {
+        return '*';
+    }
+
+    let output = variant || '*';
     if (state || locale) {
         output += SEP + (state || '*');
         if (locale) {
@@ -54,36 +57,12 @@ module.exports.pattern = (variant, state, locale) => {
     } else {
         output += SEP + '*';
     }
+
+    if (output === '*:*:*' || output === '*:*') {
+        return '*';
+    }
+
     return output;
-};
-
-module.exports.set = (root, path, value, variant, state, locale) => {
-    if (!path) {
-        throw new Error('Path is requried in setter');
-    }
-    let input = {},
-        old = crawl(root, path),
-        target = module.exports.pattern(variant, state, locale),
-        notVariant = (typeof old === 'string') || !old.type || (old.type && old.type !== 'Variants');
-
-    if (notVariant && target === '*') {
-        input = value;
-    } else {
-        if (notVariant) {
-            if(typeof old === 'object' && old.hasOwnProperty('*')) {
-                input = old;
-            } else {
-                input['*'] = old;
-            }
-            input.type = 'Variants';
-        } else {
-            input = old;
-        }
-        input[target] = value;
-
-    }
-    crawl(root, path, input);
-
 };
 
 function crawl(object, path, value) {
@@ -99,10 +78,42 @@ function crawl(object, path, value) {
         }
     }
 
-    if (!path || !path.length || !object) return object;
+    if (!path || !path.length || !object) {
+        return object;
+    }
 
     return crawl(object[field], elems.join('.'), value);
 }
+
+module.exports.set = (root, path, value, variant, state, locale) => {
+    if (!path) {
+        throw new Error('Path is requried in setter');
+    }
+    let input = {},
+        old = crawl(root, path),
+        target = module.exports.pattern(variant, state, locale),
+        notVariant = !old || (typeof old === 'string') || !old.type || (old.type && old.type !== 'Variants');
+
+    if (notVariant && target === '*') {
+        input = value;
+    } else {
+        if (notVariant && old) {
+            if (typeof old === 'object' && old.hasOwnProperty('*')) {
+                input = old;
+            } else if (typeof old !== 'object' || old.type) {
+                input['*'] = old;
+            }
+            input.type = 'Variants';
+        } else {
+            input = old || {};
+        }
+        input[target] = value;
+
+    }
+    crawl(root, path, input);
+
+};
+
 
 module.exports.get = (root, path, variant, state, locale) => {
     return parse(crawl(root, path), variant, state, locale);

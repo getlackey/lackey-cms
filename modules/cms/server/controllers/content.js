@@ -64,6 +64,37 @@ module.exports = SUtils.deps(
                 };
             }
 
+            static create(req, res) {
+
+                if (!req.body) return res.error(req, new Error('No input'));
+                if (!req.body.route) return res.error(req, new Error('No route given'));
+                if (!req.body.templateId) return res.error(req, new Error('No template id given'));
+
+                req.body.templateId = 1 * req.body.templateId;
+
+                this.model.getByTypeAndRoute('page', req.body.route)
+                    .then((instance) => {
+                        if (instance) {
+                            throw new Error('Given route is already taken');
+                        }
+                        req.body.type = 'page';
+                        return this.model.create(req.body);
+                    })
+                    .then((instance) => {
+                        res.api(instance);
+                    }, function (error) {
+                        console.error(error);
+                        res.error(req, error);
+                    });
+            }
+
+            static get actions() {
+                return [{
+                    label: 'View',
+                    href: '/admin{route}'
+                }];
+            }
+
             static cmsList(req, res) {
                 Model.list({
                         type: 'page'
@@ -111,9 +142,28 @@ module.exports = SUtils.deps(
                 }
             }
 
+            static createPage(req, res) {
+                Template.selectable()
+                    .then((templates) => {
+
+                        res.send({
+                            template: 'cms/cms/page-create',
+                            javascripts: [
+                                'js/cms/cms/new-page.js'
+                            ],
+                            data: {
+                                types: Model.getTypes(),
+                                templates: templates.map((template) => {
+                                    return template.toJSON();
+                                })
+                            }
+                        });
+                    }, req.error);
+            }
+
             static taxonomyFromQuery(body) {
                 let promise = null;
-                if(!body.type) {
+                if (!body.type) {
                     throw new Error('Type required');
                 }
                 if (body.name) {

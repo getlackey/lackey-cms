@@ -1,58 +1,80 @@
-.structure-Composite,
-.structure-doc,
-.structure-Block,
-.structure-List {
-    padding: 10px 5px;
+[data-lky-hook="cms.area.structure"],
+.structure ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.dropdown-settings li.structure {
+    font-size: 12px;
+    margin: 0px;
+    padding: 0px 0px;
+    background-color: rgba(255, 255, 255, 0.1);
+    span {
+        padding: 5px 10px;
+        min-height: 14px;
+        display: inline-block;
+    }
     ul {
+        display: none;
         padding: 0;
         list-style: none;
-        li {
-            font-size: 12px;
+    }
+    a {
+        font-size: 11px;
+    }
+    .toggle {
+        float: right;
+        width: 10px;
+        height: 10px;
+        padding: 5px 3px 0px 0px;
+        &:before {
+            font: normal normal normal 14px/1 FontAwesome;
+            content: "\f107";
         }
-        h5 {
-            margin: 0px;
-            text-align: center;
+    }
+    .toolbar {
+        float: right;
+        padding: 5px 10px;
+        min-height: 14px;
+    }
+    &.expand {
+        > ul {
+            display: block;
+        }
+        > .toggle {
+            &:before {
+                content: "\f106";
+            }
         }
     }
 }
 
-.structure-Composite {
-    border: 1px dotted #666;
-    padding: 5px;
-    h5 {
-        color: white;
-    }
-}
-
-.structure-doc {
-    border: 1px dotted white;
-    background-color: #666;
-}
-
-.structure-Block {
-    border: 1px dotted white;
-    background-color: #666;
-}
-
-.structure-Block > h5:before {
+.structure-Block > span:before {
     font: normal normal normal 14px/1 FontAwesome;
     content: "\f1b2";
     padding-right: 5px;
 }
 
-.structure-List {
-    border: 1px dotted white;
-    background-color: #666;
-}
-
-.structure-List > h5:before {
+.structure-List > span:before {
     font: normal normal normal 14px/1 FontAwesome;
     content: "\f03a";
     padding-right: 5px;
 }
 
-.structure-doc > h5:before {
+.structure-Media > span:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f03e";
+    padding-right: 5px;
+}
+
+.structure-doc > span:before {
     font: normal normal normal 14px/1 FontAwesome;
     content: "\f15c";
+    padding-right: 5px;
+}
+
+.structure-User > span:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f007";
     padding-right: 5px;
 }

@@ -1,0 +1,28 @@
+{>"cms/core/modal"/}
+
+{<body}
+  <div class="bt">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Properties</h4>
+      </div>
+      <div class="modal-body">
+        <div style="overflow-y: auto">
+          <ul>
+            {#definitions}
+              <dl>
+                <dt>{$key}</dt>
+                <dd>
+                    <input type="text" class="form-control" value="{@path root=properties path=$key/}" name="{$key}"/>
+                </dd>
+              </dl>
+            {/definitions}
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"data-lky-hook="close">Apply</button>
+      </div>
+    </div>
+  </div>
+{/body}

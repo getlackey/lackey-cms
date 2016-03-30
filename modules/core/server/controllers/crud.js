@@ -43,6 +43,14 @@ class CRUDController {
 
     // Read
     static read(req, res) {
+        if (req.__resFormat === 'yaml' && req[this.field].toYAML) {
+            req[this.field]
+                .toYAML()
+                .then((result) => {
+                    res.yaml(result);
+                });
+            return;
+        }
         res.api(req[this.field]);
     }
 
@@ -61,32 +69,74 @@ class CRUDController {
 
     // List
     static list(req, res) {
-            let restParams = req.getRESTQuery(true);
+        let restParams = req.getRESTQuery(true),
+            self = this;
 
-            this.model.table(restParams.query, this.tableConfig, restParams.options).then((data) => {
-                res.api(data);
-            }, (error) => {
-                res.error(req, error);
-            });
-        }
+        this.model.table(restParams.query, this.tableConfig, restParams.options).then((data) => {
+            try {
+                self.mapActions(this.actions, data.columns, data.rows);
+            } catch (e) {
+                console.log(e);
+                res.error(e);
+            }
+            res.api(data);
+        }, (error) => {
+            res.error(req, error);
+        });
+    }
+
     // ById
     static byId(req, res, next, id) {
-            let self = this;
-            this.model.findById(id)
-                .then((content) => {
-                    req[self.field] = content;
-                    next();
-                }, (error) => {
-                    req.error(req, error);
-                });
-        }
+        let self = this;
+        this.model
+            .findById(id)
+            .then((content) => {
+                req[self.field] = content;
+                next();
+            }, (error) => {
+                req.error(req, error);
+            });
+    }
+
     // ================================================ /CRUD
+
+    static mapActions(actions, columns, rows) {
+        if (actions && rows) {
+            rows.map((row) => {
+                row.actions = actions.map((_action) => {
+                    let action = JSON.parse(JSON.stringify(_action));
+                    if (action.href) {
+                        let matches = action.href.match(/\{.+?\}/g);
+                        if (matches) {
+                            matches.forEach((match) => {
+                                let fieldName = match.replace(/^\{|\}$/g, '');
+                                columns.forEach((column, index) => {
+                                    if (column.name === fieldName) {
+                                        action.href = row.columns[index].value; //action.href.replace(match, row.columns[index].value);
+                                    }
+                                });
+                            });
+                        }
+                    }
+                    return action;
+                });
+            });
+        }
+    }
 
     static table(req, res) {
 
-        let restParams = req.getRESTQuery(true);
+        let restParams = req.getRESTQuery(true),
+            self = this;
 
-        this.model.table(restParams.query, this.tableConfig).then((data) => {
+        this.model.table(restParams.query, this.tableConfig, {
+            format: 'table'
+        }).then((data) => {
+            try {
+                self.mapActions(this.actions, data.columns, data.rows);
+            } catch (e) {
+                res.error(e);
+            }
             res.send({
                 template: 'cms/cms/tableview',
                 javascripts: [
@@ -104,7 +154,7 @@ class CRUDController {
 
     static method(methodName, param) {
         let self = this;
-        if(!param) {
+        if (!param) {
             return (req, res, next) => self[methodName](req, res, next);
         }
         return (req, res, next, id) => self[methodName](req, res, next, id);

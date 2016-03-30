@@ -33,25 +33,26 @@ module.exports = (data) => {
     return require('./index')
         .then((template) => {
             Template = template;
-
+            if (typeof data === 'number') {
+                return Template.findById(data);
+            }
             path = (typeof data === 'string') ? data : data.path;
             SCli.debug('lackey/modules/cms/server/models/template/generator', 'Ensure that Template ' + path + ' exists');
-            return Template.getByPath(path);
+            return Template.getByPath(path).then((templateObj) => {
+                let wrapped = (typeof data === 'string') ? {
+                    path: data
+                } : data;
+                if (!templateObj) {
+                    SCli.log('lackey/modules/cms/server/models/template/generator', 'Create Template ' + path);
+                    return Template.create(wrapped);
+                }
+                if (Generator.override('Template') && templateObj.diff(wrapped)) {
+                    return templateObj.save();
+                }
+                return templateObj;
+            });
         }).then((template) => {
-            let wrapped = (typeof data === 'string') ? {
-                path: data
-            } : data;
-            if (!template) {
-                SCli.log('lackey/modules/cms/server/models/template/generator', 'Create Template ' + path);
-                return Template.create(wrapped);
-            }
-            if (template.diff(wrapped)) {
-                SCli.log('lackey/modules/cms/server/models/template/generator', 'Update Template ' + path);
-                return template.save();
-            }
-            return template;
-        }).then((template) => {
-            SCli.debug('lackey/modules/cms/server/models/template/generator', 'Ensured that Template ' + path + ' exists');
+            SCli.debug('lackey/modules/cms/server/models/template/generator', 'Ensured that Template ' + JSON.stringify(data) + ' exists');
             return template;
         });
 };

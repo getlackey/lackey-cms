@@ -24,8 +24,6 @@ if (!GLOBAL.LACKEY_PATH) {
 const SCli = require(LACKEY_PATH).cli,
     Generator = require(LACKEY_PATH).generator;
 
-let Language;
-
 module.exports = (data, Language) => {
 
     let LanguageModel = Language || require('./index');

@@ -31,9 +31,9 @@ class Table {
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
         this.paging();
-        lackey.bind('lky:filters', 'submit', (event, hook) => {
+        lackey.bind('[data-lky-hook="filters"] button', 'click', (event) => {
             /* istanbul ignore next */
-            self.filter(event, hook);
+            self.filter(event, lackey.hook('lky:filters'));
         }, element);
     }
 
@@ -97,28 +97,25 @@ class Table {
 
         api.read(path).then((response) => {
 
+            response.rows.map((row) => {
+                let columns = [];
+                self._columns.forEach((column) => {
+                    let value = row[column.name];
+                    if (column.parse) {
+                        let parse = new Function('val', column.parse); //eslint-disable-line no-new-func
+                        value = parse(value);
+                    }
+                    columns.push({
+                        value: value
+                    });
+                });
+                return {
+                    columns: columns
+                };
+            });
+
             let context = {
                 table: response
-                    /*{
-                                        columns: self._columns,
-                                        paging: response.paging,
-                                        rows: response.rows/*.map((row) => {
-                                            let columns = [];
-                                            self._columns.forEach((column) => {
-                                                let value = row[column.name];
-                                                if (column.parse) {
-                                                    let parse = new Function('val', column.parse); //eslint-disable-line no-new-func
-                                                    value = parse(value);
-                                                }
-                                                columns.push({
-                                                    value: value
-                                                });
-                                            });
-                                            return {
-                                                columns: columns
-                                            };
-                                        })
-                                    }*/
             };
             self.drawRows(context);
             self.drawPaging(context);
@@ -156,7 +153,7 @@ class Table {
 
     paging(area) {
         let self = this;
-        lackey.bind('table-paging', 'click', (event, hook) => {
+        lackey.bind('lky:table-paging', 'click', (event, hook) => {
             event.stopPropagation();
             event.preventDefault();
             self.page(hook.getAttribute('data-page'));

@@ -21,6 +21,7 @@ var lackey,
 
 function select(selector, root) {
     if (!selector) return [];
+    if (selector.nodeType === 1) return [selector];
     if (Array.isArray(selector)) {
         let result = [];
         selector.forEach((singleSelector) => {
@@ -169,8 +170,12 @@ lackey = {
             'select'
         ], form).forEach(function (element) {
             if (element.name && element.name.length) {
-                if (element.type === 'checkbox') {
+                if (['checkbox'].indexOf(element.type) !== -1) {
                     values[element.name] = element.checked ? element.value : null;
+                } else if (['radio'].indexOf(element.type) !== -1) {
+                    if(element.checked) {
+                        values[element.name] = element.value;
+                    }
                 } else {
                     values[element.name] = element.value;
                 }
@@ -183,21 +188,12 @@ lackey = {
     },
     show: function (selector, root) {
         lackey.each(selector, function (target) {
-            if (!target.classList) {
-                return addClass(target, 'show');
-            }
-            /* istanbul ignore next : atomus don't support classList */
-            target.classList.add('show');
+            target.style.display = 'initial';
         }, root);
     },
     hide: function (selector, root) {
         lackey.each(selector, function (target) {
-            if (!target.classList) {
-                return removeClass(target, 'show');
-
-            }
-            /* istanbul ignore next : atomus don't support classList */
-            target.classList.remove('show');
+            target.style.display = 'none';
         }, root);
     },
     addClass: addClass,
@@ -222,7 +218,7 @@ lackey = {
                 }, 0);
             });
         }
-        if(this !== top.Lackey) {
+        if (this !== top.Lackey) {
             top.Lackey.emit(event, data);
         }
         return lackey;

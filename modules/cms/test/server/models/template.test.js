@@ -63,6 +63,9 @@ describe('models/cms/server/models/template', () => {
                 path: 'page/template',
                 javascripts: ["js1", "js2"],
                 stylesheets: ["css1", "css2"],
+                props: {},
+                selectable: false,
+                thumb: null,
                 type: 'template'
             });
             result.name.should.be.eql('my page');

@@ -23,12 +23,39 @@ const model = require('prosemirror/dist/model'),
       twitterable = require('./widgets/twitterable'),
       Dino = dino.Dino,
       Twitterable = twitterable.Twitterable,
-      Dust = dust.Dust;
+      Dust = dust.Dust,
+      Image = model.Image;
+
+let img = window.document.createElement('img');
+img.style.left = '-1000px';
+img.style.top = '-1000px';
+
+Image.register('command', 'upload', {
+      label: 'Upload Image',
+      menu: {
+            group: 'insert',
+            rank: 70,
+            display: {
+                  type: 'label',
+                  label: 'Media'
+            }
+      },
+      run: function (pm) {
+            top.Lackey.manager.media({
+                        node: img
+                  })
+                  .then((media) => {
+                        if (!media) return;
+                        pm.execCommand('image:insert', [media.source, media.source, media.source]);
+                  });
+      }
+});
 
 let LackeySchema = new Schema(defaultSchema.spec.update({
       dust: Dust,
       twitterable: Twitterable,
-      dino: Dino
+      dino: Dino,
+      image: Image
 }));
 
 LackeySchema.newDoc = (id) => {
@@ -36,10 +63,7 @@ LackeySchema.newDoc = (id) => {
             type: 'doc',
             content: [{
                   type: 'paragraph',
-                  content: [{
-                        type: 'text',
-                        text: ''
-                  }]
+                  content: []
             }]
       };
       if (id) {

@@ -331,7 +331,7 @@ describe('modules/users/server/models/user', () => {
                 should.exist(result);
                 result.name.should.be.eql('name');
                 result.roles.should.be.eql([]);
-                result.image.default.src.should.be.eql('https://s.gravatar.com/avatar/43b05f394d5611c54a1a9e8e20baee21?s=250&r=x&d=retro');
+                result.image.source.should.be.eql('https://s.gravatar.com/avatar/43b05f394d5611c54a1a9e8e20baee21?s=250&r=x&d=retro');
             }).then(() => {
                 return true;
             }).should.be.finally.eql(true)]);

@@ -1,4 +1,4 @@
-/* eslint no-cond-assign:0 */
+/* eslint no-cond-assign:0, no-new:0 */
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
@@ -26,7 +26,8 @@ const
     modal = require('./../../../../core/client/js/modal'),
     template = require('./../../../../core/client/js/template'),
     treeParser = require('./../../../shared/treeparser'),
-    Structure = require('./structure');
+    Structure = require('./structure'),
+    MediaModalController = require('./media');
 
 let contents = {},
     cache = {},
@@ -57,6 +58,7 @@ function jsjp(input) {
 
 let self,
     locale = null,
+    defaultLocale = null,
     LackeyPageManager = {
         refresh: function () {
             var changed = null;
@@ -81,15 +83,19 @@ let self,
 
             lackey.select('html').forEach((elem) => {
                 locale = elem.getAttribute('lang');
+                defaultLocale = elem.getAttribute('data-default-locale');
+                if (locale === defaultLocale) {
+                    locale = '*';
+                }
             });
 
             if (options && options.controls) {
                 if (options.controls.visibility) {
-                    self.visibility = lackey.hook(options.controls.visibility);
+                    self.visibility = lackey.select(options.controls.visibility)[0];
                     lackey.bind(self.visibility, 'click', lackey.as(self.toggleVisibility, self));
                 }
                 if (options.controls.save) {
-                    self.saveBtn = lackey.hook(options.controls.save);
+                    self.saveBtn = lackey.select(options.controls.save)[0];
                     lackey.bind(self.saveBtn, 'click', lackey.as(self.save, self));
                 }
                 if (options.controls.cancel) {
@@ -98,8 +104,17 @@ let self,
                 if (options.controls.taxonomy) {
                     lackey.bind(options.controls.taxonomy, 'click', lackey.as(self.taxonomy, self));
                 }
+                if (options.controls.properties) {
+                    lackey.bind(options.controls.properties, 'click', lackey.as(self.properties, self));
+                }
                 if (options.controls.structure) {
                     LackeyPageManager.structure(options.controls.structure);
+                }
+                if (options.controls.preview) {
+                    lackey.bind(options.controls.preview, 'click', lackey.as(self.preview, self));
+                }
+                if (options.controls.create) {
+                    lackey.bind(options.controls.create, 'click', lackey.as(self.create, self));
                 }
             }
             LackeyPageManager.setVisibility(LackeyPageManager.getVisibility());
@@ -114,10 +129,65 @@ let self,
                 });
             });
         },
+        create: () => {
+            api.get('cms/template?selectable=true')
+                .then((templates) => {
+                    return modal.open('cms/cms/newpage', {
+                        templates: templates.data
+                    }, function (rootNode, vars, resolve) {
+                        lackey.bind('lky:create', 'click', () => {
+                            resolve(lackey.form(rootNode));
+                        }, rootNode);
+                        lackey.bind('lky:cancel', 'click', () => {
+                            resolve(null);
+                        }, rootNode);
+                    });
+                }).then(() => {});
+        },
+        preview: () => {
+            self.getDefault()
+                .then((def) => {
+                    let data = JSON.stringify({
+                            location: ((a) => {
+                                return a === '' ? '/' : a;
+                            })(top.location.pathname.replace(/^\/admin/, '')),
+                            contents: contents[def.id]
+                        }),
+                        form = top.document.createElement('form'),
+                        input = top.document.createElement('input');
+                    form.method = 'post';
+                    form.action = '/cms/preview';
+                    form.target = '_preview';
+                    input.type = 'hidden';
+                    input.name = 'preview';
+                    input.value = data;
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                    document.body.removeChild(form);
+                });
+        },
+        media: (media) => {
+            return modal.open('cms/cms/image', {
+                node: media.node,
+                media: media.media
+            }, MediaModalController);
+        },
         structure: (selector) => {
-            let view;
-            return this.default.then((page) => {
-                view = new Structure(page.layout, selector);
+            return self.getDefault().then((page) => {
+                page.layout = page.layout || {};
+                let node = new Structure(page.layout);
+                Structure.changed(() => {
+                    contents[page.id].layout = page.layout;
+                    self.refresh();
+                    self.preview();
+                });
+                node.expand();
+                lackey.select(selector)[0].appendChild(node.node);
+                lackey.on('structure.add-block', (event) => {
+                    console.log(event);
+                    console.log(node);
+                });
             });
         },
         capture: (event) => {
@@ -126,117 +196,180 @@ let self,
             return false;
         },
         readDefault: () => {
-            let location = top.location.pathname.replace(/^\/admin/, '');
-            this.default = api.read('/cms/content?route=' + location).then((data) => {
+            let loc = top.location.pathname.replace(/^\/admin/, '');
+            if (loc === '') {
+                loc = '/';
+            }
+            self._default = api.read('/cms/content?route=' + loc).then((data) => {
                 return data.data[0];
             });
-            return this.default;
+            return self._default;
         },
+        getDefault: () => {
+            return self._default || self.readDefault();
+        },
+        properties: (event) => {
+            event.preventDefault();
+            event.cancelBubble = true;
+            let id;
+            self.getDefault().then((content) => {
+                id = content.id;
+                modal.open('cms/cms/properties', {
+                    properties: content.props,
+                    definitions: Object.keys(content.template.props).map((key) => {
+                        return {
+                            $key: key,
+                            item: content.template.props[key]
+                        };
+                    })
+                }, function (rootNode, vars, resolve) {
+                    lackey.bind('lky:close', 'click', () => {
+                        resolve(lackey.form(rootNode));
+                    }, rootNode);
+                }).then((props) => {
+                    console.log(props);
+                    contents[id].props = props;
+                    self.refresh();
+                    self.preview();
+                });
+            });
+        },
+
+        addBlock: (contentId, path) => {
+            api.read('/cms/template?type=block')
+                .then((templates) => {
+                    return modal.open('cms/cms/blocks', {
+                        templates: templates.data
+                    }, function (rootNode, vars, resolve) {
+                        lackey.bind('lky:close', 'click', () => {
+                            resolve(lackey.hook('template').value);
+                        }, rootNode);
+                    });
+                }).then((_template) => {
+                    let source = treeParser.get(contents[contentId].layout, path, null, null, null);
+                    if (!source) {
+                        source = {
+                            type: 'List',
+                            items: []
+                        };
+                    }
+                    source.items.push({
+                        type: 'Block',
+                        fields: {},
+                        template: _template
+                    });
+                    treeParser.set(contents[contentId].layout, path, source, '*', null, null);
+                    self.refresh();
+                    self.preview();
+                });
+        },
+
         taxonomy: (event) => {
-            let self = this;
 
             event.preventDefault();
             event.cancelBubble = true;
-            api.read('/cms/taxonomy-type').then((data) => {
-                modal.open('cms/cms/taxonomy', {
-                    types: data.data
-                }, function (rootNode, vars, resolve) {
+            api.read('/cms/taxonomy-type')
+                .then((data) => {
+                    modal.open('cms/cms/taxonomy', {
+                        types: data.data
+                    }, function (rootNode, vars, resolve) {
 
-                    let currentType = 'tag';
+                        let currentType = 'tag';
 
-                    function loadCurrent(type) {
-                        self.default.then((content) => {
-                            let taxonomies = content.taxonomies.filter((item) => {
-                                return item.type.name === type;
+                        function loadCurrent(type) {
+                            self.getDefault()
+                                .then((content) => {
+                                    let taxonomies = content.taxonomies.filter((item) => {
+                                        return item.type.name === type;
+                                    });
+                                    return template.redraw('items', {
+                                            bullets: taxonomies,
+                                            remove: true
+                                        }, rootNode)
+                                        .then(() => {
+                                            lackey.bind('button', 'click', (event2, button) => {
+                                                event2.preventDefault();
+                                                event2.cancelBubble = true;
+                                                self.getDefault().then((content2) => {
+                                                    return api.delete('/cms/content/' + content2.id + '/taxonomy', {
+                                                        name: button.getAttribute('data-name')
+                                                    }).then((updated) => {
+                                                        self._default = Promise.resolve(updated);
+                                                        loadCurrent(type);
+                                                    });
+                                                });
+                                                return false;
+                                            }, lackey.hook('items', rootNode));
+                                        });
+                                });
+                        }
+
+                        function loadType(type) {
+
+                            currentType = type;
+
+                            lackey.hooks('taxonomyTab').forEach((elem) => {
+                                if (elem.getAttribute('data-name') === type) {
+                                    lackey.addClass(elem, 'active');
+                                } else {
+                                    lackey.removeClass(elem, 'active');
+                                }
                             });
-                            return template.redraw('items', {
-                                    bullets: taxonomies,
-                                    remove: true
-                                }, rootNode)
+
+                            loadCurrent(type);
+
+                            api.read('/cms/taxonomy?type=' + type)
+                                .then((list) => {
+                                    return template.redraw('cloud', {
+                                        bullets: list.data
+                                    }, rootNode);
+                                })
                                 .then(() => {
-                                    lackey.bind('button', 'click', (event, button) => {
-                                        event.preventDefault();
-                                        event.cancelBubble = true;
-                                        self.default.then((content) => {
-                                            return api.delete('/cms/content/' + content.id + '/taxonomy', {
-                                                name: button.getAttribute('data-name')
+                                    lackey.bind('button', 'click', (event3, button) => {
+                                        event3.preventDefault();
+                                        event3.cancelBubble = true;
+                                        self.getDefault().then((content) => {
+                                            return api.create('/cms/content/' + content.id + '/taxonomy', {
+                                                name: button.getAttribute('data-name'),
+                                                type: type
                                             }).then((updated) => {
-                                                self.default = Promise.resolve(updated);
+                                                self._default = Promise.resolve(updated);
                                                 loadCurrent(type);
                                             });
                                         });
                                         return false;
-                                    }, lackey.hook('items', rootNode));
+                                    }, lackey.hook('cloud', rootNode));
                                 });
-                        });
-                    }
 
-                    function loadType(type) {
+                        }
 
-                        currentType = type;
-
-                        lackey.hooks('taxonomyTab').forEach((elem) => {
-                            if (elem.getAttribute('data-name') === type) {
-                                lackey.addClass(elem, 'active');
-                            } else {
-                                lackey.removeClass(elem, 'active');
-                            }
-                        });
-
-                        loadCurrent(type);
-
-                        api.read('/cms/taxonomy?type=' + type)
-                            .then((list) => {
-                                return template.redraw('cloud', {
-                                    bullets: list.data
-                                }, rootNode);
-                            })
-                            .then(() => {
-                                lackey.bind('button', 'click', (event, button) => {
-                                    event.preventDefault();
-                                    event.cancelBubble = true;
-                                    self.default.then((content) => {
-                                        return api.create('/cms/content/' + content.id + '/taxonomy', {
-                                            name: button.getAttribute('data-name'),
-                                            type: type
-                                        }).then((updated) => {
-                                            self.default = Promise.resolve(updated);
-                                            loadCurrent(type);
-                                        });
-                                    });
-                                    return false;
-                                }, lackey.hook('cloud', rootNode));
+                        lackey.bind('lky:add-taxonomy', 'submit', (event4, hook) => {
+                            event4.preventDefault();
+                            event4.cancelBubble = true;
+                            self.getDefault().then((content) => {
+                                return api.create('/cms/content/' + content.id + '/taxonomy', {
+                                    type: currentType,
+                                    label: lackey.form(hook).label
+                                }).then((updated) => {
+                                    self._default = Promise.resolve(updated);
+                                    loadCurrent(currentType);
+                                });
                             });
+                            return false;
+                        }, rootNode);
 
-                    }
+                        lackey.bind('lky:taxonomyTab', 'click', (event5, hook) => {
+                            event5.preventDefault();
+                            event5.cancelBubble = true;
+                            loadType(hook.getAttribute('data-name'));
+                            return false;
+                        }, rootNode);
 
-                    lackey.bind('lky:add-taxonomy', 'submit', (event, hook) => {
-                        event.preventDefault();
-                        event.cancelBubble = true;
-                        self.default.then((content) => {
-                            return api.create('/cms/content/' + content.id + '/taxonomy', {
-                                type: currentType,
-                                label: lackey.form(hook).label
-                            }).then((updated) => {
-                                self.default = Promise.resolve(updated);
-                                loadCurrent(currentType);
-                            });
-                        });
-                        return false;
-                    }, rootNode);
+                        loadType(currentType);
 
-                    lackey.bind('lky:taxonomyTab', 'click', (event, hook) => {
-                        event.preventDefault();
-                        event.cancelBubble = true;
-                        loadType(hook.getAttribute('data-name'));
-                        return false;
-                    }, rootNode);
-
-                    loadType(currentType);
-
-                    lackey.bind('lky:close', 'click', () => resolve(), rootNode);
+                        lackey.bind('lky:close', 'click', () => resolve(), rootNode);
+                    });
                 });
-            });
             return false;
         },
         setVisibility: function (value) {
@@ -295,16 +428,27 @@ let self,
             document.location.reload(true);
         },
         load(contentIds) {
-            return Promise.all(contentIds.map((id) => {
-                return api.read('/cms/content/' + id).then((json) => {
-                    contents[json.id] = json;
-                    return true;
-                });
-            })).then(() => {
-                cache = _.cloneDeep(contents);
-                self.setVisibility(self.getVisibility());
-                self.refresh();
-            });
+
+            if (!this._loader) {
+
+                this._loader = Promise.all(contentIds.map((id) => {
+                        return api.read('/cms/content/' + id).then((json) => {
+                            contents[json.id] = json;
+                            if (!json.layout) {
+                                json.layout = {
+                                    type: 'Fields'
+                                };
+                            }
+                            return true;
+                        });
+                    }))
+                    .then(() => {
+                        cache = _.cloneDeep(contents);
+                        self.setVisibility(self.getVisibility());
+                        self.refresh();
+                    });
+            }
+            return this._loader;
         }
     };
 

@@ -1,0 +1,49 @@
+    .image-manager {
+        .sidebar {
+            background: $color-light-gray;
+            color: $color-dark-gray;
+            float: left;
+            height: inherit;
+            width: 300px;
+            padding: 5px 10px;
+            [data-lky-hook="list"] {
+                overflow-y: auto;
+                height: 100%;
+            }
+
+            h5 {
+                font-size: 1rem;
+                margin: 5px 0px;
+            }
+
+            input {
+                width: 100%;
+                font-size: 1rem;
+            }
+
+            button {
+                padding: 10px;
+                margin: 5px;
+            }
+
+            [data-lky-hook="dropZone"] {
+                border:2px solid $color-dark-gray;
+                border-radius: 10px;
+                padding: 10px;
+                &:hover {
+                    background-color: lighten($color-light-gray,10%);
+                }
+            }
+
+        }
+        .miniatures {
+            list-style: none;
+            li {
+                float: left;
+                img, video {
+                    height: 100px;
+                    width: 100px;
+                }
+            }
+        }
+    }

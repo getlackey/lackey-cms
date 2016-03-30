@@ -52,7 +52,7 @@ module.exports = (data) => {
                             return Content.create(input);
                         }
                         SCli.debug('lackey/modules/cms/server/models/content/generator', 'Found content', content.type, content.route);
-                        if (content.diff(input)) {
+                        if (Generator.override('Content') && content.diff(input)) {
                             return content.save();
                         }
                         return content;

@@ -36,10 +36,31 @@ describe('modules/media/server/models/media', () => {
             require('../../../server/models/media')
                 .then((media) => {
                     MediaModel = media;
+                    MediaModel.debug = 'image/jpeg';
                     MediaGenerator = require('../../../server/models/media/generator');
                     done();
                 });
         });
+    });
+
+    it('gets mime from path', () => {
+        let tests = [{
+                input: 'a.jpg',
+                output: 'image/jpeg'
+         }, {
+                input: SOURCE,
+                output: 'image/jpeg'
+         }],
+            promise = Promise.resolve(true);
+
+        tests.forEach((test) => {
+            promise = MediaModel.lookupMime(test.input).then((mime) => {
+                mime.should.be.eql(test.output);
+                return true;
+            });
+        });
+
+        return promise;
     });
 
     it('should begin with no content', function () {
@@ -55,9 +76,11 @@ describe('modules/media/server/models/media', () => {
     describe('Gets default source', () => {
 
         it('Just string', () => {
-            MediaModel.defaultSource(SOURCE).should.eql({
-                src: SOURCE,
-                type: 'image'
+            return MediaModel.mapSource(SOURCE).should.finally.be.eql({
+                source: SOURCE,
+                type: 'image',
+                mime: 'image/jpeg',
+                alternatives: []
             });
         });
 
@@ -67,15 +90,13 @@ describe('modules/media/server/models/media', () => {
                 source: SOURCE
             };
 
-            MediaModel.defaultSource(input).should.eql({
-                src: SOURCE,
-                type: 'image'
+            return MediaModel.mapSource(input).should.finally.be.eql({
+                source: SOURCE,
+                type: 'image',
+                mime: 'image/jpeg',
+                alternatives: []
             });
 
-            MediaModel.sources(input).should.be.eql({
-                src: SOURCE,
-                type: 'image'
-            });
         });
 
         it('Source with videos and image', () => {
@@ -89,22 +110,26 @@ describe('modules/media/server/models/media', () => {
                 }
             };
 
-            MediaModel.defaultSource(input).should.eql({
-                src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+            return MediaModel.mapSource(input).should.finally.be.eql({
+                source: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
                 type: 'video',
-                mime: 'video/mp4'
+                mime: 'video/mp4',
+                alternatives: [{
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+                    type: 'video/mp4'
+            }, {
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE.webm',
+                    type: 'video/webm'
+            }, {
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE.ogv',
+                    type: 'video/ogg'
+            }, {
+                    src: SOURCE,
+                    type: 'image/jpeg'
+            }]
             });
 
-            MediaModel.sources(input).should.be.eql([{
-                src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
-                type: 'video/mp4'
-            }, {
-                src: 'http://clips.vorwaerts-gmbh.de/VfE.webm',
-                type: 'video/webm'
-            }, {
-                src: 'http://clips.vorwaerts-gmbh.de/VfE.ogv',
-                type: 'video/ogg'
-            }]);
+
         });
 
         it('Source with videos (nested)', () => {
@@ -123,27 +148,27 @@ describe('modules/media/server/models/media', () => {
                 }
             };
 
-            MediaModel.defaultSource(input).should.eql({
-                src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+            return MediaModel.mapSource(input).should.finally.be.eql({
+                source: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
                 type: 'video',
-                'mime': 'video/mp4'
+                mime: 'video/mp4',
+                alternatives: [{
+                    media: 'all and (min-width: 300px)',
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+                    type: 'video/mp4'
+                }, {
+                    media: 'all and (min-width: 600px)',
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE_html5B.mp4',
+                    type: 'video/mp4'
+                }, {
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE.webm',
+                    type: 'video/webm'
+                }, {
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE.ogv',
+                    type: 'video/ogg'
+                }]
             });
 
-            MediaModel.sources(input).should.be.eql([{
-                media: 'all and (min-width: 300px)',
-                src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
-                type: 'video/mp4'
-            }, {
-                media: 'all and (min-width: 600px)',
-                src: 'http://clips.vorwaerts-gmbh.de/VfE_html5B.mp4',
-                type: 'video/mp4'
-            }, {
-                src: 'http://clips.vorwaerts-gmbh.de/VfE.webm',
-                type: 'video/webm'
-            }, {
-                src: 'http://clips.vorwaerts-gmbh.de/VfE.ogv',
-                type: 'video/ogg'
-            }]);
         });
 
         it('Source with videos', () => {
@@ -156,22 +181,22 @@ describe('modules/media/server/models/media', () => {
                 }
             };
 
-            MediaModel.defaultSource(input).should.eql({
-                src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+            return MediaModel.mapSource(input).should.finally.be.eql({
+                source: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
                 type: 'video',
-                'mime': 'video/mp4'
+                mime: 'video/mp4',
+                alternatives: [{
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+                    type: 'video/mp4'
+            }, {
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE.webm',
+                    type: 'video/webm'
+            }, {
+                    src: 'http://clips.vorwaerts-gmbh.de/VfE.ogv',
+                    type: 'video/ogg'
+            }]
             });
 
-            MediaModel.sources(input).should.be.eql([{
-                src: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
-                type: 'video/mp4'
-            }, {
-                src: 'http://clips.vorwaerts-gmbh.de/VfE.webm',
-                type: 'video/webm'
-            }, {
-                src: 'http://clips.vorwaerts-gmbh.de/VfE.ogv',
-                type: 'video/ogg'
-            }]);
         });
 
         it('Image source sets with default', () => {
@@ -197,20 +222,18 @@ describe('modules/media/server/models/media', () => {
                 }]
             };
 
-            MediaModel.defaultSource(input).should.eql({
-                src: SOURCE,
-                type: 'image'
-            });
-
-            MediaModel.sources(input).should.be.eql({
-                src: SOURCE,
+            return MediaModel.mapSource(input).should.finally.be.eql({
+                source: SOURCE,
                 type: 'image',
+                mime: 'image/jpeg',
                 srcset: SOURCE + ',http://lorempixel.com/600/200/?rnd=test 600w 200h 1x,' +
                     'http://lorempixel.com/1200/400/?rnd=test 600w 200h 2x,' +
                     'http://lorempixel.com/1200/400/?rnd=test 1200w,' +
                     'http://lorempixel.com/200/200/?rnd=test 200w 200h,' +
                     'http://lorempixel.com/1800/600/?rnd=test 3x'
             });
+
+
         });
 
         it('Image source sets', () => {
@@ -235,20 +258,17 @@ describe('modules/media/server/models/media', () => {
                 }]
             };
 
-            MediaModel.defaultSource(input).should.eql({
-                src: SOURCE,
-                type: 'image'
-            });
-
-            MediaModel.sources(input).should.be.eql({
-                src: SOURCE,
+            return MediaModel.mapSource(input).should.finally.be.eql({
+                source: SOURCE,
                 type: 'image',
+                mime: 'image/jpeg',
                 srcset: SOURCE + ' 600w 200h 1x,' +
                     'http://lorempixel.com/1200/400/?rnd=test 600w 200h 2x,' +
                     'http://lorempixel.com/1200/400/?rnd=test 1200w,' +
                     'http://lorempixel.com/200/200/?rnd=test 200w 200h,' +
                     'http://lorempixel.com/1800/600/?rnd=test 3x'
             });
+
         });
     });
 

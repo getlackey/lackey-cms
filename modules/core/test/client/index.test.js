@@ -63,7 +63,8 @@ describe('modules/core/client', () => {
         index.hooks('show1').forEach((hook) => {
             browser.clicked(hook);
             let span = document.getElementById('id1');
-            span.className.should.be.eql('myclass show');
+            span.className.should.be.eql('myclass');
+            span.style.display.should.be.eql('initial');
             callback();
         });
     });
@@ -72,7 +73,8 @@ describe('modules/core/client', () => {
         let hook = index.hook('show1');
         browser.clicked(hook);
         let span = document.getElementById('id1');
-        span.className.should.be.eql('myclass show');
+        span.className.should.be.eql('myclass');
+        span.style.display.should.be.eql('initial');
         callback();
     });
 
@@ -82,6 +84,7 @@ describe('modules/core/client', () => {
             browser.clicked(hook);
             let span = document.getElementById('id1');
             span.className.should.be.eql('myclass');
+            span.style.display.should.be.eql('none');
         });
         callback();
 

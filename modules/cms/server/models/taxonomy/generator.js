@@ -44,7 +44,7 @@ module.exports = (data) => {
                     if (!type) {
                         return Taxonomy.create(data);
                     }
-                    if (type.diff(data)) {
+                    if (Generator.override('Taxonomy') && type.diff(data)) {
                         return type.save();
                     }
                     return type;

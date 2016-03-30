@@ -29,7 +29,10 @@ Manager.init({
         settings: 'lky:cms.actions.settings',
         debug: 'lky:cms.actions.debug',
         taxonomy: 'lky:cms.actions.taxonomy',
-        iframe: 'lky:iframe'
+        iframe: 'lky:iframe',
+        properties: 'lky:cms.actions.properties',
+        preview: 'lky:cms.actions.preview',
+        create: 'lky:cms.actions.create'
     }
 });
 

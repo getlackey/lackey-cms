@@ -6,8 +6,7 @@
             <th>{label}</th>
             {/.table.columns}
         </tr>
-        <form data-lky-hook="filters">
-        <tr>
+        <tr data-lky-hook="filters">
             {#table.columns}
                 <th><input class="form-control" type="text" name="{name}" value="{table.paging.filters[name]}"/></th>
             {/table.columns}
@@ -15,7 +14,6 @@
                 <button class="btn btn-primary" type="submit">Filter</button>
             </th>
         </tr>
-        </form>
     </thead>
     <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
         {>"cms/core/table-body"/}

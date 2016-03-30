@@ -1,0 +1,24 @@
+.bt {
+    .templates {
+        list-style: none;
+        width: 100%;
+        height: 415px;
+        overflow-y: hidden;
+        overflow-x: auto;
+        margin: 0px;
+        padding: 0px;
+        li {
+            label {
+                padding: 5px;
+                margin: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            span {
+                display: block;
+                text-align: center;
+            }
+            display: table-cell;
+        }
+    }
+}

@@ -1,0 +1,78 @@
+{
+    "layout": {
+        "type": "Fields",
+        "title": "Technology",
+        "hero": {
+            "type": "Block",
+            "template": "~/core/partials/block/temp/hero",
+            "fields": {
+                "image": {
+                    "type": "Media",
+                    "source": "/img/core/404.jpg"
+                },
+                "title": "Technology",
+                "text": "Technology is everything. It's who we are, what we do and the critical factor in the success of every business we work for. Our exceptional in house team of technical talent enables us to support a much wider range of work than our competitors. Whatever the best approach to influencing your market, we can help you identify both the strategy and how to use technology as a catalyst to accelerate growth and deliver on our promises to you and yours to your customers."
+            }
+        },
+        "blocks": {
+            "type": "List",
+            "items": [{
+                "type": "Block",
+                "template": "~/core/partials/block/temp/hero",
+                "fields": {
+                    "image": {
+                        "type": "Media",
+                        "source": "/img/core/404.jpg"
+                    },
+                    "title": "Technology",
+                    "text": "Technology is everything. It's who we are, what we do and the critical factor in the success of every business we work for. Our exceptional in house team of technical talent enables us to support a much wider range of work than our competitors. Whatever the best approach to influencing your market, we can help you identify both the strategy and how to use technology as a catalyst to accelerate growth and deliver on our promises to you and yours to your customers."
+                }
+        }, {
+                "type": "Block",
+                "template": "~/core/partials/block/temp/quote",
+                "fields": {
+                    "text": "Our team are highly experienced in creating cutting edge websites and software applications. Whether it's Responsive HTML5, Mobile optimised landing pages, Responsive emails, animation, Virtual Reality or interactive video, apps or gamea; Enigma have the production savvy to deliver content on time and on budget for all major platforms.",
+                    "author": {
+                        "type": "User",
+                        "email": "james@enigma-marketing.co.uk"
+                    }
+                }
+        }, {
+                "type": "Block",
+                "template": "~/core/partials/block/temp/square",
+                "fields": {
+                    "title": "System integration",
+                    "text": "\"Everything as a Service\" is sweeping the tech landscape and economy in general. This great unbundling of services has seen an explosion of vendors who specialise in doing just one thing well and our briefs often come with a need to support automation, tracking and CRM tools our clients have existing investments in. These services can either be powerful & efficient or expensive & messy depending on who you entrust with your systems integration. Whichever aspect of your business you're looking to integrate and be it via APIs, Marketing Automation, Email Vendors, CMS systems, Single Sign On, eCommerce or IT infrastructure; you can be sure Enigma are the right partner to help you get everything working in unison to get the job done.",
+                    "image": {
+                        "type": "Media",
+                        "source": "/img/core/404.jpg"
+                    }
+                }
+            }, {
+                "type": "Block",
+                "template": "~/core/partials/block/temp/pair",
+                "fields": {
+                    "title": "Tools, APIs & platforms",
+                    "text": "Most agencies can build simple landing pages but will outsource anything complicated. This always costs clients more money in the long run and creates risk for your business as you don't know who your real partners are. Enigma's approach is different. Delivering software for clients ranging from the largest Enterprise IT corporations to highly agile technology start ups, we possess the skills to deliver complex projects with long shelf lives for applications critical to our clients business operations.",
+                    "image": {
+                        "type": "Media",
+                        "source": "/img/core/404.jpg"
+                    }
+                }
+            }, {
+                "type": "Block",
+                "template": "~/core/partials/block/temp/blog",
+                "route": "/blog/arcserve-shortlisted-in-the-best-brand-initiative-category-for-b2b-marketing-awards"
+            }, {
+                "type": "Block",
+                "template": "~/core/partials/block/temp/image",
+                "fields": {
+                    "image": {
+                        "type": "Media",
+                        "source": "/img/core/404.jpg"
+                    }
+                }
+            }]
+        }
+    }
+}

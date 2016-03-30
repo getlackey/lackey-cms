@@ -1,0 +1,23 @@
+{>"cms/core/modal"/}
+
+{<body}
+  <div class="bt">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Block</h4>
+      </div>
+      <div class="modal-body">
+        <div style="overflow-y: auto">
+          <select data-lky-hook="template">
+            {#templates}
+              <option value="{path}">{name}</option>
+            {/templates}
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-lky-hook="close">Add</button>
+      </div>
+    </div>
+  </div>
+{/body}

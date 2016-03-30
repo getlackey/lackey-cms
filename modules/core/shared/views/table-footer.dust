@@ -1,6 +1,5 @@
 <tr>
     <td colspan="{table.columns.length+1}">
-        <pre>{table.paging|js|s}</pre>
         <nav>
             <ul class="pagination">
             {@iterate from=1 to=table.paging.pages}

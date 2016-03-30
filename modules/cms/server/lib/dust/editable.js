@@ -36,8 +36,9 @@ function schema(type) {
   }
 }
 
-function fromLayout(root, path, variant, type, route, toFormat) {
-  let output = treeParser.get(root, path, variant);
+function fromLayout(root, path, variant, locale, type, route, toFormat) {
+
+  let output = treeParser.get(root, path, variant, null, locale);
 
   if (!output) {
     return '';
@@ -66,7 +67,8 @@ module.exports = (dust) => {
       variant = params.variant,
       path = params.path || null,
       parent = params.parent || null,
-      type = params.type || 'doc';
+      type = params.type || 'doc',
+        locale = context.get('locale');
 
     if (parent) {
       path = parent + '.' + path;
@@ -87,7 +89,7 @@ module.exports = (dust) => {
       try {
 
         if (layout && layout.type) {
-          layout = fromLayout(layout, path, variant, type);
+          layout = fromLayout(layout, path, variant, locale, type);
 
           let regexMulti = /<dust-template(.+?)template=('|")(.*?)('|")(.+?)<\/dust-template>/g,
             regexSingle = /<dust-template(.+?)template=('|")(.*?)('|")(.+?)<\/dust-template>/,

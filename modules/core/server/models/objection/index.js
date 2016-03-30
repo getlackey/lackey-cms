@@ -278,11 +278,30 @@ class ObjectionWrapper {
         return this.find();
     }
 
-    static where(cursor, query) {
+    static where(cursor, query, operand) {
+        let cur = cursor,
+            self = this,
+            fn = operand === 'or' ? 'orWhere' : 'where';
         Object.keys(query).forEach((key) => {
-            cursor = cursor.where(key, query[key]);
+
+            if (key === '$or') {
+                cur = cur.andWhere(function () {
+                    let self2 = this;
+                    query.$or.forEach((condition, index) => {
+                        if (index === 0) {
+                            self2 = self.where(self2, condition);
+                        } else {
+                            self2 = self.where(self2, condition, 'or');
+                        }
+                    });
+                });
+            } else if (typeof query[key] === 'object') {
+                cur = cur[fn](key, query[key].operator, query[key].value);
+            } else {
+                cur = cur[fn](key, query[key]);
+            }
         });
-        return cursor;
+        return cur;
     }
 
     static count(query) {
@@ -290,7 +309,7 @@ class ObjectionWrapper {
         let cursor = this.model
             .query()
             .count();
-        if(query) {
+        if (query) {
             cursor = this.where(cursor, query);
         }
         return SCli.sql(
@@ -386,12 +405,7 @@ class ObjectionWrapper {
         return value;
     }
 
-    static translateQueryFileds(query) {
-        if (query) {
-            Object.keys(query).forEach((key) => {
-                query[key] = this.parseLike(query[key]);
-            });
-        }
+    static _preQuery(query) {
         return Promise.resolve(query);
     }
 
@@ -414,23 +428,28 @@ class ObjectionWrapper {
             populate = null,
             table = {};
 
-        return self.translateQueryFileds(inputQuery).then((q) => {
-                query = q;
+        if (!sort) {
+            sort = {
+                id: 1
+            };
+        }
 
-                if (columnsList) {
-                    populate = {};
-                    Object.keys(columnsList).forEach((column) => {
-                        if (typeof columnsList[column] === 'number') {
-                            populate[column] = columnsList[column];
-                        } else {
-                            populate[column] = 1;
-                        }
-                    });
+        if (columnsList) {
+            populate = {};
+            Object.keys(columnsList).forEach((column) => {
+                if (typeof columnsList[column] === 'number') {
+                    populate[column] = columnsList[column];
+                } else {
+                    populate[column] = 1;
                 }
+            });
+        }
 
-                return this.count(query);
-            })
-            .then((count) => {
+        return this._preQuery(inputQuery, options)
+            .then((q) => {
+                query = q;
+                return this.count(inputQuery);
+            }).then((count) => {
 
                 if (options) {
                     if (options.limit) {
@@ -469,8 +488,6 @@ class ObjectionWrapper {
                 if (options && options.textSearch) {
                     queryOptions.textSearch = options.textSearch;
                 }
-
-
 
                 return this.query(query, populate, queryOptions);
             }).then((data) => {
@@ -511,8 +528,9 @@ class ObjectionWrapper {
 
                 rows = rows.map((row) => {
                     let formatted;
-                    if (options.format === 'table') {
+                    if (options && options.format === 'table') {
                         formatted = {
+                            id: row.id,
                             columns: []
                         };
                         Object.keys(columnsList).forEach((column) => {
@@ -547,7 +565,7 @@ class ObjectionWrapper {
                     }
                     newColumns.push(columnsList[column]);
                 });
-                if (options.format === 'table') {
+                if (options && options.format === 'table') {
                     table.columns = newColumns;
                     table.rows = rows;
                 } else {

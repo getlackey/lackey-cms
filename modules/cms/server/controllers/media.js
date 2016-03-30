@@ -43,7 +43,6 @@ module.exports = SUtils.deps(
                 return null;
             }
 
-
             static create(req, res) {
                 if (req.body && req.body instanceof Buffer) {
                     Uploads.save(req.body, req.headers).then((response) => {
@@ -53,6 +52,14 @@ module.exports = SUtils.deps(
                     }, (error) => {
                         res.error(req, error);
                     });
+                } else if (req.body.source) {
+                    return Model
+                        .create(req.body)
+                        .then((model) => {
+                            res.api(model);
+                        }, (error) => {
+                            res.error(req, error);
+                        });
                 } else {
                     res.error(new Error('You are nasty'));
                 }

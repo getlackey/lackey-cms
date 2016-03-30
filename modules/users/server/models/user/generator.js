@@ -28,7 +28,6 @@ const SCli = require(LACKEY_PATH).cli,
 let User;
 
 module.exports = (data) => {
-
     return require('./index')
         .then((user) => {
 

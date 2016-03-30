@@ -8,7 +8,8 @@ require:
 
 testStages: &routes
     /admin*: [get]
-    /cms*: [get]
+    /cms*: [get, post]
+    /cms/preview: [post]
     /api/cms/*: [get, delete, put, post]
     viewInVariant: '*'
     edit: '*'

@@ -29,9 +29,11 @@ module.exports = SUtils
         SUtils.cmsMod('core').model('activity-log'),
         SUtils.cmsMod('users').model('role'),
         SUtils.cmsMod('i18n').model('language'),
-        require('../models/template')
+        require('../models/template'),
+        require('../lib/serializer'),
+        require('json2yaml')
     )
-    .promised((Activity, Role, Language, Template) => {
+    .promised((Activity, Role, Language, Template, Serializer, JSON2YAML) => {
 
         return {
             dashboard: (req, res) => {
@@ -75,7 +77,6 @@ module.exports = SUtils
 
                     });
             },
-
             activityStream: (req, res) => {
 
                 Activity
@@ -90,6 +91,23 @@ module.exports = SUtils
                     }, (error) => {
                         res.error(req, error);
                     });
+            },
+            serialize(req, res) {
+                Serializer.all()
+                    .then((result) => {
+                        try {
+                            res.header('Content-Type', 'text/x-yaml');
+                            res.send({
+                                template: 'cms/core/yaml',
+                                data: {
+                                    yaml: JSON2YAML.stringify(result)
+                                }
+                            });
+                        } catch (e) {
+                            console.log(e);
+                            res.error(e);
+                        }
+                    }, res.error);
             }
         };
     });

@@ -1,8 +1,13 @@
 <ul class="miniatures">
     {#uploaded}
         <li>
-            <a href="#" data-lky-hook="image" data-lky-id="{id}" data-lky-src="{default.src}">
-                <img src="{default.src}"/>
+            <a href="#" data-lky-hook="image" data-lky-media="{.|js}">
+                {@eq key=type value="video"}
+                    <video><source src="{source}"/></video>
+                {/eq}
+                {@ne key=type value="video"}
+                    <img src="{source}"/>
+                {/ne}
             </a>
         </li>
     {/uploaded}

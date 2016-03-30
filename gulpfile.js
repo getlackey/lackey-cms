@@ -20,14 +20,7 @@ const gulp = require('gulp'),
     mocha = require('gulp-mocha'),
     eslint = require('gulp-eslint'),
     sassLint = require('gulp-sass-lint'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    del = require('del'),
-    fs = require('fs'),
-    gulpJsdoc2md = require('gulp-jsdoc-to-markdown');
-
-
-
+    del = require('del');
 
 if (!GLOBAL.LACKEY_PATH) {
     /* istanbul ignore next */
@@ -92,10 +85,6 @@ gulp.task('pre-test', ['pre-test:clean'], function () {
         .pipe(istanbul.hookRequire());
 });
 
-function mp(module, segment, folder) {
-    return 'modules/' + module + '/test/' + segment + '/' + folder + '/*.js'
-}
-
 gulp.task('test', ['pre-test'], function () {
     return gulp.src([
         'test/**/*.js',
@@ -133,43 +122,3 @@ gulp.task('mocha', ['pre-test:clean'], function () {
             timeout: 50000
         }));
 });
-
-let docTasks = [];
-
-function doc(name) {
-
-    let dir = name ? ('modules/' + name + '/**/*.js') : 'lib/**/*.js',
-        output = name ? ('modules/' + name + '/docs/reference') : 'docs/reference',
-        taskName = name ? ('docs:' + name) : 'docs:lackey',
-        options = {
-            template: fs.readFileSync('./api.hbs', 'utf8')
-        };
-
-
-    docTasks.push(taskName);
-
-    gulp.task(taskName, function () {
-        return gulp.src(dir)
-            //.pipe(concat('_.md'))
-            .pipe(gulpJsdoc2md(options))
-
-        .on('error', function (err) {
-                console.error(err);
-            })
-            .pipe(rename(function (path) {
-                path.extname = '.md';
-            }))
-            .pipe(gulp.dest(output));
-    });
-
-}
-
-doc(null);
-doc('blog');
-doc('cms');
-doc('core');
-doc('i18n');
-doc('media');
-doc('users');
-
-gulp.task('docs', docTasks);

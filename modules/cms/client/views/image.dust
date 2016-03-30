@@ -4,14 +4,21 @@
     <div class="image-manager">
         <div class="sidebar">
             <h5>Search</h5>
-            <input type="search"/>
-            <h5>Contexts</h5>
+            <button data-lky-hook="filter">filter</button>
+            <button data-lky-hook="reset">reset</button>
+            <input type="search" data-lky-hook="search"/>
+            <h5>Add from URL</h5>
+            <input type="url" data-lky-hook="url"/>
+            <button data-lky-hook="add">add</button>
             <h5>Photo Source</h5>
-            <div data-lky-hook="dropZone" style="width:100%; height: 100px; border: 1px solid red;">drop here</div>
+            <div data-lky-hook="dropZone" >drop here</div>
             <button data-lky-hook="use">apply</button>
             <button data-lky-hook="close">cancel</button>
+            <button data-lky-hook="prev">&laquo</button>
+            <button data-lky-hook="next">&raquo</button>
             <div data-lky-hook="list" data-lky-template="cms/cms/imagelist">
             </div>
+
         </div>
         <div data-lky-hook="preview">
         </div>

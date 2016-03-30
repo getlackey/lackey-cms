@@ -42,6 +42,11 @@ module.exports = SUtils.deps(
      */
     class Template extends ObjectionWrapper {
 
+        static get api() {
+            return '/cms/template';
+        }
+
+
         static get model() {
             return TemplateModel;
         }
@@ -54,6 +59,18 @@ module.exports = SUtils.deps(
             return this._doc.type;
         }
 
+        static selectable() {
+            SCli.debug('lackey-cms/modules/cms/server/models/template', 'selectable', this.model.tableName);
+            let Self = this;
+            return SCli.sql(this.model
+                .query()
+                .where('selectable', true)
+                .where('type', 'template')
+            ).then((results) => {
+                return Promise.all(results.map((result) => Self.factory(result)));
+            });
+        }
+
         toJSON() {
             return {
                 id: this.id,
@@ -61,7 +78,10 @@ module.exports = SUtils.deps(
                 path: this._doc.path,
                 type: this._doc.type,
                 javascripts: this._doc.javascripts,
-                stylesheets: this._doc.stylesheets
+                stylesheets: this._doc.stylesheets,
+                props: this._doc.props || {},
+                selectable: this._doc.selectable || false,
+                thumb: this._doc.thumb || null
             };
         }
 
@@ -79,7 +99,7 @@ module.exports = SUtils.deps(
                     }
                     this._doc.stylesheets = JSON.stringify(this._doc.stylesheets);
                 }
-                if(!this._doc.type) {
+                if (!this._doc.type) {
                     this._doc.type = 'template';
                 }
             }
@@ -100,17 +120,17 @@ module.exports = SUtils.deps(
         }
 
         _populate() {
-            if(typeof this._doc.javascripts === 'string') {
+            if (typeof this._doc.javascripts === 'string') {
                 this._doc.javascripts = JSON.parse(this._doc.javascripts);
             }
-            if(typeof this._doc.stylesheets === 'string') {
+            if (typeof this._doc.stylesheets === 'string') {
                 this._doc.stylesheets = JSON.parse(this._doc.stylesheets);
             }
             return Promise.resolve(this);
         }
     }
 
-    require('./generator');
+    Template.generator = require('./generator');
 
     return Template;
 });

@@ -1,0 +1,43 @@
+<ul class="dropdown-right">
+    <li class="divider">Account</li>
+    <li>
+        <a href="/cms/account">Account Settings</a>
+    </li>
+                        <li>
+        <a href="/logout">Logout</a>
+    </li>
+
+
+        <li class="divider">View as</li>
+        {#viewAs}
+            {@eq key=name value=viewingAs}
+            <li>
+                Act as {label}
+            </li>
+            {:else}
+            <li>
+                <a href="#" data-lky-hook="actAs" data-lky-act-as="{name}">Act as {label}</a>
+            </li>
+            {/eq}
+        {/viewAs}
+        <li class="divider">View in variant</li>
+        <li>
+            <a href="#" data-lky-hook="viewAs" data-lky-view-as="">View as page</a>
+        </li>
+        {#data.variants}
+            <li>
+                <a href="#" data-lky-hook="viewAs" data-lky-view-as="{path}">View as {name}</a>
+            </li>
+        {/data.variants}
+        <li class="divider">View in Language</li>
+        {#data.langauges}
+            <li>
+                {@eq key=locale value=code}
+                Viewing in {name}
+                {:else}
+                    <a href="#" data-lky-hook="viewIn" data-lky-language="{code}">View in {name}</a>
+                {/eq}
+            </li>
+        {/data.langauges}
+
+</ul>

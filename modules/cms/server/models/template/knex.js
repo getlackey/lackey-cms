@@ -22,37 +22,36 @@ const
 module.exports = SUtils
     .deps(
         require(LACKEY_PATH).datasources.get('knex', 'default'),
+        require(LACKEY_PATH).datasources.getManager('knex', 'default'),
         require(LACKEY_PATH).configuration()
     )
-    .promised((knex, config) => {
-        return Promise
-            .resolve()
-            .then(() => {
-                if (!config.get('datasources.pg.default.truncate')) return null;
-                return knex
-                    .raw('DROP TABLE IF EXISTS template CASCADE');
-            })
-            .then(() => {
-                return knex.schema.hasTable('template');
-            })
-            .then((exists) => {
-                if (exists) return Promise.resolve();
-                return knex.schema.createTableIfNotExists('template', (table) => {
-                    table.increments();
-                    table.string('name');
-                    table.string('path');
-                    table.string('type');
-                    table.json('javascripts');
-                    table.json('stylesheets');
-                    table.bigInteger('userId')
-                        .unsigned()
-                        .references('id')
-                        .inTable('users')
-                        .onDelete('CASCADE');
-                    table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
-                    table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
-                    table.unique('path');
-                });
-
-            });
+    .promised((knex, manager, config) => {
+        let Schema = {
+            tableName: 'template',
+            build: (table) => {
+                table.increments();
+                table.string('name');
+                table.string('path');
+                table.string('type');
+                table.string('thumb');
+                table.boolean('selectable');
+                table.json('props');
+                table.json('javascripts');
+                table.json('stylesheets');
+                table.bigInteger('userId')
+                    .unsigned()
+                    .references('id')
+                    .inTable('users')
+                    .onDelete('CASCADE');
+                table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
+                table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
+                table.unique('path');
+            }
+        };
+        return manager.sync([Schema]).then(() => {
+            if (!config.get('datasources.pg.default.truncate')) {
+                return null;
+            }
+            return manager.reset([Schema]);
+        });
     });

@@ -20,12 +20,29 @@ const
     LackeySchema = require('../../shared/content-blocks').LackeySchema,
     InlineSchema = require('../../shared/inline'),
     edit = require('prosemirror/dist/edit'),
+    Media = require('./media'),
     ProseMirror = edit.ProseMirror;
 
 //require('prosemirror/dist/inputrules/autoinput');
 require('prosemirror/dist/menu/tooltipmenu');
+require('prosemirror/dist/menu/menubar');
 
-let pool = [];
+let pool = [],
+    style = `
+    .ProseMirror-tooltip,
+    .ProseMirror-menu-dropdown-menu,
+    .ProseMirror-menubar,
+    .ProseMirror-prompt {
+        font-size: 12px;
+    }
+`,
+    styleBlock = document.createElement('style');
+
+styleBlock.innerHTML = style;
+document.body.appendChild(styleBlock);
+
+
+console.log(document.body);
 
 class Wysiwyg {
 
@@ -34,7 +51,8 @@ class Wysiwyg {
         this._div = div;
         this._changed = false;
         this._wrap = div.getAttribute('data-lky-type') || 'doc';
-        this.variant = div.getAttribute('data-lky-variant') || 'default';
+        this.variant = div.getAttribute('data-lky-variant') || '*';
+        this._placeholder = div.getAttribute('placeholder') || 'Type here';
 
         this._schema = LackeySchema;
         if (this._wrap === 'inline') {
@@ -58,10 +76,11 @@ class Wysiwyg {
         this._source = Wysiwyg.manager.get(this.contentId, this.path, this.variant, this._schema);
         this.render();
     }
-
+    isEmpty() {
+        return (this._pm.getContent('text').replace(/^\s+|\s+$/g, '').length === 0);
+    }
     render() {
 
-        this._div.style.border = '1px solid red';
         this._div.style.minHeight = '50px';
 
         let pm,
@@ -69,32 +88,51 @@ class Wysiwyg {
             options = {
                 place: this._div,
                 schema: self._schema,
-                docFormat: 'json',
+                docFormat: typeof this._source === 'string' ? 'text' : 'json',
                 doc: this._source
             };
 
         try {
             this._pm = pm = new ProseMirror(options);
-            /*
-            let tooltip = new Tooltip(pm.wrapper, 'below'),
-                tooltipOpen;
 
-            pm.content.addEventListener('keydown', () => {
-                tooltip.close();
-                tooltipOpen = null;
+            let overlay = document.createElement('div');
+
+            overlay.style.pointeEvents = 'none';
+            overlay.style.position = 'absolute';
+            overlay.style.display = 'none';
+            overlay.innerText = this._placeholder;
+            overlay.style.width = '100%';
+            overlay.style.opacity = 0.5;
+            overlay.style.textAling = 'center';
+            this._div.parentNode.insertBefore(overlay, this._div);
+
+            if (!window.getComputedStyle(overlay.parentNode).position) {
+                overlay.parentNode.style.position = 'relative';
+                overlay.style.transform = 'translateY(-50%)';
+                overlay.style.top = '50%';
+            }
+
+            if (self.isEmpty()) {
+                overlay.style.display = 'block';
+            }
+
+            pm.on('focus', function () {
+                overlay.style.display = 'none';
             });
 
-            pm.content.addEventListener('mousedown', () => {
-                tooltip.close();
-                tooltipOpen = null;
+            pm.on('blur', function () {
+                if (self.isEmpty()) {
+                    overlay.style.display = 'block';
+                }
             });
-
-            pm.setOption("menuBar", false);
-            */
 
             pm.setOption('tooltipMenu', {
                 selectedBlockMenu: true
             });
+
+            /*pm.setOption('menuBar', {
+                float: true
+            });*/
 
             pm.on('change', function () {
                 self._changed = true;
@@ -108,7 +146,6 @@ class Wysiwyg {
 
         }
 
-
     }
 
     static get manager() {
@@ -120,9 +157,27 @@ class Wysiwyg {
     }
 
     static init() {
+
         lackey.getWithAttribute('data-lky-pm').forEach(Wysiwyg.factory);
+
+        lackey.select('[data-lky-media]').forEach((element) => {
+            let media = new Media(element);
+            media.selected((mediaObject) => {
+                Wysiwyg.manager.media(mediaObject)
+                    .then((result) => {
+                        if (!result) {
+                            return;
+                        }
+
+                        mediaObject.set(result);
+                        mediaObject.notify();
+                    });
+            });
+        });
+
         return Wysiwyg.manager.load(Wysiwyg.getContents())
-            .then(() => pool.forEach((instance) => instance.ready())).catch((error) => {
+            .then(() => pool.forEach((instance) => instance.ready()))
+            .catch((error) => {
                 throw error;
             });
     }
@@ -138,25 +193,8 @@ class Wysiwyg {
     }
 
     static get pool() {
-            return pool;
-        }
-        /*
-            static save(id) {
-                return api.update('/cms/content/' + id, {
-                    layout: contents[id]
-                });
-            }
-
-            static saveAll() {
-                return BbPromise.all(Object.keys(contents).map((id) => {
-                    return Wysiwyg.save(id);
-                }));
-
-            static onChange(callback) {
-                changeCallbacks.push(callback);
-            }
-            */
-
+        return pool;
+    }
 
 }
 

@@ -89,6 +89,11 @@ module.exports = SUtils.deps(
 
         class Role extends ObjecitonWrapper {
 
+            static get api() {
+                return '/cms/role';
+            }
+
+
             static get model() {
                 return RoleModel;
             }
@@ -110,7 +115,7 @@ module.exports = SUtils.deps(
             }
 
             static getLabelByName(name) {
-                if(lighweights[name]) {
+                if (lighweights[name]) {
                     return lighweights[name].label;
                 }
                 return null;
@@ -146,7 +151,7 @@ module.exports = SUtils.deps(
             }
 
             _populate() {
-                if(typeof this._doc.acl === 'string') {
+                if (typeof this._doc.acl === 'string') {
                     this._doc.acl = JSON.parse(this._doc.acl);
                 }
                 return Promise.resolve(this);

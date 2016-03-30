@@ -3,14 +3,14 @@
 /*
     Copyright 2016 Enigma Marketing Services Limited
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the 'License');
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
        http://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
+    distributed under the License is distributed on an 'AS IS' BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
@@ -23,13 +23,11 @@ describe('modules/cms/shared/treeparser', () => {
 
     const COMPLEX = {
         type: 'Variants',
-        variants: {
-            'hero:online:en': 'Online',
-            'hero:offline:en': 'Offline',
-            '*': 'DefaultEnglish',
-            '*:online:pl': 'W sieci',
-            '*:offline:pl': 'Wyłączony'
-        }
+        'hero:online:en': 'Online',
+        'hero:offline:en': 'Offline',
+        '*': 'DefaultEnglish',
+        '*:online:pl': 'W sieci',
+        '*:offline:pl': 'Wyłączony'
     };
 
     describe('Getter', () => {
@@ -151,6 +149,28 @@ describe('modules/cms/shared/treeparser', () => {
                 variant: 'hero',
                 state: 'offline',
                 output: 'Wyłączony'
+            },
+            {
+                root: {
+                    image: {
+                        '*': {
+                            'type': 'Media',
+                            'id': 4
+                        },
+                        'type': 'Variants',
+                        '*:*:pl': {
+                            'type': 'Media',
+                            'id': '3'
+                        }
+                    },
+                },
+                output: {
+                    'type': 'Media',
+                    'id': '3'
+                },
+                path: 'image',
+                variant: 'hero',
+                locale: 'pl'
             }
         ];
 
@@ -270,7 +290,75 @@ describe('modules/cms/shared/treeparser', () => {
                         type: 'Variants'
                     }
                 }
-            }
+            },
+            {
+                root: {
+                    text: {
+                        id: 1,
+                        type: 'Media'
+                    }
+                },
+                path: 'text',
+                value: 'dummy',
+                variant: 'hero',
+                locale: 'pl',
+                output: {
+                    text: {
+                        '*': {
+                            id: 1,
+                            type: 'Media'
+                        },
+                        'hero:*:pl': 'dummy',
+                        type: 'Variants'
+                    }
+                }
+            },
+            {
+                root: {
+                    text: {
+                        id: 1,
+                        type: 'Media'
+                    }
+                },
+                path: 'text',
+                value: 'dummy',
+                output: {
+                    text: 'dummy'
+                }
+            },
+            {
+                root: {
+                    title: {
+                        type: 'doc',
+                        content: [{
+                            type: 'paragraph',
+                            content: [{
+                                type: 'text',
+                                text: 'We are Enigma Marketing'
+                            }]
+                        }]
+                    }
+                },
+                path: 'title',
+                locale: 'pl',
+                value: 'dummy',
+                output: {
+                    title: {
+                        type: 'Variants',
+                        '*': {
+                            type: 'doc',
+                            content: [{
+                                type: 'paragraph',
+                                content: [{
+                                    type: 'text',
+                                    text: 'We are Enigma Marketing'
+                                    }]
+                            }]
+                        },
+                        '*:*:pl': 'dummy'
+                    }
+                }
+             }
             ];
 
         cases.forEach((item) => {

@@ -102,6 +102,17 @@ module.exports = SUtils.deps(
             return this._doc.props || {};
         }
 
+        set props(data) {
+            this._doc.props = data;
+        }
+
+        diff(data) {
+            if (data && typeof data.layout === 'object' && Object.keys(data.layout).length) {
+                this._doc.layout = data.layout;
+            }
+            return super.diff(data);
+        }
+
         _populate() {
             let self = this;
             return User.findById(this._doc.userId)
@@ -126,23 +137,37 @@ module.exports = SUtils.deps(
 
         _preSave() {
 
+            let self = this,
+                promise;
+
             if (this._doc.template) {
-                this._doc.templateId = this._doc.template;
+                promise = Template.generator(this._doc.template)
+                    .then((template) => {
+                        if (template) self._doc.templateId = template.id;
+                    });
+            } else {
+                promise = Promise.resolve();
             }
 
-            if (this._doc.author) {
-                this._doc.userId = this._doc.author;
-            }
+            return promise.then(() => {
 
-            delete this._doc.template;
-            delete this._doc.taxonomy;
-            delete this._doc.author;
+                if (self._doc.templateId === undefined) {
+                    delete self._doc.templateId;
+                }
 
-            if (this._doc.layout === undefined) {
-                delete this._doc.layout;
-            }
+                if (self._doc.author) {
+                    self._doc.userId = this._doc.author;
+                }
 
-            return Promise.resolve(this);
+                delete self._doc.template;
+                delete self._doc.taxonomy;
+                delete self._doc.author;
+
+                if (self._doc.layout === undefined) {
+                    delete self._doc.layout;
+                }
+                return self;
+            });
         }
 
         _postSave(cached) {
@@ -181,11 +206,40 @@ module.exports = SUtils.deps(
                 createdAt: this._doc.createdAt,
                 props: this.props,
                 author: this._user ? this._user.toJSON() : null,
-                template: this._doc.template ? this._doc.template.toJSON() : null,
+                template: this._template ? this._template.toJSON() : null,
                 state: this._doc.state,
                 layout: this._doc.layout,
                 taxonomies: this.taxonomies
             };
+        }
+
+        toYAML() {
+            let self = this;
+            return Content.serializer
+                .serialize(self.toJSON())
+                .then((content) => {
+
+                    let taxonomies = {};
+
+                    if (content.taxonomies) {
+                        content.taxonomies.forEach((taxonomy) => {
+                            if (!taxonomies[taxonomy.type.name]) {
+                                taxonomies[taxonomy.type.name] = [];
+                            }
+                            taxonomies[taxonomy.type.name].push(taxonomy.name);
+                        });
+                    }
+
+                    return {
+                        type: content.type,
+                        route: content.route,
+                        props: content.props || {},
+                        template: content.template ? content.template.path : '',
+                        taxonomies: taxonomies,
+                        layout: content.layout
+                    };
+                });
+
         }
 
         addTaxonomy(taxonomy) {
@@ -223,7 +277,12 @@ module.exports = SUtils.deps(
             return this._doc.layout;
         }
 
+        set layout(data) {
+            this._doc.layout = data;
+        }
+
         get uri() {
+            if (!this._doc || !this._doc.id) return null;
             return '/api/cms/content/' + this._doc.id.toString();
         }
 
@@ -266,6 +325,7 @@ module.exports = SUtils.deps(
             return this.findOneBy('route', route);
         }
     }
-    require('./generator');
+    Content.generator = require('./generator');
+    Content.serializer = require('./serializer');
     return Content;
 });

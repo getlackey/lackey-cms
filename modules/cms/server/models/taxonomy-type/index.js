@@ -41,6 +41,11 @@ module.exports = SUtils.deps(
      */
     class TaxonomyType extends ObjectionWrapper {
 
+        static get api() {
+            return '/cms/taxonomy-type';
+        }
+
+
         static get model() {
             return TaxonomyTypeModel;
         }

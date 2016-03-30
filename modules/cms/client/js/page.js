@@ -17,9 +17,4 @@
     limitations under the License.
 */
 require('./iframe');
-const
-    wysiwyg = require('./wysiwyg');
-
-require('./image');
-
-wysiwyg.init();
+require('./view');

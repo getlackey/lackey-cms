@@ -20,7 +20,7 @@
                         <dl>
                             <dt>Image</dt>
                             <dd>
-                                <img src="{user.image.default.src}"
+                                <img src="{user.image.source}"
                                      data-lky-hook="avatar"
                                      data-lky-image="{admin.image|js}"
                                      />

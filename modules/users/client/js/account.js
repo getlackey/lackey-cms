@@ -1,4 +1,4 @@
-/* eslint no-cond-assign:0 */
+/* eslint no-cond-assign:0, no-alert:0 */
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
@@ -16,8 +16,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const image = require('../../../cms/client/js/image'),
-    lackey = require('../../../core/client/js'),
+const lackey = require('../../../core/client/js'),
     api = require('../../../cms/client/js/api');
 
 
@@ -61,9 +60,9 @@ lackey.bind('lky:password', 'submit', (event, hook) => {
 });
 
 lackey.on('cms/cms/image:selected', (data) => {
-    if(data.hook === lackey.hook('avatar')) {
+    if (data.hook === lackey.hook('avatar')) {
         api.update('/me', {
-            avatar : data.id
+            avatar: data.id
         });
     }
 });

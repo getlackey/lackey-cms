@@ -22,37 +22,47 @@ if (!GLOBAL.LACKEY_PATH) {
 }
 
 const SCli = require(LACKEY_PATH).cli,
+    _ = require('lodash'),
     Generator = require(LACKEY_PATH).generator,
     BbPromise = require('bluebird');
 
 let Media;
 
 module.exports = (data) => {
-    let path;
     return require('./index')
         .then((media) => {
             Media = media;
+            return Media.mapSource(data);
+        }).then((sourceResult) => {
 
-            path = Media.defaultSource(data);
-
-            if (!path) {
+            if (!sourceResult || !sourceResult.source) {
                 return BbPromise.resolve(null);
             }
 
-            SCli.debug('lackey/modules/media/server/models/media/generator', 'Ensure that media ' + path.src + ' exists');
-            return Media.findByPath(path.src);
+            SCli.debug('lackey/modules/media/server/models/media/generator', 'Ensure that media ' + sourceResult.source + ' exists');
+
+            return Media
+                .lookupMime(sourceResult.source)
+                .then((mime) => {
+                    return Media.findByPathAndType(sourceResult.source, mime);
+                }).then((media) => {
+                    if (!media) {
+                        SCli.debug('lackey/modules/media/server/models/media/generator', 'Creating media ' + sourceResult.source);
+                        return Media.create(_.merge({
+                                attributes: data.attributes || {},
+                                name: data.name || sourceResult.source
+                            },
+                            sourceResult));
+                    }
+
+                    if (Generator.override('Media') && media.diff(data)) {
+                        return media.save();
+                    }
+                    return media;
+                });
         }).then((media) => {
-            if (!media) {
-                return Media.create(typeof data === 'string' ? {
-                    source: data
-                } : data);
-            }
-            if (Generator.override('Media') && media.diff(data)) {
-                return media.save();
-            }
-            return media;
-        }).then((media) => {
-            SCli.debug('lackey/modules/media/server/models/media/generator', 'Ensured that media ' + path.src + ' exists');
+            SCli.debug('lackey/modules/media/server/models/media/generator', 'Ensured that media ' +
+                JSON.stringify(data) + ' exists');
             return media;
         });
 };

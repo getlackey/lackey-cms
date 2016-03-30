@@ -38,7 +38,12 @@ module.exports = (server) => {
             require('../controllers/taxonomy'),
             require('../controllers/taxonomy-type'),
             require('../controllers/media'),
-            require('../controllers/language')
+            require('../controllers/language'),
+            require('../controllers/activity'),
+            require('../controllers/role'),
+            require('../controllers/user'),
+            require('../controllers/template'),
+            require('../controllers/page')
         )
         .promised((
             CMSController,
@@ -46,15 +51,25 @@ module.exports = (server) => {
             TaxonomyController,
             TaxonomyTypeController,
             MediaController,
-            languageController) => {
+            LanguageController,
+            ActivityController,
+            RoleController,
+            UserController,
+            TemplateController,
+            PageController
+        ) => {
 
             server.route('/admin*')
                 .get(server.aclAdmin, CMSController.iframe);
-            server.route('/cms').get(server.aclAdmin, CMSController.dashboard);
-            server.route('/cms/activity')
-                .get(server.aclAdmin, CMSController.activityStream);
 
-            cmsResourceRoutes(server, 'content', 'content', ContentController);
+            server.route('/cms').get(server.aclAdmin, CMSController.dashboard);
+            server.route('/cms/preview').post(server.aclAdmin, PageController.preview);
+            server.route('/cms/content/create')
+                .get(server.aclAdmin, ContentController.createPage);
+
+            server.route('/cms/export/all')
+                .get( /*server.aclAdmin, */ CMSController.serialize);
+
             server.route('/cms/content/:content_id')
                 .get(server.aclAdmin, ContentController.cmsEdit);
 
@@ -62,10 +77,15 @@ module.exports = (server) => {
                 .post(server.aclAdmin, ContentController.method('addTaxonomy'))
                 .delete(server.aclAdmin, ContentController.method('removeTaxonomy'));
 
+            cmsResourceRoutes(server, 'activity', 'activity', ActivityController);
+            cmsResourceRoutes(server, 'content', 'content', ContentController);
             cmsResourceRoutes(server, 'taxonomy', 'taxonomy', TaxonomyController);
             cmsResourceRoutes(server, 'taxonomy-type', 'taxonomyType', TaxonomyTypeController);
             cmsResourceRoutes(server, 'media', 'media', MediaController);
-            cmsResourceRoutes(server, 'language', 'language', languageController);
+            cmsResourceRoutes(server, 'language', 'language', LanguageController);
+            cmsResourceRoutes(server, 'user', 'user', UserController);
+            cmsResourceRoutes(server, 'role', 'role', RoleController);
+            cmsResourceRoutes(server, 'template', 'template', TemplateController);
 
         });
 };

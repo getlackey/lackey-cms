@@ -44,6 +44,11 @@ module.exports = SUtils.deps(
      */
     class Taxonomy extends ObjectionWrapper {
 
+        static get api() {
+            return '/cms/taxonomy';
+        }
+
+
         static get model() {
             return TaxonomyModel;
         }
@@ -93,7 +98,7 @@ module.exports = SUtils.deps(
                     type: type
                 };
             query[paramName] = paramValue;
-            return this.translateQueryFileds(query)
+            return this._preQuery(query)
                 .then((q) => {
                     query = q;
                     let cursor = TaxonomyModel.query();
@@ -145,25 +150,20 @@ module.exports = SUtils.deps(
             return this.byTypeAndParam(type, 'name', name);
         }
 
-        static translateQueryFileds(query) {
-            return super.translateQueryFileds(query)
-                .then((q) => {
-                    let promise = Promise.resolve(q);
-                    if (q.type) {
-                        promise = promise.then((q2) => {
-                            return TaxonomyType.query({
-                                name: q2.type
-                            }).then((types) => {
-                                delete q2.type;
-                                if (types && types.length) {
-                                    q2.taxonomyTypeId = types[0].id;
-                                }
-                                return q2;
-                            });
-                        });
-                    }
-                    return promise;
+        static _preQuery(query) {
+
+            if (query.type) {
+                return TaxonomyType.query({
+                    name: query.type
+                }).then((types) => {
+                    delete query.type;
+                    query.taxonomyTypeId = types[0].id;
+                    return query;
                 });
+            }
+
+            return Promise.resolve(query);
+
         }
 
         static getByName(name) {

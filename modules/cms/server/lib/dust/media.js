@@ -21,58 +21,78 @@ if (!GLOBAL.LACKEY_PATH) {
 }
 
 const SUtils = require(LACKEY_PATH).utils,
+  _ = require('lodash'),
   SCli = require(LACKEY_PATH).cli,
   treeParser = require('../../../shared/treeparser');
 
 
-function print(chunk, data, type, editMode, dust) {
-  let sources;
+function print(chunk, data, type, editMode) {
+  let source;
+
+  if (data && !data.content && data.default) {
+    data.content = {
+      source: data.default
+    };
+  }
 
   if (data && data.content) {
 
-    sources = data.content.sources;
-
-    if (!sources) return;
+    source = data.content.source;
 
     if (type === 'url') {
-      chunk.write(sources.src);
-      return;
-    } else if (type === 'hook') {
-      chunk.write('data-lky-image ');
+      chunk.write(source);
       return;
     }
 
+    if (editMode) {
+      if (type !== 'hook') {
+        chunk.write('<lackey-media ');
+      }
+      chunk.write(' data-lky-attributes="' + JSON.stringify(data.attrs).replace(/"/g, '&quot;') + '"');
+      chunk.write(' data-lky-content="' + data.id + '"');
+      chunk.write(' data-lky-path="' + data.path + '"');
+      if (data.variant) {
+        chunk.write(' data-lky-variant="' + data.variant + '"');
+      }
+      chunk.write(' data-lky-media="' + JSON.stringify(data.content.toJSON ? data.content.toJSON() : data.content).replace(/"/g, '&quot;') + '"');
+      if (type === 'hook') {
+        chunk.write(' data-lky-media-type="hook"');
+      }
+
+      if (type !== 'hook') {
+        chunk.write('></lackey-media>');
+      } else if (data.update) {
+        chunk.write(' data-lky-update="' + data.update + '"');
+        chunk.write(' data-lky-update-pattern="' + data.updatePattern + '"');
+      }
+      return;
+    }
+
+    if (type === 'hook') {
+      return;
+    }
 
     if (data.content.type === 'video') {
       chunk.write('<video controls>');
-      sources.forEach((source) => {
-        chunk.write('<source src="' + source.src + '"');
-        if (source.media) {
-          chunk.write(' media="' + source.media + '"');
+      data.content.alternatives.forEach((_source) => {
+        chunk.write('<source src="' + _source.src + '"');
+        if (_source.media) {
+          chunk.write(' media="' + _source.media + '"');
         }
-        if (source.type) {
-          chunk.write(' type="' + source.type + '"');
+        if (_source.type) {
+          chunk.write(' type="' + _source.type + '"');
         }
         chunk.write('>');
       });
       chunk.write('</video>');
-      return;
+    } else {
+      chunk.write('<img src="' + source + '"');
+      /*if (data.alternatives.srcset) {
+        chunk.write(' srcset="' + sources.srcset + '"');
+      }*/
+      chunk.write('/>');
     }
-
-
-
-    chunk.write('<img src="' + sources.src + '"');
-    if (sources.srcset) {
-      chunk.write(' srcset="' + sources.srcset + '"');
-    }
-    if (editMode) {
-      chunk.write(' data-lky-content="' + data.id + '"');
-      chunk.write(' data-lky-path="' + data.path + '"');
-      chunk.write(' data-lky-image="' + JSON.stringify(data.content.toJSON()).replace(/"/g, '&quot;') + '"');
-    }
-    chunk.write('/>');
   }
-
 }
 
 module.exports = (dust) => {
@@ -85,14 +105,31 @@ module.exports = (dust) => {
       type = params.type,
       parent = params.parent,
       path = parent ? (parent + '.' + params.path) : params.path,
-
-      data = treeParser.get(content ? content.layout : {}, path, params.variant),
+      attrNames = Object.keys(params).map((name) => {
+        if (name.match(/^attr-/)) {
+          return name;
+        }
+        return null;
+      }).filter((output) => {
+        return output !== null;
+      }),
+      //attrs = {},
+      data = treeParser.get(content ? content.layout : {}, path, params.variant, null, context.get('locale')),
       dataObject = {
         path: path,
+        variant: params.variant,
+        state: params.state,
+        update: params.update,
+        updatePattern: params.updatePattern,
         id: id,
         content: data,
-        default: params.default
+        default: params.default,
+        attrs: {}
       };
+
+    attrNames.forEach((key) => {
+      dataObject.attrs[key.replace(/^attr-/, '')] = params[key];
+    });
 
     SCli.debug('lackey-cms/modules/cms/server/lib/dust/media', 'Media', JSON.stringify(data, null, 4));
 
@@ -110,7 +147,11 @@ module.exports = (dust) => {
             SCli.debug('lackey-cms/modules/cms/server/lib/dust/media', 'Model', model);
             if (model) {
               dataObject.content = model;
+              if (model._doc.attributes) {
+                _.merge(dataObject.attrs, model._doc.attributes);
+              }
             }
+
             print(injected, dataObject, type, editMode, dust);
             injected.end();
           }, (error) => {

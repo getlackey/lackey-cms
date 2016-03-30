@@ -1,4 +1,4 @@
-<html lang="{locale}">
+<html lang="{locale}" data-default-locale="{defaultLocale}">
     <head>
         <base href="/"/>
         {! to migrate elseewhre !}
@@ -14,7 +14,7 @@
     <body style="margin:0px;padding:0px;">
         <div class="lackey-cms">
             {>"cms/cms/partials/header"/}
-            <iframe src={data.page} data-lky-hook="iframe"></iframe>
+            <iframe src={data.page} data-lky-hook="iframe" name="_preview"></iframe>
             <div class="fullscreen overlay" data-lky-hook="debug">
                 <button data-lky-hide="lky:debug">close</button>
                 <div data-lky-hook="visualdiff"></div>

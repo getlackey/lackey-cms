@@ -10,97 +10,14 @@
                 <label for="lk-cms-menu-toggle">
                     ≡
                 </label>
-                <ul class="dropdown">
-                    <li>
-                        <a href="/admin/">Homepage</a>
-                    <li>
-                        <a href="cms">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="cms/activity">Activity</a>
-                    </li>
-                    <li>
-                        <a href="cms/users">Users</a>
-                    </li>
-                    <li>
-                        <a href="cms/content">Content</a>
-                    </li>
-                    <li>
-                        <a href="cms/media">Media</a>
-                    </li>
-                    <li>
-                        <a href="cms/taxonomy">Taxonomy</a>
-                    </li>
-                </ul>
+                {>"cms/cms/partials/header/sections"/}
             </li>
             <li>
                 <a href="#">
                 </a>
             </li>
             {?edit}
-                <li>
-                    <a href="#" data-lky-hook="cms.actions.visibility"><i class="fa"></i></a>
-                </li>
-                <li>
-                    <a href="#" data-lky-hook="cms.actions.taxonomy"><i class="fa fa-tag"></i></a>
-                </li>
-                <li>
-                    <input type="checkbox" class="dropdown-menu-toggle" id="lk-cms-settings-toggle"/>
-                    <label for="lk-cms-settings-toggle">
-                        <i class="fa fa-cog"></i>
-                    </label>
-                    <div class="dropdown-settings">
-                        <ul>
-                            <li>
-                                Properties
-                            </li>
-                            <li>
-                                <table>
-                                    <thead>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="text"/>
-                                            </td>
-                                            <td>
-                                                <input type="text"/>
-                                            </td>
-                                            <td>
-                                                <button>
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td>
-                                                <input type="text"/>
-                                            </td>
-                                            <td>
-                                                <input type="text"/>
-                                            </td>
-                                            <td>
-                                                <button>
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </li>
-                            <li>
-                                Structure
-                            <li>
-                                <div data-lky-hook="cms.area.structure" data-lky-template="cms/cms/structure"></div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-code" data-lky-show="lky:debug"></i></a>
-                </li>
+                {>"cms/cms/partials/header/editmode"/}
             {/edit}
         </ul>
         <ul class="right">
@@ -110,60 +27,29 @@
                     <img src="{admin.image.default.src}"/>
                     <div class="details">
                         <span>{admin.name}</span>
-                        <span>as {user.roles|role}</span>
+                        <span>as {user.roles|role} in&nbsp;
+                            {#data.langauges}
+                                {@eq key=locale value=code}
+                                    {name}
+                                {/eq}
+                            {/data.langauges}
+                        </span>
                     </div>
                 </label>
-                <ul class="dropdown-right">
-                    <li class="divider">Account</li>
-                    <li>
-                        <a href="/cms/account">Account Settings</a>
-                    </li>
-                                        <li>
-                        <a href="/logout">Logout</a>
-                    </li>
-
-
-                        <li class="divider">View as</li>
-                        {#viewAs}
-                            {@eq key=name value=viewingAs}
-                            <li>
-                                Act as {label}
-                            </li>
-                            {:else}
-                            <li>
-                                <a href="#" data-lky-hook="actAs" data-lky-act-as="{name}">Act as {label}</a>
-                            </li>
-                            {/eq}
-                        {/viewAs}
-                        <li class="divider">View in variant</li>
-                        <li>
-                            <a href="#" data-lky-hook="viewAs" data-lky-view-as="">View as page</a>
-                        </li>
-                        {#data.variants}
-                            <li>
-                                <a href="#" data-lky-hook="viewAs" data-lky-view-as="{path}">View as {name}</a>
-                            </li>
-                        {/data.variants}
-                        <li class="divider">View in Language</li>
-                        {#data.langauges}
-                            <li>
-                                {@eq key=locale value=code}
-                                Viewing in {name}
-                                {:else}
-                                    <a href="#" data-lky-hook="viewIn" data-lky-language="{code}">View in {name}</a>
-                                {/eq}
-                            </li>
-                        {/data.langauges}
-
-                </ul>
+                {>"cms/cms/partials/header/sidebar"/}
             </li>
             {?edit}
-            <li>
-                <button data-lky-hook="cms.actions.cancel" disabled>Cancel</button>
-            </li>
-            <li>
-                <button data-lky-hook="cms.actions.save" disabled>Save</button>
-            </li>
+                <li>
+                    <button data-lky-hook="cms.actions.cancel" disabled>Cancel</button>
+                </li>
+                <li>
+                    <button data-lky-hook="cms.actions.save" disabled>Save</button>
+                </li>
+                {!
+                <li>
+                    <button data-lky-hook="cms.actions.preview">Preview</button>
+                </li>
+                !}
             {/edit}
         </ul>
     </nav>
