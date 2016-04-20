@@ -60,6 +60,10 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
       data = context,
       document;
 
+    if (config.props) {
+      data = data.push(config.props);
+    }
+
     if (config.route) {
 
       promise = promise
