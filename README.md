@@ -1,5 +1,7 @@
 # Lackey
 
+![Travis Status for Lackey](https://travis-ci.org/getlackey/lackey-cms.svg?branch=master)
+
 ![Lackey](./docs/lackey-logo.png)
 
 _Version 0.2.0-rc1_
@@ -16,6 +18,7 @@ It's just an awesome Node.js CMS and framework by ![Enigma Marketing Services](.
 
  * [Documentation](https://github.com/getlackey/lackey-cms/wiki)
  * [Boilerplate](https://github.com/getlackey/boilerplate)
+ * [API Reference](http://getlackey.github.io/) - only for core development
 
 # License and Credits
 

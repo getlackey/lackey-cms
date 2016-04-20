@@ -411,10 +411,9 @@ class ObjectionWrapper {
 
     /**
      * Generates table data
-     * @param   {[[Type]]} inputQuery   [[Description]]
-     * @param   {Array}    columns [[Description]]
-     * @param   {object}   options [[Description]]
-     * @returns {[[Type]]} [[Description]]
+     * @param   {object} inputQuery
+     * @param   {Array}    columns
+     * @param   {object}   options
      */
     static table(inputQuery, columns, options) {
 
