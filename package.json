@@ -1,0 +1,22 @@
+{
+  "name": "lackey-cms-refernce",
+  "version": "0.2.0",
+  "description": "Lackey CMS",
+  "private": true,
+  "author": {
+    "name": "Enigma Marketing",
+    "email": "admin@enigma-marketing.co.uk",
+    "url": "http://www.enigma-marketing.co.uk"
+  },
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jsdoc3": "^0.2.1",
+    "jsdoc": "^3.4.0"
+  }
+}
