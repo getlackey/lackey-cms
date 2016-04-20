@@ -1,5 +1,7 @@
 # Lackey
 
+![Travis Status for Lackey](https://travis-ci.org/getlackey/lackey-cms.svg?branch=master)
+
 ![Lackey](./docs/lackey-logo.png)
 
 _Version 0.2.0-rc1_
