@@ -18,6 +18,7 @@ It's just an awesome Node.js CMS and framework by ![Enigma Marketing Services](.
 
  * [Documentation](https://github.com/getlackey/lackey-cms/wiki)
  * [Boilerplate](https://github.com/getlackey/boilerplate)
+ * [API Reference](http://getlackey.github.io/lackey-cms) - only for core development
 
 # License and Credits
 

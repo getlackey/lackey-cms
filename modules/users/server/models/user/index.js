@@ -626,8 +626,7 @@ module.exports = SUtils.deps(
 
         /**
          * Gets as specific role
-         * @param   {[[Type]]} role [[Description]]
-         * @returns {[[Type]]} [[Description]]
+         * @param   role
          */
         as(role) {
             SCli.debug(__MODULE_NAME, 'as', role.name ? role.name : role);
