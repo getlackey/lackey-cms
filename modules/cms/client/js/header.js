@@ -32,7 +32,9 @@ Manager.init({
         iframe: 'lky:iframe',
         properties: 'lky:cms.actions.properties',
         preview: 'lky:cms.actions.preview',
-        create: 'lky:cms.actions.create'
+        create: 'lky:cms.actions.create',
+        createdAt: 'lky:cms.page.created-at',
+        createdAtTime: 'lky:cms.page.created-at-time'
     }
 });
 

@@ -69,6 +69,9 @@ module.exports = SUtils.deps(
                     },
                     templateId: {
                         type: 'integer'
+                    },
+                    createdAt: {
+                        type: ['date', 'string']
                     }
                 }
             };

@@ -13,6 +13,11 @@
         <i class="fa fa-cog"></i>
     </label>
     <div class="dropdown-settings">
+        <h5>Created at</h5>
+        <input type="date"
+               class="form-control" name="created-at" data-lky-hook="cms.page.created-at"/>
+        <input type="time"
+               class="form-control" name="created-at-time" data-lky-hook="cms.page.created-at-time"/>
         <h5>Structure</h5>
         <ul data-lky-hook="cms.area.structure"></ul>
     </div>

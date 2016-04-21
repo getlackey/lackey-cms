@@ -16,9 +16,21 @@
     limitations under the License.
 */
 
+/**
+ * @module lackey-cms/modules/core/client
+ * @type {object}
+ * @exports lackey
+ */
+
 var lackey,
     eventHandlers = {};
 
+/**
+ * Gets HTML nodes by query
+ * @param   {string|HTMLNode|Array}   selector @see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
+ * @param   {HTMLNode} root     node to start scan within
+ * @returns {Array}    of HTMLNodes
+ */
 function select(selector, root) {
     if (!selector) return [];
     if (selector.nodeType === 1) return [selector];
@@ -37,6 +49,13 @@ function select(selector, root) {
     return [].slice.call(found);
 }
 
+/**
+ * Gets list of HTMLNodes containg given attribute
+ * @param   {string} attribute name
+ * @param   {string} value of the attribute
+ * @param   {HTMLNode} root      node to start scan with
+ * @returns {Array} of HTMLNodes
+ */
 function getWithAttribute(attribute, value, root) {
     return select('[' + attribute + (value !== undefined ? ('="' + value + '"') : '') + ']', root);
 }
@@ -113,6 +132,12 @@ function eraseCookie(name) {
 }
 
 lackey = {
+    /**
+     * Binds function to be always executed in given context
+     * @param   {Function} fn
+     * @param   {object} context
+     * @returns {funciton}
+     */
     as: function (fn, context) {
         var ctx = context,
             fcn = fn;
@@ -173,7 +198,7 @@ lackey = {
                 if (['checkbox'].indexOf(element.type) !== -1) {
                     values[element.name] = element.checked ? element.value : null;
                 } else if (['radio'].indexOf(element.type) !== -1) {
-                    if(element.checked) {
+                    if (element.checked) {
                         values[element.name] = element.value;
                     }
                 } else {
@@ -232,4 +257,5 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     window.addEventListener('load', lackey.init);
 }
 window.Lackey = lackey;
+/** Lackey */
 module.exports = lackey;

@@ -116,6 +116,9 @@ let self,
                 if (options.controls.create) {
                     lackey.bind(options.controls.create, 'click', lackey.as(self.create, self));
                 }
+                if (options.controls.createdAt && options.controls.createdAtTime) {
+                    self.createdAt(options.controls.createdAt, options.controls.createdAtTime);
+                }
             }
             LackeyPageManager.setVisibility(LackeyPageManager.getVisibility());
 
@@ -128,6 +131,20 @@ let self,
                     id: data.id
                 });
             });
+        },
+        createdAt: (dateSelector, timeSelector) => {
+            let dateHook = lackey.select(dateSelector)[0],
+                timeHook = lackey.select(timeSelector)[0];
+            self.getDefault()
+                .then((def) => {
+                    dateHook.value = new Date(def.createdAt).toISOString().substr(0, 10);
+                    timeHook.value = new Date(def.createdAt).toISOString().substr(11, 5);
+                    lackey.bind([dateHook, timeHook], 'change', () => {
+                        let string = new Date(dateHook.value + 'T' + timeHook.value);
+                        contents[def.id].createdAt = string.toISOString();
+                        self.refresh();
+                    });
+                });
         },
         create: () => {
             api.get('cms/template?selectable=true')
