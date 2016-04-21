@@ -25,7 +25,8 @@ if (!GLOBAL.LACKEY_PATH) {
 const SUtils = require(LACKEY_PATH).utils,
     objection = require('objection'),
     SCli = require(LACKEY_PATH).cli,
-    Model = objection.Model;
+    Model = objection.Model,
+    _ = require('lodash');
 
 module.exports = SUtils.deps(
     SUtils.cmsMod('core').model('objection'),
@@ -326,6 +327,41 @@ module.exports = SUtils.deps(
 
         static findByRoute(route) {
             return this.findOneBy('route', route);
+        }
+
+        static getByTaxonomies(taxonomies, limit) {
+
+            let promise;
+
+            if (taxonomies.length) {
+
+                promise = Promise.all(taxonomies.map((taxonomy) => {
+                    return SCli.sql(ContentToTaxonomy
+                            .query()
+                            .where('taxonomyId', taxonomy.id))
+                        .then((list) => list.map((entry) => entry.contentId));
+                })).then((lists) => _.intersection.apply(null, lists));
+            } else {
+                promise = Promise.resolve(null);
+            }
+
+            return promise
+                .then((list) => {
+
+                    let query = ContentModel.query();
+                    if (list) {
+                        query = query.whereIn('id', list);
+                    }
+
+                    return SCli.sql(query
+                        .orderBy('createdAt', 'DESC')
+                        .limit(limit)
+                    );
+
+                })
+                .then((results) => {
+                    return results.map((result) => result.route);
+                });
         }
     }
     Content.generator = require('./generator');
