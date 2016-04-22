@@ -645,7 +645,8 @@ module.exports = SUtils.deps(
             return {
                 name: this.name,
                 roles: this.roles,
-                image: this.image ? this.image.toJSON() : null
+                image: this.image ? this.image.toJSON() : null,
+                id: this.id
             };
         }
 

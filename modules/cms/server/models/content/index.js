@@ -160,7 +160,11 @@ module.exports = SUtils.deps(
                 }
 
                 if (self._doc.author) {
-                    self._doc.userId = this._doc.author;
+                    let author = this._doc.author;
+                    if(typeof author === 'object') {
+                        author = author ? author.id : null;
+                    }
+                    self._doc.userId = author;
                 }
 
                 delete self._doc.template;
