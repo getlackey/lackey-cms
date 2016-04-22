@@ -21,6 +21,7 @@ const model = require('prosemirror/dist/model'),
       dino = require('./widgets/dino'),
       dust = require('./widgets/dust'),
       twitterable = require('./widgets/twitterable'),
+      iframe = require('./widgets/iframe').iframe,
       Dino = dino.Dino,
       Twitterable = twitterable.Twitterable,
       Dust = dust.Dust,
@@ -54,6 +55,7 @@ Image.register('command', 'upload', {
 let LackeySchema = new Schema(defaultSchema.spec.update({
       dust: Dust,
       twitterable: Twitterable,
+      iframe: iframe,
       dino: Dino,
       image: Image
 }));

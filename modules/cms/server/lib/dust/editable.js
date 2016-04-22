@@ -51,7 +51,7 @@ function fromLayout(root, path, variant, locale, type, route, toFormat) {
       uri: route
     });
   } catch (e) {
-    output = '';
+    output = e.message;
   }
   return output;
 
