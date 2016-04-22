@@ -45,7 +45,7 @@ function fromLayout(root, path, variant, locale, type, route, toFormat) {
   }
 
   try {
-    output = parseFrom(schema(type), output, 'json');
+    output = treeParser.walk(parseFrom(schema(type), output, 'json'));
     output = (toFormat === 'text' ? toText : toHTML)(output, {
       serverSide: true,
       uri: route
@@ -68,7 +68,7 @@ module.exports = (dust) => {
       path = params.path || null,
       parent = params.parent || null,
       type = params.type || 'doc',
-        locale = context.get('locale');
+      locale = context.get('locale');
 
     if (parent) {
       path = parent + '.' + path;

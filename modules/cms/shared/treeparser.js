@@ -43,6 +43,35 @@ function parse(value, variant, state, locale) {
     return value[key];
 }
 
+module.exports.walk = function walk(schema) {
+    if (typeof schema !== 'object') return schema;
+    if (schema.type === 'paragraph' && schema.content) {
+        let hasYOUTUBE = false;
+        schema.content.forEach((node) => {
+            if (node.marks && node.text === 'IFRAME') {
+                node.marks.forEach((mark) => {
+                    if (mark._ === 'link') {
+                        hasYOUTUBE = mark.href;
+                    }
+                });
+            }
+        });
+        if (hasYOUTUBE) {
+            schema.type = 'iframe';
+            delete schema.content;
+            schema.attrs = {
+                src: hasYOUTUBE
+            };
+        }
+    }
+    if (schema.content) {
+        schema.content.forEach((node) => {
+            module.exports.walk(node);
+        });
+    }
+    return schema;
+};
+
 module.exports.pattern = (variant, state, locale) => {
     if (!variant && !state && !locale) {
         return '*';

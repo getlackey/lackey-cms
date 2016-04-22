@@ -22,6 +22,7 @@ const browser = require('../../lib/dust/editable').browser,
     BbPromise = require('bluebird'),
     _ = require('lodash'),
     toMarkdown = require('prosemirror/dist/markdown').toMarkdown,
+      treeParser = require('../../../shared/treeparser'),
     SUtils = require(LACKEY_PATH).utils,
     mediaModule = SUtils.cmsMod('media');
 
@@ -29,7 +30,7 @@ let mediaGenerator, Media;
 
 module.exports.deserializeText = (text) => {
     return browser.then((window) => {
-        return parseFrom(window.LackeySchema, text.replace(/\\n/g, '  '), 'markdown').toJSON();
+        return treeParser.walk(parseFrom(window.LackeySchema, text.replace(/\\n/g, '  '), 'markdown').toJSON());
     });
 };
 

@@ -23,7 +23,6 @@ class Website extends Block {
 	}
 }
 
-
 Website.prototype.serializeDOM = (node, s) => s.renderAs(node, 'iframe', {
 	src: node.attrs.src,
 	content: 'text/html;charset=UTF-8',
@@ -32,8 +31,23 @@ Website.prototype.serializeDOM = (node, s) => s.renderAs(node, 'iframe', {
 });
 
 Website.prototype.serializeMarkdown = (s, node) => {
-	s.write("<iframe src=\"" + s.esc(node.attrs.src) + "\"/>");
+	s.write('[IFRAME](' + s.esc(node.attrs.src) + ')');
 };
+
+Website.register('parseDOM', 'a', {
+	rank: 25,
+	parse: function (domObj, state) {
+
+		if (domObj.innerTex !== 'IFRAME') {
+			return false;
+		}
+
+		state.wrapIn(this, {
+			type: this.type,
+			src: domObj.href
+		});
+	}
+});
 
 function selectedNodeAttr(pm, type, name) {
 	let node = pm.selection.node;
