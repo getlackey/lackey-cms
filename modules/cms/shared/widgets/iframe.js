@@ -31,6 +31,10 @@ Website.prototype.serializeDOM = (node, s) => s.renderAs(node, 'iframe', {
 	allowfullscreen: '1'
 });
 
+Website.prototype.serializeMarkdown = (s, node) => {
+	s.write("<iframe src=\"" + s.esc(node.attrs.src) + "\"/>");
+};
+
 function selectedNodeAttr(pm, type, name) {
 	let node = pm.selection.node;
 	if (node && node.type === type) return node.attrs[name];
