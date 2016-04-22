@@ -1,0 +1,2 @@
+field: !import ymls/one.yml
+other: !import ymls/second.yml ymls/third.yml

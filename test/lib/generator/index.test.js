@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true, esnext:true, mocha:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -45,6 +45,21 @@ describe('lib/generator', () => {
             return true;
         });
 
+    });
+
+    it('Includes', () => {
+        return Generator.load(__dirname + '/../../../mockup/main.yml')
+            .then((doc) => {
+                should.exist(doc);
+                return doc;
+            }).should.finally.be.eql({
+                field: [
+                123, 456
+            ],
+                other: [
+                789, '0ab', 'cde', 'fgh', 'ijk'
+            ]
+            });
     });
 
 });
