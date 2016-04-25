@@ -134,7 +134,10 @@ module.exports.set = (root, path, value, variant, state, locale) => {
             }
             input.type = 'Variants';
         } else {
-            input = old || {};
+            input = old || {
+                type: 'Variants'
+            };
+
         }
         input[target] = value;
 
