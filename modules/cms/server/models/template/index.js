@@ -59,6 +59,10 @@ module.exports = SUtils.deps(
             return this._doc.type;
         }
 
+        get populate() {
+            return this._doc.populate || [];
+        }
+
         static selectable() {
             SCli.debug('lackey-cms/modules/cms/server/models/template', 'selectable', this.model.tableName);
             let Self = this;

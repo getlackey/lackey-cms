@@ -36,6 +36,7 @@ module.exports = SUtils
                 table.string('thumb');
                 table.boolean('selectable');
                 table.json('props');
+                table.json('populate');
                 table.json('javascripts');
                 table.json('stylesheets');
                 table.bigInteger('userId')
