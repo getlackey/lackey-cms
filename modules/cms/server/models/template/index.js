@@ -85,12 +85,14 @@ module.exports = SUtils.deps(
                 stylesheets: this._doc.stylesheets,
                 props: this._doc.props || {},
                 selectable: this._doc.selectable || false,
+                populate: this._doc.populate || [],
                 thumb: this._doc.thumb || null
             };
         }
 
         _preSave() {
             if (this._doc) {
+
                 if (this._doc.javascripts) {
                     if (!Array.isArray(this._doc.javascripts)) {
                         this._doc.javascripts = [this._doc.javascripts];
@@ -102,6 +104,12 @@ module.exports = SUtils.deps(
                         this._doc.stylesheets = [this._doc.stylesheets];
                     }
                     this._doc.stylesheets = JSON.stringify(this._doc.stylesheets);
+                }
+                if (this._doc.populate) {
+                    if (!Array.isArray(this._doc.populate)) {
+                        this._doc.stylesheets = [this._doc.populate];
+                    }
+                    this._doc.populate = JSON.stringify(this._doc.populate);
                 }
                 if (!this._doc.type) {
                     this._doc.type = 'template';

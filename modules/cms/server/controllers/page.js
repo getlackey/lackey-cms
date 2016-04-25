@@ -16,17 +16,24 @@
     limitations under the License.
 */
 
-const SCli = require(LACKEY_PATH).cli;
+const SCli = require(LACKEY_PATH).cli,
+    SUtils = require(LACKEY_PATH).utils;
 
-module.exports = require('../models/content')
-    .then((Model) => {
+module.exports = SUtils
+    .deps(
+        require('../models/content'),
+        require('../models/taxonomy'),
+        require('../models/taxonomy-type')
+    )
+    .promised((ContentModel, Taxonomy, TaxonomyType) => {
 
         class PageController {
+
             static preview(req, res, next) {
                 let data = JSON.parse(req.body.preview),
                     fullPath = req.protocol + '://' + req.get('host') + data.location;
 
-                Model
+                ContentModel
                     .findByRoute(data.location)
                     .then((page) => {
                         if (page) {
@@ -39,15 +46,20 @@ module.exports = require('../models/content')
 
 
             }
-            static print(page, fullPath, res, req, preview) {
 
+            static print(page, fullPath, res, req, preview) {
 
                 let path, edit = req.user && req.user.getACL('edit').length > 0,
                     javascripts = req.user ? [
                                     preview ? 'js/cms/cms/preview.js' : 'js/cms/cms/page.js'
                                 ] : [],
                     stylesheets = [],
-                    pageJson = page.toJSON();
+                    pageJson = page.toJSON(),
+                    data = {
+                        route: fullPath,
+                        content: pageJson
+                    },
+                    promise = Promise.resolve(data);
 
                 if (page.state !== 'published' && !edit) {
                     return res.error403(req);
@@ -59,6 +71,10 @@ module.exports = require('../models/content')
                     }
                     if (pageJson.template.stylesheets) {
                         stylesheets = stylesheets.concat(pageJson.template.stylesheets);
+                    }
+
+                    if (pageJson.template.populate && pageJson.template.populate.length) {
+                        promise = PageController.populate(data, pageJson.template.populate, req, page);
                     }
                 }
 
@@ -77,13 +93,92 @@ module.exports = require('../models/content')
 
                 res.edit(edit);
 
-                res.print(path, {
-                    route: fullPath,
-                    content: pageJson
+                promise.then((result) => {
+                    res.print(path, result);
+                }, (error) => {
+                    console.log(error);
+                    res.error(error);
                 });
 
-
             }
+
+            static populate(target, populate, req, page) {
+                return Promise.all(populate.map((item) => PageController.populateOne(target, item, req, page)))
+                    .then(() => target);
+            }
+
+            static populateOne(target, item, req, page) {
+                switch (item.type) {
+                case 'Taxonomy':
+                    return PageController.populateTaxonomy(target, item, req);
+                case 'Content':
+                    return PageController.populateContent(target, item, req, page);
+                default:
+                    return Promise.resolve();
+                }
+            }
+
+            static populateContent(target, item, req, page) {
+                return Promise.all(item.taxonomy.map((taxonomy) => {
+                    let queryValue = PageController.parse(taxonomy, req, page);
+                    if (!queryValue || !queryValue.length) return Promise.resolve(null);
+                    return PageController.taxonomyType(taxonomy.type)
+                        .then((taxonomyTypeId) => {
+                            return SCli
+                                .sql(Taxonomy.model.query()
+                                    .where('taxonomyTypeId', taxonomyTypeId)
+                                    .whereIn('name', queryValue))
+                                .then((tax) => {
+                                    return tax[0] ? tax[0].id : null;
+                                });
+                        });
+                })).then((taxonomies) => {
+                    let taxes = taxonomies.filter((tax) => !!tax);
+                    return ContentModel.getByTaxonomies(taxes, item.limit, item.order, item.excludeContentId ? page.id : null);
+                }).then((results) => {
+                    target[item.field] = results;
+                });
+            }
+
+            static populateTaxonomy(target, item, req) {
+                return PageController.taxonomyType(item.taxonomyType)
+                    .then((taxonomyTypeId) => {
+                        return Taxonomy.findBy('taxonomyTypeId', taxonomyTypeId)
+                            .then((list) => {
+                                target[item.field] = list.map((result) => {
+                                    let res = result.toJSON();
+                                    if (item.selected && res.name === PageController.parse(item.selected, req)) {
+                                        res.selected = true;
+                                    }
+                                    return res;
+                                });
+                            });
+                    });
+            }
+
+            static taxonomyType(name) {
+                return TaxonomyType
+                    .findOneBy('name', name)
+                    .then((taxonomyType) => taxonomyType.id);
+            }
+
+            static parse(query, req, page) {
+                if (query.source === 'query') {
+                    return req.query[query.field];
+                } else if (query.source === 'content') {
+                    if (page.taxonomies) {
+                        let res = [];
+                        page.taxonomies.forEach((tax) => {
+                            if (tax.type.name === query.type) {
+                                res.push(tax.name);
+                            }
+                        });
+                        return res;
+                    }
+                }
+                return [query.value] || null;
+            }
+
             static capture(req, res, next) {
 
                 let route = req.route.replace(/\..*$/, ''),
@@ -97,7 +192,7 @@ module.exports = require('../models/content')
 
                 route = decodeURIComponent(route);
 
-                Model
+                ContentModel
                     .findByRoute(route)
                     .then((page) => {
                         if (page) {

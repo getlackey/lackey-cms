@@ -161,7 +161,7 @@ module.exports = SUtils.deps(
 
                 if (self._doc.author) {
                     let author = this._doc.author;
-                    if(typeof author === 'object') {
+                    if (typeof author === 'object') {
                         author = author ? author.id : null;
                     }
                     self._doc.userId = author;
@@ -333,16 +333,16 @@ module.exports = SUtils.deps(
             return this.findOneBy('route', route);
         }
 
-        static getByTaxonomies(taxonomies, limit) {
+        static getByTaxonomies(taxonomyIds, limit, order, excludeId) {
 
             let promise;
 
-            if (taxonomies.length) {
+            if (taxonomyIds.length) {
 
-                promise = Promise.all(taxonomies.map((taxonomy) => {
+                promise = Promise.all(taxonomyIds.map((taxonomyId) => {
                     return SCli.sql(ContentToTaxonomy
                             .query()
-                            .where('taxonomyId', taxonomy.id))
+                            .where('taxonomyId', taxonomyId))
                         .then((list) => list.map((entry) => entry.contentId));
                 })).then((lists) => _.intersection.apply(null, lists));
             } else {
@@ -355,6 +355,9 @@ module.exports = SUtils.deps(
                     let query = ContentModel.query();
                     if (list) {
                         query = query.whereIn('id', list);
+                    }
+                    if (excludeId) {
+                        query = query.whereNotIn('id', [excludeId]);
                     }
 
                     return SCli.sql(query

@@ -42,7 +42,7 @@ module.exports = (data) => {
             if (!type) {
                 return TaxonomyType.create(data);
             }
-            if (Generator.override('TaxonomyType') && type.diff(data)) {
+            if (Generator.override('TaxonomyType') && typeof data !== 'string' && type.diff(data)) {
                 return type.save();
             }
             return type;

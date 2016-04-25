@@ -40,23 +40,24 @@ module.exports = (data) => {
 
             function next() {
                 SCli.debug('lackey/modules/cms/server/models/taxonomy/generator', 'Ensure that taxonomy  ' + data.name + ' exists');
-                return Taxonomy.getByName(data.name).then((type) => {
-                    if (!type) {
+                return Taxonomy.getByName(data.name).then((tax) => {
+                    if (!tax) {
                         return Taxonomy.create(data);
                     }
-                    if (Generator.override('Taxonomy') && type.diff(data)) {
-                        return type.save();
+                    if (Generator.override('Taxonomy') && tax.diff(data)) {
+                        return tax.save();
                     }
-                    return type;
-                }).then((type) => {
+                    return tax;
+                }).then((tax) => {
                     SCli.debug('lackey/modules/cms/server/models/taxonomy/generator', 'Ensured that taxonomy ' + data.name + ' exists');
-                    return type;
+                    return tax;
                 });
             }
 
             if (data.type && !data.type.id) {
                 return taxonomyTypeGenerator(data.type).then((type) => {
-                    data.type = type.id;
+                    data.taxonomyTypeId = type.id;
+                    delete data.type;
                     return next();
                 });
 

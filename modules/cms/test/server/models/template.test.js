@@ -58,6 +58,7 @@ describe('models/cms/server/models/template', () => {
         }).then((result) => {
             let json = result.toJSON();
             json.should.be.eql({
+                populate: [],
                 id: json.id,
                 name: 'my page',
                 path: 'page/template',
