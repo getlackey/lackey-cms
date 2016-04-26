@@ -98,7 +98,7 @@ Twitterable.register('command', 'insert', {
         let content = pm.doc.cut(pm.selection.from, pm.selection.to),
             node = this.create(null, content.content);
         return pm.tr.replaceSelection(node).apply();
-    },
+    }
 });
 
 Twitterable.register('insertMenu', 'main', {

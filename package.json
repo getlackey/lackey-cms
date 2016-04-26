@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -24,6 +24,7 @@
     "acl": "^0.4.9",
     "adaro": "^1.0.1",
     "atomus": "^1.0.0",
+    "autoprefixer": "^6.3.6",
     "bestmatch": "^1.1.0",
     "bluebird": "^3.1.1",
     "body-parser": "^1.14.2",
@@ -88,6 +89,8 @@
     "passport-github": "^1.0.0",
     "passport-local": "^1.0.0",
     "pg": "^4.5.1",
+    "postcss": "^5.0.19",
+    "postcss-js": "^0.1.2",
     "primer-css": "^2.5.0",
     "prompt": "^1.0.0",
     "prosemirror": "^0.6.0",
