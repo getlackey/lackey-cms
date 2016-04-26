@@ -39,7 +39,7 @@ Twitterable.register('parseDOM', 'a', {
     parse: function (domObj, state) {
 
         let className = domObj.getAttribute('class');
-        if (className !== 'twitterable') {
+        if (className !== 'tweetable') {
             return false;
         }
 
@@ -50,48 +50,55 @@ Twitterable.register('parseDOM', 'a', {
 });
 
 Twitterable.prototype.serializeDOM = (node, serializer) => {
+    try {
+        let innerContent = '',
+            innerContentClear = '',
+            attributes = {
+                class: 'tweetable'
+            };
 
-    let innerContent = '',
-        innerContentClear = '',
-        attributes = {
-            class: 'twitterable'
-        };
+        if (node.rendered) {
+            node.rendered = node.rendered.cloneNode(true);
+        } else {
 
-    if (node.rendered) {
-        node.rendered = node.rendered.cloneNode(true);
-    } else {
-        try {
             if (node && node.content && node.content.content && node.content.content[0].type) {
                 innerContent = serializer.renderAs(node.content.content[0], 'p');
                 innerContentClear = toText(node.content.content[0]);
             }
-        } catch (e) {
-            console.error(e);
-        }
-        if (serializer.options.serverSide === true) {
-            attributes.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(innerContentClear + ' ' + serializer.options.uri);
-        }
 
-        node.rendered = elt('a', attributes, [elt('blockquote', {}, innerContent)]);
+            if (serializer.options.serverSide === true) {
+                attributes.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(innerContentClear + ' ' + serializer.options.uri);
+            }
 
+            node.rendered = elt('a', attributes, [elt('blockquote', {
+                'pm-container': true
+            }, innerContent)]);
+
+        }
+    } catch (e) {
+        console.error(e);
     }
     return node.rendered;
 };
 
 Twitterable.register('command', 'insert', {
     label: 'Wrap the selection in a block quote',
-    'display': {
-        'type': 'icon',
-        'width': 1500,
-        'height': 1200,
-        'path': 'm1366.9 989.39c-50.27-22.309-104.33-37.387-161.05-44.18 57.89 34.723 102.34 89.679 123.28 155.15-54.18-32.15-114.18-55.47-178.09-68.04-51.13 54.49-124.02 88.55-204.68 88.55-154.89 0-280.43-125.55-280.43-280.43 0-21.988 2.457-43.398 7.258-63.91-233.08 11.68-439.72 123.36-578.04 293.01-24.141-41.4-37.969-89.567-37.969-140.97 0-97.308 49.489-183.13 124.76-233.44-45.969 1.437-89.218 14.058-127.03 35.078-0.043-1.18-0.043-2.348-0.043-3.52 0-135.9 96.68-249.22 224.96-275-23.512-6.41-48.281-9.8-73.86-9.8-18.089 0-35.628 1.711-52.781 5 35.711-111.41 139.26-192.5 262-194.77-96.058-75.23-216.96-120.04-348.36-120.04-22.621 0-44.961 1.332-66.918 3.91 124.16-79.568 271.55-125.98 429.94-125.98 515.82 0 797.86 427.31 797.86 797.93 0 12.153-0.28 24.223-0.79 36.25 54.77 39.571 102.31 88.95 139.93 145.2'
+    menu: {
+        group: 'block',
+        rank: 72,
+        display: {
+            label: 'Tweetable',
+            'type': 'icon',
+            'width': 18.438,
+            'height': 14.656,
+            'path': 'M18.449,1.744 C17.771,2.038 17.041,2.237 16.276,2.326 C17.057,1.869 17.657,1.143 17.940,0.279 C17.208,0.703 16.399,1.011 15.537,1.177 C14.847,0.458 13.863,0.009 12.775,0.009 C10.685,0.009 8.992,1.665 8.992,3.708 C8.992,3.998 9.025,4.281 9.090,4.552 C5.945,4.398 3.157,2.925 1.291,0.686 C0.966,1.232 0.779,1.868 0.779,2.546 C0.779,3.829 1.447,4.962 2.462,5.626 C1.842,5.606 1.258,5.439 0.748,5.163 C0.748,5.178 0.748,5.193 0.748,5.209 C0.748,7.002 2.052,8.497 3.783,8.837 C3.465,8.922 3.131,8.967 2.786,8.967 C2.542,8.967 2.305,8.944 2.074,8.900 C2.556,10.369 3.953,11.440 5.609,11.469 C4.314,12.462 2.683,13.053 0.910,13.053 C0.604,13.053 0.303,13.036 0.007,13.002 C1.682,14.051 3.670,14.664 5.807,14.664 C12.766,14.664 16.572,9.026 16.572,4.137 C16.572,3.977 16.569,3.818 16.561,3.658 C17.300,3.136 17.942,2.486 18.449,1.744 Z'
+        }
     },
     run(pm) {
-        let content = pm.doc.sliceBetween(pm.selection.from, pm.selection.to),
+        let content = pm.doc.cut(pm.selection.from, pm.selection.to),
             node = this.create(null, content.content);
         return pm.tr.replaceSelection(node).apply();
     },
-    menuGroup: 'block(46)'
 });
 
 Twitterable.register('insertMenu', 'main', {
