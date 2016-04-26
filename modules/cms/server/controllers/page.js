@@ -196,6 +196,14 @@ module.exports = SUtils
                     .findByRoute(route)
                     .then((page) => {
                         if (page) {
+
+                            if (req.__resFormat === 'yaml') {
+                                return page.toYAML()
+                                    .then((yaml) => {
+                                        return res.yaml(yaml);
+                                    });
+                            }
+
                             return PageController.print(page, fullPath, res, req);
                         }
                         next();

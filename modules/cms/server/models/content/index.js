@@ -242,6 +242,7 @@ module.exports = SUtils.deps(
                         type: content.type,
                         route: content.route,
                         props: content.props || {},
+                        createdAt: content.createdAt || null,
                         template: content.template ? content.template.path : '',
                         taxonomies: taxonomies,
                         layout: content.layout
