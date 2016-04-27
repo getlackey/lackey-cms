@@ -95,6 +95,9 @@ module.exports = (dust) => {
             regexSingle = /<dust-template(.+?)template=('|")(.*?)('|")(.+?)<\/dust-template>/,
             matches = layout.match(regexMulti);
           if (!matches || matches.length === 0) {
+            if (type === 'heading') {
+              layout = layout.replace(/<(\/|)p>/g, '');
+            }
             return chunk.write(layout);
           } else {
             return chunk.map((injectedChunk) => {
@@ -118,6 +121,9 @@ module.exports = (dust) => {
                 results.forEach((result) => {
                   layout = layout.replace(result.original, result.replace);
                 });
+                if (type === 'heading') {
+                  layout = layout.replace(/<(\/|)p>/g, '');
+                }
                 injectedChunk.write(layout);
                 injectedChunk.end();
               }, (error) => {

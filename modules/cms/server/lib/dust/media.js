@@ -29,69 +29,75 @@ const SUtils = require(LACKEY_PATH).utils,
 function print(chunk, data, type, editMode) {
   let source;
 
+  SCli.debug('lackey-cms/modules/cms/server/lib/dust/media', 'Print', JSON.stringify(data, null, 4));
+
   if (data && !data.content && data.default) {
     data.content = {
       source: data.default
     };
   }
+  try {
+    if (data && (data.content || editMode)) {
 
-  if (data && data.content) {
+      source = data.content ? data.content.source : null;
 
-    source = data.content.source;
-
-    if (type === 'url') {
-      chunk.write(source);
-      return;
-    }
-
-    if (editMode) {
-      if (type !== 'hook') {
-        chunk.write('<lackey-media ');
+      if (type === 'url') {
+        chunk.write(source);
+        return;
       }
-      chunk.write(' data-lky-attributes="' + JSON.stringify(data.attrs).replace(/"/g, '&quot;') + '"');
-      chunk.write(' data-lky-content="' + data.id + '"');
-      chunk.write(' data-lky-path="' + data.path + '"');
-      if (data.variant) {
-        chunk.write(' data-lky-variant="' + data.variant + '"');
+
+      if (editMode) {
+        if (type !== 'hook') {
+          chunk.write('<lackey-media ');
+        }
+        chunk.write(' data-lky-attributes="' + JSON.stringify(data.attrs || {}).replace(/"/g, '&quot;') + '"');
+        chunk.write(' data-lky-content="' + data.id + '"');
+        chunk.write(' data-lky-path="' + data.path + '"');
+        if (data.variant) {
+          chunk.write(' data-lky-variant="' + data.variant + '"');
+        }
+
+        chunk.write(' data-lky-media="' + JSON.stringify(data.content ? (data.content.toJSON ? data.content.toJSON() : data.content) : {}).replace(/"/g, '&quot;') + '"');
+        if (type === 'hook') {
+          chunk.write(' data-lky-media-type="hook"');
+        }
+
+        if (type !== 'hook') {
+          chunk.write('></lackey-media>');
+        } else if (data.update) {
+          chunk.write(' data-lky-update="' + data.update + '"');
+          chunk.write(' data-lky-update-pattern="' + data.updatePattern + '"');
+        }
+        return;
       }
-      chunk.write(' data-lky-media="' + JSON.stringify(data.content.toJSON ? data.content.toJSON() : data.content).replace(/"/g, '&quot;') + '"');
+
       if (type === 'hook') {
-        chunk.write(' data-lky-media-type="hook"');
+        return;
       }
 
-      if (type !== 'hook') {
-        chunk.write('></lackey-media>');
-      } else if (data.update) {
-        chunk.write(' data-lky-update="' + data.update + '"');
-        chunk.write(' data-lky-update-pattern="' + data.updatePattern + '"');
+      if (data.content.type === 'video') {
+        chunk.write('<video controls>');
+        data.content.alternatives.forEach((_source) => {
+          chunk.write('<source src="' + _source.src + '"');
+          if (_source.media) {
+            chunk.write(' media="' + _source.media + '"');
+          }
+          if (_source.type) {
+            chunk.write(' type="' + _source.type + '"');
+          }
+          chunk.write('>');
+        });
+        chunk.write('</video>');
+      } else {
+        chunk.write('<img src="' + source + '"');
+        /*if (data.alternatives.srcset) {
+          chunk.write(' srcset="' + sources.srcset + '"');
+        }*/
+        chunk.write('/>');
       }
-      return;
     }
-
-    if (type === 'hook') {
-      return;
-    }
-
-    if (data.content.type === 'video') {
-      chunk.write('<video controls>');
-      data.content.alternatives.forEach((_source) => {
-        chunk.write('<source src="' + _source.src + '"');
-        if (_source.media) {
-          chunk.write(' media="' + _source.media + '"');
-        }
-        if (_source.type) {
-          chunk.write(' type="' + _source.type + '"');
-        }
-        chunk.write('>');
-      });
-      chunk.write('</video>');
-    } else {
-      chunk.write('<img src="' + source + '"');
-      /*if (data.alternatives.srcset) {
-        chunk.write(' srcset="' + sources.srcset + '"');
-      }*/
-      chunk.write('/>');
-    }
+  } catch (e) {
+    chunk.write(e.message);
   }
 }
 

@@ -87,7 +87,8 @@ module.exports = SUtils
 
                 if (req.query.variant && req.query.variant) {
                     if (req.user && req.user.getACL('viewInContext')) {
-                        path = req.query.variant;
+                        path = ['~/core/variant', 'cms/cms/variant'];
+                        res.variant(req.query.variant);
                     }
                 }
 
