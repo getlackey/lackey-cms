@@ -130,6 +130,7 @@ header {
     }
     .dropdown,
     .dropdown-settings {
+        overflow-y: auto;
         left: 0px;
         -webkit-transform: translateX(-100%) translateX(-.2em);
         transform: translateX(-100%) translateX(-.2em);
