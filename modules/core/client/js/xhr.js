@@ -17,48 +17,48 @@
 */
 
 var XHR = {
-    ajax: function (path, method, data) {
+  ajax: function (path, method, data, raw) {
 
-      return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
 
-        var xhr = new XMLHttpRequest(),
-          httpMethod = method.toLowerCase();
+      var xhr = new XMLHttpRequest(),
+        httpMethod = method.toLowerCase();
 
-        xhr.open(httpMethod, path);
-        if (httpMethod === 'post' || httpMethod === 'put') {
-          xhr.setRequestHeader('Content-type', 'application/json');
-        }
+      xhr.open(httpMethod, path);
+      if (httpMethod === 'post' || httpMethod === 'put') {
+        xhr.setRequestHeader('Content-type', 'application/json');
+      }
 
-        xhr.onreadystatechange = function () {
-          var DONE = 4, // readyState 4 means the request is done.
-            OK = 200; // status 200 is a successful return.
-          if (xhr.readyState === DONE) {
-            if (xhr.status === OK) {
-              resolve(xhr.responseText); // 'This is the returned text.'
-            } else if (xhr.status === '204') {
-              resolve(null);
-            } else {
-              reject(new Error('Error: ' + xhr.status)); // An error occurred during the request.
-            }
+      xhr.onreadystatechange = function () {
+        var DONE = 4, // readyState 4 means the request is done.
+          OK = 200; // status 200 is a successful return.
+        if (xhr.readyState === DONE) {
+          if (xhr.status === OK) {
+            resolve(xhr.responseText); // 'This is the returned text.'
+          } else if (xhr.status === '204') {
+            resolve(null);
+          } else {
+            reject(new Error('Error: ' + xhr.status)); // An error occurred during the request.
           }
-        };
+        }
+      };
 
-        xhr.send(data ? JSON.stringify(data) : null);
+      xhr.send(data ? (raw ? data : JSON.stringify(data)) : null);
 
-      });
-    },
-    get: function (path) {
-      return XHR.ajax(path, 'get');
-    },
-    post: function (path, data) {
-      return XHR.ajax(path, 'post', data);
-    },
-    put: function (path, data) {
-      return XHR.ajax(path, 'put', data);
-    },
-    delete: function (path) {
-      return XHR.ajax(path, 'delete');
-    }
-  };
+    });
+  },
+  get: function (path, raw) {
+    return XHR.ajax(path, 'get', null, raw);
+  },
+  post: function (path, data, raw) {
+    return XHR.ajax(path, 'post', data, raw);
+  },
+  put: function (path, data, raw) {
+    return XHR.ajax(path, 'put', data, raw);
+  },
+  delete: function (path, raw) {
+    return XHR.ajax(path, 'delete', null, raw);
+  }
+};
 
 module.exports = XHR;
