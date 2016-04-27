@@ -133,8 +133,9 @@ module.exports = SUtils
                                 });
                         });
                 })).then((taxonomies) => {
-                    let taxes = taxonomies.filter((tax) => !!tax);
-                    return ContentModel.getByTaxonomies(taxes, item.limit, item.order, item.excludeContentId ? page.id : null);
+                    let taxes = taxonomies.filter((tax) => !!tax),
+                        pageNumber = item.page ? PageController.parse(item.page, req) : 0;
+                    return ContentModel.getByTaxonomies(taxes, item.limit, pageNumber, item.order, item.excludeContentId ? page.id : null);
                 }).then((results) => {
                     target[item.field] = results;
                 });

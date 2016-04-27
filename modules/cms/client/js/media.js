@@ -95,9 +95,18 @@ class Media {
       }
       field(node, path, value) {
             let result, parts = path.split('.'),
-                  element = parts.shift();
+                  element = parts.shift(),
+                  field;
             if (parts.length) {
-                  node[element] = node[element] || {};
+                  field = node[element];
+                  if (!field) {
+                        try {
+                              node[element] = {};
+                        } catch (e) {
+                              console.log(e);
+                              return;
+                        }
+                  }
                   return this.field(node[element], parts.join('.'), value);
             } else {
                   result = node[element] = value;

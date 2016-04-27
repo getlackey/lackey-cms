@@ -66,6 +66,7 @@ describe('lib/server/init/format', () => {
                 _headers: {},
                 header: (name, value) => res._headers[name] = value,
                 send: function (output) {
+                    //console.error(output);
                     callback(new Error('Shouldn\'t be here'));
                 },
                 render: function (template, data) {
@@ -82,6 +83,7 @@ describe('lib/server/init/format', () => {
                         stylesheets: ['my/css', 'my/css2'],
                         javascripts: ['my/js', 'my2/js'],
                         data: {},
+                        fragment: false,
                         locale: undefined,
                         user: undefined,
                         defaultLocale: undefined,
@@ -126,6 +128,7 @@ describe('lib/server/init/format', () => {
                         stylesheets: ['my/css', 'my/css2'],
                         javascripts: ['my/js', 'my2/js'],
                         data: {},
+                        fragment: false,
                         user: undefined,
                         admin: undefined,
                         locale: undefined,
@@ -176,6 +179,7 @@ describe('lib/server/init/format', () => {
                         stylesheets: ['my/css', 'my/css2'],
                         javascripts: ['my/js', 'my2/js'],
                         data: {},
+                        fragment: false,
                         user: undefined,
                         admin: undefined,
                         locale: undefined,
@@ -225,6 +229,7 @@ describe('lib/server/init/format', () => {
                         "stylesheets": ["my/css", "my/css2"],
                         "javascripts": ["my/js", "my2/js"],
                         "edit": false,
+                        fragment: false,
                         "route": "/hakuna/matata.json"
                     });
                     res.__doc.should.be.eql({
@@ -233,6 +238,7 @@ describe('lib/server/init/format', () => {
                         data: {},
                         user: undefined,
                         admin: undefined,
+                        fragment: false,
                         locale: undefined,
                         defaultLocale: undefined,
                         edit: false,

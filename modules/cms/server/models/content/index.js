@@ -334,7 +334,7 @@ module.exports = SUtils.deps(
             return this.findOneBy('route', route);
         }
 
-        static getByTaxonomies(taxonomyIds, limit, order, excludeId) {
+        static getByTaxonomies(taxonomyIds, limit, page, order, excludeId) {
 
             let promise;
 
@@ -361,10 +361,13 @@ module.exports = SUtils.deps(
                         query = query.whereNotIn('id', [excludeId]);
                     }
 
-                    return SCli.sql(query
-                        .orderBy('createdAt', 'DESC')
-                        .limit(limit)
-                    );
+                    query = query.orderBy('createdAt', 'DESC');
+
+                    if(page > 0) {
+                        query = query.offset(page * limit);
+                    }
+
+                    return SCli.sql(query.limit(limit));
 
                 })
                 .then((results) => {
