@@ -56,7 +56,15 @@ module.exports = SUtils
                     table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
                     table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
                 });
-
+            }).then(() => {
+                return knex.schema.hasColumn('users', 'route');
+            }).then((hasRoute) => {
+                if (!hasRoute) {
+                    return knex.schema.table('users', (table) => {
+                        table.string('route');
+                    });
+                }
+                return true;
             }).then(() => {
                 return knex.schema.hasTable('identities');
             }).then((exists) => {

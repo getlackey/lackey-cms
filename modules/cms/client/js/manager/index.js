@@ -424,6 +424,10 @@ let self,
             }
             return source;
         },
+        setAuthor: (contentId, value) => {
+            contents[contentId].author = value;
+            self.refresh();
+        },
         set: (contentId, path, variant, value) => {
             treeParser.set(contents[contentId].layout, path, value, variant || '*', null, locale);
             //TODO

@@ -146,6 +146,8 @@ module.exports.set = (root, path, value, variant, state, locale) => {
 
 };
 
+module.exports.crawl = crawl;
+
 
 module.exports.get = (root, path, variant, state, locale) => {
     return parse(crawl(root, path), variant, state, locale);

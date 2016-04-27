@@ -624,6 +624,10 @@ module.exports = SUtils.deps(
             return this._image;
         }
 
+        get route() {
+            return this._doc.route;
+        }
+
         /**
          * Gets as specific role
          * @param   role
@@ -645,6 +649,7 @@ module.exports = SUtils.deps(
             return {
                 name: this.name,
                 roles: this.roles,
+                route: this.route,
                 image: this.image ? this.image.toJSON() : null,
                 id: this.id
             };
