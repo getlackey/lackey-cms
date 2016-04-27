@@ -40,7 +40,7 @@ class Node {
         this._item = item;
         this._label = label;
         this.node = document.createElement('li');
-        this.node.className = 'structure structure-' + item.type;
+        this.node.className = 'structure structure-' + item.type + ' expand';
 
         if (['Fields', 'List', 'Block'].indexOf(item.type) !== -1) {
             this.toggl = document.createElement('a');

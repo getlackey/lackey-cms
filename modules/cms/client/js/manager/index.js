@@ -18,7 +18,6 @@
 */
 const
     lackey = require('./../../../../core/client/js'),
-    TreeView = require('../components/treeview.js'),
     _ = require('lodash'),
     diff = require('jsondiffpatch'),
     diffFormatters = require('jsondiffpatch/src/main-formatters'),
@@ -31,32 +30,16 @@ const
 
 let contents = {},
     cache = {},
-    contentsTree = new TreeView({
-        selector: 'lky:cms.debug.contents',
-        format: null
-    }),
     visualdiff = lackey.hook('visualdiff');
-
-
-function map(data, extraLabel) {
-    let children = [];
-    if (data.content) {
-        children = children.concat(data.content.map((content) => map(content)));
-    }
-    if (data.fields) {
-        children = children.concat(Object.keys(data.fields).map((field) => map(data.fields[field], field)));
-    }
-    return {
-        label: (extraLabel ? extraLabel : '') + data.type,
-        children: children
-    };
-}
 
 function jsjp(input) {
     return JSON.parse(JSON.stringify(input));
 }
 
 let self,
+    structure,
+    structureNode,
+    structureCopy,
     locale = null,
     defaultLocale = null,
     LackeyPageManager = {
@@ -71,10 +54,9 @@ let self,
             if (self.saveBtn) {
                 self.saveBtn.disabled = !changed;
             }
-            contentsTree.setData({
-                label: 'ROOT',
-                children: Object.keys(contents).map((key) => map(contents[key]))
-            });
+            if (structure) {
+                self.structure(structure);
+            }
 
         },
         init: (options) => {
@@ -108,7 +90,9 @@ let self,
                     lackey.bind(options.controls.properties, 'click', lackey.as(self.properties, self));
                 }
                 if (options.controls.structure) {
+                    structure = options.controls.structure;
                     LackeyPageManager.structure(options.controls.structure);
+
                 }
                 if (options.controls.preview) {
                     lackey.bind(options.controls.preview, 'click', lackey.as(self.preview, self));
@@ -191,20 +175,26 @@ let self,
             }, MediaModalController);
         },
         structure: (selector) => {
-            return self.getDefault().then((page) => {
-                page.layout = page.layout || {};
-                let node = new Structure(page.layout);
+            if(!structureNode) {
                 Structure.changed(() => {
-                    contents[page.id].layout = page.layout;
-                    self.refresh();
-                    self.preview();
+                        self.getDefault()
+                            .then((page) => {
+                                contents[page.id].layout = structureCopy;
+                                self.refresh();
+                                self.preview();
+                            });
                 });
-                node.expand();
+
+            }
+            return self.getDefault().then((page) => {
+                structureCopy = _.clone(contents[page.id] ? contents[page.id].layout : page.layout) || {};
+
+                if (structureNode) {
+                    structureNode.parentNode.removeChild(structureNode);
+                }
+                let node = new Structure(structureCopy);
+                structureNode = node.node;
                 lackey.select(selector)[0].appendChild(node.node);
-                lackey.on('structure.add-block', (event) => {
-                    console.log(event);
-                    console.log(node);
-                });
             });
         },
         capture: (event) => {
