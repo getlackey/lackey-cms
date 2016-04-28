@@ -29,6 +29,7 @@ const editable = require('./server/lib/dust/editable'),
     block = require('./server/lib/dust/block'),
     list = require('./server/lib/dust/list'),
     taxonomy = require('./server/lib/dust/taxonomy'),
+    hasContent = require('./server/lib/dust/has-content'),
     sitemap = require(LACKEY_PATH).sitemap;
 
 module.exports = (instance) => {
@@ -41,6 +42,7 @@ module.exports = (instance) => {
     instance.addDustHelper(block);
     instance.addDustHelper(list);
     instance.addDustHelper(taxonomy);
+    instance.addDustHelper(hasContent);
     sitemap.addSource(() => {
         return require('./server/controllers/content')
             .then((ctrl) => ctrl.generateSitemap());
