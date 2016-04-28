@@ -40,7 +40,7 @@ module.exports = (dust) => {
       throw error;
     }
 
-    if (layout && layout.replace(/\s+/g, '').length) {
+    if (params.editMode || (layout && layout.replace(/\s+/g, '').length)) {
       if (bodies.block) {
         chunk = chunk.render(bodies.block, context);
       }
