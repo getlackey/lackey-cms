@@ -31,10 +31,10 @@ module.exports = SUtils
 
             static preview(req, res, next) {
                 let data = JSON.parse(req.body.preview),
-                    fullPath = req.protocol + '://' + req.get('host') + data.location;
+                    fullPath = req.protocol + '://' + req.get('host') + decodeURIComponent(data.location);
 
                 ContentModel
-                    .findByRoute(data.location)
+                    .findByRoute(decodeURIComponent(data.location))
                     .then((page) => {
                         if (page) {
                             page.layout = data.contents.layout;
@@ -121,6 +121,17 @@ module.exports = SUtils
 
             static populateContent(target, item, req, page) {
                 return Promise.all(item.taxonomy.map((taxonomy) => {
+                    if (taxonomy.ifNot) {
+                        if (PageController.parse(taxonomy.ifNot, req, page)) {
+                            return null;
+                        }
+                    }
+                    if (taxonomy.if) {
+                        if (!PageController.parse(taxonomy.if, req, page)) {
+                            return null;
+                        }
+                    }
+
                     let queryValue = PageController.parse(taxonomy, req, page);
                     if (!queryValue || !queryValue.length) return Promise.resolve(null);
                     return PageController.taxonomyType(taxonomy.type)
@@ -135,8 +146,9 @@ module.exports = SUtils
                         });
                 })).then((taxonomies) => {
                     let taxes = taxonomies.filter((tax) => !!tax),
-                        pageNumber = item.page ? PageController.parse(item.page, req) : 0;
-                    return ContentModel.getByTaxonomies(taxes, item.limit, pageNumber, item.order, item.excludeContentId ? page.id : null);
+                        pageNumber = item.page ? PageController.parse(item.page, req) : 0,
+                        author = (item.author && PageController.parse(item.author.if, req, page)) ? page.author : null;
+                    return ContentModel.getByTaxonomies(taxes, author, item.limit, pageNumber, item.order, item.excludeContentId ? page.id : null);
                 }).then((results) => {
                     target[item.field] = results;
                 });
@@ -183,7 +195,7 @@ module.exports = SUtils
 
             static capture(req, res, next) {
 
-                let route = req.route.replace(/\..*$/, ''),
+                let route = req.route.toString().replace(/\..*$/, ''),
                     fullPath = req.protocol + '://' + req.get('host') + route;
 
                 route = route.replace(/\?.*$/, '');

@@ -24,7 +24,7 @@ if (picker) {
                 option.value = user.id;
                 users[user.id] = user;
                 option.innerText = user.name;
-                if (user.id === defContent.author.id) {
+                if (defContent.author && user.id === defContent.author.id) {
                     option.selected = true;
                 }
                 picker.appendChild(option);

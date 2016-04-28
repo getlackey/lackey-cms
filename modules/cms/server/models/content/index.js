@@ -106,6 +106,10 @@ module.exports = SUtils.deps(
             return this._doc.props || {};
         }
 
+        get author() {
+            return this._user ? this._user.toJSON() : null;
+        }
+
         set props(data) {
             this._doc.props = data;
         }
@@ -245,6 +249,7 @@ module.exports = SUtils.deps(
                         createdAt: content.createdAt || null,
                         template: content.template ? content.template.path : '',
                         taxonomies: taxonomies,
+                        author: this._user ? this._user.toJSON() : null,
                         layout: content.layout
                     };
                 });
@@ -334,7 +339,7 @@ module.exports = SUtils.deps(
             return this.findOneBy('route', route);
         }
 
-        static getByTaxonomies(taxonomyIds, limit, page, order, excludeId) {
+        static getByTaxonomies(taxonomyIds, author, limit, page, order, excludeId) {
 
             let promise;
 
@@ -361,9 +366,13 @@ module.exports = SUtils.deps(
                         query = query.whereNotIn('id', [excludeId]);
                     }
 
+                    if (author) {
+                        query = query.where('userId', author.id);
+                    }
+
                     query = query.orderBy('createdAt', 'DESC');
 
-                    if(page > 0) {
+                    if (page > 0) {
                         query = query.offset(page * limit);
                     }
 

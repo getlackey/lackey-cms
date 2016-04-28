@@ -66,7 +66,14 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
 
     if (config.props) {
       SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'has props');
-      data = data.push(config.props);
+      let props = {};
+      Object.keys(config.props).forEach((key) => {
+        let val = config.props[key];
+        if (!(typeof config.props[key] === 'string' && val.replace(/\s+/g, '') === '')) {
+          props[key] = val;
+        }
+      });
+      data = data.push(props);
     }
 
     if (config.route) {
