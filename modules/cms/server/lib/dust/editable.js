@@ -68,6 +68,7 @@ module.exports = (dust) => {
       path = params.path || null,
       parent = params.parent || null,
       type = params.type || 'doc',
+      def = params.default || '',
       locale = context.get('locale');
 
     if (parent) {
@@ -98,6 +99,9 @@ module.exports = (dust) => {
             if (type === 'heading') {
               layout = layout.replace(/<(\/|)p>/g, '');
             }
+            if (layout.replace(/\s+/g, '').length === 0) {
+              layout = def;
+            }
             return chunk.write(layout);
           } else {
             return chunk.map((injectedChunk) => {
@@ -124,6 +128,7 @@ module.exports = (dust) => {
                 if (type === 'heading') {
                   layout = layout.replace(/<(\/|)p>/g, '');
                 }
+
                 injectedChunk.write(layout);
                 injectedChunk.end();
               }, (error) => {
