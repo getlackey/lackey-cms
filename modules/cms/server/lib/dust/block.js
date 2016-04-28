@@ -28,6 +28,7 @@ module.exports = (dust) => {
   dust.helpers.block = function (chunk, context, bodies, params) {
     SCli.debug('lackey-cms/modules/cms/server/lib/dust/block');
 
+
     return chunk.map((injectedChunk) => {
       module.exports.block(
         params.content ? treeParser.get(params.content.layout, params.path) : {
@@ -127,7 +128,7 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
           reject(err);
         }
         injectedChunk.write(out);
-        SCli.debug('lackey-cms/modules/cms/serer/lib/dust/block', 'Rendered ');
+        SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'Rendered ');
         resolve(injectedChunk);
       });
 

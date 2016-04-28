@@ -175,14 +175,14 @@ let self,
             }, MediaModalController);
         },
         structure: (selector) => {
-            if(!structureNode) {
+            if (!structureNode) {
                 Structure.changed(() => {
-                        self.getDefault()
-                            .then((page) => {
-                                contents[page.id].layout = structureCopy;
-                                self.refresh();
-                                self.preview();
-                            });
+                    self.getDefault()
+                        .then((page) => {
+                            contents[page.id].layout = structureCopy;
+                            self.refresh();
+                            self.preview();
+                        });
                 });
 
             }
@@ -417,6 +417,15 @@ let self,
         setAuthor: (contentId, value) => {
             contents[contentId].author = value;
             self.refresh();
+        },
+        setRelated: (contentId, value, index) => {
+            contents[contentId].layout.related = contents[contentId].layout.related || {};
+            contents[contentId].layout.related[index] = value ? {
+                type: 'Ref',
+                ref: value
+            } : null;
+            self.refresh();
+            self.preview();
         },
         set: (contentId, path, variant, value) => {
             treeParser.set(contents[contentId].layout, path, value, variant || '*', null, locale);

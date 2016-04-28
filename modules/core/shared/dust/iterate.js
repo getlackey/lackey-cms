@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* eslint no-param-reassign:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -28,7 +29,7 @@ module.exports = (dust) => {
             let old = context.stack.head[as];
             for (var i = from; i <= to; i++) {
                 context.stack.head[as] = i;
-                chunk.render(bodies.block, context);
+                chunk = chunk.render(bodies.block, context);
             }
             context.stack.head[as] = old;
         }

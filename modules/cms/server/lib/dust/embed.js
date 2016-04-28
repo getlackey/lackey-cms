@@ -35,9 +35,10 @@ module.exports = (dust) => {
     SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', route, template);
 
     return chunk.map((injectedChunk) => {
-
+      SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'map', route, template);
       return require('../../models/content')
         .then((Content) => {
+        SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'query', route, template);
           return Content.getByTypeAndRoute(type, route);
         })
         .then((document) => {
@@ -64,7 +65,8 @@ module.exports = (dust) => {
 
               injectedChunk.write(out);
               SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'Rendered ', route, template);
-              return injectedChunk.end();
+              injectedChunk.end();
+              return injectedChunk;
             });
           }
 

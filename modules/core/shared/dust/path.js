@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* eslint no-param-reassign:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -19,9 +20,9 @@
 module.exports = (dust) => {
 
     function crawl(obj, path) {
-        if(!obj) return null;
-        if(!path) return obj;
-        if(path.indexOf('.') === -1) {
+        if (!obj) return null;
+        if (!path) return obj;
+        if (path.indexOf('.') === -1) {
             return obj[path];
         }
         let elems = path.split('.'),
@@ -32,19 +33,31 @@ module.exports = (dust) => {
     dust.helpers.path = function (chunk, context, bodies, params) {
 
         let root = params.root || null,
-            path = params.path,
+            path = params.path + '',
             filters = params.filters || [],
             value = crawl(root, path);
 
-        console.log(root, path, filters, value);
+        console.log('path', 'init', root, path);
 
         filters.forEach((filter) => {
             value = dust.filters[filter](value);
         });
 
-        chunk.write(value);
-        return chunk;
+        console.log('path', 'value', value);
+
+        if (!bodies.block) {
+            chunk.write(value);
+        } else {
+            let template = value ? bodies.block : bodies.else;
+
+            console.log('path', 'template', template);
+
+            if (template) {
+                chunk = chunk.render(template, context.push(value));
+            }
+            return chunk;
+
+        }
 
     };
-
 };

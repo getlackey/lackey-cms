@@ -17,3 +17,5 @@
     limitations under the License.
 */
 require('./view');
+require('./manager/author');
+require('./manager/related');

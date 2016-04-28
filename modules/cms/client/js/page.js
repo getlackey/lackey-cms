@@ -19,3 +19,4 @@
 require('./iframe');
 require('./view');
 require('./manager/author');
+require('./manager/related');

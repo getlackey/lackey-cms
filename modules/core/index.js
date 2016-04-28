@@ -13,6 +13,8 @@ module.exports = (instance) => {
             instance.addPostware(errors.on404);
             instance.addMiddleware(activityLog.capture);
             instance.addDustHelper(require('./shared/dust/iterate'));
-
+            instance.addDustHelper(require('./shared/dust/path'));
+            instance.addDustHelper(require('./shared/dust/hashmap'));
+            instance.addDustHelper(require('./shared/dust/list'));
         });
 };
