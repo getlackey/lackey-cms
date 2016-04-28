@@ -242,16 +242,32 @@ module.exports = SUtils.deps(
                         });
                     }
 
-                    return {
-                        type: content.type,
-                        route: content.route,
-                        props: content.props || {},
-                        createdAt: content.createdAt || null,
-                        template: content.template ? content.template.path : '',
-                        taxonomies: taxonomies,
-                        author: this._user ? this._user.toJSON() : null,
-                        layout: content.layout
-                    };
+                    let promise = Promise.resolve();
+
+                    if (self._user) {
+                        promise = self._user.getIdentity('email')
+                            .then((email) => {
+                                if (email) return email.accountId;
+                                return null;
+                            });
+                    }
+
+                    return promise.then((author) => {
+
+                        return {
+                            type: content.type,
+                            route: content.route,
+                            props: content.props || {},
+                            createdAt: content.createdAt || null,
+                            template: content.template ? content.template.path : '',
+                            taxonomies: taxonomies,
+                            author: author ? author : null,
+                            layout: content.layout
+                        };
+                    }, (err) => {
+                        console.error(err);
+                        return err;
+                    });
                 });
 
         }

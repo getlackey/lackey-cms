@@ -22,7 +22,7 @@ const browser = require('../../lib/dust/editable').browser,
     BbPromise = require('bluebird'),
     _ = require('lodash'),
     toMarkdown = require('prosemirror/dist/markdown').toMarkdown,
-      treeParser = require('../../../shared/treeparser'),
+    treeParser = require('../../../shared/treeparser'),
     SUtils = require(LACKEY_PATH).utils,
     mediaModule = SUtils.cmsMod('media');
 
@@ -143,7 +143,7 @@ function crawlBack(data) {
         }
     });
 
-    if (data.type === 'Fields') {
+    if (data.type === 'Fields' || data.type === 'Variants') {
         Object.keys(data).forEach((key) => {
             if (['type'].indexOf(key) === -1) {
                 let content = data[key];

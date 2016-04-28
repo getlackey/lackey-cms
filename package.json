@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -68,7 +68,7 @@
     "gulp-sass-lint": "^1.1.1",
     "humanize": "0.0.9",
     "js-yaml": "^3.5.5",
-    "json2yaml": "git://github.com/sielay/json2yaml.git#master",
+    "json2yaml": "git://github.com/sielay/json2yaml.git#a6fbbc45a981134a0857add085a20dd832514a6f",
     "jsondiffpatch": "^0.1.41",
     "keypress": "^0.2.1",
     "knex": "^0.10.0",
