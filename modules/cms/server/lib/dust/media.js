@@ -81,18 +81,28 @@ function print(chunk, data, type, editMode) {
           chunk.write(' ' + key + '="' + data.attrs[key].replace(/"/g, '&quot;') + '"');
         });
         chunk.write('>');
-        if (data.content.alternatives) {
-          data.content.alternatives.forEach((_source) => {
-            chunk.write('<source src="' + _source.src + '"');
-            if (_source.media) {
-              chunk.write(' media="' + _source.media + '"');
-            }
-            if (_source.type) {
-              chunk.write(' type="' + _source.type + '"');
-            }
-            chunk.write('>');
+
+        let alternatives = [];
+        if (data.content.source) {
+          alternatives.push({
+            src: data.content.source
           });
         }
+        if (data.conten.alternatives && Array.isArray(data.content.alternatives)) {
+          alternatives = alternatives.concat(data.content.alternatives);
+        }
+
+        alternatives.forEach((_source) => {
+          chunk.write('<source src="' + _source.src + '"');
+          if (_source.media) {
+            chunk.write(' media="' + _source.media + '"');
+          }
+          if (_source.type) {
+            chunk.write(' type="' + _source.type + '"');
+          }
+          chunk.write('>');
+        });
+
         chunk.write('</video>');
       } else {
         chunk.write('<img src="' + source + '"');
