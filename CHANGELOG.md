@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4
+
+### 0.4.0
+
+  * `faclor-router` from `0.2.12` to `0.4.0`
+  * `fs-extra` from `0.26.4` to `0.30.0`
+  * remove `marked`
+  * `nodemailer-html-to-text` from `1.0.2` to `2.1.0`
+  * remove `primer-css`
+  * `query-string` from `3.0.0` to `4.1.0`
+  * `shelljs` from `0.6.0` to `0.7.0`
+
 ## 0.3
 
 ### 0.3.19
