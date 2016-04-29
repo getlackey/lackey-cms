@@ -165,11 +165,11 @@ class Wysiwyg {
             media.selected((mediaObject) => {
                 Wysiwyg.manager.media(mediaObject)
                     .then((result) => {
-                        if (!result) {
+                        if (!result && result !== -1) {
                             return;
                         }
 
-                        mediaObject.set(result);
+                        mediaObject.set(result !== -1 ? result : null);
                         mediaObject.notify();
                     });
             });

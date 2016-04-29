@@ -159,6 +159,15 @@ class ObjectionWrapper {
         return Promise.resovle(this);
     }
 
+    remove() {
+        let self = this;
+        return SCli.sql(self.constructor.model
+            .query()
+            .where('id', self.id)
+            .del()
+        ).then((result) => result);
+    }
+
     static get model() {
         return ObjectionModel;
     }

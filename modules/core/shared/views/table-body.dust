@@ -8,9 +8,14 @@
             {?href}
                 <a href="{href}">{label}</a>
             {:else}
-                <button data-lky-hook="{hook}"
-                        data-lky-id="{id}"
-                        >{label}</button>
+                {?api}
+                    <button data-lky-api="{api}"
+                            >{label}</button>
+                {:else}
+                    <button data-lky-hook="{hook}"
+                            data-lky-id="{id}"
+                            >{label}</button>
+                {/api}
             {/href}
         {/actions}
     </td>

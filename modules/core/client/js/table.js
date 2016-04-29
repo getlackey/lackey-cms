@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true, es6:true */
+/* eslint default-case:0 no-alert:0 */
 /* global top */
 'use strict';
 /*
@@ -35,6 +36,26 @@ class Table {
             /* istanbul ignore next */
             self.filter(event, lackey.hook('lky:filters'));
         }, element);
+        this.api();
+    }
+
+    api() {
+        let self = this;
+        lackey.bind('[data-lky-api]', 'click', (event, hook) => {
+            event.preventDefault();
+            let apiAction = hook.getAttribute('data-lky-api').split(':');
+            switch (apiAction[0]) {
+            case 'DELETE':
+                {
+                    if (confirm('Are you sure? There is no undo')) {
+                        api.delete(apiAction[1])
+                            .then(() => {
+                                self.page(0);
+                            });
+                    }
+                }
+            }
+        });
     }
 
     filter(event, hook) {
@@ -117,7 +138,10 @@ class Table {
             let context = {
                 table: response
             };
-            self.drawRows(context);
+            self.drawRows(context)
+                .then(() => {
+                    self.api();
+                });
             self.drawPaging(context);
         });
     }
@@ -127,7 +151,7 @@ class Table {
             self = this;
         body.innerHTML = '';
 
-        template.render(body.getAttribute('data-lky-template'), context).then((rows) => {
+        return template.render(body.getAttribute('data-lky-template'), context).then((rows) => {
             rows.forEach((row) => {
                 body.appendChild(row);
                 self.paging(row);
@@ -140,7 +164,7 @@ class Table {
         let body = lackey.hook('table-body', this._root);
         body.innerHTML = '';
 
-        template.render(body.getAttribute('data-lky-template'), context).then((rows) => {
+        return template.render(body.getAttribute('data-lky-template'), context).then((rows) => {
             rows.forEach((row) => {
                 body.appendChild(row);
             });

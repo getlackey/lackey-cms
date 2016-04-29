@@ -92,6 +92,9 @@ module.exports = SUtils.deps(
                 return [{
                     label: 'View',
                     href: '/admin{route}'
+                }, {
+                    label: 'Remove',
+                    api: 'DELETE:/cms/content/{id}'
                 }];
             }
 

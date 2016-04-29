@@ -76,7 +76,11 @@ function print(chunk, data, type, editMode) {
       }
 
       if (data.content.type === 'video') {
-        chunk.write('<video controls>');
+        chunk.write('<video controls');
+        Object.keys(data.attrs).forEach((key) => {
+          chunk.write(' ' + key + '="' + data.attrs[key].replace(/"/g, '&quot;') + '"');
+        });
+        chunk.write('>');
         data.content.alternatives.forEach((_source) => {
           chunk.write('<source src="' + _source.src + '"');
           if (_source.media) {
@@ -90,9 +94,11 @@ function print(chunk, data, type, editMode) {
         chunk.write('</video>');
       } else {
         chunk.write('<img src="' + source + '"');
-        /*if (data.alternatives.srcset) {
-          chunk.write(' srcset="' + sources.srcset + '"');
-        }*/
+        if (data.attrs) {
+          Object.keys(data.attrs).forEach((key) => {
+            chunk.write(' ' + key + '="' + data.attrs[key].replace(/"/g, '&quot;') + '"');
+          });
+        }
         chunk.write('/>');
       }
     }

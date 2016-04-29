@@ -122,10 +122,10 @@ class Media {
             this.node.style.cursor = 'pointer';
       }
       notify() {
-            Media.manager.set(this.content, this.path, this.variant, {
+            Media.manager.set(this.content, this.path, this.variant, this.media ? {
                   id: this.media.id,
                   type: 'Media'
-            });
+            } : null);
       }
 }
 

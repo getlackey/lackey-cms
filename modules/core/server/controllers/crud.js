@@ -66,6 +66,13 @@ class CRUDController {
     }
 
     // Delete
+    static delete(req, res) {
+        req[this.field].remove().then((result) => {
+            res.api(result);
+        }, (error) => {
+            req.error(req, error);
+        });
+    }
 
     // List
     static list(req, res) {
@@ -100,23 +107,36 @@ class CRUDController {
 
     // ================================================ /CRUD
 
+    static populateAction(action, row, columns) {
+        let matches = action.match(/\{.+?\}/g),
+            output = action;
+        if (matches) {
+            matches.forEach((match) => {
+                if(match === '{id}') {
+                    output = action.replace(match, row.id);
+                    return;
+                }
+                let fieldName = match.replace(/^\{|\}$/g, '');
+                columns.forEach((column, index) => {
+                    if (column.name === fieldName) {
+                        output = action.replace(match, row.columns[index].value);
+                    }
+                });
+            });
+        }
+        return output;
+    }
+
     static mapActions(actions, columns, rows) {
+        let self = this;
         if (actions && rows) {
             rows.map((row) => {
                 row.actions = actions.map((_action) => {
                     let action = JSON.parse(JSON.stringify(_action));
                     if (action.href) {
-                        let matches = action.href.match(/\{.+?\}/g);
-                        if (matches) {
-                            matches.forEach((match) => {
-                                let fieldName = match.replace(/^\{|\}$/g, '');
-                                columns.forEach((column, index) => {
-                                    if (column.name === fieldName) {
-                                        action.href = row.columns[index].value; //action.href.replace(match, row.columns[index].value);
-                                    }
-                                });
-                            });
-                        }
+                        action.href = self.populateAction(action.href, row, columns);
+                    } else if(action.api) {
+                        action.api = self.populateAction(action.api, row, columns);
                     }
                     return action;
                 });

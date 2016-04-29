@@ -171,6 +171,10 @@ function ModalController(rootNode, vars, resolve) {
                   dummy.set(media);
             });
       });
+      lackey.bind('lky:remove', 'click', () => {
+            result = -1;
+            dummy.set(null);
+      });
 
       lackey.bind('lky:use', 'click', () => {
             if (result) {
