@@ -88,7 +88,7 @@ function print(chunk, data, type, editMode) {
             src: data.content.source
           });
         }
-        if (data.conten.alternatives && Array.isArray(data.content.alternatives)) {
+        if (data.content.alternatives && Array.isArray(data.content.alternatives)) {
           alternatives = alternatives.concat(data.content.alternatives);
         }
 

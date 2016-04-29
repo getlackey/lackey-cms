@@ -92,7 +92,9 @@ class Media {
                   if (source.media) {
                         sourceTag.setAttribute('media', source.media);
                   }
-                  sourceTag.setAttribute('type', source.type);
+                  if(source.type) {
+                        sourceTag.setAttribute('type', source.type);
+                  }
                   videoTag.appendChild(sourceTag);
             });
 
