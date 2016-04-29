@@ -77,15 +77,17 @@ class Media {
       }
       renderVideo() {
             let videoTag = document.createElement('video');
-            this.media.alternatives.forEach((source) => {
-                  let sourceTag = document.createElement('source');
-                  sourceTag.src = source.src;
-                  if (source.media) {
-                        sourceTag.setAttribute('media', source.media);
-                  }
-                  sourceTag.setAttribute('type', source.type);
-                  videoTag.appendChild(sourceTag);
-            });
+            if (this.media.alternatives) {
+                  this.media.alternatives.forEach((source) => {
+                        let sourceTag = document.createElement('source');
+                        sourceTag.src = source.src;
+                        if (source.media) {
+                              sourceTag.setAttribute('media', source.media);
+                        }
+                        sourceTag.setAttribute('type', source.type);
+                        videoTag.appendChild(sourceTag);
+                  });
+            }
             this.replace(videoTag);
       }
       renderImage() {

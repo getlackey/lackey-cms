@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.1
+
+ * Secure media alernatives
+
 ### 0.4.0
 
   * `faclor-router` from `0.2.12` to `0.4.0`

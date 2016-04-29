@@ -81,16 +81,18 @@ function print(chunk, data, type, editMode) {
           chunk.write(' ' + key + '="' + data.attrs[key].replace(/"/g, '&quot;') + '"');
         });
         chunk.write('>');
-        data.content.alternatives.forEach((_source) => {
-          chunk.write('<source src="' + _source.src + '"');
-          if (_source.media) {
-            chunk.write(' media="' + _source.media + '"');
-          }
-          if (_source.type) {
-            chunk.write(' type="' + _source.type + '"');
-          }
-          chunk.write('>');
-        });
+        if (data.content.alternatives) {
+          data.content.alternatives.forEach((_source) => {
+            chunk.write('<source src="' + _source.src + '"');
+            if (_source.media) {
+              chunk.write(' media="' + _source.media + '"');
+            }
+            if (_source.type) {
+              chunk.write(' type="' + _source.type + '"');
+            }
+            chunk.write('>');
+          });
+        }
         chunk.write('</video>');
       } else {
         chunk.write('<img src="' + source + '"');
