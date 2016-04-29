@@ -76,7 +76,7 @@ function print(chunk, data, type, editMode) {
       }
 
       if (data.content.type === 'video') {
-        chunk.write('<video controls');
+        chunk.write('<video');
         Object.keys(data.attrs).forEach((key) => {
           chunk.write(' ' + key + '="' + data.attrs[key].replace(/"/g, '&quot;') + '"');
         });
