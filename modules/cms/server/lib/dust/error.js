@@ -23,9 +23,9 @@ if (!GLOBAL.LACKEY_PATH) {
 module.exports = (dust) => {
 
     dust.helpers.error = function (chunk, context, bodies, params) {
-        chunk.write('<div style="border: 1px solid red; background-color: white; color: black; padding: 10px">');
+        chunk.write('<div data-lky-error>');
         chunk.write('<h1>' + (params ? params.name : 'Error') + '</h1>');
-        chunk.write('<pre style="border-color: #333; background-color: #ccc;">');
+        chunk.write('<pre>');
         chunk.write(((params && params.stack) ? params.stack : '') + '\n' + JSON.stringify(context, null, 4));
         chunk.write('</pre>');
         chunk.write('</div>');
