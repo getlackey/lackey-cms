@@ -298,9 +298,7 @@ let self,
                                                 event2.preventDefault();
                                                 event2.cancelBubble = true;
                                                 self.getDefault().then((content2) => {
-                                                    return api.delete('/cms/content/' + content2.id + '/taxonomy', {
-                                                        name: button.getAttribute('data-name')
-                                                    }).then((updated) => {
+                                                    return api.delete('/cms/content/' + content2.id + '/taxonomy/' + currentType + '/' + button.getAttribute('data-name')).then((updated) => {
                                                         self._default = Promise.resolve(updated);
                                                         loadCurrent(type);
                                                     });

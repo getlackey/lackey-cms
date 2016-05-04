@@ -2,6 +2,14 @@
 
 ## 0.4
 
+### 0.4.5
+
+ * Fix taxonomy detach
+
+### 0.4.4
+
+ * Error styling
+
 ### 0.4.1 - 0.4.3
 
  * Secure media alernatives

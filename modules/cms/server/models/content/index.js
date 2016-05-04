@@ -289,7 +289,7 @@ module.exports = SUtils.deps(
             let self = this;
             return SCli.sql(ContentToTaxonomy
                     .query()
-                    .remove()
+                    .del()
                     .where('contentId', this.id)
                     .where('taxonomyId', taxonomy.id)
                 )

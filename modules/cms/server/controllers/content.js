@@ -194,11 +194,15 @@ module.exports = SUtils.deps(
             }
 
             static removeTaxonomy(req, res) {
-                this.taxonomyFromQuery(req.body).then((taxonomy) => {
+                this.taxonomyFromQuery({
+                    type: req.taxonomyTypeName,
+                    name: req.taxonomyName
+                }).then((taxonomy) => {
                     return req.content.removeTaxonomy(taxonomy);
                 }).then(() => {
                     return res.api(req.content);
                 }, (error) => {
+                    console.log(error);
                     return res.error(error);
                 });
             }

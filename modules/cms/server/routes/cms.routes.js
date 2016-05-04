@@ -73,9 +73,21 @@ module.exports = (server) => {
             server.route('/cms/content/:content_id')
                 .get(server.aclAdmin, ContentController.cmsEdit);
 
-            server.route('/api/cms/content/:content_id/taxonomy')
-                .post(server.aclAdmin, ContentController.method('addTaxonomy'))
+            server.route('/api/cms/content/:content_id/taxonomy/:taxonomyTypeName/:taxonomyName')
                 .delete(server.aclAdmin, ContentController.method('removeTaxonomy'));
+
+            server.route('/api/cms/content/:content_id/taxonomy')
+                .post(server.aclAdmin, ContentController.method('addTaxonomy'));
+
+            server.param('taxonomyTypeName', (req, res, next, id) => {
+                req.taxonomyTypeName = id;
+                next();
+            });
+
+            server.param('taxonomyName', (req, res, next, id) => {
+                req.taxonomyName = id;
+                next();
+            });
 
             cmsResourceRoutes(server, 'activity', 'activity', ActivityController);
             cmsResourceRoutes(server, 'content', 'content', ContentController);
