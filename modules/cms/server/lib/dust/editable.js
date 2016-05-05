@@ -51,7 +51,13 @@ function fromLayout(root, path, variant, locale, type, route, toFormat) {
       uri: route
     });
   } catch (e) {
-    output = e.message;
+    let original = output;
+    output = e.message + '<br/>';
+    output += 'Variant: ' + variant + '<br/>';
+    output += 'Locale: ' + locale + '<br/>';
+    output += 'Type: ' + type + '<br/>';
+    output += 'Path: ' + path + '<br/>';
+    output += 'Output: ' + JSON.stringify(original);
   }
   return output;
 

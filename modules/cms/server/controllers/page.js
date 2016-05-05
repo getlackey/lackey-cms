@@ -97,7 +97,7 @@ module.exports = SUtils
                 promise.then((result) => {
                     res.print(path, result);
                 }, (error) => {
-                    console.log(error);
+                    console.error(error);
                     res.error(error);
                 });
 

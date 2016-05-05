@@ -41,9 +41,6 @@ let pool = [],
 styleBlock.innerHTML = style;
 document.body.appendChild(styleBlock);
 
-
-console.log(document.body);
-
 class Wysiwyg {
 
     constructor(div) {

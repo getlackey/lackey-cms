@@ -29,7 +29,7 @@ let lastResults = {},
   twitter = configuration.then((config) => {
     let conf = config.get('twitter');
 
-    if(!conf) {
+    if (!conf) {
       return;
     }
 
@@ -46,7 +46,7 @@ module.exports = (dust) => {
   dust.helpers.tweet = function (chunk, context, bodies, params) {
 
     let
-    data = context,
+      data = context,
       account = params.account + '',
       limit = params.limit || 1,
       input = {

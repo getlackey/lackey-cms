@@ -187,8 +187,8 @@ module.exports = SUtils.deps(
                 }).then(() => {
                     return res.api(req.content);
                 }, (error) => {
-                    console.log(error.message);
-                    console.log(error.stack);
+                    console.error(error.message);
+                    console.error(error.stack);
                     return res.error(error);
                 });
             }
@@ -202,7 +202,7 @@ module.exports = SUtils.deps(
                 }).then(() => {
                     return res.api(req.content);
                 }, (error) => {
-                    console.log(error);
+                    console.error(error);
                     return res.error(error);
                 });
             }

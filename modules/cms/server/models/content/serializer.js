@@ -63,7 +63,7 @@ function crawl(data) {
 
     let calls = [];
 
-    ['fields', 'variants'].forEach((group) => {
+    ['fields', 'variants', 'items'].forEach((group) => {
         if (data[group]) {
             Object.keys(data[group]).forEach((key) => {
                 let content = data[group][key];
@@ -77,7 +77,7 @@ function crawl(data) {
     });
 
 
-    if (data.type === 'Fields') {
+    if (data.type === 'Fields' || data.type === 'Variants') {
         Object.keys(data).forEach((key) => {
             if (['type'].indexOf(key) === -1) {
                 let content = data[key];
@@ -89,19 +89,6 @@ function crawl(data) {
             }
         });
     }
-
-    ['items'].forEach((group) => {
-        if (data[group]) {
-            data[group].forEach((content, idx) => {
-                calls.push(() => {
-                    return crawl(content).then((output) => {
-                        data[group][idx] = output;
-                    });
-                });
-            });
-        }
-    });
-
 
     if (calls.length) {
         return SUtils.serialPromise(calls, (call) => call()).then(() => {

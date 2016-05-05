@@ -37,20 +37,14 @@ module.exports = (dust) => {
             filters = params.filters || [],
             value = crawl(root, path);
 
-        console.log('path', 'init', root, path);
-
         filters.forEach((filter) => {
             value = dust.filters[filter](value);
         });
-
-        console.log('path', 'value', value);
 
         if (!bodies.block) {
             chunk.write(value);
         } else {
             let template = value ? bodies.block : bodies.else;
-
-            console.log('path', 'template', template);
 
             if (template) {
                 chunk = chunk.render(template, context.push(value));

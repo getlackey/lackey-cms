@@ -92,8 +92,8 @@ class MediaRepository {
                         file.sendTo('/api/cms/media');
                   });
             });
-            this.zone.event('iframeDone', function (xhr) {
-                  console.log(xhr.responseText);
+            this.zone.event('iframeDone', function () {
+                  //
             });
             this.zone.event('upload', function () {});
             this.list();

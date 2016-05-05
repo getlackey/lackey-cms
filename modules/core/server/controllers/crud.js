@@ -83,7 +83,7 @@ class CRUDController {
             try {
                 self.mapActions(this.actions, data.columns, data.rows);
             } catch (e) {
-                console.log(e);
+                console.error(e);
                 res.error(e);
             }
             res.api(data);

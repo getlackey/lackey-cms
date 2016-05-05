@@ -261,6 +261,7 @@ module.exports = SUtils.deps(
                             createdAt: content.createdAt || null,
                             template: content.template ? content.template.path : '',
                             taxonomies: taxonomies,
+                            state: content.state,
                             author: author ? author : null,
                             layout: content.layout
                         };
@@ -392,6 +393,10 @@ module.exports = SUtils.deps(
 
             return promise
                 .then(() => {
+
+                    if(include && taxonomyIds.length && !include.length) {
+                        return [];
+                    }
 
                     let query = ContentModel.query();
                     if (include && include.length) {

@@ -2,6 +2,13 @@
 
 ## 0.4
 
+### 0.4.9
+
+ * Fix populate
+ * Remove console logs
+ * Add state to toYAML of content
+ * Fix content unserialize
+
 ### 0.4.8
 
  * Twitter helper

@@ -58,7 +58,7 @@ module.exports = (dust) => {
                 injectedChunk.end();
             }, (error) => {
                 dust.helpers.error(injectedChunk, error);
-                console.log(error, error.stack);
+                console.error(error, error.stack);
                 injectedChunk.end();
             });
         });

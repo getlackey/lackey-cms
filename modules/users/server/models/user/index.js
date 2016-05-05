@@ -208,7 +208,6 @@ module.exports = SUtils.deps(
         }
 
         _populateImage(imagePath) {
-            console.log('_populateImage', imagePath);
             let self = this;
             return SUtils
                 .cmsMod('media')

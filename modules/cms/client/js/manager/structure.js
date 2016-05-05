@@ -78,7 +78,6 @@ class Node {
                                         resolve(lackey.form(rootNode));
                                     }, rootNode);
                                 }).then((props) => {
-                                    console.log(props);
                                     item.props = props;
                                     Node._changed();
                                 });

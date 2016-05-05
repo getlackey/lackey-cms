@@ -234,7 +234,6 @@ let self,
                         resolve(lackey.form(rootNode));
                     }, rootNode);
                 }).then((props) => {
-                    console.log(props);
                     contents[id].props = props;
                     self.refresh();
                     self.preview();

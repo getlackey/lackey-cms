@@ -104,7 +104,7 @@ module.exports = SUtils
                                 }
                             });
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                             res.error(e);
                         }
                     }, res.error);

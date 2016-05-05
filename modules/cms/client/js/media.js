@@ -115,7 +115,7 @@ class Media {
                         try {
                               node[element] = {};
                         } catch (e) {
-                              console.log(e);
+                              console.error(e);
                               return;
                         }
                   }
