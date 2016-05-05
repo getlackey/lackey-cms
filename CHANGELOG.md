@@ -2,7 +2,7 @@
 
 ## 0.4
 
-### 0.4.6
+### 0.4.6 - 0.4.7
 
  * Exclude taxonomies in populate
  * Fix getByTaxonomies to populate taxonomies

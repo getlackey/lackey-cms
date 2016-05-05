@@ -394,10 +394,10 @@ module.exports = SUtils.deps(
                 .then(() => {
 
                     let query = ContentModel.query();
-                    if (include) {
+                    if (include && include.length) {
                         query = query.whereIn('id', include);
                     }
-                    if (exclude) {
+                    if (exclude && exclude.length) {
                         query = query.whereNotIn('id', [exclude]);
                     }
                     if (excludeId) {
