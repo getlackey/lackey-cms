@@ -345,7 +345,7 @@ module.exports = SUtils.deps(
                     .where('type', type))
                 .then((results) => {
                     if (results && results.length) {
-                        return new Content(results[0]);
+                        return (new Content(results[0]))._populate();
                     }
                     return null;
                 });
@@ -355,28 +355,50 @@ module.exports = SUtils.deps(
             return this.findOneBy('route', route);
         }
 
-        static getByTaxonomies(taxonomyIds, author, limit, page, order, excludeId) {
+        static getByTaxonomies(taxonomyIds, excludeTaxonomyIds, author, limit, page, order, excludeId) {
 
-            let promise;
+            let promise, include, exclude;
 
             if (taxonomyIds.length) {
-
                 promise = Promise.all(taxonomyIds.map((taxonomyId) => {
-                    return SCli.sql(ContentToTaxonomy
-                            .query()
-                            .where('taxonomyId', taxonomyId))
-                        .then((list) => list.map((entry) => entry.contentId));
-                })).then((lists) => _.intersection.apply(null, lists));
+                        return SCli.sql(ContentToTaxonomy
+                                .query()
+                                .where('taxonomyId', taxonomyId))
+                            .then((list) => list.map((entry) => entry.contentId));
+                    }))
+                    .then((lists) => _.intersection.apply(null, lists))
+                    .then((list) => {
+                        include = list;
+                    });
             } else {
                 promise = Promise.resolve(null);
             }
 
+            if (excludeTaxonomyIds.length) {
+                promise = promise
+                    .then(() => {
+                        Promise.all(taxonomyIds.map((taxonomyId) => {
+                                return SCli.sql(ContentToTaxonomy
+                                    .query()
+                                    .where('taxonomyId', taxonomyId));
+                            }))
+                            .then((list) => list.map((entry) => entry.contentId));
+                    })
+                    .then((lists) => _.intersection.apply(null, lists))
+                    .then((list) => {
+                        exclude = list;
+                    });
+            }
+
             return promise
-                .then((list) => {
+                .then(() => {
 
                     let query = ContentModel.query();
-                    if (list) {
-                        query = query.whereIn('id', list);
+                    if (include) {
+                        query = query.whereIn('id', include);
+                    }
+                    if (exclude) {
+                        query = query.whereNotIn('id', [exclude]);
                     }
                     if (excludeId) {
                         query = query.whereNotIn('id', [excludeId]);

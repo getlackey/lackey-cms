@@ -119,8 +119,8 @@ module.exports = SUtils
                 }
             }
 
-            static populateContent(target, item, req, page) {
-                return Promise.all(item.taxonomy.map((taxonomy) => {
+            static mapTaxonomyList(list, req, page) {
+                return Promise.all(list.map((taxonomy) => {
                     if (taxonomy.ifNot) {
                         if (PageController.parse(taxonomy.ifNot, req, page)) {
                             return null;
@@ -144,11 +144,23 @@ module.exports = SUtils
                                     return tax[0] ? tax[0].id : null;
                                 });
                         });
-                })).then((taxonomies) => {
-                    let taxes = taxonomies.filter((tax) => !!tax),
+                }));
+            }
+
+            static populateContent(target, item, req, page) {
+                let includeTaxonomies,
+                    excludeTaxonomies;
+
+                return PageController.mapTaxonomyList(item.taxonomy || [], req, page).then((taxonomies) => {
+                    includeTaxonomies = taxonomies;
+                    return PageController.mapTaxonomyList(item.excludeTaxonomy || [], req, page);
+                }).then((taxonomies) => {
+                    excludeTaxonomies = taxonomies;
+                    let taxes = includeTaxonomies.filter((tax) => !!tax),
+                        exTaxes = excludeTaxonomies.filter((tax) => !!tax),
                         pageNumber = item.page ? PageController.parse(item.page, req) : 0,
                         author = (item.author && PageController.parse(item.author.if, req, page)) ? page.author : null;
-                    return ContentModel.getByTaxonomies(taxes, author, item.limit, pageNumber, item.order, item.excludeContentId ? page.id : null);
+                    return ContentModel.getByTaxonomies(taxes, exTaxes, author, item.limit, pageNumber, item.order, item.excludeContentId ? page.id : null);
                 }).then((results) => {
                     target[item.field] = results;
                 });

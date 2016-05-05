@@ -2,6 +2,11 @@
 
 ## 0.4
 
+### 0.4.6
+
+ * Exclude taxonomies in populate
+ * Fix getByTaxonomies to populate taxonomies
+
 ### 0.4.5
 
  * Fix taxonomy detach
