@@ -115,6 +115,8 @@ function crawlBack(data) {
                     return med;
                 });
         }
+    } else {
+        return Promise.resolve(null);
     }
 
     let promises = [];

@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.10
+
+ * Fix export
+
 ### 0.4.9
 
  * Fix populate
