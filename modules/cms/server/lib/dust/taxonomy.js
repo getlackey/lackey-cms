@@ -22,14 +22,28 @@ module.exports = (dust) => {
     let data = context.get('data'),
       name = params.name,
       type = params.type,
+      newContext,
       output = chunk;
 
-    if (data && data.content && data.content.taxonomies && data.content.taxonomies.length && name && type) {
-      data.content.taxonomies.forEach((taxonomy) => {
-        if (taxonomy.name === name && taxonomy.type.name === type) {
-          output = chunk.render(bodies.block, context);
+    if (type) {
+      let found = false;
+      (data.content.taxonomies || []).forEach((taxonomy) => {
+        if (name) {
+          if (taxonomy.name === name && taxonomy.type.name === type) {
+            output = chunk.render(bodies.block, context);
+          }
+        } else if (!found && taxonomy.type.name === type) {
+          newContext = context.push({
+            $taxonomy: taxonomy
+          });
+          output = chunk.render(bodies.block, newContext);
+          found = true;
+
         }
       });
+      if (!found && bodies.else) {
+        output = chunk.render(bodies.else, context);
+      }
     }
 
     return output;

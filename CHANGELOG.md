@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.8
+
+ * Twitter helper
+
 ### 0.4.6 - 0.4.7
 
  * Exclude taxonomies in populate

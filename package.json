@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -95,6 +95,7 @@
     "query-string": "^4.1.0",
     "shelljs": "^0.7.0",
     "tween.js": "^16.3.4",
+    "twitter": "1.2.5",
     "uglifyify": "^3.0.1",
     "url": "^0.11.0"
   },
