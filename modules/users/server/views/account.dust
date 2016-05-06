@@ -19,10 +19,10 @@
                         </dl>
                         <dl>
                             <dt>Image</dt>
-                            <dd>
+                            <dd class="avatar">
                                 <img src="{user.image.source}"
                                      data-lky-hook="avatar"
-                                     data-lky-image="{admin.image|js}"
+                                     data-lky-media="{admin.image|js}"
                                      />
                             </dd>
                         </dl>

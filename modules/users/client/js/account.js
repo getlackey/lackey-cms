@@ -17,16 +17,35 @@
     limitations under the License.
 */
 const lackey = require('../../../core/client/js'),
-    api = require('../../../cms/client/js/api');
+    api = require('../../../cms/client/js/api'),
+    Media = require('../../../cms/client/js/media'),
+    modal = require('../../../core/client/js/modal'),
+    MediaModalController = require('../../../cms/client/js/manager/media');
 
-
-lackey.on('cms/cms/image:uploaded', function (data) {
-    lackey.hook('avatar-id').value = data.id;
+lackey.select('[data-lky-media]').forEach((element) => {
+    let media = new Media(element);
+    media.selected((mediaObject) => {
+        return modal
+            .open('cms/cms/image', {
+                node: mediaObject.node,
+                media: mediaObject.media
+            }, MediaModalController)
+            .then((result) => {
+                if (!result && result !== -1) {
+                    return;
+                }
+                mediaObject.set(result !== -1 ? result : null);
+                api.update('/me', {
+                    avatar: result !== -1 ? result.id : null
+                });
+            });
+    });
 });
 
 lackey.bind('lky:confirm-email', 'click', (event, hook) => {
     event.preventDefault();
     event.cancelBubble = true;
+
     api.create('/account/confirm-email', {
         email: hook.getAttribute('data-lky-email')
     });
@@ -57,12 +76,4 @@ lackey.bind('lky:password', 'submit', (event, hook) => {
         password: data.newPassword
     });
     return false;
-});
-
-lackey.on('cms/cms/image:selected', (data) => {
-    if (data.hook === lackey.hook('avatar')) {
-        api.update('/me', {
-            avatar: data.id
-        });
-    }
 });

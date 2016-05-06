@@ -24,7 +24,7 @@
             <li class="user">
                 <input type="checkbox" class="dropdown-menu-toggle" id="lk-cms-menu-toggle-right"/>
                 <label for="lk-cms-menu-toggle-right">
-                    <img src="{admin.image.default.src}"/>
+                    <img src="{admin.image.source}"/>
                     <div class="details">
                         <span>{admin.name}</span>
                         <span>as {user.roles|role} in&nbsp;

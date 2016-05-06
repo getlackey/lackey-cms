@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.11
+
+ * Fix avatar setup
+
 ### 0.4.10
 
  * Fix export
