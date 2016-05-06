@@ -413,6 +413,8 @@ module.exports = SUtils.deps(
                         query = query.where('userId', author.id);
                     }
 
+                    query = query.where('state', 'published');
+
                     query = query.orderBy('createdAt', 'DESC');
 
                     if (page > 0) {

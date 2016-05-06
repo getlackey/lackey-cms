@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.17
+
+ * Hide not published content
+
 ### 0.4.16
 
  * Tweetable open in new window

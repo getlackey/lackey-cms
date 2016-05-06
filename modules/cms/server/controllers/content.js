@@ -211,7 +211,8 @@ module.exports = SUtils.deps(
             static generateSitemap() {
 
                 return Model.list({
-                    type: 'page'
+                    type: 'page',
+                    state: 'published'
                 }).then((list) => {
                     return list.map((item) => {
                         return {

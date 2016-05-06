@@ -152,9 +152,11 @@ module.exports = SUtils
                     excludeTaxonomies;
 
                 return PageController.mapTaxonomyList(item.taxonomy || [], req, page).then((taxonomies) => {
+                    console.log('require', item.taxonomy, taxonomies);
                     includeTaxonomies = taxonomies;
                     return PageController.mapTaxonomyList(item.excludeTaxonomy || [], req, page);
                 }).then((taxonomies) => {
+                    console.log('exclude', item.excludeTaxonomy, taxonomies);
                     excludeTaxonomies = taxonomies;
                     let taxes = includeTaxonomies.filter((tax) => !!tax),
                         exTaxes = excludeTaxonomies.filter((tax) => !!tax),
