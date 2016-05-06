@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.16
+
+ * Tweetable open in new window
+
 ### 0.4.14-15
 
  * Clear image

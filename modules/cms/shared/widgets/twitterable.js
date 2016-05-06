@@ -68,6 +68,7 @@ Twitterable.prototype.serializeDOM = (node, serializer) => {
 
             if (serializer.options.serverSide === true) {
                 attributes.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(innerContentClear + ' ' + serializer.options.uri);
+                attributes.target = '_blank';
             }
 
             node.rendered = elt('a', attributes, [elt('blockquote', {
