@@ -45,7 +45,7 @@ module.exports = (dust) => {
           if (!document) {
             SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'No content', route, template);
             if (bodies.error) {
-              injectedChunk.render(bodies.error, data.push({
+              injectedChunk.render(bodies.error, data.push(params).push({
                 error: new Error('Route ' + route + ' not found')
               }));
             } else {
