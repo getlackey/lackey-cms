@@ -182,7 +182,9 @@ function ModalController(rootNode, vars, resolve) {
                   lackey.select('input', node).forEach(function (input) {
                         alternative[input.name] = input.value || null;
                   });
-                  alternatives.push(alternative);
+                  if (alternative.src && alternative.src.length) {
+                        alternatives.push(alternative);
+                  }
             });
             api.update('/cms/media/' + result.id, {
                   source: result.source,
@@ -206,6 +208,12 @@ function ModalController(rootNode, vars, resolve) {
                   media: result
             }, rootNode);
       }, rootNode);
+
+      if (result) {
+            template.redraw('alternatives', {
+                  media: result
+            }, rootNode);
+      }
 
       lackey.bind('lky:use', 'click', () => {
             if (result) {

@@ -93,6 +93,7 @@ function print(chunk, data, type, editMode) {
         }
 
         alternatives.forEach((_source) => {
+          if(!_source.src) return;
           chunk.write('<source src="' + _source.src + '"');
           if (_source.media) {
             chunk.write(' media="' + _source.media + '"');
