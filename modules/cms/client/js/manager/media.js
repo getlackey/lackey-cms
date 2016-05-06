@@ -1,4 +1,4 @@
-/* eslint no-new:0 */
+/* eslint no-new:0, no-alert:0 */
 /* jslint esnext:true, browser:true, node:true */
 'use strict';
 /*
@@ -49,22 +49,22 @@ class MediaRepository {
                               self.list();
                         });
                   }
-                  if(options.filter) {
+                  if (options.filter) {
                         lackey.bind(options.filter, 'click', () => {
                               self.page = 1;
                               self.list();
                         });
                   }
-                  if(options.reset) {
+                  if (options.reset) {
                         lackey.bind(options.reset, 'click', () => {
-                              if(self.search) {
+                              if (self.search) {
                                     self.search.value = '';
                               }
                               self.page = 1;
                               self.list();
                         });
                   }
-                  if(options.filterInput) {
+                  if (options.filterInput) {
                         this.search = options.filterInput;
                   }
             }
@@ -111,10 +111,10 @@ class MediaRepository {
       }
       list() {
             let self = this,
-                query = this.search ? this.search.value : null,
-                url = '/cms/media?limit=10&sort=-createdAt&page=' + self.page;
+                  query = this.search ? this.search.value : null,
+                  url = '/cms/media?limit=4&sort=-createdAt&page=' + self.page;
 
-            if(query) {
+            if (query) {
                   url += '&q=' + encodeURIComponent(query);
             }
 
@@ -156,12 +156,13 @@ class MediaRepository {
 function ModalController(rootNode, vars, resolve) {
 
       let dummy,
-            result,
+            result = vars.media,
             repository;
 
       dummy = new DummyImage(vars.node, vars.media, lackey.hooks('preview', rootNode)[0]);
 
       lackey.bind('lky:close', 'click', () => resolve(), rootNode);
+      lackey.hook('url', rootNode).value = vars.media.source || '';
       lackey.bind('lky:add', 'click', () => {
             let url = lackey.hook('url', rootNode).value;
             api.create('/cms/media', {
@@ -170,11 +171,41 @@ function ModalController(rootNode, vars, resolve) {
                   result = media;
                   dummy.set(media);
             });
-      });
+      }, rootNode);
+      lackey.bind('lky:save', 'click', () => {
+            if (!result || !result.id) {
+                  return alert('No media selected');
+            }
+            let alternatives = [];
+            lackey.select('[data-lky-alternative]', rootNode).forEach(function (node) {
+                  let alternative = {};
+                  lackey.select('input', node).forEach(function (input) {
+                        alternative[input.name] = input.value || null;
+                  });
+                  alternatives.push(alternative);
+            });
+            api.update('/cms/media/' + result.id, {
+                  source: result.source,
+                  alternatives: alternatives
+            }).then((media) => {
+                  result = media;
+                  dummy.set(media);
+            });
+      }, rootNode);
       lackey.bind('lky:remove', 'click', () => {
             result = -1;
             dummy.set(null);
-      });
+      }, rootNode);
+      lackey.bind('lky:alternative', 'click', () => {
+            if (!result || !result.id) {
+                  return alert('No media selected');
+            }
+            result.alternatives = result.alternatives || [];
+            result.alternatives.push({});
+            template.redraw('alternatives', {
+                  media: result
+            }, rootNode);
+      }, rootNode);
 
       lackey.bind('lky:use', 'click', () => {
             if (result) {

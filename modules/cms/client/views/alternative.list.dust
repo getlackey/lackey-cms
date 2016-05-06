@@ -1,0 +1,20 @@
+<table>
+    <tr>
+        <th>Source</th>
+        <th>Media</th>
+        <th>Mime</th>
+    </tr>
+{#media.alternatives}
+    <tr data-lky-alternative>
+        <td>
+            <input type="text" value="{src}" name="src"/>
+        </td>
+        <td>
+            <input type="text" value="{.media}" name="media"/>
+        </td>
+        <td>
+            <input type="text" value="{type}"  name="type"/>
+        </td>
+    </tr>
+{/media.alternatives}
+</table>

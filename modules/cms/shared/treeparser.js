@@ -94,12 +94,12 @@ module.exports.pattern = (variant, state, locale) => {
     return output;
 };
 
-function crawl(object, path, value) {
+function crawl(object, path, value, setOperation) {
 
     let elems = path ? path.split('.') : [],
         field = elems.shift();
 
-    if (value && object && (field !== undefined && field !== null)) {
+    if (setOperation && object && (field !== undefined && field !== null)) {
         if (elems.length > 0) {
             object[field] = object[field] || {};
         } else {
@@ -111,7 +111,7 @@ function crawl(object, path, value) {
         return object;
     }
 
-    return crawl(object[field], elems.join('.'), value);
+    return crawl(object[field], elems.join('.'), value, setOperation);
 }
 
 module.exports.set = (root, path, value, variant, state, locale) => {
@@ -142,7 +142,7 @@ module.exports.set = (root, path, value, variant, state, locale) => {
         input[target] = value;
 
     }
-    crawl(root, path, input);
+    crawl(root, path, input, true);
 
 };
 

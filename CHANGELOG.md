@@ -2,6 +2,11 @@
 
 ## 0.4
 
+### 0.4.14
+
+ * Clear image
+ * Video alternatives
+
 ### 0.4.12-13
 
  * Error block for embed
