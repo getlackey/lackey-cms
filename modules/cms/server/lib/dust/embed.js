@@ -38,14 +38,22 @@ module.exports = (dust) => {
       SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'map', route, template);
       return require('../../models/content')
         .then((Content) => {
-        SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'query', route, template);
+          SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'query', route, template);
           return Content.getByTypeAndRoute(type, route);
         })
         .then((document) => {
           if (!document) {
             SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'No content', route, template);
-            dust.helpers.error(injectedChunk, 'Route ' + route + ' not found', null);
-            return injectedChunk.end();
+            if (bodies.error) {
+              injectedChunk.render(bodies.error, data.push({
+                error: new Error('Route ' + route + ' not found')
+              }));
+            } else {
+              dust.helpers.error(injectedChunk, 'Route ' + route + ' not found', null);
+            }
+
+            injectedChunk.end();
+            return injectedChunk;
           }
 
           function render() {
@@ -59,7 +67,13 @@ module.exports = (dust) => {
             dust.render(template, data, (err, out) => {
               if (err) {
                 SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'Error', route, template);
-                dust.helpers.error(injectedChunk, err, null, err);
+                if (bodies.error) {
+                  injectedChunk.render(bodies.error, data.push({
+                    error: err
+                  }));
+                } else {
+                  dust.helpers.error(injectedChunk, err, null, err);
+                }
                 return injectedChunk.end();
               }
 
@@ -85,7 +99,13 @@ module.exports = (dust) => {
             });
         }, (error) => {
           SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'Error', route, template);
-          dust.helpers.error(injectedChunk, error, null, error);
+          if (bodies.error) {
+            injectedChunk.render(bodies.error, data.push({
+              error: error
+            }));
+          } else {
+            dust.helpers.error(injectedChunk, error, null, error);
+          }
           return injectedChunk.end();
         });
     });

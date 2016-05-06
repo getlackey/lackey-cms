@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.12
+
+ * Error block for embed
+
 ### 0.4.11
 
  * Fix avatar setup
