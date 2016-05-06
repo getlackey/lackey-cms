@@ -162,7 +162,7 @@ function ModalController(rootNode, vars, resolve) {
       dummy = new DummyImage(vars.node, vars.media, lackey.hooks('preview', rootNode)[0]);
 
       lackey.bind('lky:close', 'click', () => resolve(), rootNode);
-      lackey.hook('url', rootNode).value = vars.media.source || '';
+      lackey.hook('url', rootNode).value = vars.media ? (vars.media.source || '') : '';
       lackey.bind('lky:add', 'click', () => {
             let url = lackey.hook('url', rootNode).value;
             api.create('/cms/media', {

@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.18
+
+ * Fix media in prose mirror
+
 ### 0.4.17
 
  * Hide not published content
