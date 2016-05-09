@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.19
+
+ * Fix routes in tweetable quotes
+
 ### 0.4.18
 
  * Fix media in prose mirror

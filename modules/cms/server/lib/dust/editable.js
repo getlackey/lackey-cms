@@ -96,7 +96,7 @@ module.exports = (dust) => {
       try {
 
         if (layout && layout.type) {
-          layout = fromLayout(layout, path, variant, locale, type);
+          layout = fromLayout(layout, path, variant, locale, type, params.route);
 
           let regexMulti = /<dust-template(.+?)template=('|")(.*?)('|")(.+?)<\/dust-template>/g,
             regexSingle = /<dust-template(.+?)template=('|")(.*?)('|")(.+?)<\/dust-template>/,
