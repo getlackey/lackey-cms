@@ -1,4 +1,4 @@
-/* jslint node:true */
+/* jslint node:true, browser:true, esnext:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,6 +15,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
+let statuses = require('http-status'),
+  base = document.querySelector('head base'),
+  loc = document.location,
+  basePath = (base ? base.getAttribute('href').replace(/(.{1})\/$/, '$1') : (loc.protocol + '//' + loc.host + (loc.port && loc.port.length ? (':' + loc.port) : ''))) + '/';
 
 var XHR = {
   ajax: function (path, method, data, raw) {
@@ -38,7 +43,7 @@ var XHR = {
           } else if (xhr.status === '204') {
             resolve(null);
           } else {
-            reject(new Error('Error: ' + xhr.status)); // An error occurred during the request.
+            reject(new Error('Error: ' + (xhr.status === 0 ? 'Network problem' : statuses[xhr.status]))); // An error occurred during the request.
           }
         }
       };
@@ -58,7 +63,23 @@ var XHR = {
   },
   delete: function (path, raw) {
     return XHR.ajax(path, 'delete', null, raw);
-  }
+  },
+  joinWithBase: function (path) {
+    return basePath + path.replace(/^\//, '');
+  },
+  basedGet: function (path, raw) {
+    return XHR.get(XHR.joinWithBase(path), raw);
+  },
+  basedPost: function (path, data, raw) {
+    return XHR.post(XHR.joinWithBase(path), data, raw);
+  },
+  basedPut: function (path, data, raw) {
+    return XHR.put(XHR.joinWithBase(path), data, raw);
+  },
+  basedDelete: function (path, raw) {
+    return XHR.delete(XHR.joinWithBase(path), raw);
+  },
+  base: basePath
 };
 
 module.exports = XHR;

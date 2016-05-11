@@ -16,6 +16,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-require('./view');
-require('./manager/author');
-require('./manager/related');
+require('cms/client/js/view');
+require('cms/client/js/manager/author');
+require('cms/client/js/manager/related');

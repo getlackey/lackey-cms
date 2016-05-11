@@ -1,10 +1,10 @@
 <ul class="dropdown-right">
     <li class="divider">Account</li>
     <li>
-        <a href="/cms/account">Account Settings</a>
+        <a href="cms/account">Account Settings</a>
     </li>
                         <li>
-        <a href="/logout">Logout</a>
+        <a href="logout">Logout</a>
     </li>
 
 

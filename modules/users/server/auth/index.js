@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,16 +17,23 @@
     limitations under the License.
 */
 
+const SUtils = require(LACKEY_PATH).utils;
+
 module.exports.serializeUser = (user, done) => {
     done(null, user.id);
 };
 
 module.exports.deserializeUser = (id, done) => {
-    require('../models/user').then((user) => {
-        return user.findById(id);
-    }).then((user) => {
-        done(null, user);
-    }, (error) => {
-        done(error);
-    });
+
+    SUtils
+        .cmsMod('core')
+        .model('user')
+        .then((user) => {
+            return user.findById(id);
+        })
+        .then((user) => {
+            done(null, user);
+        }, (error) => {
+            done(error);
+        });
 };

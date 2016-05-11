@@ -2,11 +2,14 @@
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 
-const lackey = require('./../../../../core/client/js');
+const lackey = require('core/client/js');
 
 let defContent;
 
-top.Lackey.manager.getDefault()
+top.Lackey.manager.current
+    .then((def) => {
+        return top.Lackey.manager.repository.get('content', def.id);
+    })
     .then((def) => {
         defContent = def;
         lackey.select('[data-lky-related]').forEach((item) => {

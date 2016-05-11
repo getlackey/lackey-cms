@@ -138,11 +138,16 @@ lackey = {
      * @param   {object} context
      * @returns {funciton}
      */
-    as: function (fn, context) {
+    as: function (fn, context, args) {
         var ctx = context,
             fcn = fn;
+
         return function () {
-            return fcn.apply(ctx, arguments);
+            var args2 = Array.prototype.slice.apply(arguments);
+            if(args) {
+                args2 = args.concat(args2);
+            }
+            return fcn.apply(ctx, args2);
         };
     },
     setCookie: createCookie,
@@ -247,6 +252,27 @@ lackey = {
             top.Lackey.emit(event, data);
         }
         return lackey;
+    },
+    merge: function () {
+        var args = Array.prototype.slice.apply(arguments),
+            result = args.shift(),
+            i, p, obj;
+        for (i = 0; i < args.length; i++) {
+            obj = args[i];
+            for (p in obj) {
+                try {
+                    if (obj[p].constructor === Object) {
+                        result[p] = lackey.merge(result[p], obj[p]);
+                    } else {
+                        result[p] = obj[p];
+                    }
+                } catch (e) {
+                    result[p] = obj[p];
+                }
+            }
+        }
+        return result;
+
     }
 };
 

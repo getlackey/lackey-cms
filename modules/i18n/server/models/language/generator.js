@@ -16,10 +16,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
 
 const SCli = require(LACKEY_PATH).cli,
     Generator = require(LACKEY_PATH).generator;

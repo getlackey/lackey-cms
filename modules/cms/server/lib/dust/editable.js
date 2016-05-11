@@ -21,8 +21,7 @@ const format = require('prosemirror/dist/format'),
   atomus = require('atomus'),
   toHTML = format.toHTML,
   toText = format.toText,
-  treeParser = require('../../../shared/treeparser'),
-  BbPromise = require('bluebird');
+  treeParser = require('../../../shared/treeparser');
 
 let LackeySchema,
   HeadingSchema;
@@ -45,7 +44,12 @@ function fromLayout(root, path, variant, locale, type, route, toFormat) {
   }
 
   try {
-    output = treeParser.walk(parseFrom(schema(type), output, 'json'));
+    if(typeof output === 'string') {
+      output = parseFrom(schema(type), output, 'markdown');
+    } else {
+      output = parseFrom(schema(type), output, 'json');
+    }
+    output = treeParser.walk(output);
     output = (toFormat === 'text' ? toText : toHTML)(output, {
       serverSide: true,
       uri: route
@@ -111,9 +115,9 @@ module.exports = (dust) => {
             return chunk.write(layout);
           } else {
             return chunk.map((injectedChunk) => {
-              BbPromise.all(matches.map((match) => {
+              Promise.all(matches.map((match) => {
                 let innerMatches = match.match(regexSingle);
-                return new BbPromise((resolve) => {
+                return new Promise((resolve) => {
                   dust.render(innerMatches[3], context, (error, result) => {
                     if (error) {
                       return resolve({
@@ -157,7 +161,7 @@ module.exports = (dust) => {
 
 module.exports.fromLayout = fromLayout;
 
-module.exports.browser = new BbPromise((resolve, reject) => {
+module.exports.browser = new Promise((resolve, reject) => {
 
   atomus().html('<html></html>').ready(function (errors, window) {
     try {

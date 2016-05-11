@@ -35,19 +35,41 @@ module.exports = (dust) => {
         let root = params.root || null,
             path = params.path + '',
             filters = params.filters || [],
-            value = crawl(root, path);
+            value = crawl(root, path),
+            equals = params.hasOwnProperty('eq') ? params.eq : undefined,
+            allowEmpty = !!params.allowEmpty,
+            data = context.push((function (args) {
+                var output = {};
+                Object
+                    .keys(args)
+                    .filter((key) => {
+                        return ['root', 'path', 'filters', 'eq'].indexOf(key) === -1;
+                    })
+                    .forEach((key) => {
+                        output[key] = args[key];
+                    });
+                return output;
+            })(params));
 
         filters.forEach((filter) => {
             value = dust.filters[filter](value);
         });
+
+        if (equals !== undefined) {
+            value = value === equals;
+        }
 
         if (!bodies.block) {
             chunk.write(value);
         } else {
             let template = value ? bodies.block : bodies.else;
 
+            if(!value && !template && allowEmpty) {
+                template = bodies.block;
+            }
+
             if (template) {
-                chunk = chunk.render(template, context.push(value));
+                chunk = chunk.render(template, data.push(value));
             }
             return chunk;
 

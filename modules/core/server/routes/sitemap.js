@@ -16,10 +16,6 @@
     limitations under the License.
 */
 
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../lib';
-}
 
 
 const sitemap = require(LACKEY_PATH).sitemap;

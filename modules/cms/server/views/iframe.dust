@@ -1,30 +1,6 @@
-<html lang="{locale}" data-default-locale="{defaultLocale}">
-    <head>
-        <base href="/"/>
-        {! to migrate elseewhre !}
-        <meta http-equiv="content-language" content="{locale}">
-        <link rel="stylesheet" href="css/cms/core/base.css"/>
-        <link rel="stylesheet" href="css/cms/cms/base.css"/>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
-        {#stylesheets}
+{>"cms/cms/main"/}
 
-            <link rel="stylesheet" href="{.}"/>
-        {/stylesheets}
-    </head>
-    <body style="margin:0px;padding:0px;">
-        <div class="lackey-cms">
-            {>"cms/cms/partials/header"/}
-            <iframe src={data.page} data-lky-hook="iframe" name="_preview"></iframe>
-            <div class="fullscreen overlay" data-lky-hook="debug">
-                <button data-lky-hide="lky:debug">close</button>
-                <div data-lky-hook="visualdiff"></div>
-                <div data-lky-hook="cms.debug.contents"></div>
-            </div>
-            <script src="js/cms/cms/header.js"></script>
-            {#javascripts}
-                <script type="text/javascript" src="{.}"></script>
-
-            {/javascripts}
-        </div>
-    </body>
-</html>
+{<body}
+    <iframe src="{data.page}" data-lky-hook="iframe" name="_preview"></iframe>
+    <div data-lky-hook="settings.overlay"></div>
+{/body}

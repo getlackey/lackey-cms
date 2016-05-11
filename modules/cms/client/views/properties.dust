@@ -1,28 +1,19 @@
-{>"cms/core/modal"/}
-
-{<body}
-  <div class="bt">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Properties</h4>
-      </div>
-      <div class="modal-body">
-        <div style="overflow-y: auto">
-          <ul>
-            {#definitions}
-              <dl>
-                <dt>{$key}</dt>
-                <dd>
-                    <input type="text" class="form-control" value="{@path root=properties path=$key/}" name="{$key}"/>
-                </dd>
-              </dl>
-            {/definitions}
-          </ul>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"data-lky-hook="close">Apply</button>
-      </div>
-    </div>
-  </div>
-{/body}
+{#dictionary}
+  <li>
+    <label>
+      <span>{label}</span>
+      {@switch key=type}
+          <input type="{type}" class="form-control" value="{@path root=values path=name/}" name="{name}"/>
+        {:article}
+          <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
+          <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-article" data-value="{@path root=values path=name/}">Change</button>
+        {:select}
+          <select name="{name}">
+            {#items}
+              <option value="{value}" {@path root=values path=name eq=value}selected{/path}>{label}</option>
+            {/items}
+          </select>
+      {/switch}
+    </label>
+  </li>
+{/dictionary}

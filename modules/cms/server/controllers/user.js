@@ -1,4 +1,5 @@
 /* jslint esnext:true, node:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -18,11 +19,13 @@
 
 const SUtils = require(LACKEY_PATH).utils;
 
-module.exports = SUtils.deps(
-        SUtils.cmsMod('users').model('user'),
+
+module.exports = SUtils
+    .waitForAs('usersController',
+        SUtils.cmsMod('core').model('user'),
         SUtils.cmsMod('core').controller('crud')
     )
-    .promised((Model, Crud) => {
+    .then((Model, Crud) => {
         class Controller extends Crud {
 
             static get model() {
@@ -33,24 +36,34 @@ module.exports = SUtils.deps(
                 return 'user';
             }
 
+            static get actions() {
+                return [{
+                    label: 'View',
+                    href: 'cms/user/{id}'
+                }];
+            }
+
             static get tableConfig() {
-                return null;/*{
+                return {
                     name: {
                         label: 'Name',
                         like: true
                     },
-                    label: {
-                        label: 'Label',
-                        like: true
+                    roles: {
+                        label: 'Roles',
+                        parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
                     },
-                    type: {
-                        name: 'Type',
-                        parse: 'return arguments[0] ? arguments[0].label : \'\''
+                    taxonomies: {
+                        label: 'Classification',
+                        parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
                     }
-
-                };*/
+                };
             }
 
+            static preview(req, res) {
+                res.css('css/cms/cms/table.css');
+                res.print('cms/users/preview', req.user);
+            }
 
         }
 

@@ -1,23 +1,49 @@
 {#table.rows}
 <tr>
+    <td></td>
     {#columns}
-    <td>{value}</td>
+    <td>
+        {@is key=value type="array"}
+            {#value}
+                {>"cms/core/table-value" value=./}
+                {@math key=$idx method="add" operand=1}
+                    {@lt value=value.length},{/lt}
+                {/math}
+            {/value}
+        {:else}
+            {>"cms/core/table-value" value=value/}
+        {/is}
+    </td>
     {/columns}
     <td>
         {#actions}
             {?href}
-                <a href="{href}">{label}</a>
+                <a href="{host}{href}">
+                    {?icon}
+                        <img src="{icon}"/>
+                    {:else}
+                        {label}
+                    {/icon}
+                </a>
             {:else}
                 {?api}
                     <button data-lky-api="{api}"
-                            >{label}</button>
+                            >
                 {:else}
                     <button data-lky-hook="{hook}"
                             data-lky-id="{id}"
-                            >{label}</button>
+                            >
                 {/api}
+                        {?icon}
+                        <img src="{icon}"/>
+                    {:else}
+                        {label}
+                    {/icon}
+                        </button>
             {/href}
+            {@sep}&nbsp;&nbsp;{/sep}
         {/actions}
     </td>
+    <td></td>
 </tr>
 {/table.rows}

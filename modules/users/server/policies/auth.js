@@ -15,10 +15,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../lib';
-}
 
 var ACL = require('acl'),
     SCli = require(LACKEY_PATH).cli,
@@ -72,6 +68,8 @@ exports.setRoleAcl = (role, path, methods) => {
     SCli.debug('lackey-cms/modules/users/server/policies/auth', 'Define ACL rule ', role, amendedPath, methods);
     roleACL.allow(role, amendedPath, methods);
 };
+
+exports.ACL = roleACL;
 
 exports.roleAcl = exports.generateIsAllowed(roleACL, 'user');
 exports.adminRoleAcl = exports.generateIsAllowed(roleACL, 'admin');

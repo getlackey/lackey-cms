@@ -1,0 +1,131 @@
+@import "_vars";
+[data-lky-component="table"] {
+    overflow-y: auto;
+    height: calc(100% - #{$header-height});
+    > h2 {
+        padding: 40px 150px 20px;
+        text-transform: capitalize;
+    }
+    > [data-lky-hook="table.add"], .tableAction {
+        float: right;
+        margin: 68px 5px 0px 0px;
+    }
+    > input[type="search"] {
+        float: right;
+        margin: 68px 150px 0px 0px;
+        border: 1px solid $color-background-highlight;
+        color: $color-light-gray;
+        border-radius: 30px;
+        padding: 8px 10px;
+        width: 250px;
+    }
+    form > label {
+        margin: 0px 150px 15px;
+        display: block;
+        span {
+            font-weight: bolder;
+            padding: 0px 0px 5px;
+            display: block;
+        }
+        input {
+            display: block;
+            width: 100%;
+        }
+        input[type="checkbox"] {
+            display: inline-block;
+            width: auto;
+        }
+    }
+    table {
+        &[data-lky-table-hover] {
+            tbody {
+                tr:hover {
+                    background-color: $color-lackey-ligher-blue;
+                }
+            }
+        }
+        transition: opacity $speed;
+        border-spacing: 0px;
+        border-collapse: collapse;
+        width: 100%;
+        font-size: $table-font-size;
+        > thead {
+            background-color: $color-background-highlight;
+            color: white;
+        }
+        td,
+        th {
+            border: none;
+            text-align: left;
+            > img {
+                height: auto;
+                width: 100px;
+                box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+            }
+            button {
+                float: right;
+                border: none;
+                background: transparent;
+            }
+        }
+        td:first-child,
+        th:first-child,
+        td:last-child,
+        th:last-child {
+            width: 150px;
+            padding: 0px;
+        }
+        th {
+            padding: 25px 8px 20px;
+            font-weight: normal;
+            text-transform: capitalize;
+        }
+        td {
+            padding: 10px 8px 8px;
+            color: $color-washed;
+        }
+        > tbody {
+            > tr:nth-child(even) {
+                background-color: $color-lightest-gray;
+            }
+            > tr {}
+        }
+        > tfoot {
+            text-align: center;
+            td {
+                padding: 50px;
+                text-align: center;
+            }
+            ul {
+                display: inline-block;
+                list-style: none;
+                li {
+                    display: inline-block;
+                    a {
+                        text-decoration: none;
+                        display: inline-block;
+                        border-radius: 20px;
+                        padding: 10px;
+                        height: 20px;
+                        margin-right: 20px;
+                        width: 20px;
+                        line-height: 20px;
+                        text-align: center;
+                        color: $color-lackey-light-blue;
+                    }
+                    &[data-lky-active] {
+                        a {
+                            background: #00CBFE;
+                            color: #FAFBFC;
+                        }
+                    }
+                }
+                li:last-child {
+                    a {
+                        margin-right: 0px;
+                    }
+                }
+            }
+        }
+    }
+}

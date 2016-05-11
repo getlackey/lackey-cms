@@ -18,7 +18,6 @@
 
 const
     should = require('should'),
-    BbPromise = require('bluebird'),
     ACL = require('acl'),
     MemoryBackend = ACL.memoryBackend,
     policy = require('../../../server/policies/auth');

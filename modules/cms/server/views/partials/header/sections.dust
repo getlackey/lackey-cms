@@ -1,6 +1,6 @@
 <ul class="dropdown">
     <li>
-        <a href="/admin/">Homepage</a>
+        <a href="admin/">Homepage</a>
     <li>
         <a href="cms">Dashboard</a>
     </li>

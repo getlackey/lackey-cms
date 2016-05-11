@@ -1,6 +1,7 @@
 /* jslint node:true */
 /* globals process */
 'use strict';
+
 /*
     Copyright 2016 Enigma Marketing Services Limited
 
@@ -16,6 +17,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 
 module.exports = {
     name: 'Lackey CMS Default Config',

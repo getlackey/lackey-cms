@@ -16,23 +16,35 @@
     limitations under the License.
 */
 var
-    xhr = require('./xhr'),
-    lackey = require('./index'),
+    xhr = require('core/client/js/xhr'),
+    lackey = require('core/client/js/index'),
     engine = require('dustjs-linkedin'),
     helpers = require('dustjs-helpers'),
-    iterate = require('../../shared/dust/iterate'),
-    hashmap = require('../../shared/dust/hashmap'),
-    list = require('../../shared/dust/list'),
-    path = require('../../shared/dust/path');
+    iterate = require('core/shared/dust/iterate'),
+    hashmap = require('core/shared/dust/hashmap'),
+    list = require('core/shared/dust/list'),
+    path = require('core/shared/dust/path'),
+    is = require('core/shared/dust/is'),
+    snippet = require('cms/client/js/snippet'),
+    caseSwitch = require('core/shared/dust/switch'),
+    youtube = require('core/shared/dust/youtube'),
+    DustIntl = require('dust-intl');
+
+//require('dustjs-linkedin/lib/compiler');
 
 engine.helpers = helpers.helpers;
 iterate(engine);
 hashmap(engine);
 list(engine);
 path(engine);
+is(engine);
+snippet(engine);
+caseSwitch(engine);
+DustIntl.registerWith(engine);
+youtube(engine);
 
 function load(name) {
-    return xhr.get('dust/' + name + '.js').then((template) => {
+    return xhr.basedGet('dust/' + name + '.js').then((template) => {
         // need to do that so we don't have to expose dust compile
         /*jslint evil: true */
         let loadTemplate = new Function('dust', template); //eslint-disable-line no-new-func
@@ -43,6 +55,8 @@ function load(name) {
 }
 
 engine.onLoad = function () {
+
+
     let templateName = arguments[0],
         callback;
     if (arguments.length > 2) {
@@ -93,11 +107,13 @@ function redraw(hook, vars, root) {
             .then((domNodes) => {
                 node.innerHTML = '';
                 domNodes.forEach((domNode) => node.appendChild(domNode));
+                return node;
             });
     }));
 }
 
 module.exports = {
     render: render,
-    redraw: redraw
+    redraw: redraw,
+    dust: engine
 };

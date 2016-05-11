@@ -22,21 +22,17 @@ module.exports = (dust) => {
 
         let map = params.map || {},
             as = params.iterator || '$key';
-
-        let old = context.stack.head;
         Object.keys(map).forEach(function (key) {
-            if(map[key]) {
-                if(typeof map[key] === 'string') {
+            if (map[key]) {
+                if (typeof map[key] === 'string') {
                     map[key] = new String(map[key]); // eslint-disable-line no-new-wrappers
-                } else if(typeof map[key] === 'number') {
+                } else if (typeof map[key] === 'number') {
                     map[key] = new Number(map[key]); // eslint-disable-line no-new-wrappers
                 }
                 map[key][as] = key;
-                context.stack.head = map[key];
-                chunk.render(bodies.block, context);
+                chunk.render(bodies.block, context.push(map[key]));
             }
         });
-        context.stack.head = old;
 
         return chunk;
 

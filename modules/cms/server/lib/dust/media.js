@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,14 +16,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-  /* istanbul ignore next */
-  GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
 
 const SUtils = require(LACKEY_PATH).utils,
   _ = require('lodash'),
   SCli = require(LACKEY_PATH).cli,
+  isYoutube = require('../../../shared/youtube'),
   treeParser = require('../../../shared/treeparser');
 
 
@@ -43,6 +41,11 @@ function print(chunk, data, type, editMode) {
 
       if (type === 'url') {
         chunk.write(source);
+        return;
+      }
+
+      if (type === 'id') {
+        chunk.write(data.content ? data.content.id : '');
         return;
       }
 
@@ -93,7 +96,7 @@ function print(chunk, data, type, editMode) {
         }
 
         alternatives.forEach((_source) => {
-          if(!_source.src) return;
+          if (!_source.src) return;
           chunk.write('<source src="' + _source.src + '"');
           if (_source.media) {
             chunk.write(' media="' + _source.media + '"');
@@ -105,7 +108,10 @@ function print(chunk, data, type, editMode) {
         });
 
         chunk.write('</video>');
-      } else {
+      } else if (isYoutube(data.content.source)) {
+        chunk.write('<iframe type="text/html" src="https://www.youtube.com/embed/' + isYoutube(data.content.source) + '" frameborder="0"></iframe>');
+      } else if (data.content.type === 'image') {
+
         chunk.write('<img src="' + source + '"');
         if (data.attrs) {
           Object.keys(data.attrs).forEach((key) => {
@@ -113,6 +119,8 @@ function print(chunk, data, type, editMode) {
           });
         }
         chunk.write('/>');
+      } else {
+        chunk.write('<a target="_blank" href="' + source + '"><img src="/img/cms/cms/svg/file.svg"/></a>');
       }
     }
   } catch (e) {
@@ -130,16 +138,19 @@ module.exports = (dust) => {
       type = params.type,
       parent = params.parent,
       path = parent ? (parent + '.' + params.path) : params.path,
-      attrNames = Object.keys(params).map((name) => {
+      attrNames = Object.keys(params)
+      .map((name) => {
         if (name.match(/^attr-/)) {
           return name;
         }
         return null;
-      }).filter((output) => {
+      })
+      .filter((output) => {
         return output !== null;
       }),
       //attrs = {},
       data = treeParser.get(content ? content.layout : {}, path, params.variant, null, context.get('locale')),
+
       dataObject = {
         path: path,
         variant: params.variant,
@@ -164,10 +175,12 @@ module.exports = (dust) => {
 
       return chunk.map((injected) => {
 
-        return SUtils.cmsMod('media').model('media')
+        return SUtils.cmsMod('core')
+          .model('media')
           .then((Media) => {
             return Media.findById(data.id);
-          }).then((model) => {
+          })
+          .then((model) => {
 
             SCli.debug('lackey-cms/modules/cms/server/lib/dust/media', 'Model', model);
             if (model) {
@@ -176,10 +189,16 @@ module.exports = (dust) => {
                 _.merge(dataObject.attrs, model._doc.attributes);
               }
             }
-
-            print(injected, dataObject, type, editMode, dust);
-            injected.end();
+            if (bodies.block) {
+              injected.render(bodies.block, context.push(dataObject));
+            } else {
+              print(injected, dataObject, type, editMode, dust);
+            }
+            return injected.end();
           }, (error) => {
+            injected.end(error.toString());
+          })
+          .catch((error) => {
             injected.end(error.toString());
           });
       });

@@ -1,0 +1,44 @@
+
+<svg width="181px" height="72px" viewBox="560 244 181 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0.916666667" y="0" width="179.166667" height="71.3754316"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.166667" height="71.3754316" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="0.0131373008" y="0" width="41.6935096" height="21" rx="2"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="41.6935096" height="21" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="0.0131373008" y="0" width="41.6935096" height="21" rx="2"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="41.6935096" height="21" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+        <rect id="path-7" x="0.0131373008" y="0" width="41.6935096" height="21" rx="2"></rect>
+        <mask id="mask-8" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="41.6935096" height="21" fill="white">
+            <use xlink:href="#path-7"></use>
+        </mask>
+    </defs>
+    <g id="Article-widget" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(560.000000, 244.000000)">
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+        <g id="article" transform="translate(70.218938, 10.000000)">
+            <rect id="Button" fill="#00CCFF" x="0" y="42" width="41.2592022" height="8.99218036" rx="4.49609018"></rect>
+            <use id="Rectangle-33-Copy-3" stroke="#00CCFF" mask="url(#mask-4)" stroke-width="4" xlink:href="#path-3"></use>
+            <rect id="Text" fill="#ACEFFF" x="0" y="26" width="41.6935096" height="2.81005636"></rect>
+            <rect id="Text" fill="#ACEFFF" x="0" y="32" width="41.6935096" height="2.81005636"></rect>
+        </g>
+        <g id="article" opacity="0.211637127" transform="translate(18.102051, 10.000000)">
+            <rect id="Button" fill="#00CCFF" x="0" y="42" width="41.2592022" height="8.99218036" rx="4.49609018"></rect>
+            <use id="Rectangle-33-Copy-3" stroke="#00CCFF" mask="url(#mask-6)" stroke-width="4" xlink:href="#path-5"></use>
+            <rect id="Text" fill="#ACEFFF" x="0" y="26" width="41.6935096" height="2.81005636"></rect>
+            <rect id="Text" fill="#ACEFFF" x="0" y="32" width="41.6935096" height="2.81005636"></rect>
+        </g>
+        <g id="article" opacity="0.211637127" transform="translate(122.335825, 10.000000)">
+            <rect id="Button" fill="#00CCFF" x="0" y="42" width="41.2592022" height="8.99218036" rx="4.49609018"></rect>
+            <use id="Rectangle-33-Copy-3" stroke="#00CCFF" mask="url(#mask-8)" stroke-width="4" xlink:href="#path-7"></use>
+            <rect id="Text" fill="#ACEFFF" x="0" y="26" width="41.6935096" height="2.81005636"></rect>
+            <rect id="Text" fill="#ACEFFF" x="0" y="32" width="41.6935096" height="2.81005636"></rect>
+        </g>
+    </g>
+</svg>

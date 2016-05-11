@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,22 +16,32 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
+
+const SUtils = require(LACKEY_PATH).utils;
 
 let Role;
 
-module.exports = (dust) => {
-
-    require('../../models/role').then((role) => {
+SUtils
+    .cmsMod('core')
+    .model('role')
+    .then((role) => {
         Role = role;
     });
 
+
+/**
+ * @param {DustEngine} dust
+ */
+module.exports = (dust) => {
+
+    /**
+     * Formats role to it's label
+     * @param   {Role} value
+     * @returns {string}
+     */
     dust.filters.role = function (value) {
 
-        if(!Role) return '';
+        if (!Role) return '';
 
         if (Array.isArray(value)) {
             return value.map((role) => {

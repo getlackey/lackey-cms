@@ -34,8 +34,9 @@ gulp.task('sass:lint', function () {
         ])
         .pipe(sassLint())
         .pipe(sassLint.format())
-        .pipe(sassLint.failOnError())
+        .pipe(sassLint.failOnError());
 });
+
 
 gulp.task('lint', () => {
     return gulp.src([
@@ -70,8 +71,6 @@ gulp.task('pre-test:clean', () => {
   ]);
 
 });
-
-
 
 gulp.task('pre-test', ['pre-test:clean'], function () {
     return gulp.src([

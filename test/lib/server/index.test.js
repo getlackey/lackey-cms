@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true, esnext:true, mocha:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -36,6 +36,7 @@ describe('lib/server', () => {
                 should.exist(instance.getConfig());
 
                 return instance.stop();
+
             }).then(() => {
                 return true;
             }).should.finally.be.eql(true);

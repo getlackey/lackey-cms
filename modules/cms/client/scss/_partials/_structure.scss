@@ -1,0 +1,87 @@
+[data-lky-hook="lackey"] {
+    padding: 0px;
+    height: 100%;
+    font-family: $default-font-family;
+    font-size: $default-font-size;
+    letter-spacing: 1px;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    @import "./_typography";
+    @import "./_menu";
+    @import "./_switch";
+    [data-lky-hook="main-area"] {
+        transition: transform $speed;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        @import "./_header";
+        @import "./_settings";
+        [data-lky-hook="iframe"] {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        &[data-lky-settings-open="true"] {
+            [data-lky-hook="header.settings"] {
+                background-color: $color-background-highlight;
+            }
+            [data-lky-hook="settings.overlay"] {
+                transform: none;
+                opacity: 0.5;
+                pointer-events: all;
+            }
+        }
+    }
+    [data-lky-hook="menu.overlay"] {
+        position: fixed;
+        left: 0px;
+        top: $header-height;
+        width: 100%;
+        background-color: $color-background-highlight;
+        opacity: 0;
+        pointer-events: none;
+        transition: transform $speed, opacity $speed;
+        will-change: opacity, left, width;
+    }
+    &[data-lky-open="true"] {
+        [data-lky-hook="menu"] {
+            transform: none;
+        }
+        [data-lky-hook="menu.overlay"] {
+            transform: translateX(#{$sidebar-width});
+            height: calc(100% - #{$header-height});
+            pointer-events: auto;
+            opacity: 0.5;
+        }
+        [data-lky-hook="main-area"] {
+            transform: translateX(#{$sidebar-width});
+            [data-lky-hook="header"] {
+                [data-lky-hook="header.hamburger"] {
+                    .hamburger-inner {
+                        &::before {
+                            top: 0;
+                            transform: translate3d($hamburger-layer-width * -0.2, $hamburger-layer-width * -0.25, 0) rotate(-45deg) scale(0.7, 1);
+                            transition: top 0.1s ease, transform 0.15s 0.1s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+                        }
+                        &::after {
+                            bottom: 0;
+                            transform: translate3d($hamburger-layer-width * -0.2, $hamburger-layer-width * 0.25, 0) rotate(45deg) scale(0.7, 1);
+                            transition: bottom 0.1s ease, transform 0.15s 0.1s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+                        }
+                    }
+                }
+            }
+            [data-lky-hook="header.settings"],
+            [data-lky-hook="header.publish"],
+            [data-lky-hook="header.save"],
+            [data-lky-hook="header.cancel"],
+            [data-lky-hook="header.user"] {
+                opacity: 0.5;
+                pointer-events: none;
+            }
+        }
+    }
+}

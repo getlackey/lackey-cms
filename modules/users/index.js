@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,25 +16,28 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../lib';
-}
 
 const session = require('express-session'),
-    PostgresStore = require('connect-session-knex')(session),
+    PostgresStore = require('./server/lib/connect-session-knex')(session),
     passport = require('passport'),
     SCli = require(LACKEY_PATH).cli,
+    SUtils = require(LACKEY_PATH).utils,
     DBs = require(LACKEY_PATH).datasources,
-    roleFilter = require('./server/lib/dust/role');
+    roleFilter = require('./server/lib/dust/role'),
+    __MODULE_NAME = 'lackey-cms/modules/users';
+/**
+ * @module lackey-cms/modules/users
+ */
 
 module.exports = (instance) => {
+
+    SCli.debug(__MODULE_NAME, 'Init');
 
     instance.addDustHelper(roleFilter);
 
     instance.addMiddleware((app) => {
 
-        SCli.debug('lackey-cms/modules/users', 'Adding middleware');
+        SCli.debug(__MODULE_NAME, 'Adding middleware');
 
         let auth = require('./server/auth');
 
@@ -52,6 +56,7 @@ module.exports = (instance) => {
             saveUninitialized: true,
             resave: true
         })], 'session');
+        app.decorateMiddleware([module.exports.setSession], 'setsession');
         app.decorateMiddleware([passport.initialize()], 'passport.initialize');
 
         app.decorateMiddleware([passport.session()], 'passport.session');
@@ -59,7 +64,7 @@ module.exports = (instance) => {
         app.acl = module.exports.acl;
         app.aclAdmin = module.exports.aclAdmin;
 
-        SCli.debug('lackey-cms/modules/users', 'Adding middleware', app.acl);
+        SCli.debug(__MODULE_NAME, 'Adding middleware', app.acl);
         app.decorateMiddleware([module.exports.viewAs], 'viewas');
 
     });
@@ -75,43 +80,52 @@ module.exports.aclAdmin = (req, res, next) => {
     policies.adminRoleAcl(req, res, next);
 };
 
+module.exports.setSession = (req, res, next) => {
+    req.session.userAgent = req.headers['user-agent'];
+    req.session.ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    return next();
+};
+
 module.exports.viewAs = (req, res, next) => {
 
-    require('./server/models/role').then((Role) => {
+    return SUtils
+        .cmsMod('core')
+        .model('role')
+        .then((Role) => {
 
-        let viewAsCookie = 'lky-view-as',
-            viewAs,
-            names,
-            viewingAs;
+            let viewAsCookie = 'lky-view-as',
+                viewAs,
+                names,
+                viewingAs;
 
-        if (!req.user) {
+            if (!req.user) {
+                return next();
+            }
+
+            req.admin = req.user;
+            viewAs = req.admin.getACL('viewas');
+
+            if (viewAs.indexOf('*') !== -1) {
+                viewAs = Role.all();
+            } else {
+                viewAs = viewAs.map((role) => Role.getByName(role));
+            }
+
+            res.viewAs = viewAs;
+
+            if (!req.cookies || !req.cookies[viewAsCookie]) {
+                return next();
+            }
+
+            names = viewAs.map((role) => role.name);
+
+            viewingAs = req.cookies[viewAsCookie];
+
+            if (names.indexOf(viewingAs) !== -1) {
+                res.viewingAs = viewingAs;
+                req.user = req.admin.as(viewingAs);
+            }
             return next();
-        }
 
-        req.admin = req.user;
-        viewAs = req.admin.getACL('viewas');
-
-        if (viewAs.indexOf('*') !== -1) {
-            viewAs = Role.all();
-        } else {
-            viewAs = viewAs.map((role) => Role.getByName(role));
-        }
-
-        res.viewAs = viewAs;
-
-        if (!req.cookies || !req.cookies[viewAsCookie]) {
-            return next();
-        }
-
-        names = viewAs.map((role) => role.name);
-
-        viewingAs = req.cookies[viewAsCookie];
-
-        if (names.indexOf(viewingAs) !== -1) {
-            res.viewingAs = viewingAs;
-            req.user = req.admin.as(viewingAs);
-        }
-        return next();
-
-    });
+        });
 };

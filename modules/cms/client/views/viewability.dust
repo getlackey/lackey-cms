@@ -1,0 +1,25 @@
+{>"cms/core/modal"/}
+
+{<body}
+  <div class="bt">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Visibility</h4>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; min-height: 150px">
+        <h4>Publish state</h4>
+        <label>
+          <input type="checkbox" data-lky-hook="published" name="published"/>
+          Published
+        </label>
+        <h4>Tags</h4>
+        <div data-lky-hook="taxonomies"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-secondary"
+                data-lky-close>Close</button>
+      </div>
+    </div>
+  </div>
+{/body}

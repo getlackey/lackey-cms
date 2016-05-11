@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle:0 */
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -17,7 +18,8 @@
     limitations under the License.
 */
 var passport = require('passport'),
-    User = require('../../models/user'),
+    SUtils = require(LACKEY_PATH).utils,
+    User = SUtils.cmsMod('core').model('user'),
     usersAuthController = require('../../controllers/authentication'),
     GithubStrategy = require('passport-github').Strategy;
 

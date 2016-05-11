@@ -23,7 +23,7 @@
     </div>
 </li>
 <li>
-    <a href="/cms/content/create" target="_blank">
+    <a href="cms/content/create" target="_blank">
         <i class="fa fa-plus"></i>
     </a>
 </li>

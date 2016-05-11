@@ -12,15 +12,10 @@
                 </label>
                 {>"cms/cms/partials/header/sections"/}
             </li>
-            <li>
-                <a href="#">
-                </a>
-            </li>
-            {?edit}
-                {>"cms/cms/partials/header/editmode"/}
-            {/edit}
         </ul>
-        <ul class="right">
+        <ul class="left" data-lky-hook="cms.tools">
+        </ul>
+        <ul class="right" data-lky-hook="cms.actions">
             <li class="user">
                 <input type="checkbox" class="dropdown-menu-toggle" id="lk-cms-menu-toggle-right"/>
                 <label for="lk-cms-menu-toggle-right">
@@ -38,19 +33,6 @@
                 </label>
                 {>"cms/cms/partials/header/sidebar"/}
             </li>
-            {?edit}
-                <li>
-                    <button data-lky-hook="cms.actions.cancel" disabled>Cancel</button>
-                </li>
-                <li>
-                    <button data-lky-hook="cms.actions.save" disabled>Save</button>
-                </li>
-                {!
-                <li>
-                    <button data-lky-hook="cms.actions.preview">Preview</button>
-                </li>
-                !}
-            {/edit}
         </ul>
     </nav>
 </header>

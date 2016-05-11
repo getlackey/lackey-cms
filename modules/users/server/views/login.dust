@@ -16,7 +16,7 @@
                     <dl>
                         <dt>
                             <label for="username">
-                            Username
+                                {@translate ref="login.username" }Username{/translate}
                             </label>
                         </dt>
                         <dd>
@@ -26,7 +26,7 @@
                     <dl>
                         <dt>
                             <label for="password">
-                            Password
+                                {@translate ref="login.password" }Password{/translate}
                             </label>
                         </dt>
                         <dd>
@@ -35,7 +35,7 @@
                     </dl>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
-                <a href="/cms/account/forgot-password">Forgot Password</a>
+                <a href="cms/account/forgot-password">Forgot Password</a>
             </section>
         </div>
     </div>

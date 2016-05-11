@@ -15,7 +15,7 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
 */
-const Media = require('../media'),
+const Media = require('cms/client/js/media'),
       TWEEN = require('tween.js');
 
 require('filedrop');
@@ -31,7 +31,7 @@ requestAnimationFrame(animate);
 class DummyImage {
       constructor(original, media, previewArea) {
 
-            let ownerWindow = original.ownerDocument.defaultView;
+            let ownerWindow = original ? original.ownerDocument.defaultView : null;
 
             this.paddingTop = 0;
 
@@ -48,27 +48,31 @@ class DummyImage {
       set(media) {
 
             let original = this.original,
-                  position = original.getBoundingClientRect(),
+                  position = original ? original.getBoundingClientRect() : {},
                   paddingTop = this.paddingTop,
-                  firstTime = true,
+                  firstTime = false,
                   self = this;
 
-            if (!this.dummy && original) {
-                  if (['IMG', 'VIDEO'].indexOf(original.nodeName) === -1) {
+            if (!this.dummy) {
+                  if (original && ['IMG', 'VIDEO'].indexOf(original.nodeName) === -1) {
                         this.dummy = new Media(original.cloneNode(false));
                   } else {
+                        firstTime = !original;
                         this.dummy = new Media();
                   }
             } else {
-                  firstTime = false;
+                  firstTime = true;
             }
             this.dummy.set(media);
 
-            if (!firstTime) {
+            if (!this.dummy.node.parentNode) {
+                  this.previewArea.appendChild(this.dummy.node);
+            }
+
+            if (firstTime) {
                   this.dummy.node.style.top = '150px';
                   this.dummy.node.style.left = '350px';
             } else {
-                  this.previewArea.appendChild(this.dummy.node);
                   this.dummy.node.style.top = (position.top + paddingTop) + 'px';
                   this.dummy.node.style.left = position.left + 'px';
             }
@@ -76,10 +80,13 @@ class DummyImage {
             if (position.width && position.height) {
                   this.dummy.node.style.width = position.width + 'px';
                   this.dummy.node.style.height = position.height + 'px';
+            } else {
+                  this.dummy.node.style.width = '50%';
+                  this.dummy.node.style.height = 'auto';
             }
             this.dummy.node.style.position = 'fixed';
 
-            if (firstTime) {
+            if (!firstTime) {
                   new TWEEN.Tween({
                               x: position.left,
                               y: (position.top + paddingTop)

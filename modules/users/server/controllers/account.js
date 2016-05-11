@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* global LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -19,16 +20,21 @@
 const mailer = require(LACKEY_PATH).mailer,
     configuration = require(LACKEY_PATH).configuration,
     SCli = require(LACKEY_PATH).cli,
+    SUtils = require(LACKEY_PATH).utils,
     __MODULE_NAME = 'lackey-cms/modules/user/server/controllers/account';
 
-module.exports = require('../models/user')
-    .then((User) => {
+module.exports = SUtils.waitForAs(__MODULE_NAME,
+        SUtils.cmsMod('core').model('user'),
+        SUtils.cmsMod('core').model('session')
+    )
+    .then((User, Session) => {
         return {
             index: (req, res) => {
 
                 let data = {};
 
-                req.admin.getIdentities('email')
+                req.admin
+                    .getIdentities('email')
                     .then((emails) => {
                         data.emails = emails.map((email) => {
                             return {
@@ -36,6 +42,15 @@ module.exports = require('../models/user')
                                 confirmed: email.confirmed
                             };
                         });
+                        return data;
+                    })
+                    .then(() => {
+                        return Session.findBy('userId', req.admin._doc.id);
+                    })
+                    .then((sessions) => {
+                        data.sessions = sessions;
+                        data.currentSession = req.session.id;
+
                         res.js('js/cms/users/account.js');
                         res.print('cms/users/account', data);
                     });
@@ -76,7 +91,7 @@ module.exports = require('../models/user')
             },
             forgotIndex: (req, res) => {
                 res.js('js/cms/users/forgot.js');
-                res.print('cms/users/forgot-password');
+                res.print(['~/core//forgot-password', 'cms/users/forgot-password']);
             },
             forgot: (req, res) => {
                 let userId;
@@ -94,7 +109,7 @@ module.exports = require('../models/user')
                     .then((token) => {
                         return mailer({
                             to: req.body.username,
-                            template: ['cms/users/emails/forgot-password'],
+                            template: ['~/core//emails/forgot-password', 'cms/users/emails/forgot-password'],
                             token: token,
                             id: userId,
                             subject: 'Remind me my pass'

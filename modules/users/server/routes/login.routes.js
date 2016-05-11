@@ -24,11 +24,11 @@ const policy = require('../policies/auth'),
 module.exports = (server) => {
 
     return SUtils
-        .deps(
+        .waitForAs('login routes',
             require('../controllers/login'),
             require('../controllers/account')
         )
-        .promised((LoginController, AccountController) => {
+        .then((LoginController, AccountController) => {
 
             server.route('/login')
                 .get(policy.anonymous('/'), LoginController.index)

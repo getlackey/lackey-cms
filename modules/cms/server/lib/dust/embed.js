@@ -15,12 +15,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-  /* istanbul ignore next */
-  GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
-
-const SCli = require(LACKEY_PATH).cli;
+const SCli = require(LACKEY_PATH).cli,
+  SUtils = require(LACKEY_PATH).utils;
 
 module.exports = (dust) => {
 
@@ -36,7 +32,9 @@ module.exports = (dust) => {
 
     return chunk.map((injectedChunk) => {
       SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'map', route, template);
-      return require('../../models/content')
+      return SUtils
+        .cmsMod('core')
+        .model('content')
         .then((Content) => {
           SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'query', route, template);
           return Content.getByTypeAndRoute(type, route);
@@ -59,11 +57,15 @@ module.exports = (dust) => {
           function render() {
 
             SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'Content', route, template);
-            data = data.push({
-              data: {
-                content: document.toJSON()
-              }
-            }).push(params);
+            data = data
+              .push({
+                data: {
+                  content: document.toJSON()
+                }
+              })
+              .push(params);
+
+
             dust.render(template, data, (err, out) => {
               if (err) {
                 SCli.debug('lackey-cms/modules/cms/serer/lib/dust/embed', 'Error', route, template);

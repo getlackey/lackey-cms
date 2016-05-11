@@ -17,459 +17,414 @@
     limitations under the License.
 */
 const
-    lackey = require('./../../../../core/client/js'),
-    _ = require('lodash'),
-    diff = require('jsondiffpatch'),
-    diffFormatters = require('jsondiffpatch/src/main-formatters'),
-    api = require('../api'),
-    modal = require('./../../../../core/client/js/modal'),
-    template = require('./../../../../core/client/js/template'),
-    treeParser = require('./../../../shared/treeparser'),
-    Structure = require('./structure'),
-    MediaModalController = require('./media');
+    lackey = require('core/client/js'),
+    api = require('core/client/js/api'),
+    xhr = require('core/client/js/xhr'),
+    emit = require('cms/client/js/emit'),
+    treeParser = require('cms/shared/treeparser'),
+    Repository = require('cms/client/js/manager/repository'),
+    ChangeUI = require('cms/client/js/manager/change.ui.js'),
+    StructureUI = require('cms/client/js/manager/structure.ui.js'),
+    prefix = require('cms/client/js/iframe.resolve')(xhr.base, '', true),
+    Stack = require('cms/client/js/manager/stack');
 
-let contents = {},
-    cache = {},
-    visualdiff = lackey.hook('visualdiff');
+let locale = 'en',
+    defaultLocale = 'en';
 
-function jsjp(input) {
-    return JSON.parse(JSON.stringify(input));
+lackey.select('html').forEach((elem) => {
+    locale = elem.getAttribute('lang');
+    defaultLocale = elem.getAttribute('data-default-locale');
+    if (locale === defaultLocale) {
+        locale = '*';
+    }
+});
+
+
+/**
+ * @module lackey-cms/modules/cms/client/manager
+ */
+
+
+/**
+ * @class
+ */
+function Manager() {
+
+    let self = this,
+        overlay = lackey
+        .hook('settings.overlay');
+
+    this.locale = locale;
+
+    Object.defineProperty(this, 'current', {
+        /**
+         * @property {Promise.<Object>}
+         * @name Manager#current
+         */
+        get: function () {
+            if (!this._current) {
+                this._loadCurrent();
+            }
+            return this
+                ._current
+                .then((id) => self.repository.get('content', id)).catch((error) => {
+                    console.error(error);
+                });
+        },
+        enumerable: false
+    });
+
+    this.repository = new Repository();
+    this.repository.on('changed', lackey.as(this.onChanged, this));
+    this.repository.bubble(this, 'reset');
+
+    this.stack = new Stack(this.repository);
+    this.stack.on('transition', lackey.as(this.onStackChange, this));
+
+
+    overlay.addEventListener('mousewheel', (e) => {
+        if (e.srcElement === overlay) {
+            let content = lackey.hook('iframe', top.document.body).contentDocument.body;
+            content.scrollTop = (e.wheelDelta * -1) + content.scrollTop;
+        }
+    }, true);
+    overlay.addEventListener('click', () => {
+        this.stack.clear();
+    }, true);
+
+    this.setupUI();
+
 }
 
-let self,
-    structure,
-    structureNode,
-    structureCopy,
-    locale = null,
-    defaultLocale = null,
-    LackeyPageManager = {
-        refresh: function () {
-            var changed = null;
-            try {
-                changed = diff.diff(jsjp(cache), jsjp(contents));
-                visualdiff.innerHTML = diffFormatters.html.format(changed, cache);
-            } catch (e) {
-                console.error(e);
+emit(Manager.prototype);
+
+/**
+ * Forces loading currently viewed document data
+ * @private
+ */
+Manager.prototype._loadCurrent = function () {
+
+    let loc = top.location.pathname;
+
+    if (prefix && prefix.length) {
+        loc = loc.replace(new RegExp('^/' + prefix), '');
+    }
+
+    loc = loc.replace(/^\/admin/, '');
+
+    if (loc === '') {
+        loc = '/';
+    }
+
+
+    this._current = api
+        .read('/cms/content?route=' + loc)
+        .then((data) => {
+            if (data.$locale) {
+                locale = top.Lackey.manager.locale = data.$locale;
             }
-            if (self.saveBtn) {
-                self.saveBtn.disabled = !changed;
+            if (loc !== data.data[0].route) {
+                top.history.pushState('', top.document.title, '/admin' + data.data[0].route);
             }
-            if (structure) {
-                self.structure(structure);
-            }
+            return data.data[0].id;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
 
-        },
-        init: (options) => {
+Manager.prototype.setAction = function (options) {
+    let li = document.createElement('li'),
+        a = document.createElement('a'),
+        i = document.createElement('i');
+    i.className = options.class;
+    a.appendChild(i);
+    li.appendChild(a);
+    this._toolsNode.appendChild(li);
+    li.addEventListener('click', options.handler, true);
+};
 
-            LackeyPageManager.readDefault();
-
-            lackey.select('html').forEach((elem) => {
-                locale = elem.getAttribute('lang');
-                defaultLocale = elem.getAttribute('data-default-locale');
-                if (locale === defaultLocale) {
-                    locale = '*';
-                }
-            });
-
-            if (options && options.controls) {
-                if (options.controls.visibility) {
-                    self.visibility = lackey.select(options.controls.visibility)[0];
-                    lackey.bind(self.visibility, 'click', lackey.as(self.toggleVisibility, self));
-                }
-                if (options.controls.save) {
-                    self.saveBtn = lackey.select(options.controls.save)[0];
-                    lackey.bind(self.saveBtn, 'click', lackey.as(self.save, self));
-                }
-                if (options.controls.cancel) {
-                    lackey.bind(options.controls.cancel, 'click', lackey.as(self.cancel, self));
-                }
-                if (options.controls.taxonomy) {
-                    lackey.bind(options.controls.taxonomy, 'click', lackey.as(self.taxonomy, self));
-                }
-                if (options.controls.properties) {
-                    lackey.bind(options.controls.properties, 'click', lackey.as(self.properties, self));
-                }
-                if (options.controls.structure) {
-                    structure = options.controls.structure;
-                    LackeyPageManager.structure(options.controls.structure);
-
-                }
-                if (options.controls.preview) {
-                    lackey.bind(options.controls.preview, 'click', lackey.as(self.preview, self));
-                }
-                if (options.controls.create) {
-                    lackey.bind(options.controls.create, 'click', lackey.as(self.create, self));
-                }
-                if (options.controls.createdAt && options.controls.createdAtTime) {
-                    self.createdAt(options.controls.createdAt, options.controls.createdAtTime);
-                }
-            }
-            LackeyPageManager.setVisibility(LackeyPageManager.getVisibility());
-
-            lackey.on('cms/cms/image:selected', (data) => {
-                let contentId = data.hook.getAttribute('data-lky-content'),
-                    path = data.hook.getAttribute('data-lky-path'),
-                    variant = data.hook.getAttribute('data-lky-variant');
-                LackeyPageManager.set(contentId, path, variant, {
-                    type: 'Media',
-                    id: data.id
-                });
-            });
-        },
-        createdAt: (dateSelector, timeSelector) => {
-            let dateHook = lackey.select(dateSelector)[0],
-                timeHook = lackey.select(timeSelector)[0];
-            self.getDefault()
-                .then((def) => {
-                    dateHook.value = new Date(def.createdAt).toISOString().substr(0, 10);
-                    timeHook.value = new Date(def.createdAt).toISOString().substr(11, 5);
-                    lackey.bind([dateHook, timeHook], 'change', () => {
-                        let string = new Date(dateHook.value + 'T' + timeHook.value);
-                        contents[def.id].createdAt = string.toISOString();
-                        self.refresh();
-                    });
-                });
-        },
-        create: () => {
-            api.get('cms/template?selectable=true')
-                .then((templates) => {
-                    return modal.open('cms/cms/newpage', {
-                        templates: templates.data
-                    }, function (rootNode, vars, resolve) {
-                        lackey.bind('lky:create', 'click', () => {
-                            resolve(lackey.form(rootNode));
-                        }, rootNode);
-                        lackey.bind('lky:cancel', 'click', () => {
-                            resolve(null);
-                        }, rootNode);
-                    });
-                }).then(() => {});
-        },
-        preview: () => {
-            self.getDefault()
-                .then((def) => {
-                    let data = JSON.stringify({
-                            location: ((a) => {
-                                return a === '' ? '/' : a;
-                            })(top.location.pathname.replace(/^\/admin/, '')),
-                            contents: contents[def.id]
-                        }),
-                        form = top.document.createElement('form'),
-                        input = top.document.createElement('input');
-                    form.method = 'post';
-                    form.action = '/cms/preview';
-                    form.target = '_preview';
-                    input.type = 'hidden';
-                    input.name = 'preview';
-                    input.value = data;
-                    form.appendChild(input);
-                    document.body.appendChild(form);
-                    form.submit();
-                    document.body.removeChild(form);
-                });
-        },
-        media: (media) => {
-            return modal.open('cms/cms/image', {
-                node: media.node,
-                media: media.media
-            }, MediaModalController);
-        },
-        structure: (selector) => {
-            if (!structureNode) {
-                Structure.changed(() => {
-                    self.getDefault()
-                        .then((page) => {
-                            contents[page.id].layout = structureCopy;
-                            self.refresh();
-                            self.preview();
-                        });
-                });
-
-            }
-            return self.getDefault().then((page) => {
-                structureCopy = _.clone(contents[page.id] ? contents[page.id].layout : page.layout) || {};
-
-                if (structureNode) {
-                    structureNode.parentNode.removeChild(structureNode);
-                }
-                let node = new Structure(structureCopy);
-                structureNode = node.node;
-                lackey.select(selector)[0].appendChild(node.node);
-            });
-        },
-        capture: (event) => {
-            event.preventDefault();
-            event.cancelBubble = true;
-            return false;
-        },
-        readDefault: () => {
-            let loc = top.location.pathname.replace(/^\/admin/, '');
-            if (loc === '') {
-                loc = '/';
-            }
-            self._default = api.read('/cms/content?route=' + loc).then((data) => {
-                return data.data[0];
-            });
-            return self._default;
-        },
-        getDefault: () => {
-            return self._default || self.readDefault();
-        },
-        properties: (event) => {
-            event.preventDefault();
-            event.cancelBubble = true;
-            let id;
-            self.getDefault().then((content) => {
-                id = content.id;
-                modal.open('cms/cms/properties', {
-                    properties: content.props,
-                    definitions: Object.keys(content.template.props).map((key) => {
-                        return {
-                            $key: key,
-                            item: content.template.props[key]
-                        };
-                    })
-                }, function (rootNode, vars, resolve) {
-                    lackey.bind('lky:close', 'click', () => {
-                        resolve(lackey.form(rootNode));
-                    }, rootNode);
-                }).then((props) => {
-                    contents[id].props = props;
-                    self.refresh();
-                    self.preview();
-                });
-            });
-        },
-
-        addBlock: (contentId, path) => {
-            api.read('/cms/template?type=block')
-                .then((templates) => {
-                    return modal.open('cms/cms/blocks', {
-                        templates: templates.data
-                    }, function (rootNode, vars, resolve) {
-                        lackey.bind('lky:close', 'click', () => {
-                            resolve(lackey.hook('template').value);
-                        }, rootNode);
-                    });
-                }).then((_template) => {
-                    let source = treeParser.get(contents[contentId].layout, path, null, null, null);
-                    if (!source) {
-                        source = {
-                            type: 'List',
-                            items: []
-                        };
-                    }
-                    source.items.push({
-                        type: 'Block',
-                        fields: {},
-                        template: _template
-                    });
-                    treeParser.set(contents[contentId].layout, path, source, '*', null, null);
-                    self.refresh();
-                    self.preview();
-                });
-        },
-
-        taxonomy: (event) => {
-
-            event.preventDefault();
-            event.cancelBubble = true;
-            api.read('/cms/taxonomy-type')
-                .then((data) => {
-                    modal.open('cms/cms/taxonomy', {
-                        types: data.data
-                    }, function (rootNode, vars, resolve) {
-
-                        let currentType = 'tag';
-
-                        function loadCurrent(type) {
-                            self.getDefault()
-                                .then((content) => {
-                                    let taxonomies = content.taxonomies.filter((item) => {
-                                        return item.type.name === type;
-                                    });
-                                    return template.redraw('items', {
-                                            bullets: taxonomies,
-                                            remove: true
-                                        }, rootNode)
-                                        .then(() => {
-                                            lackey.bind('button', 'click', (event2, button) => {
-                                                event2.preventDefault();
-                                                event2.cancelBubble = true;
-                                                self.getDefault().then((content2) => {
-                                                    return api.delete('/cms/content/' + content2.id + '/taxonomy/' + currentType + '/' + button.getAttribute('data-name')).then((updated) => {
-                                                        self._default = Promise.resolve(updated);
-                                                        loadCurrent(type);
-                                                    });
-                                                });
-                                                return false;
-                                            }, lackey.hook('items', rootNode));
-                                        });
-                                });
-                        }
-
-                        function loadType(type) {
-
-                            currentType = type;
-
-                            lackey.hooks('taxonomyTab').forEach((elem) => {
-                                if (elem.getAttribute('data-name') === type) {
-                                    lackey.addClass(elem, 'active');
-                                } else {
-                                    lackey.removeClass(elem, 'active');
-                                }
-                            });
-
-                            loadCurrent(type);
-
-                            api.read('/cms/taxonomy?type=' + type)
-                                .then((list) => {
-                                    return template.redraw('cloud', {
-                                        bullets: list.data
-                                    }, rootNode);
-                                })
-                                .then(() => {
-                                    lackey.bind('button', 'click', (event3, button) => {
-                                        event3.preventDefault();
-                                        event3.cancelBubble = true;
-                                        self.getDefault().then((content) => {
-                                            return api.create('/cms/content/' + content.id + '/taxonomy', {
-                                                name: button.getAttribute('data-name'),
-                                                type: type
-                                            }).then((updated) => {
-                                                self._default = Promise.resolve(updated);
-                                                loadCurrent(type);
-                                            });
-                                        });
-                                        return false;
-                                    }, lackey.hook('cloud', rootNode));
-                                });
-
-                        }
-
-                        lackey.bind('lky:add-taxonomy', 'submit', (event4, hook) => {
-                            event4.preventDefault();
-                            event4.cancelBubble = true;
-                            self.getDefault().then((content) => {
-                                return api.create('/cms/content/' + content.id + '/taxonomy', {
-                                    type: currentType,
-                                    label: lackey.form(hook).label
-                                }).then((updated) => {
-                                    self._default = Promise.resolve(updated);
-                                    loadCurrent(currentType);
-                                });
-                            });
-                            return false;
-                        }, rootNode);
-
-                        lackey.bind('lky:taxonomyTab', 'click', (event5, hook) => {
-                            event5.preventDefault();
-                            event5.cancelBubble = true;
-                            loadType(hook.getAttribute('data-name'));
-                            return false;
-                        }, rootNode);
-
-                        loadType(currentType);
-
-                        lackey.bind('lky:close', 'click', () => resolve(), rootNode);
-                    });
-                });
-            return false;
-        },
-        setVisibility: function (value) {
-            if (self.visibility) {
-                lackey[value ? 'addClass' : 'removeClass'](self.visibility, 'published');
-            }
-            Object.keys(contents).forEach((key) => {
-                contents[key].state = value ? 'published' : 'draft';
-            });
-            self.refresh();
-        },
-        getVisibility: function () {
-            return Object.keys(contents)
-                .map((key) => {
-                    return contents[key].state === 'published';
-                })
-                .reduce((prev, curr) => {
-                    if (prev || curr) {
-                        return true;
-                    }
-                    return false;
-                }, false);
-        },
-        toggleVisibility: function (event) {
-            event.preventDefault();
-            event.cancelBubble = true;
-            self.setVisibility(!self.getVisibility());
-            return false;
-        },
-        get: (contentId, path, variant, schema) => {
-            let source = treeParser.get(contents[contentId].layout, path, variant, null, locale);
-
-            if (!source) {
+/**
+ * Gets content node
+ * @param   {Number} contentId [[Description]]
+ * @param   {String} path      [[Description]]
+ * @param   {String|null} variant   [[Description]]
+ * @param   {String|null} schema    [[Description]]
+ * @returns {Promise.<Mixed>}} [[Description]]
+ */
+Manager.prototype.get = function (contentId, path, variant, schema) {
+    return this.repository
+        .get('content', contentId)
+        .then((content) => {
+            let source = treeParser.get(content.layout, path, variant, null, locale);
+            if (!source && schema) {
                 source = schema.newDoc();
             }
             return source;
-        },
-        setAuthor: (contentId, value) => {
-            contents[contentId].author = value;
-            self.refresh();
-        },
-        setRelated: (contentId, value, index) => {
-            contents[contentId].layout.related = contents[contentId].layout.related || {};
-            contents[contentId].layout.related[index] = value ? {
-                type: 'Ref',
-                ref: value
-            } : null;
-            self.refresh();
-            self.preview();
-        },
-        set: (contentId, path, variant, value) => {
-            treeParser.set(contents[contentId].layout, path, value, variant || '*', null, locale);
-            //TODO
-            self.refresh();
-        },
-        save() {
-            return Promise.all(Object.keys(contents).map((id) => {
-                var json = contents[id];
-                return api.update('/cms/content/' + id, json).then((response) => {
-                    contents[id] = response;
-                    return true;
-                });
-            })).then(() => {
-                self.setVisibility(self.getVisibility());
-                self.refresh();
-            });
-        },
-        cancel() {
-            document.location.reload(true);
-        },
-        load(contentIds) {
+        });
+};
 
-            if (!this._loader) {
+/**
+ * Sets content node
+ * @param   {Number} contentId
+ * @param   {String} path
+ * @param   {String} variant
+ * @param   {Mixed} value
+ * @returns {Promise}
+ */
+Manager.prototype.set = function (contentId, path, variant, value) {
+    return this
+        .update('content', contentId, function (content) {
+            treeParser.set(content.layout, path, value, variant || '*', null, locale !== defaultLocale ? locale : '*');
+        });
+};
 
-                this._loader = Promise.all(contentIds.map((id) => {
-                        return api.read('/cms/content/' + id).then((json) => {
-                            contents[json.id] = json;
-                            if (!json.layout) {
-                                json.layout = {
-                                    type: 'Fields'
-                                };
-                            }
-                            return true;
-                        });
-                    }))
-                    .then(() => {
-                        cache = _.cloneDeep(contents);
-                        self.setVisibility(self.getVisibility());
-                        self.refresh();
-                    });
+/**
+ * Inserts before
+ * @param   {Number} contentId
+ * @param   {String} path
+ * @param   {String} variant
+ * @param   {Mixed} value
+ * @returns {Promise}
+ */
+Manager.prototype.insertAfter = function (contentId, path, variant, value) {
+    return this
+        .update('content', contentId, function (content) {
+            treeParser.insertAfter(content.layout, path, value, variant || '*', null, locale !== defaultLocale ? locale : '*');
+        });
+};
+
+
+/**
+ * Removes
+ * @param   {Number} contentId
+ * @param   {String} path
+ * @param   {String} variant
+ * @param   {Mixed} value
+ * @returns {Promise}
+ */
+Manager.prototype.remove = function (contentId, path, variant) {
+    return this
+        .update('content', contentId, function (content) {
+            treeParser.remove(content.layout, path, variant || '*', null, locale !== defaultLocale ? locale : '*');
+        });
+};
+
+/**
+ * Gets content node
+ * @param   {Number} contentId [[Description]]
+ * @param   {String} path      [[Description]]
+ * @param   {String|null} variant   [[Description]]
+ * @returns {Promise.<Mixed>}} [[Description]]
+ */
+Manager.prototype.getMedia = function (contentId) {
+    return this
+        .repository
+        .get('media', contentId)
+        .then((content) => {
+            return content;
+        });
+};
+
+/**
+ * Gets content node
+ * @param   {Number} contentId [[Description]]
+ * @param   {String} path      [[Description]]
+ * @param   {String|null} variant   [[Description]]
+ * @returns {Promise.<Mixed>}} [[Description]]
+ */
+Manager.prototype.setMedia = function (contentId, content) {
+    return this
+        .repository
+        .set('media', contentId, content);
+};
+
+Manager.prototype.preview = function (variant, language) {
+    let self = this;
+    this
+        .current
+        .then((def) => {
+            return self.repository.get('content', def.id);
+        })
+        .then((contents) => {
+            let data = JSON.stringify({
+                    location: ((a) => {
+                        return a === '' ? '/' : a;
+                    })(top.location.href.replace(new RegExp('^' + xhr.base + 'admin'), '')),
+                    contents: contents
+                }),
+                form = top.document.createElement('form'),
+                input = top.document.createElement('input'),
+                inputVariant = top.document.createElement('input'),
+                inputLanguage = top.document.createElement('input');
+            form.method = 'post';
+            form.action = xhr.base + 'cms/preview';
+            form.target = '_preview';
+            input.type = inputVariant.type = inputLanguage.type = 'hidden';
+            input.name = 'preview';
+            inputVariant.name = 'variant';
+            inputLanguage.name = 'locale';
+            input.value = data;
+            if (variant !== undefined) {
+                self.variant = variant;
             }
-            return this._loader;
-        }
-    };
+            if (self.variant !== undefined) {
+                inputVariant.value = self.variant;
+                form.appendChild(inputVariant);
+            }
+
+            if (language !== undefined) {
+                inputLanguage.value = language;
+                self.locale = language;
+                locale = language;
+            } else {
+                inputLanguage.value = self.locale;
+            }
+            form.appendChild(inputLanguage);
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        });
+};
+
+/**
+ * Handler for repository changes
+ * @param {RepositoryEvent} event
+ */
+Manager.prototype.onChanged = function () {
+    //
+};
+
+/**
+ * Handler for stack change
+ * @param {StackEvent} event
+ */
+Manager.prototype.onStackChange = function () {};
+
+Manager.prototype.onViewStructure = function () {
+
+    lackey.hook('header.settings').setAttribute('disabled', '');
+
+    let
+        self = this,
+        promise;
+
+    if (this.stack.length) {
+        promise = this.stack.clear();
+    } else {
+
+        promise = this
+            .current
+            .then((current) => {
+
+                let structureController = new StructureUI({
+                    type: 'content',
+                    id: current.id,
+                    context: () => Promise.resolve(self.current),
+                    stack: self.stack
+                }, this.repository);
+                structureController.on('changed', lackey.as(self.onStructureChange, self));
+                return self.stack.inspectStructure(structureController);
+            });
+    }
+
+    promise
+        .then(() => {
+            lackey.hook('header.settings').removeAttribute('disabled', '');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 
 
-self = LackeyPageManager;
-lackey.manager = LackeyPageManager;
-module.exports = LackeyPageManager;
+};
+
+Manager.prototype.onStructureChange = function () {
+    this.repository.notify();
+    this.preview();
+};
+
+Manager.prototype.onPagePropertiesChanged = function (event) {
+    return this
+        .updateCurrent(function (content) {
+            content.props = event.data;
+        })
+        .then(lackey.as(this.preview, this));
+};
+
+
+Manager.prototype.update = function (type, id, handler) {
+    let self = this;
+    return this.repository
+        .get(type, id)
+        .then((content) => {
+            handler(content);
+            return self.repository.set(type, id, content);
+        });
+};
+
+Manager.prototype.updateCurrent = function (handler) {
+    return this
+        .current
+        .then((current) => {
+            return this.update('content', current.id, handler);
+        });
+};
+
+Manager.prototype.setupUI = function () {
+
+    let self = this;
+
+    lackey
+        .hook('header.settings')
+        .addEventListener('click', lackey.as(this.onViewStructure, this), true);
+    this._changeUI = new ChangeUI(this.repository);
+    lackey.select([
+        '[data-lky-hook="header.settings"]',
+        '[data-lky-hook="header.publish"]'
+    ]).forEach((element) => {
+        element.style.display = 'block';
+    });
+
+    this
+        .current
+        .then((current) => {
+            let publishDiv = lackey.hook('header.publish'),
+                publishControl = lackey.select('input[type="checkbox"]', publishDiv)[0];
+
+            publishControl.checked = current.state === 'published';
+
+            publishDiv.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                publishControl.checked = !publishControl.checked;
+                self.updateCurrent((cur) => {
+                    cur.state = publishControl.checked ? 'published' : null;
+                });
+            }, true);
+
+            publishControl.addEventListener('click', () => {
+                self.updateCurrent((cur) => {
+                    cur.state = publishControl.checked ? 'published' : null;
+                });
+            }, true);
+        });
+};
+
+
+Manager.init = function () {
+    lackey.manager = new Manager();
+};
+
+Manager.prototype.diff = function () {
+    let self = this;
+    lackey
+        .select(['[data-lky-component="visual-diff"]'])
+        .forEach((hook) => {
+            hook.innerHTML = self.repository.visualDiff();
+        });
+};
+
+module.exports = Manager;

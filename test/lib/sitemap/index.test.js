@@ -17,7 +17,6 @@
 */
 
 const dbsInit = require('../../../test/mockup/dbs'),
-    BbPromise = require('bluebird'),
     should = require('should');
 
 describe('lib/sitemap', () => {
@@ -35,7 +34,7 @@ describe('lib/sitemap', () => {
 
         let counts = 0,
             source = () => {
-                return new BbPromise((resolve) => {
+                return new Promise((resolve) => {
                     resolve([++counts, ++counts]);
                 });
             }

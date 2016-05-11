@@ -15,6 +15,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-var table = require('./../../../core/client/js/table');
+var table = require('core/client/js/table');
 
 table.init();

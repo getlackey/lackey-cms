@@ -1,0 +1,11 @@
+{?value.href}
+    <a href="{value.href}">{value.label}</a>
+{:else}
+    {?value.date}
+        <strong>
+            {@formatDate val=value.date weekday="long"/} {@formatDate val=value.date day="numeric"/} {@formatDate val=value.date month="long"/}
+        </strong> {@formatDate val=value.date hour="numeric"/}
+    {:else}
+        {value}
+    {/value.date}
+{/value.href}

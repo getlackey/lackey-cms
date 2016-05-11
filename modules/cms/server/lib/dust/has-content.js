@@ -30,11 +30,16 @@ module.exports = (dust) => {
       field = params.field || false,
       layout = content.layout,
       variant = params.variant,
-      type = params.type || 'doc';
+      type = params.type || 'doc',
+      path = params.path || '',
+      parent = params.parent || null;
 
+    if (parent) {
+      path = parent + '.' + path;
+    }
     try {
       if (layout && layout.type) {
-        layout = escape(editable.fromLayout(layout, params.path, field, variant, type, params.path, 'text').replace(/\n/g, ' '));
+        layout = escape(editable.fromLayout(layout, path, field, variant, type, path, 'text').replace(/\n/g, ' '));
       }
     } catch (error) {
       throw error;

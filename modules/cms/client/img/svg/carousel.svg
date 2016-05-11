@@ -1,0 +1,61 @@
+
+<svg width="180px" height="72px" viewBox="280 122 180 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="4.77777778" height="4.77124183" rx="2"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.77777778" height="4.77124183" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="7.16666667" y="0" width="4.77777778" height="4.77124183" rx="2"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.77777778" height="4.77124183" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="21.5" y="0" width="4.77777778" height="4.77124183" rx="2"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.77777778" height="4.77124183" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+        <rect id="path-7" x="0" y="0" width="177.972222" height="44.1339869"></rect>
+        <rect id="path-9" x="70.7275107" y="0.401874617" width="64.0302489" height="32.5949436" rx="2"></rect>
+        <mask id="mask-10" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="64.0302489" height="32.5949436" fill="white">
+            <use xlink:href="#path-9"></use>
+        </mask>
+        <rect id="path-11" x="0.294236925" y="0.401874617" width="64.0302489" height="32.5949436" rx="2"></rect>
+        <mask id="mask-12" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="64.0302489" height="32.5949436" fill="white">
+            <use xlink:href="#path-11"></use>
+        </mask>
+        <rect id="path-13" x="141.160784" y="0.401874617" width="64.0302489" height="32.5949436" rx="2"></rect>
+        <mask id="mask-14" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="64.0302489" height="32.5949436" fill="white">
+            <use xlink:href="#path-13"></use>
+        </mask>
+        <rect id="path-15" x="0" y="0" width="179.732522" height="71.3754316"></rect>
+        <mask id="mask-16" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.732522" height="71.3754316" fill="white">
+            <use xlink:href="#path-15"></use>
+        </mask>
+    </defs>
+    <g id="Carousel" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(280.000000, 122.000000)">
+        <g id="Body" transform="translate(111.083333, 26.241830)"></g>
+        <g id="Base-+-Borders-Copy-8" transform="translate(1.194444, 13.120915)">
+            <g id="Group-Copy-22" transform="translate(76.444444, 41.748366)">
+                <use id="Rectangle-275-Copy-4" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="2" xlink:href="#path-1"></use>
+                <use id="Rectangle-275-Copy-5" stroke="#00CCFF" mask="url(#mask-4)" stroke-width="2" xlink:href="#path-3"></use>
+                <rect id="Rectangle-275-Copy-6" fill="#00CCFF" x="14.3333333" y="0" width="4.77777778" height="4.77124183" rx="2"></rect>
+                <use id="Rectangle-275-Copy-7" stroke="#00CCFF" mask="url(#mask-6)" stroke-width="2" xlink:href="#path-5"></use>
+            </g>
+            <g id="Group-Copy-11">
+                <mask id="mask-8" fill="white">
+                    <use xlink:href="#path-7"></use>
+                </mask>
+                <g id="Mask"></g>
+                <g id="Group-3" mask="url(#mask-8)" stroke-width="4">
+                    <g transform="translate(-14.333333, 0.000000)">
+                        <use id="Rectangle-33-Copy-3" stroke="#00CCFF" mask="url(#mask-10)" xlink:href="#path-9"></use>
+                        <use id="Rectangle-33-Copy-5" stroke="#ACEFFF" mask="url(#mask-12)" xlink:href="#path-11"></use>
+                        <use id="Rectangle-33-Copy-4" stroke="#ACEFFF" mask="url(#mask-14)" xlink:href="#path-13"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-16)" stroke-width="4" xlink:href="#path-15"></use>
+    </g>
+</svg>

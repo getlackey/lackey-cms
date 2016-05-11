@@ -1,0 +1,69 @@
+[data-lky-block] {
+    border: 2px solid $color-lackey-light-blue;
+    width: 210px;
+    margin-bottom: 10px;
+    [data-lky-icon] {
+        margin: -2px -2px -3px;
+    }
+    [data-lky-bin],
+    [data-lky-cog] {
+        opacity: 0.5;
+        border-left: 2px solid $color-lackey-light-blue;
+        width: 20px;
+        padding: 6px;
+        cursor: pointer;
+    }
+    [data-lky-cog] {
+        border-top: 2px solid $color-lackey-light-blue;
+    }
+    > div {
+        width: 32px;
+        float: right;
+    }
+    &[data-lky-locked] {
+        border-color: transparentize($color-lackey-light-gray, 0.5);
+        [data-lky-icon] {
+            opacity: 0.2;
+        }
+        [data-lky-bin] {
+            opacity: 0.15;
+        }
+        [data-lky-bin],
+        [data-lky-cog] {
+            border-color: transparentize($color-lackey-light-gray, 0.5);
+        }
+    }
+}
+
+[data-lky-hook="sections"] {
+    > ul {
+        > li {
+            > span {
+                color: $color-lackey-light-blue;
+                display: block;
+                padding: 10px 0px 5px;
+            }
+        }
+    }
+}
+
+[data-lky-add-block] {
+    border-radius: 25px;
+    display: inline-block;
+    width: 25px;
+    line-height: 21px;
+    height: 25px;
+    color: white;
+    border: none;
+    background-color: $color-lackey-blue;
+    font-weight: normal;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+[data-lky-hook="settings.blocks"] {
+    ul > li {
+        text-align: center;
+        width: 225px;
+    }
+}

@@ -1,0 +1,11 @@
+{#data}
+    <li>
+        <div>
+            <span>{name}</span>
+            <pre>{route}</pre>
+        </div>
+        <div>
+            <button data-lky-btn data-lky-route="{route}">Choose</button>
+        </div>
+    </li>
+{/data}

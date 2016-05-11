@@ -1,2 +1,90 @@
-require:
-    - 'cms/users'
+name: LackeyCMS core module
+
+testStages: &testStages
+    - test
+
+sharedACLS: &sharedACLS
+    /session:
+        - get
+
+# Init data
+init:
+    # System roles
+    Role:
+        -
+            name: gold
+            label: 'Gold Member'
+            stages: *testStages
+            acl: *sharedACLS
+        -
+            name: silver
+            label: 'Silver Member'
+            stages: *testStages
+            acl: *sharedACLS
+        -
+            name: guest
+            label: 'Guest'
+            acl: *sharedACLS
+        -
+            name: developer
+            acl:
+                /admin*: # ADMIN IFRAME
+                    - get
+                /cms*: # CMS LAYER
+                    - get
+                    - post
+                /cms/preview: # PREVIEW PAGE
+                    - post
+                /api/cms/*: # API ENDPOINTS
+                    - get
+                    - delete
+                    - post
+                    - put
+                viewInVariant: '*' # VIEWING IN VARIANT
+                /session:
+                    - get
+                /api/account/confirm-email:
+                    - post
+                edit: '*' # EDITING CONTENT
+                cms: '*'
+                debug: '*'
+                viewas: '*'
+                /api/*:
+                    - get
+        -
+            name: admin
+            acl:
+                /admin*: # ADMIN IFRAME
+                    - get
+                /cms*: # CMS LAYER
+                    - get
+                    - post
+                /cms/preview: # PREVIEW PAGE
+                    - post
+                /api/cms/*: # API ENDPOINTS
+                    - get
+                    - delete
+                    - post
+                    - put
+                viewInVariant: '*' # VIEWING IN VARIANT
+                /session:
+                    - get
+                /api/account/confirm-email:
+                    - post
+                edit: '*' # EDITING CONTENT
+                cms: '*'
+                debug: '*'
+                viewas: '*'
+                /api/*:
+                    - get
+    # Users
+    User:
+        -   email : test@example.com
+            name: 'test account'
+            password: 'password'
+            stages: *testStages
+            roles:
+                - developer
+
+
+

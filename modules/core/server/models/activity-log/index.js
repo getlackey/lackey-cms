@@ -1,5 +1,7 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
+
 /*
     Copyright 2015 Enigma Marketing Services Limited
 
@@ -15,20 +17,24 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
 
 const SUtils = require(LACKEY_PATH).utils,
+    SCli = require(LACKEY_PATH).cli,
     objection = require('objection'),
-    Model = objection.Model;
+    Model = objection.Model,
+    __MODULE_NAME = 'lackey-cms/modules/core/server/models/activity-log';
 
-module.exports = SUtils.deps(
-        SUtils.cmsMod('users').model('user'),
+SCli.debug(__MODULE_NAME, 'REQUIRED');
+
+module.exports = SUtils
+    .waitForAs(__MODULE_NAME,
+        SUtils.cmsMod('core').model('user'),
         SUtils.cmsMod('core').model('objection'),
-        require('./knex'))
-    .promised((User, ObjectionWrapper) => {
+        require('../knex')
+    )
+    .then((User, ObjectionWrapper) => {
+
+        SCli.debug(__MODULE_NAME, 'READY');
 
         class ActivityLogModel extends Model {
             static get tableName() {

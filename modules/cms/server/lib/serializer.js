@@ -1,17 +1,34 @@
+/* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
+/*
+    Copyright 2016 Enigma Marketing Services Limited
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 const SUtils = require(LACKEY_PATH).utils;
 
-module.exports = SUtils.deps(
-        SUtils.cmsMod('users').model('role'),
-        SUtils.cmsMod('users').model('user'),
-        SUtils.cmsMod('cms').model('taxonomy-type'),
-        SUtils.cmsMod('cms').model('taxonomy'),
-        SUtils.cmsMod('cms').model('template'),
-        SUtils.cmsMod('media').model('media'),
-        SUtils.cmsMod('cms').model('content')
+module.exports = SUtils.waitForAs('serializer',
+        SUtils.cmsMod('core').model('role'),
+        SUtils.cmsMod('core').model('user'),
+        SUtils.cmsMod('core').model('taxonomy-type'),
+        SUtils.cmsMod('core').model('taxonomy'),
+        SUtils.cmsMod('core').model('template'),
+        SUtils.cmsMod('core').model('media'),
+        SUtils.cmsMod('core').model('content')
     )
-    .promised((Role, User, TaxonomyType, Taxonomy, Template, Media, Content) => {
+    .then((Role, User, TaxonomyType, Taxonomy, Template, Media, Content) => {
 
         class Serializer {
             static all() {

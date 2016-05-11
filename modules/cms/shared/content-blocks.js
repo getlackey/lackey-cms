@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true, esnext:true, browser:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -21,9 +21,13 @@ const model = require('prosemirror/dist/model'),
       dino = require('./widgets/dino'),
       dust = require('./widgets/dust'),
       twitterable = require('./widgets/twitterable'),
+      command = require('prosemirror/dist/edit/command'),
+      selectedNodeAttr = command.selectedNodeAttr,
       iframe = require('./widgets/iframe').iframe,
       Dino = dino.Dino,
       Twitterable = twitterable.Twitterable,
+      format = require('prosemirror/dist/format'),
+      toText = format.toText,
       Dust = dust.Dust,
       Image = model.Image;
 
@@ -31,24 +35,39 @@ let img = window.document.createElement('img');
 img.style.left = '-1000px';
 img.style.top = '-1000px';
 
-Image.register('command', 'upload', {
+Image.register('command', 'insert', {
       label: 'Upload Image',
       menu: {
             group: 'insert',
-            rank: 70,
+            rank: 20,
             display: {
                   type: 'label',
-                  label: 'Media'
+                  label: 'Image / Video'
             }
       },
+      select: this.isInline ? function (pm) {
+
+            return pm.doc.resolve(pm.selection.from).parent.type.canContainType(this);
+      } : null,
       run: function (pm) {
-            top.Lackey.manager.media({
-                        node: img
-                  })
-                  .then((media) => {
-                        if (!media) return;
-                        pm.execCommand('image:insert', [media.source, media.source, media.source]);
+            let self = this;
+            top.Lackey.manager.stack
+                  .inspectMedia(null, img)
+                  .then((result) => {
+                        if (result || result === -1) {
+                              if (!result) return;
+
+                              let alt = result.alt || selectedNodeAttr(pm, self, 'alt') || toText(pm.doc.cut(pm.selection.from, pm.selection.to)),
+                                    image = this.create({
+                                          alt: alt,
+                                          title: alt,
+                                          src: result.source
+                                    });
+                              pm.tr.replaceSelection(image).apply(pm.apply.scroll);
+                        }
                   });
+
+
       }
 });
 

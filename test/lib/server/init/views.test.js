@@ -25,12 +25,11 @@ describe('lib/server/init/views', () => {
 
     let root = path.resolve(path.join(__dirname, '../../../mockup'))
 
-    let resolver = view.resolver('my-site', root + '/lackey/', root + '/project/');
+    let resolver = view.resolver(root + '/lackey/lib/', root + '/project/');
 
-    it('Resolves aboslute path', () => {
+    it('Resolves absolute path', () => {
 
-        resolver('sites/default/cms/partials/header').should.be.eql(root + '/project/sites/default/modules/cms/shared/views/partials/header.dust');
-        resolver('cms/cms/partials/header').should.be.eql(root + '/lackey/modules/cms/server/views/partials/header.dust');
+        resolver('cms/cms/partials/header').should.be.eql(path.resolve(root + '/lackey/lib/../modules/cms/server/views/partials/header.dust'));
 
 
     });
@@ -39,25 +38,15 @@ describe('lib/server/init/views', () => {
 
         resolver('~/cms/partials/header', {
             'view': {
-                path: root + '/project/sites/other-site/modules/core/server/views/main.dust'
+                path: path.resolve(root + '/project/modules/core/server/views/main.dust')
             }
-        }).should.be.eql(root + '/project/sites/other-site/modules/cms/server/views/partials/header.dust');
+        }).should.be.eql(path.resolve(root + '/project/modules/cms/shared/views/partials/header.dust'));
 
         resolver('~/cms/partials/header', {
             'view': {
-                path: root + '/lackey/modules/core/server/views/main.dust'
+                path: path.resolve(root + '/lackey/lib/../modules/core/server/views/main.dust')
             }
-        }).should.be.eql(root + '/lackey/modules/cms/server/views/partials/header.dust');
-
-    });
-
-    it('Resolved local path', () => {
-
-        resolver('./partials/header', {
-            'view': {
-                path: root + '/project/sites/other-site/modules/core/server/views/main.dust'
-            }
-        }).should.be.eql(root + '/project/sites/other-site/modules/core/server/views/partials/header.dust');
+        }).should.be.eql(path.resolve(root + '/project/modules/cms/shared/views/partials/header.dust'));
 
     });
 

@@ -16,27 +16,33 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const url = require('url');
+const url = require('url'),
+    resolve = require('cms/client/js/iframe.resolve.js');
+
+let base = document.querySelector('head base'),
+    loc = document.location,
+    basePath = base ? base.getAttribute('href') : (loc.protocol + '//' + loc.host + (loc.port && loc.port.length ? (':' + loc.port) : '') + '/'),
+    adminPath = resolve(basePath, document.location.pathname),
+    previewPath = resolve(basePath, '/cms/preview');
 
 window.addEventListener('unload', () => {
     if (document.activeElement.href) {
         let location = url.parse(document.activeElement.href);
-        top.document.location = '/admin' + location.path;
+        top.document.location = resolve(basePath, location.path);
     }
 }, true);
 
 if (top === window) {
-    document.location.pathname = '/admin' + document.location.pathname;
+    document.location.href = adminPath;
 } else {
-    let left = top.location.pathname.replace(/\/$/, ''),
-        right = '/admin' + document.location.pathname.replace(/\/$/, '');
+    let left = top.location.href.replace(/\/$/, ''),
+        right = adminPath.replace(/\/$/, '');
 
-    if(right === '/admin/cms/preview') {
-        // something goes wrong here
+    if (right === previewPath) {
         return;
     }
 
     if (left !== right) {
-        top.location.href = right + document.location.search;
+        top.location.href = adminPath + document.location.search;
     }
 }

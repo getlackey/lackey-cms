@@ -1,0 +1,16 @@
+
+<svg width="180px" height="72px" viewBox="0 244 180 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="179.166667" height="71.3754316"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.166667" height="71.3754316" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="image" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(0.000000, 244.000000)">
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+        <polygon id="Mountains" fill="#ACEFFF" points="79.0533984 33.8939357 87.1019525 41.3418617 99.8518123 26.3998708 117.701617 51.9105869 66.1865008 51.9105869"></polygon>
+        <ellipse id="Sun" fill="#ACEFFF" cx="74.3996489" cy="23.7671796" rx="5.11497604" ry="5.10214321"></ellipse>
+    </g>
+</svg>
