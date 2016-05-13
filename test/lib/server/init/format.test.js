@@ -89,7 +89,8 @@ describe('lib/server/init/format', () => {
                         defaultLocale: undefined,
                         admin: undefined,
                         edit: false,
-                        route: '/hakuna/matata'
+                        route: '/hakuna/matata',
+                        query: {}
                     });
                     callback();
                 },
@@ -134,7 +135,8 @@ describe('lib/server/init/format', () => {
                         locale: undefined,
                         defaultLocale: undefined,
                         edit: false,
-                        route: '/hakuna/matata.json'
+                        route: '/hakuna/matata.json',
+                        query: {}
                     });
                     callback();
                 },
@@ -185,7 +187,8 @@ describe('lib/server/init/format', () => {
                         locale: undefined,
                         defaultLocale: undefined,
                         edit: false,
-                        route: '/hakuna/matata.json'
+                        route: '/hakuna/matata.json',
+                        query: {}
                     });
                     callback();
                 },
@@ -230,7 +233,8 @@ describe('lib/server/init/format', () => {
                         "javascripts": ["my/js", "my2/js"],
                         "edit": false,
                         fragment: false,
-                        "route": "/hakuna/matata.json"
+                        "route": "/hakuna/matata.json",
+                        query: {}
                     });
                     res.__doc.should.be.eql({
                         stylesheets: ['my/css', 'my/css2'],
@@ -242,7 +246,8 @@ describe('lib/server/init/format', () => {
                         locale: undefined,
                         defaultLocale: undefined,
                         edit: false,
-                        route: '/hakuna/matata.json'
+                        route: '/hakuna/matata.json',
+                        query: {}
                     });
                     callback();
                 },

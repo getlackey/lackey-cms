@@ -2,6 +2,10 @@
 
 ## 0.4
 
+### 0.4.20
+
+ * Expose query
+
 ### 0.4.19
 
  * Fix routes in tweetable quotes
