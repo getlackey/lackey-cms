@@ -16,11 +16,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const lackey = require('../../../core/client/js'),
-    api = require('../../../cms/client/js/api'),
-    Media = require('../../../cms/client/js/media'),
-    modal = require('../../../core/client/js/modal'),
-    MediaModalController = require('../../../cms/client/js/manager/media');
+const lackey = require('core/client/js'),
+    api = require('core/client/js/api'),
+    Media = require('cms/client/js/media'),
+    modal = require('core/client/js/modal'),
+    MediaModalController = require('cms/client/js/manager/media');
+
 
 lackey.select('[data-lky-media]').forEach((element) => {
     let media = new Media(element);
@@ -60,11 +61,44 @@ function validPass(pass) { // TODO: move to backend
     return true;
 }
 
+lackey.bind('.sess-rm', 'click', (event, hook) => {
+    event.preventDefault();
+
+    api.delete('/cms/session/' + hook.getAttribute('data-id'))
+        .then(() => {
+            hook.parentNode.parentNode.removeChild(hook.parentNode);
+        }, (error) => {
+            console.error(error);
+        });
+});
+
+lackey.bind('.sess-rmCurrent', 'click', (event) => {
+    event.preventDefault();
+    window.location = '/logout';
+});
+
+lackey.bind('.sess-rmAll', 'click', (event) => {
+    event.preventDefault();
+
+    api.delete('/cms/session')
+        .then(() => {
+            var items = document.querySelectorAll('.active-sessions .session'),
+                i;
+            for (i = 0; i < items.length; i += 1) {
+                if (!items[i].classList.contains('current')) {
+                    items[i].parentNode.removeChild(items[i]);
+                }
+            }
+        }, (error) => {
+            console.error(error);
+        });
+});
+
 lackey.bind('lky:password', 'submit', (event, hook) => {
     event.preventDefault();
     event.cancelBubble = true;
     let data = lackey.form(hook);
-    if (data.newPassword !== data.newPassword2) {
+    if (data.newPassword !== data.newPassword2 && data.newPassword2 !== undefined) {
         alert('Passwords doesn\'t match');
         return false;
     }

@@ -16,19 +16,4 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const
-    wysiwyg = require('./wysiwyg'),
-    lackey = require('./../../../core/client/js');
-
-wysiwyg.init();
-
-lackey.hooks('structure-add-block').forEach((hook) => {
-
-    hook.innerText = 'Add Block';
-    hook.style.width = '100%';
-    hook.style.cursor = 'pointer';
-    hook.style.textAlign = 'center';
-    lackey.bind(hook, 'click', () => {
-        top.Lackey.manager.addBlock(hook.getAttribute('data-lky-content'), hook.getAttribute('data-lky-path'));
-    });
-});
+require('cms/client/js/wysiwyg').init();

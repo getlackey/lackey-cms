@@ -1,6 +1,6 @@
 <html lang="{locale}" data-default-locale="{defaultLocale}">
     <head>
-        <base href="/"/>
+        <base href="{host}/"/>
         {! to migrate elseewhre !}
         <meta http-equiv="content-language" content="{locale}">
         <link rel="stylesheet" href="css/cms/core/base.css"/>
@@ -11,12 +11,86 @@
         {/stylesheets}
     </head>
     <body>
-        <div class="lackey-cms">
-            {>"cms/cms/partials/header"/}
-            {+body /}
-        </div>
+        <body data-lky-hook="lackey">
+        <aside data-lky-hook="menu">
+            <section data-lky-hook="menu.logo">
+                Lackey.io
+            </section>
+            <ul data-lky-hook="menu.items">
+                <li>
+                    <a href="">Homepage</a>
+                </li>
+                <li>
+                    <a href="cms/user">Users</a>
+                </li>
+                <li>
+                    <a href="cms/media">Media</a>
+                </li>
+                <li>
+                    <a href="cms/taxonomy">Tags</a>
+                </li>
+                <li>
+                    <a href="cms/content">Content</a>
+                </li>
+                {@config}
+                    {@path root=. path="cms.items"}
+                        <li data-class="divider"></li>
+                        {#.}
+                            <li>
+                                <a href="{uri}">{label}</a>
+                            </li>
+                        {/.}
+                    {/path}
+                {/config}
+                <li data-class="divider"></li>
+                <li>
+                    <a href="http://lackey.io">Updates</a>
+                </li>
+                <li>
+                    <a href="cms/terms">Terms</a>
+                </li>
+                <li>
+                    <a href="logout">Logout</a>
+                </li>
+            </ul>
+            <section data-lky-hook="menu.footer">
+            </section>
+        </aside>
+        <main data-lky-hook="main-area">
+            <header data-lky-hook="header">
+                <button data-lky-hook="header.hamburger" onclick="document.body.setAttribute('data-lky-open', document.body.getAttribute('data-lky-open') === 'true' ? '' : 'true')">
+                    <div class="hamburger-box">
+                      <div class="hamburger-inner"></div>
+                    </div>
+                </button>
+                <button data-lky-hook="header.settings">Settings</button>
+                <button data-lky-hook="header.publish">
+                    <label data-lky-switch>
+                        <input type="checkbox" name="published"/>
+                        <span></span>
+                    </label>
+                </button>
+                <div data-lky-hook="header.user">
+                    <img src="{admin.image.source}"/>
+                    <span data-lky-hook="header.user.name">{admin.name}</span>
+                    <span data-lky-hook="header.user.acting"><span>Acting as:</span>Admin</span>
+                </div>
+                <div data-lky-hook="header.changes">
+                    <button data-lky-hook="header.save" data-lky-btn>Save</button>
+                    <span>
+                        <span>You've made 2 changes</span>
+                        <a data-lky-hook="header.cancel">Cancel all</a>
+                    </span>
+                </div>
+
+
+            </header>
+            {+body/}
+        </main>
+        <div data-lky-hook="menu.overlay"></div>
         {#javascripts}
             <script type="text/javascript" src="{.}"></script>
         {/javascripts}
+    </body>
     </body>
 </html>

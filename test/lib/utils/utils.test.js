@@ -18,7 +18,6 @@
 
 const SUtils = require('../../../lib/utils'),
     StdOutFixture = require('fixture-stdout'),
-    BbPromise = require('bluebird'),
     async = require('async'),
         path = require('path'),
     should = require('should');
@@ -34,12 +33,9 @@ describe('lib/utils', () => {
         SUtils.getProjectPath().should.be.eql(false);
         SUtils.setProjectPath(null);
         let current = process.cwd(),
-        testPath = __dirname + '/../../../test/mockup/project/sites/default';
+        testPath = __dirname + '/../../../test/mockup/project';
         process.chdir(testPath);
-        SUtils.getProjectPath().should.be.eql(path.resolve(testPath + '/../..') + '/');
-        SUtils.setProjectPath(null);
-        process.chdir(path.resolve(testPath + '/../..'));
-        SUtils.getProjectPath().should.be.eql(path.resolve(testPath + '/../..') + '/');
+        SUtils.getProjectPath().should.be.eql(path.resolve(testPath) + '/');
         process.chdir(current);
     });
 

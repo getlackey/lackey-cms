@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -20,20 +21,28 @@
  */
 const passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    User = require('../../models/user');
+    SUtils = require(LACKEY_PATH).utils;
 
 module.exports = function () {
     // Use local strategy
     passport.use(new LocalStrategy({
         usernameField: 'username',
         passwordField: 'password'
-    }, module.exports.handler(User)));
+    }, module.exports.handler(SUtils.cmsMod('core').model('user'))));
 };
 
+/**
+ * Handle request
+ * @param   {Promise<User>} promise
+ * @returns {Promise}
+ */
 module.exports.handler = function (promise) {
     return function (username, password, done) {
-        return promise.then((UserClass) => {
-            UserClass.getByProvider([UserClass.USERNAME, UserClass.EMAIL], username).then((user) => {
+        return promise
+            .then((UserClass) => {
+                return UserClass.getByProvider([UserClass.USERNAME, UserClass.EMAIL], username);
+            })
+            .then((user) => {
                 if (!user) {
                     return done(null, false, {
                         message: 'User doesn\'t exist'
@@ -46,7 +55,10 @@ module.exports.handler = function (promise) {
                 }
 
                 return done(null, user);
-            }, done);
-        });
+            })
+            .catch((error) => {
+                done(error);
+            });
+
     };
 };

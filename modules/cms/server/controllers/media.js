@@ -16,19 +16,14 @@
     limitations under the License.
 */
 
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../lib';
-}
+const SUtils = require(LACKEY_PATH).utils;
 
-const SUtils = require(LACKEY_PATH).utils,
-    Uploads = require(LACKEY_PATH).uploads;
-
-module.exports = SUtils.deps(
-        SUtils.cmsMod('media').model('media'),
+module.exports = SUtils
+    .waitForAs('mediaCtrl',
+        SUtils.cmsMod('core').model('media'),
         SUtils.cmsMod('core').controller('crud')
     )
-    .promised((Model, Crud) => {
+    .then((Model, Crud) => {
         class Controller extends Crud {
 
             static get model() {
@@ -44,15 +39,7 @@ module.exports = SUtils.deps(
             }
 
             static create(req, res) {
-                if (req.body && req.body instanceof Buffer) {
-                    Uploads.save(req.body, req.headers).then((response) => {
-                        return Model.create(response);
-                    }).then((model) => {
-                        res.api(model);
-                    }, (error) => {
-                        res.error(req, error);
-                    });
-                } else if (req.body.source) {
+                if (req.body.source) {
                     return Model
                         .create(req.body)
                         .then((model) => {

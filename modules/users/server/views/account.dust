@@ -83,6 +83,26 @@
                             </div>
                         </dd>
                     </dl>
+                    <dl>
+                        <dt>Sessions</dt>
+                        <dd>
+                            {#data.sessions}
+                            <div class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">
+                                {_doc.ipAddress} - {_doc.browser} - {_doc.os} &nbsp;
+                                {@eq key="{_doc.sid}" value="{data.currentSession}"}
+                                    (current session)
+                                {:else}
+                                    <a data-id="{_doc.sid}" class="sess-rm" href="#">delete</a> - last active: {_doc.humanLastActive}
+                                {/eq}
+                            </div>
+                            {/data.sessions}
+
+                            <div>
+                                <button class="btn btn-sm btn-warning sess-rmAll">Delete All Sesssions</button>
+                            </div>
+
+                        </dd>
+                    </dl>
                 </div>
             </div>
         </div>

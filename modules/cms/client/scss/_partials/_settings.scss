@@ -1,0 +1,388 @@
+        [data-lky-component="settings"] {
+            position: absolute;
+            top: $header-height;
+            left: 0px;
+            transform: translateX(-100%);
+            transition: transform $speed;
+            pointer-events: none;
+            box-shadow: 3px 23px 23px -2px rgba(0, 0, 0, 0.52);
+            > [data-lky-hook="settings.back"] {
+                width: 0px;
+                background: rgba(0, 0, 0, 0.25);
+                height: 100%;
+                float: left;
+            }
+            &[data-lky-open] {
+                transform: none;
+                pointer-events: all;
+            }
+            height: calc(100% - 75px);
+            [data-lky-hook="settings.breadcrumbs"] {
+                height: 10px;
+                /* for later $settings-breadcrumb-height; */
+                line-height: $settings-breadcrumb-height;
+                width: 100%;
+                color: $color-white;
+                text-transform: uppercase;
+                background-color: $color-background-highlight;
+                padding-left: 20px;
+                box-sizing: border-box;
+            }
+            [data-lky-hook="settings.pick"] {
+                width: $settings-pick-width;
+                background-color: $color-background;
+                height: 100%;
+                float: left;
+                > ul {
+                    padding: 0px;
+                    margin: 0px;
+                    > li {
+                        display: block;
+                        height: $item-height;
+                        line-height: $item-height;
+                        padding-left: $item-height;
+                        text-aling: left;
+                        border-bottom: 1px solid $color-washed;
+                        cursor: pointer;
+                        > a {
+                            color: $color-white;
+                            pointer-events: none;
+                            text-transform: uppercase;
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+            label {
+                margin: 5px 0px 15px;
+                display: block;
+                color: $color-background-highlight;
+                font-size: 12px;
+                text-transform: uppercase;
+                font-weight: 500;
+                > span {
+                    display: block;
+                    padding: 0px 0px 5px;
+                }
+                > input,
+                select {
+                    border: 1px solid $color-background-highlight;
+                    border-radius: 3px;
+                    display: block;
+                    width: 100%;
+                    text-transform: none;
+                    font-weight: normal;
+                    padding: 5px;
+                    color: $color-light-gray;
+                }
+            }
+            [data-lky-hook="settings.picker"] {
+                background-color: white;
+                color: $color-black;
+                height: 100%;
+                float: left;
+                transition: width $speed;
+                overflow-x: hidden;
+                overflow-y: auto;
+                width: $settings-edit-width;
+                padding: 25px;
+            }
+            [data-lky-hook="settings.picker"],
+            [data-lky-hook="settings.gallery"] {
+                input[type="search"] {
+                    border: 1px solid $color-background-highlight;
+                    color: $color-light-gray;
+                    border-radius: 30px;
+                    padding: 8px 10px;
+                    width: 100%;
+                }
+            }
+            [data-lky-hook="settings.picker"] {
+                ul {
+                    list-style: none;
+                    padding: 15px 0px;
+                    margin: 0px;
+                    li {
+                        border-bottom: 1px solid lighten($color-lackey-light-gray, 30%);
+                        div {
+                            display: table-cell;
+                            padding: 5px;
+                            vertical-align: middle;
+                            overflow: hidden;
+                        }
+                        div:first-child {
+                            width: 250px;
+                            span,
+                            pre {
+                                overflow-x: auto;
+                                width: 250px;
+                            }
+                            pre {
+                                font-size: 10px;
+                                color: $color-lackey-light-gray;
+                            }
+                        }
+                    }
+                }
+            }
+            [data-lky-hook="settings.meta"],
+            [data-lky-hook="settings.dimensions"],
+            [data-lky-hook="settings.taxonomy"],
+            [data-lky-hook="settings.blocks"],
+            [data-lky-hook="settings.diff"],
+            [data-lky-hook="settings.url"],
+            [data-lky-hook="settings.upload"],
+            [data-lky-hook="settings.gallery"] {
+                width: 0px;
+                background-color: white;
+                color: $color-black;
+                height: 100%;
+                float: left;
+                transition: width $speed;
+                overflow-x: hidden;
+                overflow-y: auto;
+                > div {
+                    height: 100%;
+                    width: $settings-edit-width;
+                    > ul {
+                        padding: 0px;
+                        margin: 0px;
+                    }
+                }
+            }
+            &[data-lky-has-media="true"] {
+                [data-lky-hook="settings.meta"] {
+                    > div {
+                        width: #{$settings-edit-width*2};
+                    }
+                }
+            }
+
+            [data-lky-hook="settings.dimensions"] {
+                > div {
+                    width: #{$settings-edit-width * 2};
+                    > ul {
+                        padding: 50px;
+                        list-style: none;
+                    }
+                }
+            }
+            [data-lky-hook="settings.dimensions"],
+            [data-lky-hook="settings.meta"] {
+                > div {
+                    > ul {
+                        > li {
+                            table {
+                                width: 100%;
+                                font-size: 11px;
+                                border-spacing: 0px;
+                                border-collapse: collapse;
+                                tr,
+                                td {
+                                    padding: 5px;
+                                    border: 1px solid $color-light-gray;
+                                    input {
+                                        width: 100%;
+                                    }
+                                }
+                                thead {
+                                    background-color: $color-lightest-gray;
+                                }
+                                tr:nth-child(even) {
+                                    background-color: $color-lightest-gray;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            [data-lky-hook="settings.meta"] {
+                input[type="text"] + [data-lky-btn] {
+                    display: block;
+                    width: 100%;
+                    margin-top: 5px;
+                    padding: 3px 10px;
+                }
+            }
+            [data-lky-hook="settings.blocks"] {
+                > div {
+                    margin: 65px;
+                }
+                ul {
+                    list-style: none;
+                    padding: 0px;
+                    marign: 0px;
+                }
+            }
+            [data-lky-hook="settings.diff"] {
+                > aside {
+                    padding: 50px;
+                }
+            }
+            [data-lky-hook="settings.meta"] {
+                > div > ul {
+                    padding: 50px;
+                    list-style: none;
+                }
+            }
+            [data-lky-hook="settings.gallery"] {
+                > div {
+                    width: #{$settings-edit-width*2};
+                    padding: 25px;
+                    table {
+                        width: 100%;
+                        font-size: 11px;
+                        border-spacing: 0px;
+                        border-collapse: collapse;
+                        margin-top: 15;
+                        tr,
+                        td {
+                            padding: 5px;
+                        }
+                        thead {
+                            background-color: $color-lightest-gray;
+                        }
+                        tr:nth-child(even) {
+                            background-color: $color-lightest-gray;
+                        }
+                        tr {
+                            border-bottom: 1px solid lighten($color-lackey-light-gray, 30%);
+                            td {
+                                img,
+                                video {
+                                    width: auto;
+                                    height: 50px;
+                                    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+                                    float: left;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            [data-lky-hook="settings.taxonomy"] {
+                > div {
+                    padding: 50px;
+                    width: #{$settings-edit-width - 100px};
+                    small {
+                        font-size: 10px;
+                        color: $color-washed;
+                        padding: 10px;
+                        display: block;
+                        line-height: 150%;
+                        letter-spacing: 0px;
+                    }
+                }
+            }
+            &[data-lky-has-media="false"] {
+                [data-lky-hook="settings.open.meta"],
+                [data-lky-hook="settings.open.clear"] {
+                    background-color: $color-lackey-light-gray;
+                    pointer-events: none;
+                    a {
+                        color: $color-lackey-dark-gray;
+                        cursor: none;
+                    }
+                }
+            }
+            &[data-lky-edit="meta"] {
+                [data-lky-hook="settings.open.meta"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.meta"] {
+                    width: $settings-edit-width;
+                }
+                &[data-lky-has-media="true"] {
+                    [data-lky-hook="settings.meta"] {
+                        width: #{$settings-edit-width * 2};
+                    }
+                }
+            }
+            &[data-lky-edit="dimensions"] {
+                [data-lky-hook="settings.open.dimensions"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.dimensions"] {
+                    width: #{$settings-edit-width * 2};
+                }
+            }
+            &[data-lky-edit="taxonomy"] {
+                [data-lky-hook="settings.open.taxonomy"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.taxonomy"] {
+                    width: $settings-edit-width;
+                }
+            }
+            &[data-lky-edit="blocks"] {
+                [data-lky-hook="settings.open.blocks"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.blocks"] {
+                    width: $settings-edit-width;
+                }
+            }
+            &[data-lky-edit="diff"] {
+                [data-lky-hook="settings.open.diff"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.diff"] {
+                    width: #{$settings-edit-width*2};
+                }
+            }
+            &[data-lky-edit="url"] {
+                [data-lky-hook="settings.open.url"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.url"] {
+                    width: #{$settings-edit-width};
+                }
+            }
+            &[data-lky-edit="upload"] {
+                [data-lky-hook="settings.open.upload"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.upload"] {
+                    width: #{$settings-edit-width};
+                }
+            }
+            &[data-lky-edit="gallery"] {
+                [data-lky-hook="settings.open.gallery"] {
+                    background-color: $color-background-accent;
+                }
+                [data-lky-hook="settings.gallery"] {
+                    width: #{$settings-edit-width*2};
+                }
+            }
+        }
+
+        [data-lky-hook="settings.overlay"] {
+            position: fixed;
+            top: $header-height;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            background-color: $color-background-highlight;
+            transform: transition;
+            transition: transform $speed, opacity $speed;
+        }
+
+        [data-lky-component="settings"] + [data-lky-component="settings"] {
+            > [data-lky-hook="settings.back"] {
+                width: 50px;
+            }
+        }
+
+        [data-lky-component="settings"] + [data-lky-component="settings"] + [data-lky-component="settings"] {
+            > [data-lky-hook="settings.back"] {
+                width: 100px;
+            }
+        }
+
+        [data-lky-component="settings"] + [data-lky-component="settings"] + [data-lky-component="settings"] +[data-lky-component="settings"] {
+            > [data-lky-hook="settings.back"] {
+                width: 150px;
+            }
+        }

@@ -18,11 +18,12 @@
 
 const SUtils = require(LACKEY_PATH).utils;
 
-module.exports = SUtils.deps(
-        require('../models/taxonomy'),
+module.exports = SUtils
+    .waitForAs('taxonomyCtrl',
+        SUtils.cmsMod('core').model('taxonomy'),
         SUtils.cmsMod('core').controller('crud')
     )
-    .promised((Model, Crud) => {
+    .then((Model, Crud) => {
         class Controller extends Crud {
 
             static get model() {

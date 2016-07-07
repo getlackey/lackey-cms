@@ -66,10 +66,6 @@ describe('lib/server/init/locale', () => {
             route: '/about',
             locale: 'zh-Hans'
         },
-        '/zh-yue/about': {
-            route: '/about',
-            locale: 'zh-yue'
-        },
         '/zh-Hant-TW/about': {
             route: '/about',
             locale: 'zh-Hant-TW'
@@ -98,6 +94,19 @@ describe('lib/server/init/locale', () => {
                 });
                 next();
             });
+        });
+
+    });
+
+    it('Redundant', (cb) => {
+
+        translate({
+            path: '/zh-yue/about'
+        }, {
+            redirect: (path) => {
+                path.should.be.eql('/yue/about');
+                cb();
+            }
         });
 
     });

@@ -18,11 +18,12 @@
 
 const SUtils = require(LACKEY_PATH).utils;
 
-module.exports = SUtils.deps(
-        SUtils.cmsMod('cms').model('template'),
+module.exports = SUtils
+    .waitForAs('templateCtrl',
+        SUtils.cmsMod('core').model('template'),
         SUtils.cmsMod('core').controller('crud')
     )
-    .promised((Model, Crud) => {
+    .then((Model, Crud) => {
         class Controller extends Crud {
 
             static get model() {
@@ -34,21 +35,22 @@ module.exports = SUtils.deps(
             }
 
             static get tableConfig() {
-                return null;/*{
-                    name: {
-                        label: 'Name',
-                        like: true
-                    },
-                    label: {
-                        label: 'Label',
-                        like: true
-                    },
-                    type: {
-                        name: 'Type',
-                        parse: 'return arguments[0] ? arguments[0].label : \'\''
-                    }
+                return null;
+                /*{
+                                    name: {
+                                        label: 'Name',
+                                        like: true
+                                    },
+                                    label: {
+                                        label: 'Label',
+                                        like: true
+                                    },
+                                    type: {
+                                        name: 'Type',
+                                        parse: 'return arguments[0] ? arguments[0].label : \'\''
+                                    }
 
-                };*/
+                                };*/
             }
 
 

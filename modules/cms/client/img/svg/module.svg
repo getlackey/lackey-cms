@@ -1,0 +1,25 @@
+
+<svg width="180px" height="72px" viewBox="0 366 180 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="179.166667" height="71.3754316"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.166667" height="71.3754316" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="image" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(0.000000, 366.000000)">
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+        <g id="Check-Mark" transform="translate(23.000000, 15.000000)" stroke="#00CCFF" stroke-width="2">
+            <circle id="BG" fill="#FFFFFF" cx="9" cy="8" r="8"></circle>
+            <polyline id="Check" points="12.557132 5.62962963 7.78683529 10.3999263 6.00431894 8.61740994"></polyline>
+        </g>
+        <rect id="Text" fill="#ACEFFF" x="49" y="18" width="105.914063" height="2.81005636"></rect>
+        <rect id="Text" fill="#ACEFFF" x="49" y="25" width="105.914063" height="2.81005636"></rect>
+        <g id="Check-Mark" transform="translate(24.000000, 41.000000)" stroke="#ACEFFF" stroke-width="2" fill="#FFFFFF">
+            <circle id="BG" cx="8" cy="8" r="8"></circle>
+        </g>
+        <rect id="Text" fill="#ACEFFF" x="49" y="44" width="105.914063" height="2.81005636"></rect>
+        <rect id="Text" fill="#ACEFFF" x="49" y="51" width="105.914063" height="2.81005636"></rect>
+    </g>
+</svg>

@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true, esnext:true, mocha:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -80,13 +80,18 @@ describe('modules/users/server/auth/strategies/github', function () {
 
     before((done) => {
         dbsInit(() => {
-            strategy = require('../../../../server/auth/dynamic-strategies/github');
+            try {
+                strategy = require('../../../../server/auth/dynamic-strategies/github');
+            } catch (e) {
+                console.error(e);
+                console.error(e.stack);
+                return done(e);
+            }
             done();
         });
     });
 
     it('Handles valid token for new User', function (next) {
-
         var
             users = {
                 saveOAuthUserProfile: function (err, user, isNew, callback) {
@@ -137,9 +142,9 @@ describe('modules/users/server/auth/strategies/github', function () {
         strategy.handler(provider, UserMockup, users)(req, accessTokenValidExists, 'refreshToken', profile, done);
     });
 
-    it('Setups', function() {
+    it('Setups', function () {
         strategy({
-            name : 'githug',
+            name: 'githug',
             clientID: 'test',
             clientSecret: 'test'
         });

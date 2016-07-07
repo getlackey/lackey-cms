@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,23 +17,30 @@
     limitations under the License.
 */
 
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../lib';
-}
 
-const editable = require('./server/lib/dust/editable'),
+const
+    SUtils = require(LACKEY_PATH).utils,
+    editable = require('./server/lib/dust/editable'),
+    translate = require('./server/lib/dust/translate'),
     image = require('./server/lib/dust/media'),
     error = require('./server/lib/dust/error'),
     embed = require('./server/lib/dust/embed'),
     attr = require('./server/lib/dust/attr'),
     block = require('./server/lib/dust/block'),
     list = require('./server/lib/dust/list'),
+    acronym = require('./server/lib/dust/acronym'),
+    is = require('./../core/shared/dust/is'),
     taxonomy = require('./server/lib/dust/taxonomy'),
     hasContent = require('./server/lib/dust/has-content'),
     tweet = require('./server/lib/dust/tweet'),
+    config = require('./server/lib/dust/config'),
+    userHas = require('./server/lib/dust/user-has'),
+    socket = SUtils.cmsMod('core').path('server/models/media/sockets'),
     sitemap = require(LACKEY_PATH).sitemap;
 
+/**
+ * @param {lackey-cms/lib/server/Server} instance
+ */
 module.exports = (instance) => {
 
     instance.addDustHelper(error);
@@ -45,14 +53,31 @@ module.exports = (instance) => {
     instance.addDustHelper(taxonomy);
     instance.addDustHelper(hasContent);
     instance.addDustHelper(tweet);
+    instance.addDustHelper(is);
+    instance.addDustHelper(translate);
+    instance.addDustHelper(acronym);
+    instance.addDustHelper(config);
+    instance.addDustHelper(userHas);
+
     sitemap.addSource(() => {
         return require('./server/controllers/content')
             .then((ctrl) => ctrl.generateSitemap());
     });
+
+    instance.addMiddleware((server) => {
+        return require('./server/controllers/redirect')
+            .then((RedirectController) => {
+                server.use(RedirectController.capture);
+
+            });
+    });
+
     instance.addPostRouteWare((server) => {
         return require('./server/controllers/page')
             .then((PageController) => {
                 server.use(PageController.capture);
             });
     });
+
+    instance.addSocketware(socket);
 };

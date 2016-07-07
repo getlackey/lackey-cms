@@ -1,0 +1,82 @@
+[data-lky-autocomplete] {
+    display: block;
+    -appearance: textfield;
+    padding: 1px;
+    overflow: hidden;
+    word-wrap: break-word;
+    cursor: text;
+    background-color: white;
+    border: 1px solid transparentize($color-light-gray,0.5);
+    box-shadow: 1px 1px 1px 0 $color-light-gray inset;
+    min-height: 32px;
+    border-radius: 6px;
+    [data-lky-tags] {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        > li {
+            margin: 1px;
+            padding: 4px 15px 1px;
+            display: block;
+            width: calc(100% - 31px);
+            float: left;
+            height: 26px;
+            line-height: 25px;
+            border-radius: 6px;
+            background: #00CBFE;
+            color: $color-white;
+            background: $color-background-highlight;
+            > a {
+                margin-left: 5px;
+                font-weight: 900;
+                float: right;
+                cursor: pointer;
+                &:hover {
+                    color: $color-background-accent;
+                }
+            }
+        }
+    }
+    > input[type="text"] {
+        border: 0;
+        outline: 0;
+        margin: 2px;
+        padding: 0 0 0 5px;
+        float: left;
+        height: 26px;
+        font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    [data-lky-suggestions] {
+        margin-top: 33px;
+        margin-left: 0px;
+        position: absolute;
+        padding: 5px 0;
+        z-index: 999;
+        width: 50%;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, .2);
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+        list-style-type: none;
+        max-height: 280px;
+        overflow-y: auto;
+        > li {
+            padding: 5px 10px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #000;
+            background-color: #fff;
+            &[data-lky-selected] {
+                background-color: #000;
+                color: #fff;
+            }
+        }
+        &:empty {
+            display: none;
+        }
+    }
+}

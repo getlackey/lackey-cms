@@ -1,0 +1,18 @@
+
+<svg width="180px" height="72px" viewBox="0 0 180 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="179.732522" height="71.3754316"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.732522" height="71.3754316" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="header" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Text" transform="translate(60.286457, 25.290507)" fill="#00CCFF">
+            <rect id="text" x="0.0734793218" y="0" width="63.5200476" height="8.13694582"></rect>
+            <rect id="text" x="9.29413139" y="12.6574713" width="45.0787434" height="8.13694582"></rect>
+        </g>
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+    </g>
+</svg>

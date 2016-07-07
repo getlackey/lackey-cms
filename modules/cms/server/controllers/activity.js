@@ -16,18 +16,15 @@
     limitations under the License.
 */
 
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../lib';
-}
 
 const SUtils = require(LACKEY_PATH).utils;
 
-module.exports = SUtils.deps(
+module.exports = SUtils
+    .waitForAs('lackey-cms/modules/cms/server/controllers/activity',
         SUtils.cmsMod('core').model('activity-log'),
         SUtils.cmsMod('core').controller('crud')
     )
-    .promised((Model, Crud) => {
+    .then((Model, Crud) => {
         class Controller extends Crud {
 
             static get model() {

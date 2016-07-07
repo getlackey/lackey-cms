@@ -17,48 +17,6 @@
     limitations under the License.
 */
 const
-    Manager = require('./manager'),
-    querystring = require('query-string'),
-    lackey = require('./../../../core/client/js');
+    Manager = require('cms/client/js/manager/index.new.js');
 
-Manager.init({
-    controls: {
-        structure: 'lky:cms.area.structure',
-        save: 'lky:cms.actions.save',
-        visibility: 'lky:cms.actions.visibility',
-        settings: 'lky:cms.actions.settings',
-        debug: 'lky:cms.actions.debug',
-        taxonomy: 'lky:cms.actions.taxonomy',
-        iframe: 'lky:iframe',
-        properties: 'lky:cms.actions.properties',
-        preview: 'lky:cms.actions.preview',
-        create: 'lky:cms.actions.create',
-        createdAt: 'lky:cms.page.created-at',
-        createdAtTime: 'lky:cms.page.created-at-time'
-    }
-});
-
-lackey.bind('lky:actAs', 'click', (event, hook) => {
-    event.preventDefault();
-    event.cancelBubble = true;
-    lackey.setCookie('lky-view-as', hook.getAttribute('data-lky-act-as'));
-    window.location.reload();
-    return false;
-});
-
-lackey.bind('lky:viewAs', 'click', (event, hook) => {
-    var qs = querystring.parse(document.location.search);
-    event.preventDefault();
-    event.cancelBubble = true;
-    qs.variant = hook.getAttribute('data-lky-view-as');
-    document.location.search = '?' + querystring.stringify(qs);
-    return false;
-});
-
-lackey.bind('lky:viewIn', 'click', (event, hook) => {
-    event.preventDefault();
-    event.cancelBubble = true;
-    lackey.setCookie('lky-view-in', hook.getAttribute('data-lky-language'));
-    window.location.reload();
-    return false;
-});
+Manager.init();

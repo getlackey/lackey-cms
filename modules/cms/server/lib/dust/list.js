@@ -15,10 +15,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
 
 const _ = require('lodash'),
     SCli = require(LACKEY_PATH).cli,
@@ -36,7 +32,7 @@ module.exports = (dust) => {
             let container = treeParser.get(params.content.layout, params.path, params.field || false),
                 promise;
 
-            if (container) {
+            if (container && Array.isArray(container.items)) {
                 promise = SUtils.serialPromise(container.items, (item, idx) => {
                     let innerParams = _.merge({}, params, {
                         path: (params.path ? (params.path + '.') : '') + 'items.' + idx,
@@ -48,13 +44,6 @@ module.exports = (dust) => {
                 promise = Promise.resolve();
             }
             promise.then(() => {
-                if (params.editMode) {
-                    injectedChunk.write('<div data-lky-hook="structure-add-block" data-lky-path="');
-                    injectedChunk.write(params.path);
-                    injectedChunk.write('" data-lky-content="');
-                    injectedChunk.write(params.content.id);
-                    injectedChunk.write('"></div>');
-                }
                 injectedChunk.end();
             }, (error) => {
                 dust.helpers.error(injectedChunk, error);

@@ -1,0 +1,29 @@
+
+<svg width="180px" height="72px" viewBox="561 488 180 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="179.166667" height="71.3754316"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.166667" height="71.3754316" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="x3-image" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(561.000000, 488.000000)">
+        <rect id="Rectangle-222" fill="#FFFFFF" x="1.94482422" y="1.78921569" width="58.4562174" height="67.9901961"></rect>
+        <rect id="Rectangle-222" fill="#FFFFFF" x="118.857259" y="1.78921569" width="58.4562174" height="67.9901961"></rect>
+        <rect id="Rectangle-222" fill="#ACEFFF" x="60.4010417" y="2" width="58.4562174" height="67.9901961"></rect>
+        <g id="Group-6" transform="translate(13.000000, 22.000000)" fill="#ACEFFF">
+            <polygon id="Mountains" points="9.28140664 10.9230238 14.6380842 15.8799561 23.1236938 5.93538396 35.0035477 22.9139218 0.717903129 22.9139218"></polygon>
+            <ellipse id="Sun" cx="5.84845526" cy="4.15218031" rx="3.40424839" ry="3.39570757"></ellipse>
+        </g>
+        <g id="Group-6" transform="translate(132.000000, 22.000000)" fill="#ACEFFF">
+            <polygon id="Mountains" points="9.28140664 10.9230238 14.6380842 15.8799561 23.1236938 5.93538396 35.0035477 22.9139218 0.717903129 22.9139218"></polygon>
+            <ellipse id="Sun" cx="5.84845526" cy="4.15218031" rx="3.40424839" ry="3.39570757"></ellipse>
+        </g>
+        <g id="Group-6" transform="translate(71.629150, 22.000000)" fill="#FFFFFF">
+            <polygon id="Mountains" points="9.28140664 10.9230238 14.6380842 15.8799561 23.1236938 5.93538396 35.0035477 22.9139218 0.717903129 22.9139218"></polygon>
+            <ellipse id="Sun" cx="5.84845526" cy="4.15218031" rx="3.40424839" ry="3.39570757"></ellipse>
+        </g>
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+    </g>
+</svg>

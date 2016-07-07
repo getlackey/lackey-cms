@@ -1,5 +1,6 @@
 /* jslint node:true, esnext:true */
 'use strict';
+
 /*
     Copyright 2016 Enigma Marketing Services Limited
 
@@ -18,7 +19,7 @@
 const _ = require('lodash');
 
 module.exports = _.merge({}, require('./default'), {
-    isTest : true,
+    isTest: true,
     name: 'Lackey CMS Default Test Config',
     datasources: {
         pg: {
@@ -27,7 +28,7 @@ module.exports = _.merge({}, require('./default'), {
             }
         }
     },
-    http : {
-        port : 4444
+    http: {
+        port: 4444
     }
 });

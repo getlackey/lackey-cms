@@ -2,15 +2,15 @@
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 
-const lackey = require('./../../../../core/client/js'),
-    treeParser = require('./../../../shared/treeparser'),
-    api = require('../api');
+const lackey = require('core/client/js'),
+    treeParser = require('cms/shared/treeparser'),
+    api = require('core/client/js/api');
 
 let picker = lackey.select('[data-lky-author-picker]')[0],
     toUpdate = lackey.select('[data-lky-author]'),
     users = {},
     defContent;
-
+picker = null; //TODO
 if (picker) {
     top.Lackey.manager.getDefault()
         .then((def) => {

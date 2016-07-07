@@ -1,4 +1,5 @@
 /* jslint esnext:true, node:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -18,11 +19,12 @@
 
 const SUtils = require(LACKEY_PATH).utils;
 
-module.exports = SUtils.deps(
-        SUtils.cmsMod('users').model('role'),
+module.exports = SUtils
+    .waitForAs('lackey-cms/modules/cms/server/controllers/role',
+        SUtils.cmsMod('core').model('role'),
         SUtils.cmsMod('core').controller('crud')
     )
-    .promised((Model, Crud) => {
+    .then((Model, Crud) => {
         class Controller extends Crud {
 
             static get model() {
@@ -34,21 +36,22 @@ module.exports = SUtils.deps(
             }
 
             static get tableConfig() {
-                return null;/*{
-                    name: {
-                        label: 'Name',
-                        like: true
-                    },
-                    label: {
-                        label: 'Label',
-                        like: true
-                    },
-                    type: {
-                        name: 'Type',
-                        parse: 'return arguments[0] ? arguments[0].label : \'\''
-                    }
+                return null;
+                /*{
+                                    name: {
+                                        label: 'Name',
+                                        like: true
+                                    },
+                                    label: {
+                                        label: 'Label',
+                                        like: true
+                                    },
+                                    type: {
+                                        name: 'Type',
+                                        parse: 'return arguments[0] ? arguments[0].label : \'\''
+                                    }
 
-                };*/
+                                };*/
             }
 
 

@@ -1,0 +1,37 @@
+
+<svg width="181px" height="72px" viewBox="280 488 181 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0.916666667" y="0" width="179.166667" height="71.3754316"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.166667" height="71.3754316" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="0.345874663" y="0.286413389" width="27.4683416" height="27.4683416" rx="2"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="27.4683416" height="27.4683416" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="32.8620037" y="0.286413389" width="27.4683416" height="27.4683416" rx="2"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="27.4683416" height="27.4683416" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+        <rect id="path-7" x="65.3781327" y="0.286413389" width="27.4683416" height="27.4683416" rx="2"></rect>
+        <mask id="mask-8" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="27.4683416" height="27.4683416" fill="white">
+            <use xlink:href="#path-7"></use>
+        </mask>
+        <rect id="path-9" x="97.8942618" y="0.286413389" width="27.4683416" height="27.4683416" rx="2"></rect>
+        <mask id="mask-10" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="27.4683416" height="27.4683416" fill="white">
+            <use xlink:href="#path-9"></use>
+        </mask>
+    </defs>
+    <g id="x4-widget" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(280.000000, 488.000000)">
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+        <rect id="Text" fill="#ACEFFF" x="68" y="14" width="47" height="2.81005636"></rect>
+        <g id="Group-5" transform="translate(28.725806, 25.500000)" stroke="#00CCFF" stroke-width="4">
+            <use id="Rectangle-33-Copy-3" mask="url(#mask-4)" xlink:href="#path-3"></use>
+            <use id="Rectangle-33-Copy-3" mask="url(#mask-6)" xlink:href="#path-5"></use>
+            <use id="Rectangle-33-Copy-3" mask="url(#mask-8)" xlink:href="#path-7"></use>
+            <use id="Rectangle-33-Copy-3" mask="url(#mask-10)" xlink:href="#path-9"></use>
+        </g>
+    </g>
+</svg>

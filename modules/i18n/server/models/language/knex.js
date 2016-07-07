@@ -20,11 +20,11 @@ const
     SUtils = require(LACKEY_PATH).utils;
 
 module.exports = SUtils
-    .deps(
+    .waitForAs('knex',
         require(LACKEY_PATH).datasources.get('knex', 'default'),
         require(LACKEY_PATH).configuration()
     )
-    .promised((knex, config) => {
+    .then((knex, config) => {
         return Promise
             .resolve()
     .then(() => {

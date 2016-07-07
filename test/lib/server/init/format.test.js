@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true, esnext:true, mocha:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,8 +16,9 @@
     limitations under the License.
 */
 
-const should = require('should'),
-    middleware = require('../../../../lib/server/init/format');
+const middleware = require('../../../../lib/server/init/format');
+
+require('should');
 
 describe('lib/server/init/format', () => {
     it('Setup', () => {
@@ -29,7 +30,9 @@ describe('lib/server/init/format', () => {
             }
         };
 
-        middleware(server);
+        middleware(server, {
+            get: (field) => field
+        });
 
         server._middlewares.should.be.eql([
             middleware.cors,
@@ -52,7 +55,7 @@ describe('lib/server/init/format', () => {
                 'Access-Control-Allow-Headers': 'Content-Type'
             });
             callback();
-        })
+        });
 
     });
 
@@ -66,8 +69,7 @@ describe('lib/server/init/format', () => {
                 _headers: {},
                 header: (name, value) => res._headers[name] = value,
                 send: function (output) {
-                    //console.error(output);
-                    callback(new Error('Shouldn\'t be here'));
+                    throw output;
                 },
                 render: function (template, data) {
                     template.should.be.eql('adsaf');
@@ -90,7 +92,9 @@ describe('lib/server/init/format', () => {
                         admin: undefined,
                         edit: false,
                         route: '/hakuna/matata',
-                        query: {}
+                        query: {},
+                        env: 'development',
+                        host: 'host'
                     });
                     callback();
                 },
@@ -136,7 +140,9 @@ describe('lib/server/init/format', () => {
                         defaultLocale: undefined,
                         edit: false,
                         route: '/hakuna/matata.json',
-                        query: {}
+                        query: {},
+                        env: 'development',
+                        host: 'host'
                     });
                     callback();
                 },
@@ -188,7 +194,9 @@ describe('lib/server/init/format', () => {
                         defaultLocale: undefined,
                         edit: false,
                         route: '/hakuna/matata.json',
-                        query: {}
+                        query: {},
+                        env: 'development',
+                        host: 'host'
                     });
                     callback();
                 },
@@ -234,7 +242,9 @@ describe('lib/server/init/format', () => {
                         "edit": false,
                         fragment: false,
                         "route": "/hakuna/matata.json",
-                        query: {}
+                        query: {},
+                        env: 'development',
+                        host: 'host'
                     });
                     res.__doc.should.be.eql({
                         stylesheets: ['my/css', 'my/css2'],
@@ -247,7 +257,9 @@ describe('lib/server/init/format', () => {
                         defaultLocale: undefined,
                         edit: false,
                         route: '/hakuna/matata.json',
-                        query: {}
+                        query: {},
+                        env: 'development',
+                        host: 'host'
                     });
                     callback();
                 },

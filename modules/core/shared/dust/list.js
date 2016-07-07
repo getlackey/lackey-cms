@@ -23,13 +23,10 @@ module.exports = (dust) => {
         let list = params.list || [],
             as = params.iterator || '$key';
 
-        let old = context.stack.head;
         list.forEach(function (item, index) {
             item[as] = index;
-            context.stack.head = item;
-            chunk.render(bodies.block, context);
+            chunk.render(bodies.block, context.push(item));
         });
-        context.stack.head = old;
 
         return chunk;
 

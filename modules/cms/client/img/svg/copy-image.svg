@@ -1,0 +1,24 @@
+
+<svg width="180px" height="72px" viewBox="0 122 180 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="179.166667" height="71.3754316"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="179.166667" height="71.3754316" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="text-/-image" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(0.000000, 122.000000)">
+        <rect id="Rectangle-222" fill-opacity="0.5" fill="#ACEFFF" x="0" y="1.78921569" width="172" height="67.9901961"></rect>
+        <g id="Body" transform="translate(27.472222, 26.241830)" fill="#00CCFF">
+            <rect id="Text" x="0" y="0" width="41.6934377" height="2.81005636"></rect>
+            <rect id="Text" x="0" y="11.2402255" width="41.6934377" height="2.81005636"></rect>
+            <rect id="Text" x="0" y="5.62011273" width="35.4957645" height="2.81005636"></rect>
+            <rect id="Text" x="0" y="16.8603382" width="24.2272679" height="2.81005636"></rect>
+        </g>
+        <rect id="Rectangle-222" fill="#FFFFFF" x="89.5833333" y="1.19281046" width="89.5833333" height="69.1830065"></rect>
+        <polygon id="Mountains" fill="#ACEFFF" points="121.004535 33.2130441 127.210485 38.9558716 137.041443 27.4346405 150.804784 47.1050351 111.083333 47.1050351"></polygon>
+        <ellipse id="Sun" fill="#ACEFFF" cx="117.416196" cy="25.4046671" rx="3.94397384" ry="3.93407891"></ellipse>
+        <use id="Screen" stroke-opacity="0" stroke="#00CCFF" mask="url(#mask-2)" stroke-width="4" xlink:href="#path-1"></use>
+    </g>
+</svg>

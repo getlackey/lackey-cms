@@ -15,12 +15,12 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
 */
-const template = require('./../../../../core/client/js/template'),
-      lackey = require('./../../../../core/client/js'),
-      DummyImage = require('./dummy'),
-      api = require('./../api');
-
-require('filedrop');
+const template = require('core/client/js/template'),
+      lackey = require('core/client/js'),
+      DummyImage = require('cms/client/js/manager/dummy'),
+      api = require('core/client/js/api'),
+      modal = require('core/client/js/modal'),
+      Upload = require('core/client/js/upload');
 
 class MediaRepository {
       constructor(root, options) {
@@ -71,31 +71,17 @@ class MediaRepository {
 
             this._listeners = [];
             this.root = root;
-            this.zone = new window.FileDrop(lackey.hook('dropZone', root), {
-                  multiple: false
-            });
-            this.zone.event('send', function (files) {
-                  let count = files.length;
-                  files.each((file, idx) => {
-                        let index = idx;
-                        file.event('done', (xhr) => {
-                              if (index === 0) {
-                                    let data = JSON.parse(xhr.responseText);
-                                    self.select(data);
-                              }
 
-                              if (--count === 0) {
-                                    //done
-                              }
+            this.zone = new Upload(lackey.hook('dropZone', root));
+            this.zone.on('done', (uploader, images) => {
+                  if (images && images.length) {
+                        self.select(images[0].data);
+                  }
+                  self.filter = '';
+                  self.page = 0;
+                  self.list();
+            });
 
-                        });
-                        file.sendTo('/api/cms/media');
-                  });
-            });
-            this.zone.event('iframeDone', function () {
-                  //
-            });
-            this.zone.event('upload', function () {});
             this.list();
       }
       select(id, url, type) {
@@ -236,5 +222,12 @@ function ModalController(rootNode, vars, resolve) {
       });
 
 }
+
+ModalController.open = (media, node) => {
+      return modal.open('cms/cms/image', {
+            node: node,
+            media: media
+      }, ModalController);
+};
 
 module.exports = ModalController;

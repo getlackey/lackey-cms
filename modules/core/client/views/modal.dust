@@ -1,4 +1,5 @@
 <div class="lackey-cms">
+    <div data-lky-overlay></div>
     <div class="modal">
         {+body/}
     </div>

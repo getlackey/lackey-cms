@@ -1,36 +1,59 @@
 {>"cms/cms/main"/}
 
 {<body}
-<div class="bt">
-    <div class="container">
-        <form data-lky-hook="create">
-            <h2>Create Page</h2>
-            <dl>
-                <dt>Title</dt>
-                <dd>
-                    <input type="text" class="form-control" name="name"/>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Route</dt>
-                <dd>
-                    <input type="text" class="form-control" name="route"/>
-                </dd>
-            </dl>
-            <ul class="templates">
+<section data-lky-component="table">
+    <h2>Create Page</h2>
+    <form>
+        <label>
+            <span>Title</span>
+            <input data-lky-input type="text" name="title" placeholder="Place your path here"/>
+        </label>
+        <label>
+            <span>Slug</span>
+            <input data-lky-input type="text" name="slug" placeholder="/place-your/path/here"/>
+        </label>
+        <table class="table" data-lky-table data-lky-table-hover>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Preview</th>
+                    <th>Name</th>
+                    <th>Prefix</th>
+                    <th><button data-lky-btn-inverted type="submit">Create</button></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
                 {#data.templates}
-                    <li>
-                        <label for="template_{id}">
-                            <span>
-                                <input id="template_{id}" type="radio" name="templateId" value="{id}"/>{name}
-                            </span>
-                        <img src="{thumb}"/>
-                        </label>
-                    </li>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <img src="{thumb}"/>
+                        </td>
+                        <td>
+                            {name}
+                        </td>
+                        <td>
+                            <pre>{prefix}</pre>
+                        </td>
+                        <td>
+                            <input type="radio" name="template" value="{id}"/>
+                        </td>
+                        <td></td>
+                    </tr>
                 {/data.templates}
-            </ul>
-            <button class="btn btn-block btn-default" type="submit">Create</button>
-        </form>
-    </div>
-</div>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th><button data-lky-btn type="submit">Create</button></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</section>
 {/body}

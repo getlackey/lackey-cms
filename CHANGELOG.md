@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5
+
+ * removed all CLI tools
+ * gulp incorporated
+
+### Breaking changes
+
+ * Moving content of `/sites/<SITENAME>` to `/`
+ * Rather using relative paths in frontend JS we use now paths scoped to `/modules` both in project and lackey
+
+
 ## 0.4
 
 ### 0.4.20

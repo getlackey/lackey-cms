@@ -33,9 +33,9 @@
                 <td>
                     <ul>
                         {?path}
-                            <li><a href="/{path}">view</a></li>
+                            <li><a href="{path}">view</a></li>
                         {/path}
-                        <li><a href="/cms/media/{id}">edit</a></li>
+                        <li><a href="cms/media/{id}">edit</a></li>
                     </ul>
                 </td>
             </tr>

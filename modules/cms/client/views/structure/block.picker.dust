@@ -1,0 +1,33 @@
+{>"cms/core/modal"/}
+
+{<body}
+  <div class="bt">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Add new block</h4>
+      </div>
+      <div class="modal-body block-picker" style="overflow-y: auto; min-height: 150px">
+          <ul>
+          {#blocks}
+            <li>
+                <label>
+                  <input type="radio" name="new-block" value="{path}"/>
+                  <img src="{thumb}"/>
+                  {name}
+                </label>
+
+            </li>
+          {/blocks}
+          </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-secondary"
+                data-lky-hook="ok">OK</button>
+        <button type="button"
+                class="btn btn-secondary"
+                data-lky-close>Cancel</button>
+      </div>
+    </div>
+  </div>
+{/body}

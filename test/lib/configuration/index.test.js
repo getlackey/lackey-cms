@@ -24,7 +24,7 @@ require('should');
 describe('lib/configuration/index', () => {
     it('Works', () => {
         SUtils.setProjectPath(path.join(__dirname, '/../../../test/mockup/project/'));
-        let instance = configuration('default', 'test');
+        let instance = configuration('test');
 
         return instance.then((config) => {
             config.isTest().should.eql(true);

@@ -20,7 +20,7 @@ const SUtils = require(LACKEY_PATH).utils;
 function cmsResourceRoutes(server, name, param, controller) {
     server.route('/cms/' + name).get(server.aclAdmin, controller.method('table'));
 
-    server.crud('/api/cms/' + name, param, [server.acl], {
+    server.crud('/api/cms/' + name, param, [ /*server.acl*/ ], {
         list: controller.method('list'),
         create: controller.method('create'),
         read: controller.method('read'),
@@ -30,10 +30,11 @@ function cmsResourceRoutes(server, name, param, controller) {
     });
 }
 
-module.exports = (server) => {
+module.exports = (server, config) => {
 
     return SUtils
-        .deps(require('../controllers'),
+        .waitForAs('cms routes',
+            require('../controllers'),
             require('../controllers/content'),
             require('../controllers/taxonomy'),
             require('../controllers/taxonomy-type'),
@@ -43,9 +44,10 @@ module.exports = (server) => {
             require('../controllers/role'),
             require('../controllers/user'),
             require('../controllers/template'),
-            require('../controllers/page')
+            require('../controllers/page'),
+            require('../controllers/session')
         )
-        .promised((
+        .then((
             CMSController,
             ContentController,
             TaxonomyController,
@@ -56,11 +58,15 @@ module.exports = (server) => {
             RoleController,
             UserController,
             TemplateController,
-            PageController
+            PageController,
+            SessionController
         ) => {
 
             server.route('/admin*')
                 .get(server.aclAdmin, CMSController.iframe);
+
+            server.route('/api/view-as')
+                .get(server.aclAdmin, CMSController.viewingAs);
 
             server.route('/cms').get(server.aclAdmin, CMSController.dashboard);
             server.route('/cms/preview').post(server.aclAdmin, PageController.preview);
@@ -70,8 +76,8 @@ module.exports = (server) => {
             server.route('/cms/export/all')
                 .get( /*server.aclAdmin, */ CMSController.serialize);
 
-            server.route('/cms/content/:content_id')
-                .get(server.aclAdmin, ContentController.cmsEdit);
+            server.route('/api/cms/session')
+                .delete(server.aclAdmin, SessionController.method('removeAll'));
 
             server.route('/api/cms/content/:content_id/taxonomy/:taxonomyTypeName/:taxonomyName')
                 .delete(server.aclAdmin, ContentController.method('removeTaxonomy'));
@@ -98,6 +104,9 @@ module.exports = (server) => {
             cmsResourceRoutes(server, 'user', 'user', UserController);
             cmsResourceRoutes(server, 'role', 'role', RoleController);
             cmsResourceRoutes(server, 'template', 'template', TemplateController);
+            cmsResourceRoutes(server, 'session', 'session', SessionController);
+
+            server.route('/cms/user/:user_id').get(server.aclAdmin, UserController.preview);
 
         });
 };

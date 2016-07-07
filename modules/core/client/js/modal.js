@@ -16,8 +16,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const template = require('./template'),
-    lackey = require('./index');
+const template = require('core/client/js/template'),
+    lackey = require('core/client/js');
 
 class Modal {
     static open(name, vars, controller) {
@@ -34,6 +34,10 @@ class Modal {
 
                 return new Promise((resolve, reject) => {
                     setTimeout(() => controller(root, vars, resolve, reject), 0);
+
+                    lackey.bind(['[data-lky-overlay]', '[data-lky-close]'], 'click', () => {
+                        resolve();
+                    }, root);
                 }).then((data) => {
                     top.document.body.removeChild(root);
                     return data;

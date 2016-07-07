@@ -119,6 +119,10 @@
         "name": "Chinese",
         "nativeName": "中文 (Zhōngwén), 汉语, 漢語"
     },
+    "zh_CN": {
+        "name": "Simplified Chinese",
+        "nativeName": "中文 (Zhōngwén), 汉语, 漢語"
+    },
     "cv": {
         "name": "Chuvash",
         "nativeName": "чӑваш чӗлхи"
@@ -511,6 +515,10 @@
     "pt": {
         "name": "Portuguese",
         "nativeName": "Português"
+    },
+    "pt_BR": {
+        "name": "Portuguese, Brasil",
+        "nativeName": "Português, Brasil"
     },
     "qu": {
         "name": "Quechua",

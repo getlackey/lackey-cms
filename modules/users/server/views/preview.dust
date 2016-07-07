@@ -1,0 +1,25 @@
+{>"cms/cms/main"/}
+
+{<body}
+<section data-lky-component="table">
+    <h2>{data.title} {data.name}</h2>
+    <form>
+        <label>
+            <span>Roles</span>
+            <ul>
+                {#data.roles}
+                    <li>{?label}{label}{:else}{name}{/label}</li>
+                {/data.roles}
+            </ul>
+        </label>
+        <label>
+            <span>Taxonomies</span>
+            <ul>
+                {#data.taxonomies}
+                    <li>{?label}{label}{:else}{name}{/label}</li>
+                {/data.taxonomies}
+            </ul>
+        </label>
+    </form>
+</section>
+{/body}

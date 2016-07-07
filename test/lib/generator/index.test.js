@@ -17,7 +17,6 @@
 */
 
 const Generator = require('../../../lib/generator'),
-    BbPromise = require('bluebird'),
     lackey = require('../../../lib'),
     should = require('should');
 
@@ -36,7 +35,7 @@ describe('lib/generator', () => {
     it('Mappers', () => {
 
         Generator.registerMapper('Role', (list) => {
-            return BbPromise.resolve(true);
+            return Promise.resolve(true);
         });
 
         return Generator.load(__dirname + '/../../../modules/users/module.yml').then((doc) => {
@@ -48,7 +47,7 @@ describe('lib/generator', () => {
     });
 
     it('Includes', () => {
-        return Generator.load(__dirname + '/../../../mockup/main.yml')
+        return Generator.load(__dirname + '/../../../test/mockup/main.yml')
             .then((doc) => {
                 should.exist(doc);
                 return doc;

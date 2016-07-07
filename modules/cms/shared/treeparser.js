@@ -146,6 +146,40 @@ module.exports.set = (root, path, value, variant, state, locale) => {
 
 };
 
+module.exports.insertAfter = (root, path, value) => {
+    if (!path) {
+        throw new Error('Path is requried in setter');
+    }
+    let parts = path.split('.'),
+        parentPath = parts.slice(0, -1).join('.'),
+        parent = crawl(root, parentPath),
+        index = (+parts[parts.length - 1]) + 1;
+
+    if (parent && Array.isArray(parent)) {
+        parent.splice(index, 0, value);
+    } else if (!parent) {
+        this.set(root, parentPath, [value]);
+    } else {
+        parent = [parent];
+        parent.splice(index, 0, value);
+        this.set(root, parentPath, parent);
+    }
+};
+
+module.exports.remove = (root, path) => {
+    if (!path) {
+        throw new Error('Path is requried in setter');
+    }
+    let parts = path.split('.'),
+        parentPath = parts.slice(0, -1).join('.'),
+        parent = crawl(root, parentPath),
+        index = (+parts[parts.length - 1]);
+
+    if (parent && Array.isArray(parent)) {
+        parent.splice(index, 1);
+    }
+};
+
 module.exports.crawl = crawl;
 
 

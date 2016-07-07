@@ -1,6 +1,6 @@
 <html lang="{locale}">
     <head>
-        <base href="/"/>
+        <base href="{host}/"/>
         {! to migrate elseewhre !}
         <meta http-equiv="content-language" content="{locale}">
         <link rel="stylesheet" href="css/cms/core/base.css"/>

@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,12 +16,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-  /* istanbul ignore next */
-  GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
-
 const SCli = require(LACKEY_PATH).cli,
+  SUtils = require(LACKEY_PATH).utils,
   treeParser = require('../../../shared/treeparser');
 
 module.exports = (dust) => {
@@ -28,14 +25,31 @@ module.exports = (dust) => {
   dust.helpers.block = function (chunk, context, bodies, params) {
     SCli.debug('lackey-cms/modules/cms/server/lib/dust/block');
 
+    let data = context,
+      paramsCopy = JSON.parse(JSON.stringify(params)),
+      layer;
+
+    Object
+      .keys(params)
+      .forEach((key) => {
+        let match = key.match(/^data-(.+)$/);
+        if (match) {
+          layer = layer || {};
+          layer[match[1]] = params[key];
+        }
+      });
+
+    if (layer) {
+      data = data.push(layer);
+    }
 
     return chunk.map((injectedChunk) => {
       module.exports.block(
-        params.content ? treeParser.get(params.content.layout, params.path) : {
+        paramsCopy.content ? treeParser.get(params.content.layout, params.path) : {
           template: params.template,
           route: params.route
         },
-        injectedChunk, context, bodies, params, dust, params.content ? params.content.id : null
+        injectedChunk, data, bodies, paramsCopy, dust, params.content ? params.content.id : null
       ).then(() => {
         injectedChunk.end();
       }, (error) => {
@@ -62,7 +76,11 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
 
     let promise = Promise.resolve(),
       data = context,
-      document;
+      route = config.route,
+      document,
+      template = params.template || config.template;
+
+    //data = data.push(params);
 
     if (config.props) {
       SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'has props');
@@ -73,19 +91,23 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
           props[key] = val;
         }
       });
+      route = route || config.props.route;
       data = data.push(props);
     }
 
-    if (config.route) {
+
+    if (route) {
       SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'has route');
       promise = promise
         .then(() => {
-          return require('../../models/content');
-        }).then((Content) => {
-          return Content.findByRoute(config.route);
-        }).then((content) => {
+          return SUtils.cmsMod('core').model('content');
+        })
+        .then((Content) => {
+          return Content.findByRoute(route);
+        })
+        .then((content) => {
           if (!content) {
-            throw new Error('No referred document found ' + config.route);
+            throw new Error('No referred document found ' + route);
           }
           SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'found content');
           document = content;
@@ -103,10 +125,12 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
       });
     }
 
-    if (!config.template && promise.route) {
+    if (!template && promise.route) {
       SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'no template and route');
       promise = promise.then(() => {
-        if (!document) return;
+        if (!document) {
+          return;
+        }
         return require('../../models/template')
           .then((Template) => {
             return Template.findById(document._doc.templateId);
@@ -114,22 +138,21 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
           .then((templateObj) => {
             if (templateObj) {
               SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'got template from route');
-              config.template = templateObj.path;
+              template = templateObj.path;
             }
           });
       });
     }
 
-
     promise.then(() => {
       SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'last steps');
-      if (!config.template) {
+      if (!template) {
         SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'no template');
         return resolve(injectedChunk);
       }
 
       SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'rendering');
-      dust.render(config.template, data, (err, out) => {
+      dust.render(template, data, (err, out) => {
         if (err) {
           console.error(err);
           reject(err);

@@ -1,0 +1,52 @@
+<tr>
+    <td>
+        {media.source}
+    </td>
+    <td>
+        {media.mime}
+    </td>
+    <td>
+        default
+    </td>
+    <td>
+    </td>
+</tr>
+{#media.alternatives}
+<tr>
+    <td>
+        {source}
+    </td>
+    <td>
+        {mime}
+    </td>
+    <td>
+        {media}
+    </td>
+    <td>
+        <button data-lky-bt data-lky-hook="remove" data-lky-idx="{$idx}" data-lky-btn>Remove</button>
+    </td>
+</tr>
+{/media.alternatives}
+<tr>
+    <td>
+        <input data-lky-hook="new-source" type="text"/>
+    </td>
+    <td>
+        <select data-lky-hook="new-mime">
+            {#mimes}
+                {@eq key=type value="video"}
+                    <option value="{mime}" >
+                        {label}
+                    </option>
+                {/eq}
+            {/mimes}
+        </select>
+    </td>
+    <td>
+        <input data-lky-hook="new-media" type="text"/>
+    </td>
+    <td>
+        <button data-lky-btn data-lky-hook="add">Add</button>
+        <button data-lky-btn data-lky-hook="source-upload">Upload</button>
+    </td>
+</tr>

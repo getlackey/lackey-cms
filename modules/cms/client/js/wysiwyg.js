@@ -16,14 +16,13 @@
     See the License for the specific language governing permissions and
 */
 const
-    lackey = require('./../../../core/client/js'),
-    LackeySchema = require('../../shared/content-blocks').LackeySchema,
-    InlineSchema = require('../../shared/inline'),
+    lackey = require('core/client/js'),
+    LackeySchema = require('cms/shared/content-blocks').LackeySchema,
+    InlineSchema = require('cms/shared/inline'),
     edit = require('prosemirror/dist/edit'),
-    Media = require('./media'),
+    Media = require('cms/client/js/media'),
     ProseMirror = edit.ProseMirror;
 
-//require('prosemirror/dist/inputrules/autoinput');
 require('prosemirror/dist/menu/tooltipmenu');
 require('prosemirror/dist/menu/menubar');
 
@@ -45,6 +44,8 @@ class Wysiwyg {
 
     constructor(div) {
 
+        var self = this;
+
         this._div = div;
         this._changed = false;
         this._wrap = div.getAttribute('data-lky-type') || 'doc';
@@ -58,7 +59,26 @@ class Wysiwyg {
         this._contentId = div.getAttribute('data-lky-content');
         this._path = div.getAttribute('data-lky-path') || null;
 
-        pool.push(this);
+        top.Lackey
+            .manager
+            .get(this.contentId, this.path, this.variant, this._schema)
+            .then(function (source) {
+                self._source = source;
+                self.render();
+                top.Lackey.manager.on('reset', (event) => {
+                    if (event.data.type === 'content' && +event.data.id === +self._contentId) {
+                        top.Lackey
+                            .manager
+                            .get(self.contentId, self.path, self.variant, self._schema)
+                            .then((src) => {
+                                self._source = src;
+                                self._lock = true;
+                                self._pm.setContent(src, 'json');
+                                self._lock = false;
+                            });
+                    }
+                });
+            });
     }
 
     get contentId() {
@@ -70,8 +90,7 @@ class Wysiwyg {
     }
 
     ready() {
-        this._source = Wysiwyg.manager.get(this.contentId, this.path, this.variant, this._schema);
-        this.render();
+
     }
     isEmpty() {
         return (this._pm.getContent('text').replace(/^\s+|\s+$/g, '').length === 0);
@@ -132,9 +151,12 @@ class Wysiwyg {
             });*/
 
             pm.on('change', function () {
+                if (this._lock) {
+                    return;
+                }
                 self._changed = true;
                 let newContent = pm.getContent('json');
-                Wysiwyg.manager.set(self.contentId, self.path, self.variant, newContent);
+                top.Lackey.manager.set(self.contentId, self.path, self.variant, newContent);
             });
         } catch (error) {
             console.error('this', this);
@@ -143,10 +165,6 @@ class Wysiwyg {
 
         }
 
-    }
-
-    static get manager() {
-        return top.Lackey.manager;
     }
 
     static factory(div) {
@@ -160,23 +178,18 @@ class Wysiwyg {
         lackey.select('[data-lky-media]').forEach((element) => {
             let media = new Media(element);
             media.selected((mediaObject) => {
-                Wysiwyg.manager.media(mediaObject)
-                    .then((result) => {
-                        if (!result && result !== -1) {
-                            return;
-                        }
 
-                        mediaObject.set(result !== -1 ? result : null);
-                        mediaObject.notify();
+                top.Lackey.manager.stack
+                    .inspectMedia(mediaObject.media, mediaObject.node)
+
+                    .then((result) => {
+                        if (result || result === -1) {
+                            mediaObject.set(result !== -1 ? result : null);
+                            mediaObject.notify();
+                        }
                     });
             });
         });
-
-        return Wysiwyg.manager.load(Wysiwyg.getContents())
-            .then(() => pool.forEach((instance) => instance.ready()))
-            .catch((error) => {
-                throw error;
-            });
     }
 
     static getContents() {

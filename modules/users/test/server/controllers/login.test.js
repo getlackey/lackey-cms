@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true, mocha:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,13 +16,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-if (!GLOBAL.LACKEY_PATH) {
-    /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/../../../../../lib';
-}
 
 const
     dbsInit = require('../../../../../test/mockup/dbs'),
+    SUtils = require(LACKEY_PATH).utils,
     Generator = require(LACKEY_PATH).generator;
 
 require('should');
@@ -32,21 +30,30 @@ describe('modules/users/server/controllers/login', () => {
 
     before((done) => {
         dbsInit(() => {
-            require('../../../server/models/user');
-            require('../../../server/auth/strategies/local')();
-            return Generator.load(__dirname + '/../../../../../modules/users/module.yml', true).then(() => {
-                return require('../../../server/controllers/login');
-            }).then((ctrl) => {
-                controller = ctrl;
-                done();
-            });
-
+            SUtils
+                .cmsMod('core')
+                .model('user')
+                .then(() => {
+                    require('../../../server/auth/strategies/local')();
+                    return Generator
+                        .load(__dirname + '/../../../../../modules/users/module.yml', true);
+                })
+                .then(() => {
+                    return require('../../../server/controllers/login');
+                })
+                .then((ctrl) => {
+                    controller = ctrl;
+                    done();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         });
     });
 
     it('index', (done) => {
         controller.index({}, {
-            print: (data) => {
+            print: () => {
                 done();
             }
         });
@@ -59,7 +66,7 @@ describe('modules/users/server/controllers/login', () => {
                     res._status = status;
                     return res;
                 },
-                error: (error) => {
+                error: () => {
                     res._status.should.be.eql(400);
                     done();
                 }
@@ -74,7 +81,7 @@ describe('modules/users/server/controllers/login', () => {
     it('login -> 200', (done) => {
         let req = {
                 body: {
-                    username: 'test@example.com',
+                    username: 'test@test.com',
                     password: 'password'
                 },
                 login: (user, cb) => {
