@@ -140,7 +140,7 @@ class CRUDController {
                 row.actions = actions.map((_action) => {
                     let action = JSON.parse(JSON.stringify(_action));
 
-                    if (!_action.condition || _action.condition(row.data)) {
+                    if (!_action.condition || _action.condition(row.___origial)) {
                         if (action.href) {
                             action.href = self.populateAction(action.href, row, columns);
                         } else if (action.api) {
