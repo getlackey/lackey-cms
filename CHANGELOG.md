@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+ * direct call to `res.send` locked, use `res.print` instead
+ * permission restriction on temlate
+ * `<base href="{host}/" target="_top"/>` is required
+
 ## 0.5
 
  * removed all CLI tools

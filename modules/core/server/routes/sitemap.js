@@ -23,11 +23,8 @@ const sitemap = require(LACKEY_PATH).sitemap;
 module.exports = (server) => {
     server.get('/sitemap.xml', function (req, res) {
         res.header('Content-Type', 'application/xml');
-        res.send({
-            template: 'cms/core/sitemap',
-            data: {
-                urls: sitemap.getCached()
-            }
+        res.print('cms/core/sitemap', {
+            urls: sitemap.getCached()
         });
 
     });

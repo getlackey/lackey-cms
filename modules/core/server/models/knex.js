@@ -239,6 +239,11 @@ module.exports = Schema
                     table.json('variants');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'template', 'require', (table) => {
+                    table.json('require');
+                });
+            })
             //
             // TABLE content
             // .userId -> users.id

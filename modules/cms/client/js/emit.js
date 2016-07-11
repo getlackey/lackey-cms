@@ -48,8 +48,8 @@ function off(eventName, listener) {
 
 /**
  * Emits event
- * @param {[[Type]]} eventName [[Description]]
- * @param {[[Type]]} data      [[Description]]
+ * @param {string} eventName
+ * @param {object} data
  */
 function emit(eventName, data) {
     if (!this.__listeners || !this.__listeners[eventName]) {

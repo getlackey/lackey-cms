@@ -20,7 +20,11 @@ const gulp = require('gulp'),
     mocha = require('gulp-mocha'),
     eslint = require('gulp-eslint'),
     sassLint = require('gulp-sass-lint'),
-    del = require('del');
+    del = require('del'),
+    gutil = require('gulp-util'),
+    rename = require('gulp-rename'),
+    fs = require('fs'),
+    gulpJsdoc2md = require('gulp-jsdoc-to-markdown');
 
 if (!GLOBAL.LACKEY_PATH) {
     /* istanbul ignore next */
@@ -120,4 +124,28 @@ gulp.task('mocha', ['pre-test:clean'], function () {
             bail: true,
             timeout: 50000
         }));
+});
+
+gulp.task('docs', () => {
+    return gulp
+        .src([
+            'lib/**/*.js',
+            '!lib/utils/clear.js',
+            'modules/*/client/**/*.js',
+            'modules/*/shared/**/*.js',
+            'modules/*/server/**/*.js'
+        ], {
+            base: '.'
+        })
+        .pipe(rename(path => {
+            console.log(path);
+            path.extname = '.md';
+        }))
+        .pipe(gulpJsdoc2md({
+            template: fs.readFileSync('./readme.hbs', 'utf8')
+        }))
+        .on('error', function (err) {
+            gutil.log('jsdoc2md failed:', err.message);
+        })
+        .pipe(gulp.dest('../book/api'));
 });

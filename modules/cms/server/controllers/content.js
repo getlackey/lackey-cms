@@ -104,17 +104,13 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         type: 'page'
                     })
                     .then((data) => {
-                        res.send({
-                            template: 'cms/cms/pages',
-                            javascripts: [
-                                'js/cms/pages.js'
-                            ],
-                            data: {
+                        res.js('js/cms/pages.js');
+                        res.print('cms/cms/pages', {
 
-                                list: data.map((content) => {
-                                    return content.toJSON();
-                                })
-                            }
+                            list: data.map((content) => {
+                                return content.toJSON();
+                            })
+
                         });
                     }, (error) => {
                         res.error(req, error);
@@ -127,19 +123,14 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     Template
                         .list()
                         .then((templates) => {
+                            res.js('js/cms/pages.js');
+                            res.print('cms/cms/contentedit', {
+                                content: req.content.toJSON(),
+                                types: Model.getTypes(),
+                                templates: templates.map((template) => {
+                                    return template.toJSON();
+                                })
 
-                            res.send({
-                                template: 'cms/cms/contentedit',
-                                javascripts: [
-                                    'js/cms/pages.js'
-                                ],
-                                data: {
-                                    content: req.content.toJSON(),
-                                    types: Model.getTypes(),
-                                    templates: templates.map((template) => {
-                                        return template.toJSON();
-                                    })
-                                }
                             });
                         }, req.error);
                 } else {
@@ -148,21 +139,17 @@ module.exports = SUtils.waitForAs('contentCtrl',
             }
 
             static createPage(req, res) {
-                Template.selectable()
+                Template
+                    .selectable(req.admin)
                     .then((templates) => {
-
-                        res.send({
-                            template: 'cms/cms/page-create',
-                            stylesheets: ['css/cms/cms/table.css'],
-                            javascripts: [
-                                'js/cms/cms/new-page.js'
-                            ],
-                            data: {
-                                types: Model.getTypes(),
-                                templates: templates.map((template) => {
+                        res.css('css/cms/cms/table.css');
+                        res.js('js/cms/cms/new-page.js');
+                        res.print('cms/cms/page-create', {
+                            types: Model.getTypes(),
+                            templates: templates
+                                .map((template) => {
                                     return template.toJSON();
                                 })
-                            }
                         });
                     }, req.error);
             }

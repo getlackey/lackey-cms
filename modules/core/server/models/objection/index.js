@@ -486,12 +486,11 @@ module.exports = Database
                     }
 
                     /**
-                     * [[Description]]
                      * @private
-                     * @param   {[[Type]]} data    [[Description]]
-                     * @param   {[[Type]]} query   [[Description]]
-                     * @param   {[[Type]]} options [[Description]]
-                     * @returns {[[Type]]} [[Description]]
+                     * @param   {object} data
+                     * @param   {string} query
+                     * @param   {object} options
+                     * @returns {Promise}
                      */
                     static _postQuery(data) {
                         return Promise.resolve(data);

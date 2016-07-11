@@ -81,6 +81,14 @@ module.exports = SUtils
                     pagePermissions,
                     promise = (user ? user.isAllowed('/admin*', 'get') : Promise.resolve(false));
 
+                promise = promise
+                    .then(allowed => {
+                        if (!allowed || !user) {
+                            return allowed;
+                        }
+                        return page._template.canEdit(user);
+                    });
+
                 return promise
                     .then((allowed) => {
                         isAllowed = allowed;
