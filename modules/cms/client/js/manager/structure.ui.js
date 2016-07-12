@@ -370,7 +370,6 @@ class StructureUI extends Emitter {
                         dictionary: responses[1]
                     }))
                     .then(() => {
-                        console.log(responses[0]);
                         return responses[0];
                     });
             })

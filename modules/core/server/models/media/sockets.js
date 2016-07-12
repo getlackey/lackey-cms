@@ -29,21 +29,21 @@ const path = require('path'),
 let files = {};
 
 function postProcess(file, config) {
-    SCli.log(__MODULE_NAME, 'Post process', file);
+    SCli.debug(__MODULE_NAME, 'Post process', file);
     let oldPath = file.path;
     return new Promise((resolve) => {
             resolve(mime.lookup(file.path));
         })
         .then((mimeType) => {
-            SCli.log(__MODULE_NAME, 'Post process - mime', mime);
+            SCli.debug(__MODULE_NAME, 'Post process - mime', mime);
             file.mime = mimeType;
             let uploadSettings = config.get('upload');
             if (uploadSettings) {
-                SCli.log(__MODULE_NAME, 'S3 uploadeding');
+                SCli.debug(__MODULE_NAME, 'S3 uploadeding');
                 return SUtils
                     .s3PutObject(file.path, file.mime, uploadSettings)
                     .then((newLocation) => {
-                        SCli.log(__MODULE_NAME, 'S3 uploaded');
+                        SCli.debug(__MODULE_NAME, 'S3 uploaded');
                         file.path = newLocation;
                         return SUtils.rimraf(path.dirname(oldPath));
                     });
@@ -54,8 +54,8 @@ function postProcess(file, config) {
             return media;
         })
         .then((Media) => {
-            SCli.log(__MODULE_NAME, 'Create recode');
-            let filePath = file.path.match(/^http(|s):\/\//) ? file.path : '/' + path.relative(SUtils.getProjectPath(), file.path);
+            SCli.debug(__MODULE_NAME, 'Create recode');
+            let filePath = file.path.match(/^http(|s):\/\//) ? file.path : '/' + path.relative(SUtils.getProjectPath(), file.path).replace(/^\//,'');
             if (file.ju) {
                 return filePath;
             }
@@ -67,7 +67,7 @@ function postProcess(file, config) {
                 }))
                 .save()
                 .then((medium) => {
-                    SCli.log(__MODULE_NAME, 'Done in fact');
+                    SCli.debug(__MODULE_NAME, 'Done in fact');
                     return medium.toJSON();
                 });
 
@@ -81,8 +81,9 @@ module.exports = (socket, config) => {
 
 
     socket.on('media.start-upload', (data) => {
+        console.log('media.start-upload', data);
 
-        SCli.log(__MODULE_NAME, 'media.start-upload');
+        SCli.debug(__MODULE_NAME, 'media.start-upload');
 
         let now = new Date(),
             name = data.name,
@@ -97,12 +98,12 @@ module.exports = (socket, config) => {
                 ju: !!data.ju
             };
 
-        SCli.log(__MODULE_NAME, 'media.start-upload - mkdir');
+        SCli.debug(__MODULE_NAME, 'media.start-upload - mkdir');
 
         SUtils
             .mkdir(path.dirname(filePath))
             .then(() => {
-                SCli.log(__MODULE_NAME, 'media.start-upload - stats');
+                SCli.debug(__MODULE_NAME, 'media.start-upload - stats');
                 return SUtils.stats(filePath);
             })
             .then((stat) => {
@@ -132,23 +133,23 @@ module.exports = (socket, config) => {
 
     function progress(file, guid) {
 
-        SCli.log(__MODULE_NAME, 'progress');
+        SCli.debug(__MODULE_NAME, 'progress');
 
         let place = file.downloaded / 524288,
             percent = file.downloaded / file.fileSize * 100,
             done = file.downloaded === file.fileSize;
 
         if (done) {
-            SCli.log(__MODULE_NAME, 'progress - done');
+            SCli.debug(__MODULE_NAME, 'progress - done');
             return SUtils
                 .close(file.handler)
                 .then(() => {
-                    SCli.log(__MODULE_NAME, 'progress - close');
+                    SCli.debug(__MODULE_NAME, 'progress - close');
                     file.handler = null;
                     return postProcess(file, config);
                 })
                 .then((response) => {
-                    SCli.log(__MODULE_NAME, 'progress - post process done');
+                    SCli.debug(__MODULE_NAME, 'progress - post process done');
                     socket.emit('media.uploaded', {
                         guid: guid,
                         data: response,
@@ -176,7 +177,7 @@ module.exports = (socket, config) => {
 
     socket.on('media.upload', (data) => {
 
-        SCli.log(__MODULE_NAME, 'media.upload');
+        SCli.debug(__MODULE_NAME, 'media.upload');
 
         try {
             let guid = data.guid,
@@ -186,7 +187,7 @@ module.exports = (socket, config) => {
             file.data += data.data;
 
             if (file.downloaded === file.fileSize) {
-                SCli.log(__MODULE_NAME, 'progress - write');
+                SCli.debug(__MODULE_NAME, 'progress - write');
                 return SUtils
                     .write(file.handler, file.data, 'binary', null)
                     .then((err) => {
@@ -197,7 +198,7 @@ module.exports = (socket, config) => {
                         progress(file, guid);
                     })
                     .catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     });
             }
             progress(file, guid);

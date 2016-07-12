@@ -107,17 +107,14 @@ Upload.prototype.emit = function (eventName, data) {
 let filesToUpload = {};
 
 socket.on('media.more-data', (data) => {
-    console.log('more-data', data);
     var def = filesToUpload[data.guid],
         file = def.file,
         place = (isNaN(data.place) ? 0 : data.place) * 524288,
         newFile = file.slice(place, place + Math.min(524288, (file.size - place)));
-    console.log('sending from ' + place + ' to ' + (place + Math.min(524288, (file.size - place))));
     def.reader.readAsBinaryString(newFile);
 });
 
 socket.on('media.uploaded', (data) => {
-    console.log('uploaded', data);
     var def = filesToUpload[data.guid];
     delete filesToUpload[data.guid];
     def.resolve(data);
@@ -183,7 +180,6 @@ Upload.prototype.choice = function (event) {
         console.error(error);
     });
     promise.then(() => {
-        console.log('uploaded', uploaded);
         self.emit('done', uploaded);
     });
     return promise;
