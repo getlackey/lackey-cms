@@ -123,7 +123,7 @@ Stack.prototype.inspectMedia = function (media, node) {
         });
 
     gallery
-        .buildUI()
+        .buildUI(true)
         .then((element) => {
             self.node.appendChild(element);
             return gallery.fadeIn();
@@ -134,7 +134,7 @@ Stack.prototype.inspectMedia = function (media, node) {
     return gallery
         .promise
         .then((mediaObject) => {
-            self.pop();
+            self.pop(true);
             return mediaObject;
         });
 };

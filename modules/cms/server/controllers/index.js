@@ -65,7 +65,10 @@ module.exports = SUtils
                     return Content
                         .findByRoute(iframePath)
                         .then((page) => {
-                            return page._template.canEdit(req.user);
+                            if (page) {
+                                return page._template.canEdit(req.user);
+                            }
+                            return false;
                         })
                         .then((canEdit) => {
                             if (!canEdit) {

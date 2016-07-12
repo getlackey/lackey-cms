@@ -114,6 +114,28 @@ module.exports = SUtils
                 return this._doc.require || [];
             }
 
+            get props() {
+                let props = this._doc.props || {};
+                props.og_title = props.og_title || {
+                    label: 'Title (used in OpenGraph)',
+                    name: 'og_title'
+                };
+                props.og_type = props.og_type || {
+                    label: 'Type (used in OpenGraph)',
+                    name: 'og_type'
+                };
+                props.og_description = props.og_description || {
+                    label: 'Description (used in OpenGraph)',
+                    name: 'og_description'
+                };
+                props.og_image = props.og_image || {
+                    label: 'Image (used in OpenGraph)',
+                    name: 'og_image',
+                    type: 'media'
+                };
+                return props;
+            }
+
             static selectable(user) {
                 SCli.debug('lackey-cms/modules/cms/server/models/template', 'selectable', this.model.tableName);
                 let Self = this;
@@ -152,7 +174,7 @@ module.exports = SUtils
                     type: this._doc.type,
                     javascripts: this._doc.javascripts,
                     stylesheets: this._doc.stylesheets,
-                    props: this._doc.props || {},
+                    props: this.props,
                     selectable: this._doc.selectable || false,
                     populate: this._doc.populate || [],
                     expose: this._doc.expose || [],

@@ -35,10 +35,11 @@ module.exports = SUtils
         require('../taxonomy'),
         require('../template'),
         require('../knex'),
-        require('./querybuilder')
+        require('./querybuilder'),
+        require(LACKEY_PATH).configuration()
 
     )
-    .then((Taggable, User, Taxonomy, Template, knexSchema, QueryBuilder) => {
+    .then((Taggable, User, Taxonomy, Template, knexSchema, QueryBuilder, configuration) => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -121,7 +122,14 @@ module.exports = SUtils
             }
 
             get props() {
-                return this._doc.props || {};
+                let props = this._doc.props || {};
+                if (!props.og_title) {
+                    props.og_title = this._doc.name;
+                }
+                if (!props.og_url) {
+                    props.og_url = configuration.get('host') + this._doc.route;
+                }
+                return props;
             }
 
             get author() {

@@ -369,7 +369,10 @@ class StructureUI extends Emitter {
                         values: responses[0],
                         dictionary: responses[1]
                     }))
-                    .then(() => responses[0]);
+                    .then(() => {
+                        console.log(responses[0]);
+                        return responses[0];
+                    });
             })
             .then(lackey.as(this.bindMetaEvents, this));
 
@@ -379,6 +382,10 @@ class StructureUI extends Emitter {
         let self = this;
         lackey
             .bind('[data-lky-hook="action:pick-article"]', 'click', lackey.as(this.pickArticle, this, [settings]), this.node);
+
+        lackey
+            .bind('[data-lky-hook="action:pick-media"]', 'click', lackey.as(this.pickMedia, this, [settings]), this.node);
+
 
         lackey
             .select(['input', 'select'], self.metaNode)
@@ -404,6 +411,24 @@ class StructureUI extends Emitter {
                     self.emit('changed', settings);
                     self.drawMeta();
                 }
+                self.node.setAttribute('data-lky-edit', 'meta');
+            });
+    }
+
+    pickMedia(settings, event, hook) {
+        this.collapse();
+        let self = this,
+            route = hook.getAttribute('data-value');
+
+        return this.options.stack
+            .inspectMedia(route)
+            .then((rt) => {
+                if (rt !== null) {
+                    settings[hook.getAttribute('data-name')] = rt.source;
+                    self.emit('changed', settings);
+                    self.drawMeta();
+                }
+                console.log(self.node);
                 self.node.setAttribute('data-lky-edit', 'meta');
             });
     }
@@ -489,6 +514,12 @@ class StructureUI extends Emitter {
                     };
                 }
                 if (typeof value === 'object') {
+                    if (value.default) {
+                        let current = data.values[key];
+                        if (current === null || current === undefined || (current.replace && current.replace(/^\s+|\s+$/g, '') === '')) {
+                            data.values[key] = value.default;
+                        }
+                    }
                     return value;
                 }
                 return {

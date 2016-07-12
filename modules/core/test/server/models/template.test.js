@@ -70,7 +70,25 @@ describe('models/cms/server/models/template', () => {
                     path: 'page/template',
                     javascripts: ["js1", "js2"],
                     stylesheets: ["css1", "css2"],
-                    props: {},
+                    props: {
+                        og_description: {
+                            label: "Description (used in OpenGraph)",
+                            name: "og_description"
+                        },
+                        og_image: {
+                            label: "Image (used in OpenGraph)",
+                            name: "og_image",
+                            type: "media"
+                        },
+                        og_title: {
+                            label: "Title (used in OpenGraph)",
+                            name: "og_title"
+                        },
+                        og_type: {
+                            label: "Type (used in OpenGraph)",
+                            name: "og_type"
+                        },
+                    },
                     selectable: true,
                     thumb: null,
                     type: 'template',
@@ -78,6 +96,7 @@ describe('models/cms/server/models/template', () => {
                     require: ['auth'],
                     taxonomies: [],
                     variants: []
+
                 });
                 result.name.should.be.eql('my page');
                 result.path.should.be.eql('page/template');
