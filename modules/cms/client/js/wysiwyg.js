@@ -173,6 +173,13 @@ class Wysiwyg {
 
     static init() {
 
+        if(!top.Lackey) {
+            setTimeout(() => {
+                Wysiwyg.init();
+            }, 250);
+            return;
+        }
+
         lackey.getWithAttribute('data-lky-pm').forEach(Wysiwyg.factory);
 
         lackey.select('[data-lky-media]').forEach((element) => {
