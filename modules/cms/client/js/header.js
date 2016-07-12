@@ -17,6 +17,6 @@
     limitations under the License.
 */
 const
-    Manager = require('cms/client/js/manager/index.new.js');
+    Manager = require('cms/client/js/manager/index.js');
 
 Manager.init();

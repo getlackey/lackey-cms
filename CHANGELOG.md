@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.2
+
+ * Fix header.js
+
 ## 0.5.1
 
  * direct call to `res.send` locked, use `res.print` instead
