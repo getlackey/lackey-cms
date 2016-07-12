@@ -104,7 +104,7 @@ class StructureUI extends Emitter {
 
     /**
      * Builds UI
-     * @returns {Promise<HTMLElement}
+     * @returns {Promise<HTMLElement>}
      */
     buildUI() {
         let self = this;

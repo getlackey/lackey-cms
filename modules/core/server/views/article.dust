@@ -1,0 +1,7 @@
+{>"cms/core/main"/}
+
+{<body}
+<h1>Blimey!</h1>
+
+Path `{path}` doesn't exist
+{/body}

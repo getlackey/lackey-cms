@@ -26,10 +26,11 @@ module.exports = SUtils
         SUtils.cmsMod('core').model('role'),
         SUtils.cmsMod('i18n').model('language'),
         SUtils.cmsMod('core').model('template'),
+        SUtils.cmsMod('core').model('content'),
         require('../lib/serializer'),
         require('json2yaml')
     )
-    .then((Activity, Role, Language, Template, Serializer, JSON2YAML) => {
+    .then((Activity, Role, Language, Template, Content, Serializer, JSON2YAML) => {
 
         return {
             viewingAs: (req, res) => {
@@ -50,38 +51,52 @@ module.exports = SUtils
                 });
             },
             iframe: (req, res) => {
+                try {
+                    let iframePath, fullIframePath, variants;
 
-                let iframePath, variants;
+                    iframePath = req.originalUrl.replace(/^\/admin/, '');
 
-                iframePath = req.originalUrl.replace(/^\/admin/, '');
+                    if (iframePath === '') {
+                        iframePath = iframePath + '/';
+                    }
 
-                if (iframePath === '') {
-                    iframePath = iframePath + '/';
+                    fullIframePath = req.__host + iframePath;
+
+                    return Content
+                        .findByRoute(iframePath)
+                        .then((page) => {
+                            return page._template.canEdit(req.user);
+                        })
+                        .then((canEdit) => {
+                            if (!canEdit) {
+                                return res.redirect(fullIframePath);
+                            }
+
+                            return Template.getOfType('variant')
+                                .then((_variants) => {
+                                    variants = _variants;
+                                    return Language.getEnabled();
+                                })
+                                .then((languages) => {
+                                    res.edit(true);
+                                    res.js('js/cms/cms/header.js');
+                                    res.print('cms/cms/iframe', {
+                                        page: fullIframePath,
+                                        variants: variants.map((variant) => {
+                                            return {
+                                                path: variant.path,
+                                                name: variant.name
+                                            };
+                                        }),
+                                        langauges: languages
+                                    });
+
+                                });
+                        })
+                        .catch(error => console.error(error));
+                } catch (e) {
+                    console.error(e);
                 }
-
-                iframePath = req.__host + iframePath;
-
-
-                return Template.getOfType('variant')
-                    .then((_variants) => {
-                        variants = _variants;
-                        return Language.getEnabled();
-                    })
-                    .then((languages) => {
-                        res.edit(req.user && req.user.getACL('edit').length > 0);
-                        res.js('js/cms/cms/header.js');
-                        res.print('cms/cms/iframe', {
-                            page: iframePath,
-                            variants: variants.map((variant) => {
-                                return {
-                                    path: variant.path,
-                                    name: variant.name
-                                };
-                            }),
-                            langauges: languages
-                        });
-
-                    });
 
             },
             activityStream: (req, res) => {
@@ -89,11 +104,8 @@ module.exports = SUtils
                 Activity
                     .query()
                     .then((data) => {
-                        res.send({
-                            template: 'cms/cms/activity-stream',
-                            data: {
-                                list: data
-                            }
+                        res.print('cms/cms/activity-stream', {
+                            list: data
                         });
                     }, (error) => {
                         res.error(req, error);
@@ -104,11 +116,9 @@ module.exports = SUtils
                     .then((result) => {
                         try {
                             res.header('Content-Type', 'text/x-yaml');
-                            res.send({
-                                template: 'cms/core/yaml',
-                                data: {
-                                    yaml: JSON2YAML.stringify(result)
-                                }
+                            res.print('cms/core/yaml', {
+                                yaml: JSON2YAML.stringify(result)
+
                             });
                         } catch (e) {
                             console.error(e);

@@ -91,14 +91,9 @@ module.exports = SUtils
                     } catch (e) {
                         res.error(e);
                     }
-                    res.send({
-                        template: 'cms/cms/tableview',
-                        javascripts: [
-                            'js/cms/cms/table.js'
-                        ],
-                        data: {
-                            table: data
-                        }
+                    res.js('js/cms/cms/table.js');
+                    res.print('cms/cms/tableview', {
+                        table: data
                     });
                 }, (error) => {
                     res.error(req, error);

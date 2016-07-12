@@ -56,7 +56,9 @@ describe('models/cms/server/models/template', () => {
                 name: 'my page',
                 path: 'page/template',
                 javascripts: ['js1', 'js2'],
-                stylesheets: ['css1', 'css2']
+                stylesheets: ['css1', 'css2'],
+                selectable: true,
+                require: ['auth']
             })
             .then((result) => {
                 let json = result.toJSON();
@@ -69,17 +71,35 @@ describe('models/cms/server/models/template', () => {
                     javascripts: ["js1", "js2"],
                     stylesheets: ["css1", "css2"],
                     props: {},
-                    selectable: false,
+                    selectable: true,
                     thumb: null,
                     type: 'template',
                     prefix: '',
+                    require: ['auth'],
                     taxonomies: [],
                     variants: []
                 });
                 result.name.should.be.eql('my page');
                 result.path.should.be.eql('page/template');
 
-                return true;
+                return TemplateModel.create({
+                    name: 'my page',
+                    path: 'page/template2',
+                    javascripts: ['js1', 'js2'],
+                    stylesheets: ['css1', 'css2'],
+                    selectable: true
+                });
+            })
+            .then(() => true)
+            .should.finally.be.eql(true);
+    });
+
+    it('Gets selectable', () => {
+        return TemplateModel
+            .selectable({
+                isAllowed: () => {
+                    return true;
+                }
             });
     });
 

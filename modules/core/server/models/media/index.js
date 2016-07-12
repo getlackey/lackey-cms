@@ -120,6 +120,10 @@ module.exports = SUtils
                     return Promise.resolve('image/jpeg');
                 }
 
+                if(path.match(/^https:\/\/www.youtube.com\//)) {
+                    return Promise.resolve('video/youtube');
+                }
+
                 SCli.debug('lackey-cms/modules/media/server/models/media', 'lookupMime', path);
                 let mime = mimeLib.lookup(path),
                     isWeb = path.match(/^(http|https|)\:\/\/.+$/) !== null;

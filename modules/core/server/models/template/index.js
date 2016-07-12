@@ -110,16 +110,38 @@ module.exports = SUtils
                 return this._doc.prefix || '';
             }
 
-            static selectable() {
+            get require() {
+                return this._doc.require || [];
+            }
+
+            static selectable(user) {
                 SCli.debug('lackey-cms/modules/cms/server/models/template', 'selectable', this.model.tableName);
                 let Self = this;
-                return SCli.sql(this.model
-                    .query()
-                    .where('selectable', true)
-                    .where('type', 'template')
-                ).then((results) => {
-                    return Promise.all(results.map((result) => Self.factory(result)));
-                });
+                return SCli
+                    .sql(this.model
+                        .query()
+                        .where('selectable', true)
+                        .where('type', 'template')
+                    )
+                    .then((results) => {
+                        return Promise.all(results.map((result) => Self.factory(result)));
+                    })
+                    .then((templates) => {
+                        return Promise.all(templates.map(template => template.canEdit(user).then(canEdit => canEdit ? template : null)));
+                    })
+                    .then(templates => {
+                        return templates.filter(template => template !== null);
+                    });
+            }
+
+            canEdit(user) {
+                if (this.require.length === 0) {
+                    return Promise.resolve(true);
+                }
+                return Promise
+                    .all(this.require.map(perm => user.isAllowed('templates', perm)))
+                    .then(list => list.filter(result => result))
+                    .then(list => list.length > 0);
             }
 
             toJSON() {
@@ -137,6 +159,7 @@ module.exports = SUtils
                     thumb: this._doc.thumb || null,
                     prefix: this._doc.prefix || '',
                     variants: this.variants || [],
+                    require: this._doc.require || [],
                     taxonomies: this.taxonomies || []
                 };
             }
@@ -178,6 +201,12 @@ module.exports = SUtils
                                 }
                                 self._doc.variants = JSON.stringify(self._doc.variants);
                             }
+                            if (self._doc.require) {
+                                if (!Array.isArray(self._doc.require)) {
+                                    self._doc.require = [self._doc.require];
+                                }
+                                self._doc.require = JSON.stringify(self._doc.require);
+                            }
                             if (!self._doc.type) {
                                 self._doc.type = 'template';
                             }
@@ -211,6 +240,9 @@ module.exports = SUtils
                         }
                         if (typeof self._doc.expose === 'string') {
                             self._doc.expose = JSON.parse(self._doc.expose);
+                        }
+                        if (typeof self._doc.require === 'string') {
+                            self._doc.require = JSON.parse(self._doc.require);
                         }
                         if (Array.isArray(self._doc.variants)) {
                             let promises = self
