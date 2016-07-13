@@ -1,12 +1,16 @@
 # Lackey
 
-![Travis Status for Lackey](https://travis-ci.org/getlackey/lackey-cms.svg?branch=master)
-[![Code Climate](https://codeclimate.com/github/getlackey/lackey-cms/badges/gpa.svg)](https://codeclimate.com/github/getlackey/lackey-cms)
-[![Dependency Status](https://david-dm.org/getlackey/lackey-cms.svg)](https://david-dm.org/getlackey/lackey-cms) ![](https://reposs.herokuapp.com/?path=getlackey/lackey-cms) [![npm version](https://badge.fury.io/js/lackey-cms.svg)](https://badge.fury.io/js/lackey-cms) [![This is a forkable respository](https://img.shields.io/badge/forkable-yes-brightgreen.svg)](https://basicallydan.github.io/forkability/?u=getlackey&r=lackey-cms&l=nodejs)
+ * ![Travis Status for Lackey](https://travis-ci.org/getlackey/lackey-cms.svg?branch=master)
+ * [![Code Climate](https://codeclimate.com/github/getlackey/lackey-cms/badges/gpa.svg)](https://codeclimate.com/github/getlackey/lackey-cms) #11
+ * [![Dependency Status](https://david-dm.org/getlackey/lackey-cms.svg)](https://david-dm.org/getlackey/lackey-cms) #12
+ * ![](https://reposs.herokuapp.com/?path=getlackey/lackey-cms)
+ * [![npm version](https://badge.fury.io/js/lackey-cms.svg)](https://badge.fury.io/js/lackey-cms)
+ * [![This is a forkable respository](https://img.shields.io/badge/forkable-yes-brightgreen.svg)](https://basicallydan.github.io/forkability/?u=getlackey&r=lackey-cms&l=nodejs)
+ * [![Coverage Status](https://coveralls.io/repos/github/getlackey/lackey-cms/badge.svg?branch=coveralls)](https://coveralls.io/github/getlackey/lackey-cms?branch=coveralls) #13
 
 ![Lackey](./docs/lackey-logo.png)
 
-_Version 0.5.0-rc2_
+_Version 0.5.5
 
 Lackey is __Best Practice Driven CMS__
 
