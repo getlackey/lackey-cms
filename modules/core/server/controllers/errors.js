@@ -20,33 +20,24 @@ module.exports = Promise.resolve({
     on404: (req, res) => {
 
         res.status(404);
-        res.send({
-            template: ['~/core/404', 'cms/core/404'],
-            data: {
-                path: req.path
-            }
+        res.print(['~/core/404', 'cms/core/404'], {
+            path: req.path
         });
 
     },
     on403: (req, res) => {
 
         res.status(403);
-        res.send({
-            template: ['~/core/403', 'cms/core/403'],
-            data: {
-                path: req.path
-            }
+        res.print(['~/core/403', 'cms/core/403'], {
+            path: req.path
         });
 
     },
     on500: (req, res) => {
 
         res.status(500);
-        res.send({
-            template: ['~/core/500', 'cms/core/500'],
-            data: {
-                path: req.path
-            }
+        res.print(['~/core/500', 'cms/core/500'], {
+            path: req.path
         });
 
     }
