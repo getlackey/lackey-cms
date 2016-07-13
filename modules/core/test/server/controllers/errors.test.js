@@ -33,14 +33,11 @@ describe('modules/core/server/controllers/errors', () => {
             status: (status) => {
                 res.status = status;
             },
-            send: (content) => {
+            print: (content) => {
                 try {
                     res.status.should.be.eql(404);
-                    content.should.be.eql({
-                        template: ['~/core/404', 'cms/core/404'],
-                        data: {
-                            path: 'abc'
-                        }
+                    content.should.be.eql(['~/core/404', 'cms/core/404'], {
+                        path: 'abc'
                     });
                     callback();
                 } catch (error) {
