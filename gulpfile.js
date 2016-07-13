@@ -23,8 +23,10 @@ const gulp = require('gulp'),
     del = require('del'),
     gutil = require('gulp-util'),
     rename = require('gulp-rename'),
+    path = require('path'),
     fs = require('fs'),
-    gulpJsdoc2md = require('gulp-jsdoc-to-markdown');
+    gulpJsdoc2md = require('gulp-jsdoc-to-markdown'),
+    coveralls = require('gulp-coveralls');
 
 if (!GLOBAL.LACKEY_PATH) {
     /* istanbul ignore next */
@@ -88,7 +90,19 @@ gulp.task('pre-test', ['pre-test:clean'], function () {
         .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', ['pre-test'], function () {
+gulp.task('test', ['istanbul'], () => {
+    if (!process.env.CI) {
+        process.exit(0);
+    }
+
+    return gulp.src(path.join(__dirname, 'coverage/lcov.info'))
+        .pipe(coveralls())
+        .on('end', () => {
+            process.exit(0);
+        });
+});
+
+gulp.task('istanbul', ['pre-test'], function () {
     return gulp.src([
         'test/**/*.js',
         'modules/*/test/server/models/**/*.js',
@@ -107,10 +121,7 @@ gulp.task('test', ['pre-test'], function () {
             thresholds: {
                 global: 1
             }
-        }))
-        .once('end', function () {
-            process.exit();
-        });
+        }));
 });
 
 gulp.task('mocha', ['pre-test:clean'], function () {
