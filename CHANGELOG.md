@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.5.9
+
+ * Fix create link https://github.com/getlackey/lackey-cms/issues/23
+
+## 0.5.8
+
+ * Fix sockets
+ * https://github.com/getlackey/lackey-cms/pull/19
+ * https://github.com/getlackey/lackey-cms/issues/22
+
+## 0.5.7
+
+ * fix failing tests https://github.com/getlackey/lackey-cms/pull/17
+
+## 0.5.6
+
+ * add sendinblue provider https://github.com/getlackey/lackey-cms/pull/15
+
+## 0.5.5
+
+ * fix iframe - WYSIWYG relation
+
+## 0.5.4
+
+ * default properties for templates https://github.com/getlackey/lackey-cms/pull/6
+
+## 0.5.3
+
+ * fix action condition https://github.com/getlackey/lackey-cms/pull/8
+
 ## 0.5.2
 
  * Fix header.js

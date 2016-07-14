@@ -55,7 +55,7 @@ function postProcess(file, config) {
         })
         .then((Media) => {
             SCli.debug(__MODULE_NAME, 'Create recode');
-            let filePath = file.path.match(/^http(|s):\/\//) ? file.path : '/' + path.relative(SUtils.getProjectPath(), file.path).replace(/^\//,'');
+            let filePath = file.path.match(/^http(|s):\/\//) ? file.path : '/' + path.relative(SUtils.getProjectPath(), file.path).replace(/^\//, '');
             if (file.ju) {
                 return filePath;
             }

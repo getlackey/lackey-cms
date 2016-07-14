@@ -64,8 +64,13 @@
             }
             button {
                 float: right;
-                border: none;
                 background: transparent;
+            }
+        }
+        td
+        {
+            button {
+                border: none;
             }
         }
         td:first-child,
