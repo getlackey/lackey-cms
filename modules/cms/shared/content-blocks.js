@@ -18,13 +18,11 @@
 const model = require('prosemirror/dist/model'),
       Schema = model.Schema,
       defaultSchema = model.defaultSchema,
-      dino = require('./widgets/dino'),
       dust = require('./widgets/dust'),
       twitterable = require('./widgets/twitterable'),
       command = require('prosemirror/dist/edit/command'),
       selectedNodeAttr = command.selectedNodeAttr,
       iframe = require('./widgets/iframe').iframe,
-      Dino = dino.Dino,
       Twitterable = twitterable.Twitterable,
       format = require('prosemirror/dist/format'),
       toText = format.toText,
@@ -75,7 +73,6 @@ let LackeySchema = new Schema(defaultSchema.spec.update({
       dust: Dust,
       twitterable: Twitterable,
       iframe: iframe,
-      dino: Dino,
       image: Image
 }));
 

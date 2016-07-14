@@ -11,7 +11,7 @@
                         <img src="{source}"/>
                     {/youtube}
                 {:else}
-                    <img src="/img/cms/cms/svg/file.svg"/>
+                    <img src="img/cms/cms/svg/file.svg"/>
                 {/eq}
             {/eq}
         </td>

@@ -25,9 +25,9 @@
                                     {>"cms/cms/structure/item" thumb=thumb locked="1"/}
                             {/templateData}
                     {:text}
-                            {>"cms/cms/structure/item" thumb="/img/cms/cms/svg/copy.svg" locked="1"/}
+                            {>"cms/cms/structure/item" thumb="img/cms/cms/svg/copy.svg" locked="1"/}
                     {:media}
-                            {>"cms/cms/structure/item" thumb="/img/cms/cms/svg/image.svg" locked="1"/}
+                            {>"cms/cms/structure/item" thumb="img/cms/cms/svg/image.svg" locked="1"/}
                 {/switch}
             {/path}
         </li>
