@@ -35,6 +35,7 @@ const
     tweet = require('./server/lib/dust/tweet'),
     config = require('./server/lib/dust/config'),
     userHas = require('./server/lib/dust/user-has'),
+    base = require('./server/lib/dust/base'),
     socket = SUtils.cmsMod('core').path('server/models/media/sockets'),
     sitemap = require(LACKEY_PATH).sitemap;
 
@@ -58,6 +59,7 @@ module.exports = (instance) => {
     instance.addDustHelper(acronym);
     instance.addDustHelper(config);
     instance.addDustHelper(userHas);
+    instance.addDustHelper(base);
 
     sitemap.addSource(() => {
         return require('./server/controllers/content')

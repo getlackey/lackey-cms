@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.10
+
+ * Dust `base` filter
+
 ## 0.5.9
 
  * Fix create link https://github.com/getlackey/lackey-cms/issues/23
