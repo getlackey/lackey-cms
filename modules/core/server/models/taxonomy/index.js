@@ -167,7 +167,7 @@ module.exports = SUtils
                             if (types && types.length) {
                                 query.taxonomyTypeId = types[0].id;
                             } else {
-                                console.log('Taxonomy Type not found ' + query.type);
+                                console.error('Taxonomy Type not found ' + query.type);
                             }
                             delete query.type;
                             return query;

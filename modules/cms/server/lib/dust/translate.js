@@ -50,7 +50,7 @@ module.exports = (dust) => {
                         injected.end();
                     }
                 }, (error) => {
-                    console.log(error);
+                    console.error(error);
                 });
         });
     };

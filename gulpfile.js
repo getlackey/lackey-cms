@@ -149,7 +149,6 @@ gulp.task('docs', () => {
             base: '.'
         })
         .pipe(rename(path => {
-            console.log(path);
             path.extname = '.md';
         }))
         .pipe(gulpJsdoc2md({
