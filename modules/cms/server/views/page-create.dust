@@ -19,7 +19,7 @@
                     <th>Preview</th>
                     <th>Name</th>
                     <th>Prefix</th>
-                    <th><button data-lky-btn-inverted type="submit">Create</button></th>
+                    <th><button data-lky-btn type="submit">Create</button></th>
                     <th></th>
                 </tr>
             </thead>
@@ -49,7 +49,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th><button data-lky-btn type="submit">Create</button></th>
+                    <th><button data-lky-btn-inverted type="submit">Create</button></th>
                     <th></th>
                 </tr>
             </tfoot>

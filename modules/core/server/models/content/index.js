@@ -106,7 +106,7 @@ module.exports = SUtils
             }
 
             static get createLink() {
-                return '/cms/content/create';
+                return 'cms/content/create';
             }
 
             static get taxonomyRelationModel() {

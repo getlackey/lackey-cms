@@ -36,6 +36,10 @@ module.exports = SUtils
                 return 'user';
             }
 
+            static get title() {
+                return 'Users';
+            }
+
             static get actions() {
                 return [{
                     label: 'View',

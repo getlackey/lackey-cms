@@ -13,18 +13,19 @@
 [data-lky-btn],
 [data-lky-btn-inverted] {
     border-radius: 30px;
-    border: none;
     font-size: 13px;
     padding: 8px 10px;
     text-decoration: none;
 }
 
 [data-lky-btn] {
+    border: 1px solid white;
     background: $color-lackey-light-blue;
     color: white;
 }
 
 [data-lky-btn-inverted] {
+    border: 1px solid $color-background-highlight;
     color: $color-lackey-light-blue;
     background: white;
 }
@@ -35,4 +36,7 @@
     border-radius: 4px;
     padding: 8px 10px;
     width: 250px;
+    &[data-lky-btn]  {
+        border: 1px solid white;
+    }
 }
