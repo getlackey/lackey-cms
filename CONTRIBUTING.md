@@ -15,6 +15,7 @@
   * see what [Travis](https://travis-ci.org/getlackey/lackey-cms/branches) thinks about your changes
  * squash your changes `git rebase -i HEAD~[number of commits]`
  * override brach in your fork with squashed changes `git push [remote] [branch] -f`
+ * version up
  * create pull request
  * update documentation
 
