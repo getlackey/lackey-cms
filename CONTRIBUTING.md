@@ -2,7 +2,7 @@
 
 ## Comitting
 
-### Officail Lackey Team
+### Official Lackey Team
 
  * create/checkout version or feature branch
   * we should create branch for `major.minor`
@@ -17,6 +17,10 @@
  * override brach in your fork with squashed changes `git push [remote] [branch] -f`
  * create pull request
  * update documentation
+
+#### Exceptions
+
+ * MarkDown file updates
 
 ### Other contributors
 
