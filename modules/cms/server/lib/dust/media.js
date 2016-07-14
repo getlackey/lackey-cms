@@ -120,7 +120,7 @@ function print(chunk, data, type, editMode) {
         }
         chunk.write('/>');
       } else {
-        chunk.write('<a target="_blank" href="' + source + '"><img src="/img/cms/cms/svg/file.svg"/></a>');
+        chunk.write('<a target="_blank" href="' + source + '"><img src="img/cms/cms/svg/file.svg"/></a>');
       }
     }
   } catch (e) {

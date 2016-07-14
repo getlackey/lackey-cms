@@ -131,7 +131,7 @@ class Media {
       }
       renderFile() {
             let img = document.createElement('IMG');
-            img.src = '/img/cms/cms/svg/file.svg';
+            img.src = 'img/cms/cms/svg/file.svg';
             this.replace(img);
       }
       renderImage() {
