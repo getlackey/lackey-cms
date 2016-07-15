@@ -164,15 +164,6 @@ module.exports = SUtils
                 });
             }
 
-            /**
-             * Gets user by unique id
-             * @deprecated
-             * @param {String} id
-             */
-            static getById() {
-                throw Error('use findById');
-            }
-
             _populate() {
                 let self = this;
 
@@ -190,6 +181,7 @@ module.exports = SUtils
                             return self._getAvatar();
                         }
                     })
+                    .then(() => self._loadIdentities())
                     .then(() => {
                         return self;
                     });
@@ -209,6 +201,20 @@ module.exports = SUtils
                     })
                     .then((avatar) => {
                         self._image = avatar;
+                    });
+            }
+
+            _loadIdentities() {
+                let self = this;
+                return this
+                    .getIdentities()
+                    .then((list) => {
+                        self.identities = list.map(identity => {
+                            return {
+                                id: identity.accountId,
+                                type: identity.provider
+                            };
+                        });
                     });
             }
 
@@ -577,16 +583,19 @@ module.exports = SUtils
                     .query()
                     .where('userId', this.id)
                     .andWhere('provider', provider);
+
                 if (id !== null) {
                     query = query.andWhere('accountId', id);
                 }
 
-                return SCli.sql(query.update({
-                    confirmed: confirmed
-                })).then(() => {
-                    SCli.debug(__MODULE_NAME, 'setIdentityConfirmed', 'done');
-                    return true;
-                });
+                return SCli
+                    .sql(query.update({
+                        confirmed: confirmed
+                    }))
+                    .then(() => {
+                        SCli.debug(__MODULE_NAME, 'setIdentityConfirmed', 'done');
+                        return true;
+                    });
             }
 
             /**
@@ -598,9 +607,11 @@ module.exports = SUtils
                 SCli.debug(__MODULE_NAME, 'getRoles');
 
                 let self = this;
-                return SCli.sql(ACL.query()
+                return SCli
+                    .sql(ACL.query()
                         .where('userId', this.id)
-                    ).then((records) => {
+                    )
+                    .then((records) => {
                         return Role.findByIds(records.map((record) => {
                             return record.roleId;
                         }));
@@ -752,7 +763,8 @@ module.exports = SUtils
                     route: this.route,
                     image: this.image ? this.image.toJSON() : null,
                     id: this.id,
-                    taxonomies: this.taxonomies
+                    taxonomies: this.taxonomies,
+                    identities: this.identities
                 };
             }
 
@@ -780,7 +792,8 @@ module.exports = SUtils
                 SCli.debug(__MODULE_NAME, 'setIdentitySafe');
 
                 let args = [].slice.call(arguments);
-                return this._detectConflict(provider, id)
+                return this
+                    ._detectConflict(provider, id)
                     .then(this.bind(this.setIdentity, args));
             }
 
@@ -795,36 +808,40 @@ module.exports = SUtils
                 let self = this;
 
                 return objection.transaction(Identities, function (BoundIdentities) {
-                    return SCli.sql(BoundIdentities
-                        .query()
-                        .where('userId', self.id)
-                        .andWhere('provider', provider)
-                        .andWhere('accountId', id)
-                        .update({
-                            accessToken: accessToken || null,
-                            refreshToken: refreshToken || null,
-                            providerData: providerData || null,
-                            confirmed: confirmed || false
-                        })
-                    ).then((count) => {
-                        if (count > 0) return Promise.resolve(self);
-                        SCli.debug(__MODULE_NAME, 'setIdentity', 'insert');
-                        return SCli.sql(BoundIdentities
-                            .query()
-                            .insertAndFetch({
-                                accessToken: accessToken || null,
-                                refreshToken: refreshToken || null,
-                                providerData: providerData || null,
-                                userId: self.id,
-                                provider: provider,
-                                accountId: id,
-                                confirmed: confirmed || false
-                            }));
+                        return SCli
+                            .sql(BoundIdentities
+                                .query()
+                                .where('userId', self.id)
+                                .andWhere('provider', provider)
+                                .andWhere('accountId', id)
+                                .update({
+                                    accessToken: accessToken || null,
+                                    refreshToken: refreshToken || null,
+                                    providerData: providerData || null,
+                                    confirmed: confirmed || false
+                                })
+                            )
+                            .then((count) => {
+                                if (count > 0) return Promise.resolve(self);
+                                SCli.debug(__MODULE_NAME, 'setIdentity', 'insert');
+                                return SCli.sql(BoundIdentities
+                                    .query()
+                                    .insertAndFetch({
+                                        accessToken: accessToken || null,
+                                        refreshToken: refreshToken || null,
+                                        providerData: providerData || null,
+                                        userId: self.id,
+                                        provider: provider,
+                                        accountId: id,
+                                        confirmed: confirmed || false
+                                    }));
+                            });
+                    })
+                    .then(() => self._loadIdentities())
+                    .then(() => {
+                        SCli.debug(__MODULE_NAME, 'setIdentity', 'done');
+                        return self;
                     });
-                }).then(() => {
-                    SCli.debug(__MODULE_NAME, 'setIdentity', 'done');
-                    return self;
-                });
             }
 
             /**
@@ -874,7 +891,9 @@ module.exports = SUtils
 
                 SCli.debug(__MODULE_NAME, 'formatIdentity');
 
-                if (!identity) return identity;
+                if (!identity) {
+                    return identity;
+                }
                 if (typeof identity.providerData === 'string') {
                     identity.providerData = JSON.parse(identity.providerData);
                 }
@@ -895,26 +914,32 @@ module.exports = SUtils
 
                 SCli.debug(__MODULE_NAME, 'removeIdentity', provider, id);
 
-                return SCli.sql(Identities
-                    .query()
-                    .delete()
-                    .where('userId', this.id)
-                    .where('provider', provider)
-                    .where('accountId', id)
-                ).then(() => true);
+                return SCli
+                    .sql(Identities
+                        .query()
+                        .delete()
+                        .where('userId', this.id)
+                        .where('provider', provider)
+                        .where('accountId', id)
+                    )
+                    .then(() => this._loadIdentities())
+                    .then(() => true);
             }
 
             removeOtherIdentity(provider, id) {
 
                 SCli.debug(__MODULE_NAME, 'removeOtherIdentity', provider, id);
 
-                return SCli.sql(Identities
-                    .query()
-                    .delete()
-                    .where('userId', this.id)
-                    .where('provider', provider)
-                    .whereNot('accountId', id)
-                ).then(() => true);
+                return SCli
+                    .sql(Identities
+                        .query()
+                        .delete()
+                        .where('userId', this.id)
+                        .where('provider', provider)
+                        .whereNot('accountId', id)
+                    )
+                    .then(() => this._loadIdentities())
+                    .then(() => true);
             }
         }
 
