@@ -27,15 +27,15 @@ module.exports = SUtils
         class Controller extends Crud {
 
             static get model() {
-                return Model;
+                return this._overriden('model', Model);
             }
 
             static get field() {
-                return 'taxonomy';
+                return this._overriden('field', 'taxonomy');
             }
 
             static get tableConfig() {
-                return {
+                return this._overriden('tableConfig', {
                     name: {
                         label: 'Name',
                         like: true
@@ -49,9 +49,8 @@ module.exports = SUtils
                         parse: 'return arguments[0] ? arguments[0].label : \'\''
                     }
 
-                };
+                });
             }
-
 
         }
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.12
+
+ * Add ability to override static getters of crud controllers
+
+## 0.5.11
+
+ * Change path of attachment icon from `/img/cms/cms/svg/file.svg` to `img/cms/cms/svg/file.svg`
+
 ## 0.5.10
 
  * Dust `base` filter

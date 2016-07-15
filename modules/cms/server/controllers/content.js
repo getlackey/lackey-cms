@@ -28,15 +28,15 @@ module.exports = SUtils.waitForAs('contentCtrl',
         class ContentCtrl extends Crud {
 
             static get model() {
-                return Model;
+                return this._overriden('model', Model);
             }
 
             static get field() {
-                return 'content';
+                return this._overriden('field', 'content');
             }
 
             static get tableConfig() {
-                return {
+                return this._overriden('tableConfig', {
                     createdAt: {
                         label: 'Created at',
                         date: true
@@ -58,7 +58,7 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     state: {
                         name: 'Status'
                     }
-                };
+                });
             }
 
             static create(req, res) {
@@ -87,7 +87,7 @@ module.exports = SUtils.waitForAs('contentCtrl',
             }
 
             static get actions() {
-                return [{
+                return this._overriden('actions', [{
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
                     href: 'admin{route}'
@@ -95,7 +95,7 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     label: 'Remove',
                     icon: 'img/cms/cms/svg/close.svg',
                     api: 'DELETE:/cms/content/{id}'
-                }];
+                }]);
             }
 
             static cmsList(req, res) {
