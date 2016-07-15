@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.13
+
+ * Expose user identities
+ * Close api endpoints
+
 ## 0.5.12
 
  * Add ability to override static getters of crud controllers
