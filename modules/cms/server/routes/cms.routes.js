@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -20,7 +21,7 @@ const SUtils = require(LACKEY_PATH).utils;
 function cmsResourceRoutes(server, name, param, controller) {
     server.route('/cms/' + name).get(server.aclAdmin, controller.method('table'));
 
-    server.crud('/api/cms/' + name, param, [ /*server.acl*/ ], {
+    server.crud('/api/cms/' + name, param, [server.aclAdmin], {
         list: controller.method('list'),
         create: controller.method('create'),
         read: controller.method('read'),
@@ -30,7 +31,7 @@ function cmsResourceRoutes(server, name, param, controller) {
     });
 }
 
-module.exports = (server, config) => {
+module.exports = (server) => {
 
     return SUtils
         .waitForAs('cms routes',
