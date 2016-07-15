@@ -29,26 +29,26 @@ module.exports = SUtils
         class Controller extends Crud {
 
             static get model() {
-                return Model;
+                return this._overriden('model', Model);
             }
 
             static get field() {
-                return 'user';
+                return this._overriden('field', 'user');
             }
 
             static get title() {
-                return 'Users';
+                return this._overriden('title', 'Users');
             }
 
             static get actions() {
-                return [{
+                return this._overriden('actions', [{
                     label: 'View',
                     href: 'cms/user/{id}'
-                }];
+                }]);
             }
 
             static get tableConfig() {
-                return {
+                return this._overriden('tableConfig', {
                     name: {
                         label: 'Name',
                         like: true
@@ -61,7 +61,11 @@ module.exports = SUtils
                         label: 'Classification',
                         parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
                     }
-                };
+                });
+            }
+
+            static get tableActions() {
+                return this._overriden('tableActions', undefined);
             }
 
             static preview(req, res) {

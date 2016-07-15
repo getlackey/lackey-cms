@@ -1,4 +1,5 @@
 /* jslint esnext:true, node:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -26,8 +27,36 @@ class CRUDController {
         throw new Error('You have to override this method');
     }
 
+    static get title() {
+        return this._overriden('title', this.field);
+    }
+
+    static get actions() {
+        return this._overriden('actions', undefined);
+    }
+
+    static get tableActions() {
+        return this._overriden('tableActions', undefined);
+    }
+
     static get tableConfig() {
-        throw new Error('You have to override this method');
+        return this._overriden('tableConfig', null);
+    }
+
+    static overrideGetter(field, handler) {
+        this.__overrides = this.__overrides || {};
+        this.__overrides[field] = this.__overrides[field] || [];
+        this.__overrides[field].push(handler);
+    }
+
+    static _overriden(field, input) {
+        let output = input;
+        if (this.__overrides && this.__overrides[field]) {
+            this.__overrides[field].forEach(handler => {
+                output = handler(output);
+            });
+        }
+        return output;
     }
 
     // ================================================ CRUD
@@ -91,7 +120,7 @@ class CRUDController {
         return this.model
             .table(options.query, this.tableConfig, options.options)
             .then((data) => {
-                if(options.options.format === 'table') {
+                if (options.options.format === 'table') {
                     self.mapActions(this.actions, data.columns, data.rows);
                 }
                 return data;

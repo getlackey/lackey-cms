@@ -26,15 +26,15 @@ module.exports = SUtils.waitForAs('langCtrl',
         class Controller extends Crud {
 
             static get model() {
-                return Model;
+                return this._overriden('model', Model);
             }
 
             static get field() {
-                return 'language';
+                return this._overriden('field', 'language');
             }
 
             static get tableConfig() {
-                return {
+                return this._overriden('tableConfig', {
                     code: {
                         label: 'Code',
                         like: true
@@ -49,7 +49,7 @@ module.exports = SUtils.waitForAs('langCtrl',
                         parse: 'return arguments[0] ? \'Enabled\' : \'Disabled\''
                     }
 
-                };
+                });
             }
 
 

@@ -28,32 +28,12 @@ module.exports = SUtils
         class Controller extends Crud {
 
             static get model() {
-                return Model;
+                return this._overriden('model', Model);
             }
 
             static get field() {
-                return 'role';
+                return this._overriden('field', 'role');
             }
-
-            static get tableConfig() {
-                return null;
-                /*{
-                                    name: {
-                                        label: 'Name',
-                                        like: true
-                                    },
-                                    label: {
-                                        label: 'Label',
-                                        like: true
-                                    },
-                                    type: {
-                                        name: 'Type',
-                                        parse: 'return arguments[0] ? arguments[0].label : \'\''
-                                    }
-
-                                };*/
-            }
-
 
         }
 

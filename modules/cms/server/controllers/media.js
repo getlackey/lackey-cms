@@ -27,15 +27,11 @@ module.exports = SUtils
         class Controller extends Crud {
 
             static get model() {
-                return Model;
+                return this._overriden('model', Model);
             }
 
             static get field() {
-                return 'media';
-            }
-
-            static get tableConfig() {
-                return null;
+                return this._overriden('field', 'media');
             }
 
             static create(req, res) {

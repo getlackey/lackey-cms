@@ -28,15 +28,15 @@ module.exports = SUtils
         class RedirectCtrl extends Crud {
 
             static get model() {
-                return Model;
+                return this._overriden('model', Model);
             }
 
             static get field() {
-                return 'redirectRule';
+                return this._overriden('field', 'redirectRule');
             }
 
             static get tableConfig() {
-                return {
+                return this._overriden('tableConfig', {
                     createdAt: {
                         label: 'Created at'
                     },
@@ -50,7 +50,7 @@ module.exports = SUtils
                     type: {
                         name: 'Type'
                     }
-                };
+                });
             }
 
             static capture(req, res, next) {
