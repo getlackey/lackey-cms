@@ -34,6 +34,33 @@ module.exports = SUtils
                 return this._overriden('field', 'media');
             }
 
+            static get tableConfig() {
+                return this._overriden('tableConfig', {
+                    name: {
+                        label: 'Name'
+                    },
+                    mime: {
+                        label: 'Type'
+                    },
+                    createdAt: {
+                        name: 'Created At',
+                        date: true
+                    }
+                });
+            }
+
+            static get actions() {
+                return this._overriden('actions', [{
+                    label: 'View',
+                    icon: 'img/cms/cms/svg/preview.svg',
+                    href: '{name}'
+                }, {
+                    label: 'Remove',
+                    icon: 'img/cms/cms/svg/close.svg',
+                    api: 'DELETE:/cms/media/{id}'
+                }]);
+            }
+
             static create(req, res) {
                 if (req.body.source) {
                     return Model
