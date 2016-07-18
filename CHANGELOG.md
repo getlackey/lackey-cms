@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.18
+
+ * Remove user preview link
+
+## 0.5.17
+
+ * Tidy up media table
+
 ## 0.5.15-0.5.16
 
  * Allow to export tables as XSLS

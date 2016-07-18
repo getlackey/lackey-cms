@@ -40,13 +40,6 @@ module.exports = SUtils
                 return this._overriden('title', 'Users');
             }
 
-            static get actions() {
-                return this._overriden('actions', [{
-                    label: 'View',
-                    href: 'cms/user/{id}'
-                }]);
-            }
-
             static get tableConfig() {
                 return this._overriden('tableConfig', {
                     name: {
