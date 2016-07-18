@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "0.5.14",
+  "version": "0.5.15",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -48,6 +48,7 @@
     "dustjs-helpers": "^1.7.3",
     "dustjs-linkedin": "2.7.2",
     "escape-html": "^1.0.3",
+    "excel-export": "^0.5.1",
     "express": "^4.13.3",
     "express-bunyan-logger": "^1.2.0",
     "express-session": "^1.13.0",

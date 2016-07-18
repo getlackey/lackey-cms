@@ -30,7 +30,7 @@
                         </button>
             {/href}
         {/tableActions}
-
+        <a data-lky-btn class="tableAction" href="{route|base}.csv">Download as CSV</a>
     <h2>{title}</h2>
     {>"cms/core/table" table=data.table/}
 </section>
