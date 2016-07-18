@@ -128,42 +128,6 @@ class Table {
             api
                 .read(path)
                 .then((response) => {
-
-                    response.rows.map((row) => {
-                        let columns = [];
-                        self._columns.forEach((column) => {
-                            let value = row[column.name];
-                            if (column.parse) {
-                                let parse = new Function('val', column.parse); //eslint-disable-line no-new-func
-                                value = parse(value);
-                            }
-
-                            if (value && column.link) {
-                                value = {
-                                    href: value,
-                                    label: column.linkText || value
-                                };
-                            }
-
-                            if (value && column.date) {
-                                value = {
-                                    date: value
-                                };
-                            }
-
-                            if (Array.isArray(value)) {
-                                value = value.join(', ');
-                            }
-
-                            columns.push({
-                                value: value
-                            });
-                        });
-                        return {
-                            columns: columns
-                        };
-                    });
-
                     context = {
                         table: response,
                         host: xhr.base
