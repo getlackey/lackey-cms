@@ -193,24 +193,40 @@ class CRUDController {
     static table(req, res) {
 
         let restParams = req.getRESTQuery(true),
+            isExport = req.__resFormat === 'xlsx',
             self = this,
-            config;
+            config,
+            tableConfig = isExport && self.exportConfig ? self.exportConfig : self.tableConfig;
 
         require(LACKEY_PATH)
             .configuration()
             .then((_config) => {
                 config = _config;
 
-                return this
+                return self
                     .model
-                    .table(restParams.query, this.tableConfig, {
+                    .table(restParams.query, tableConfig, {
                         format: 'table',
-                        keepReference: true
+                        keepReference: true,
+                        nolimit: isExport
                     });
             })
             .then((data) => {
+                if (isExport) {
+                    res.send({
+                        table: {
+                            cols: data.columns.map(column => {
+                                return {
+                                    caption: column.label
+                                };
+                            }),
+                            rows: data.rows.map(row => row.columns.map(column => column.value !== undefined ? column.value : ''))
+                        }
+                    });
+                    return;
+                }
                 try {
-                    self.mapActions(this.actions, data.columns, data.rows);
+                    self.mapActions(self.actions, data.columns, data.rows);
                 } catch (e) {
                     res.error(e);
                 }
@@ -222,7 +238,7 @@ class CRUDController {
                 res.send({
                     title: self.title || self.field,
                     create: self.model.createLink,
-                    tableActions: this.tableActions,
+                    tableActions: self.tableActions,
                     template: 'cms/cms/tableview',
                     javascripts: [
                         'js/cms/cms/table.js'

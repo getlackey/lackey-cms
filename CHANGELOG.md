@@ -1,9 +1,17 @@
 # Changelog
 
+## 0.5.15
+
+ * Allow to export tables as XSLS
+
+## 0.5.14
+
+ * Fix tables on frontend
+
 ## 0.5.13
 
- * Expose user identities
- * Close api endpoints
+ * Expose identities for user
+ * Lock down API
 
 ## 0.5.12
 

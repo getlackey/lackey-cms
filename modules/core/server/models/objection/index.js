@@ -542,11 +542,11 @@ module.exports = Database
                             .then((count) => {
 
                                 if (options) {
-                                    if (options.limit) {
+                                    if (options.limit && !options.nolimit) {
                                         perPage = options.limit;
                                     }
 
-                                    if (options.offset) {
+                                    if (options.offset && !options.nolimit) {
                                         page = Math.floor(options.offset / perPage) - 1;
                                     }
 
@@ -566,10 +566,14 @@ module.exports = Database
                                     table.paging.sort = sort;
                                 }
 
-                                let queryOptions = {
-                                    offset: (options && options.offset !== undefined) ? options.offset : table.paging.offset,
-                                    limit: (options && options.limit !== undefined) ? options.limit : table.paging.perPage
-                                };
+                                let queryOptions = {};
+
+                                if (!options.nolimit) {
+                                    queryOptions = {
+                                        offset: (options && options.offset !== undefined) ? options.offset : table.paging.offset,
+                                        limit: (options && options.limit !== undefined) ? options.limit : table.paging.perPage
+                                    };
+                                }
 
                                 if (sort) {
                                     queryOptions.sort = sort;
