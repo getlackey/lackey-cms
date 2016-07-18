@@ -18,7 +18,6 @@
 
 module.exports = Promise.resolve({
     on404: (req, res) => {
-        console.log('error ', req.path, req.route);
         res.status(404);
         res.print(['~/core/404', 'cms/core/404'], {
             path: req.path
