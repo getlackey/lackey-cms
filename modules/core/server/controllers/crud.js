@@ -43,6 +43,10 @@ class CRUDController {
         return this._overriden('tableConfig', null);
     }
 
+     static get exportConfig() {
+        return this._overriden('exportConfig', null);
+    }
+
     static overrideGetter(field, handler) {
         this.__overrides = this.__overrides || {};
         this.__overrides[field] = this.__overrides[field] || [];
