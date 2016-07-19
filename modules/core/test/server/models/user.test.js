@@ -334,6 +334,41 @@ describe('modules/core/server/models/user', () => {
             }).should.be.finally.eql(true)]);
     });
 
+    it('Removes user', () => {
+        savedUser.name.should.not.be.eql('Deleted user ' + savedUser.id);
+        return savedUser
+            .remove()
+            .then(() => {
+                return UserModel
+                    .exists(EMAIL);
+            })
+            .then(exists => {
+                should(exists).be.False;
+                return UserModel.getByProvider(UserModel.EMAIL, EMAIL);
+            })
+            .then((user) => {
+                should.not.exist(user);
+                return UserModel.findById(savedUser.id);
+            })
+            .then((user) => {
+                user.id.should.be.eql(savedUser.id);
+                user._doc.deleted.should.be.True;
+                user.name.should.be.eql('Deleted user ' + user.id);
+            })
+            .then(() => true)
+            .should.be.finally.eql(true);
+    });
+
+    it('Runs query', () => {
+        return UserModel
+            .table()
+            .then(table => {
+                table.data.length.should.be.eql(0);
+                return UserModel.count();
+            })
+            .should.be.finally.eql(1);
+    });
+
     it('Loads init data', () => {
         Generator.registerMapper('User', UserGenerator);
         return Generator

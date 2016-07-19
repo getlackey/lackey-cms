@@ -1,4 +1,4 @@
-/* jslint node:true */
+/* jslint node:true, esnext:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -18,29 +18,49 @@
 
 const xhr = require('core/client/js/xhr');
 
-function parse(data, readAs) {
+function parse(data, readAs, asError) {
+  console.log(data);
   let format = readAs || 'json';
   if (data === null || data === undefined) {
+    if (asError) {
+      throw new Error(null);
+    }
     return null;
   }
   switch (format) {
     default: {
+      if (asError) {
+        let innerData = JSON.parse(data.data);
+        if (typeof innerData.data === 'string') {
+          throw new Error(innerData.data);
+        }
+        throw data;
+      }
       return JSON.parse(data);
     }
   }
 }
 
+
 module.exports = {
   read: function (path, readAs) {
-    return xhr.basedGet('/api' + path).then((response) => parse(response, readAs));
+    return xhr
+      .basedGet('/api' + path)
+      .then(response => parse(response, readAs), response => parse(response, readAs, true));
   },
   create: function (path, data, readAs) {
-    return xhr.basedPost('/api' + path, data).then((response) => parse(response, readAs));
+    return xhr
+      .basedPost('/api' + path, data)
+      .then(response => parse(response, readAs), response => parse(response, readAs, true));
   },
   update: function (path, data, readAs) {
-    return xhr.basedPut('/api' + path, data).then((response) => parse(response, readAs));
+    return xhr
+      .basedPut('/api' + path, data)
+      .then(response => parse(response, readAs), response => parse(response, readAs, true));
   },
   delete: function (path, readAs) {
-    return xhr.basedDelete('/api' + path).then((response) => parse(response, readAs));
+    return xhr
+      .basedDelete('/api' + path)
+      .then(response => parse(response, readAs), response => parse(response, readAs, true));
   }
 };

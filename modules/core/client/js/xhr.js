@@ -43,6 +43,11 @@ var XHR = {
           } else if (xhr.status === '204') {
             resolve(null);
           } else {
+            if (xhr.responseText && xhr.responseText.length) {
+              let error = new Error('Error: ' + (xhr.status === 0 ? 'Network problem' : statuses[xhr.status]));
+              error.data = xhr.responseText;
+              reject(error);
+            }
             reject(new Error('Error: ' + (xhr.status === 0 ? 'Network problem' : statuses[xhr.status]))); // An error occurred during the request.
           }
         }

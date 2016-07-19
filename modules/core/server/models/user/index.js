@@ -218,6 +218,26 @@ module.exports = SUtils
                     });
             }
 
+            static _preQuery(innerQuery, options) {
+
+                let query = innerQuery ? JSON.parse(JSON.stringify(innerQuery)) : {},
+                    opts = options ? options : {};
+
+                SCli.debug(__MODULE_NAME, '_preQuery', JSON.stringify(innerQuery), JSON.stringify(opts));
+
+                query.$or = [
+                    {
+                        deleted: false
+                    }, {
+                        deleted: null
+                    }
+                    ];
+
+                SCli.debug(__MODULE_NAME, '_preQuery after', JSON.stringify(query), JSON.stringify(opts));
+
+                return super._preQuery(query, opts);
+            }
+
             _preSave(options) {
 
                 if (this.preventSave) {
@@ -957,7 +977,11 @@ module.exports = SUtils
                     SCli.sql(ACL
                             .query()
                             .delete()
-                            .where('userId', this.id))
+                            .where('userId', this.id)),
+                    SCli.sql(UserToTaxonomy
+                            .query()
+                            .delete()
+                            .where('taxonomyUserId', this.id))
                     ])
                     .then(() => {
                         self._doc.deleted = true;

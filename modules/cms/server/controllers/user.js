@@ -50,23 +50,24 @@ module.exports = SUtils
 
             // Delete
             static delete(req, res) {
+
+                let del = super.delete;
+
                 if (!req.admin) {
                     return res.error403();
                 }
 
+                if (req.admin.id === req.user.id) {
+                    return res.error('Can\'t delete yourself');
+                }
+
                 return Promise
-                    .all(res.user.roles.map(role => {
+                    .all(req.user.roles.map(role => {
                         return req.admin.isAllowed('deleteUser', role.name);
                     }))
                     .then(isAllowed => {
                         if (isAllowed.filter(allowed => !allowed).length === 0) {
-                            req[this.field]
-                                .remove()
-                                .then(result => {
-                                    res.api(result);
-                                }, error => {
-                                    req.error(req, error);
-                                });
+                            return del.apply(this, [req, res]);
                         } else {
                             return res.error403();
                         }
