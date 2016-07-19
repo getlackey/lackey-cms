@@ -40,6 +40,39 @@ module.exports = SUtils
                 return this._overriden('title', 'Users');
             }
 
+            static get actions() {
+                return this._overriden('actions', [{
+                    label: 'Remove',
+                    icon: 'img/cms/cms/svg/close.svg',
+                    api: 'DELETE:/cms/user/{id}'
+                }]);
+            }
+
+            // Delete
+            static delete(req, res) {
+                if (!req.admin) {
+                    return res.error403();
+                }
+
+                return Promise
+                    .all(res.user.roles.map(role => {
+                        return req.admin.isAllowed('deleteUser', role.name);
+                    }))
+                    .then(isAllowed => {
+                        if (isAllowed.filter(allowed => !allowed).length === 0) {
+                            req[this.field]
+                                .remove()
+                                .then(result => {
+                                    res.api(result);
+                                }, error => {
+                                    req.error(req, error);
+                                });
+                        } else {
+                            return res.error403();
+                        }
+                    });
+            }
+
             static get tableConfig() {
                 return this._overriden('tableConfig', {
                     name: {

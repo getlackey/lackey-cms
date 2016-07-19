@@ -941,6 +941,34 @@ module.exports = SUtils
                     .then(() => this._loadIdentities())
                     .then(() => true);
             }
+
+            remove() {
+                let self = this;
+                return Promise
+                    .all([
+                    SCli.sql(Identities
+                            .query()
+                            .delete()
+                            .where('userId', this.id)),
+                    SCli.sql(Tokens
+                            .query()
+                            .delete()
+                            .where('userId', this.id)),
+                    SCli.sql(ACL
+                            .query()
+                            .delete()
+                            .where('userId', this.id))
+                    ])
+                    .then(() => {
+                        self._doc.deleted = true;
+                        self._doc.name = 'Deleted user ' + self._doc.id;
+                        self._doc.hashedPassword = '';
+                        self._doc.title = '';
+                        self._doc.bio = '';
+                        self._doc.avatar = null;
+                        return self.save();
+                    });
+            }
         }
 
         User.generator = require('./generator');
