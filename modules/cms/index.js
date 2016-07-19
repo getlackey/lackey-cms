@@ -22,6 +22,7 @@ const
     SUtils = require(LACKEY_PATH).utils,
     editable = require('./server/lib/dust/editable'),
     translate = require('./server/lib/dust/translate'),
+    acl = require('./server/lib/dust/acl'),
     image = require('./server/lib/dust/media'),
     error = require('./server/lib/dust/error'),
     embed = require('./server/lib/dust/embed'),
@@ -60,6 +61,7 @@ module.exports = (instance) => {
     instance.addDustHelper(config);
     instance.addDustHelper(userHas);
     instance.addDustHelper(base);
+    instance.addDustHelper(acl);
 
     sitemap.addSource(() => {
         return require('./server/controllers/content')

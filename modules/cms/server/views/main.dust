@@ -20,35 +20,49 @@
                 <li>
                     <a href="">Homepage</a>
                 </li>
-                <li>
-                    <a href="cms/user">Users</a>
-                </li>
-                <li>
-                    <a href="cms/media">Media</a>
-                </li>
-                <li>
-                    <a href="cms/taxonomy">Tags</a>
-                </li>
-                <li>
-                    <a href="cms/content">Content</a>
-                </li>
+                {@acl perm="adminMenu" method="users"}
+                    <li>
+                        <a href="cms/user">Users</a>
+                    </li>
+                {/acl}
+                {@acl perm="adminMenu" method="media"}
+                    <li>
+                        <a href="cms/media">Media</a>
+                    </li>
+                {/acl}
+                {@acl perm="adminMenu" method="tags"}
+                    <li>
+                        <a href="cms/taxonomy">Tags</a>
+                    </li>
+                {/acl}
+                {@acl perm="adminMenu" method="content"}
+                    <li>
+                        <a href="cms/content">Content</a>
+                    </li>
+                {/acl}
                 {@config}
                     {@path root=. path="cms.items"}
                         <li data-class="divider"></li>
                         {#.}
-                            <li>
-                                <a href="{uri}">{label}</a>
-                            </li>
+                            {@acl perm="adminMenu" method=label}
+                                <li>
+                                    <a href="{uri}">{label}</a>
+                                </li>
+                            {/acl}
                         {/.}
                     {/path}
                 {/config}
                 <li data-class="divider"></li>
-                <li>
-                    <a href="http://lackey.io">Updates</a>
-                </li>
-                <li>
-                    <a href="cms/terms">Terms</a>
-                </li>
+                {@acl perm="adminMenu" method="updates"}
+                    <li>
+                        <a href="http://lackey.io">Updates</a>
+                    </li>
+                {/acl}
+                {@acl perm="adminMenu" method="terms"}
+                    <li>
+                        <a href="cms/terms">Terms</a>
+                    </li>
+                {/acl}
                 <li>
                     <a href="logout">Logout</a>
                 </li>
@@ -63,7 +77,13 @@
                       <div class="hamburger-inner"></div>
                     </div>
                 </button>
-                <button data-lky-hook="header.settings">Settings</button>
+                <button data-lky-hook="header.settings" data-lky-ignore="
+                    {@acl perm="adminMenu" method="meta"}{:else}meta,{/acl}
+                    {@acl perm="adminMenu" method="dimensions"}{:else}dimensions,{/acl}
+                    {@acl perm="adminMenu" method="taxonomy"}{:else}taxonomy,{/acl}
+                    {@acl perm="adminMenu" method="blocks"}{:else}blocks,{/acl}
+                    {@acl perm="adminMenu" method="diff"}{:else}diff,{/acl}
+                ">Settings</button>
                 <button data-lky-hook="header.publish">
                     <label data-lky-switch>
                         <input type="checkbox" name="published"/>

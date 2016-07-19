@@ -51,6 +51,7 @@ init:
                 viewas: '*'
                 /api/*:
                     - get
+                adminMenu: '*'
         -
             name: admin
             acl:
@@ -77,6 +78,7 @@ init:
                 viewas: '*'
                 /api/*:
                     - get
+                adminMenu: '*'
     # Users
     User:
         -   email : test@example.com
