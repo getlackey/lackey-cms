@@ -34,7 +34,7 @@ module.exports = (dust) => {
             })
             .then((isAllowed) => {
                 if (!isAllowed) {
-                    chunk.render(bodies.else, context);
+                    return chunk.render(bodies.else, context);
                 }
                 return chunk;
             }, (error) => {
