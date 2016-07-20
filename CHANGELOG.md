@@ -4,6 +4,7 @@
 
  * Improve user deletion
  * build and implement acl dust helper
+ * ACL dust helper
 
 ## 0.5.18
 
