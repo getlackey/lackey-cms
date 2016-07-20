@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.19
+
+ * Improve user deletion
+ * build and implement acl dust helper
+ * ACL dust helper
+
 ## 0.5.18
 
  * Remove user preview link

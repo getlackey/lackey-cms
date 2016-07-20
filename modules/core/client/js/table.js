@@ -21,6 +21,7 @@ const template = require('core/client/js/template'),
     lackey = require('core/client/js'),
     qs = require('query-string'),
     xhr = require('core/client/js/xhr'),
+    growl = require('cms/client/js/growl'),
     api = require('core/client/js/api');
 
 class Table {
@@ -62,9 +63,15 @@ class Table {
             case 'DELETE':
                 {
                     if (confirm('Are you sure? There is no undo')) {
-                        api.delete(apiAction[1])
+                        api
+                            .delete(apiAction[1])
                             .then(() => {
                                 self.page(0);
+                            }, error => {
+                                growl({
+                                    status: 'error',
+                                    message: error.message || error.toString()
+                                });
                             });
                     }
                 }

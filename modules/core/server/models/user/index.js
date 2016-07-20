@@ -218,6 +218,26 @@ module.exports = SUtils
                     });
             }
 
+            static _preQuery(innerQuery, options) {
+
+                let query = innerQuery ? JSON.parse(JSON.stringify(innerQuery)) : {},
+                    opts = options ? options : {};
+
+                SCli.debug(__MODULE_NAME, '_preQuery', JSON.stringify(innerQuery), JSON.stringify(opts));
+
+                query.$or = [
+                    {
+                        deleted: false
+                    }, {
+                        deleted: null
+                    }
+                    ];
+
+                SCli.debug(__MODULE_NAME, '_preQuery after', JSON.stringify(query), JSON.stringify(opts));
+
+                return super._preQuery(query, opts);
+            }
+
             _preSave(options) {
 
                 if (this.preventSave) {
@@ -940,6 +960,38 @@ module.exports = SUtils
                     )
                     .then(() => this._loadIdentities())
                     .then(() => true);
+            }
+
+            remove() {
+                let self = this;
+                return Promise
+                    .all([
+                    SCli.sql(Identities
+                            .query()
+                            .delete()
+                            .where('userId', this.id)),
+                    SCli.sql(Tokens
+                            .query()
+                            .delete()
+                            .where('userId', this.id)),
+                    SCli.sql(ACL
+                            .query()
+                            .delete()
+                            .where('userId', this.id)),
+                    SCli.sql(UserToTaxonomy
+                            .query()
+                            .delete()
+                            .where('taxonomyUserId', this.id))
+                    ])
+                    .then(() => {
+                        self._doc.deleted = true;
+                        self._doc.name = 'Deleted user ' + self._doc.id;
+                        self._doc.hashedPassword = '';
+                        self._doc.title = '';
+                        self._doc.bio = '';
+                        self._doc.avatar = null;
+                        return self.save();
+                    });
             }
         }
 

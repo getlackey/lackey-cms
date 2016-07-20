@@ -40,6 +40,40 @@ module.exports = SUtils
                 return this._overriden('title', 'Users');
             }
 
+            static get actions() {
+                return this._overriden('actions', [{
+                    label: 'Remove',
+                    icon: 'img/cms/cms/svg/close.svg',
+                    api: 'DELETE:/cms/user/{id}'
+                }]);
+            }
+
+            // Delete
+            static delete(req, res) {
+
+                let del = super.delete;
+
+                if (!req.admin) {
+                    return res.error403();
+                }
+
+                if (req.admin.id === req.user.id) {
+                    return res.error('Can\'t delete yourself');
+                }
+
+                return Promise
+                    .all(req.user.roles.map(role => {
+                        return req.admin.isAllowed('deleteUser', role.name);
+                    }))
+                    .then(isAllowed => {
+                        if (isAllowed.filter(allowed => !allowed).length === 0) {
+                            return del.apply(this, [req, res]);
+                        } else {
+                            return res.error403();
+                        }
+                    });
+            }
+
             static get tableConfig() {
                 return this._overriden('tableConfig', {
                     name: {

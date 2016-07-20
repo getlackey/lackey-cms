@@ -343,42 +343,44 @@ module.exports = Database
                     }
 
                     static where(cursor, query, operand) {
-                        let cur = cursor,
-                            self = this,
+
+                        SCli.debug(__MODULE_NAME, 'where', this.model.tableName, JSON.stringify(query), operand);
+
+                        let self = this,
                             fn = operand === 'or' ? 'orWhere' : 'where';
 
                         Object.keys(query).forEach((key) => {
-
                             if (key === '$or') {
-                                cur = cur.andWhere(function () {
+                                cursor.andWhere(function () {
+                                    let inner = this;
                                     query.$or.forEach((condition, index) => {
                                         if (index === 0) {
-                                            cur = self.where(cur, condition);
+                                            self.where(inner, condition);
                                         } else {
-                                            cur = self.where(cur, condition, 'or');
+                                            self.where(inner, condition, 'or');
                                         }
                                     });
                                 });
 
                             } else if (query[key] === null) {
-                                cur = cur.whereNull(key);
+                                cursor[operand === 'or' ? 'orWhereNull' : 'whereNull'](key);
                             } else if (typeof query[key] === 'object') {
                                 if (Array.isArray(query[key].$in)) {
-                                    cur = cur.whereIn(key, query[key].$in);
+                                    cursor[operand === 'or' ? 'orWhereIn' : 'whereIn'](key, query[key].$in);
                                 } else if (query[key].$ne) {
-                                    cur = cur.whereNot(key, query[key].$ne);
+                                    cursor[operand === 'or' ? 'orWhereNot' : 'whereNot'](key, query[key].$ne);
                                 } else {
-                                    cur = cur[fn](key, query[key].operator, query[key].value);
+                                    cursor[fn](key, query[key].operator, query[key].value);
                                 }
                             } else {
-                                cur = cur[fn](key, query[key]);
+                                cursor[fn](key, query[key]);
                             }
                         });
-                        return cur;
+                        return cursor;
                     }
 
                     static count(query) {
-                        SCli.debug(__MODULE_NAME, 'count', this.model.tableName);
+                        SCli.debug(__MODULE_NAME, 'count', this.model.tableName, JSON.stringify(query));
                         let cursor = this.model
                             .query()
                             .count();
@@ -504,7 +506,7 @@ module.exports = Database
                      */
                     static table(inputQuery, columns, options) {
 
-                        SCli.debug(__MODULE_NAME, 'table');
+                        SCli.debug(__MODULE_NAME, 'table', this.model.tableName, JSON.stringify(inputQuery), JSON.stringify(columns), JSON.stringify(options));
 
                         let
                             query,
@@ -537,19 +539,18 @@ module.exports = Database
                             ._preQuery(inputQuery, options)
                             .then((q) => {
                                 query = q;
-                                return this.count(inputQuery);
+                                return this.count(query);
                             })
                             .then((count) => {
 
-                                if (options) {
-                                    if (options.limit && !options.nolimit) {
-                                        perPage = options.limit;
-                                    }
+                                let opt = options || {};
 
-                                    if (options.offset && !options.nolimit) {
-                                        page = Math.floor(options.offset / perPage) - 1;
-                                    }
+                                if (opt.limit && !opt.nolimit) {
+                                    perPage = opt.limit;
+                                }
 
+                                if (opt.offset && !opt.nolimit) {
+                                    page = Math.floor(opt.offset / perPage) - 1;
                                 }
 
                                 table.paging = {
@@ -568,10 +569,10 @@ module.exports = Database
 
                                 let queryOptions = {};
 
-                                if (!options.nolimit) {
+                                if (!opt.nolimit) {
                                     queryOptions = {
-                                        offset: (options && options.offset !== undefined) ? options.offset : table.paging.offset,
-                                        limit: (options && options.limit !== undefined) ? options.limit : table.paging.perPage
+                                        offset: opt.offset !== undefined ? opt.offset : table.paging.offset,
+                                        limit: opt.limit !== undefined ? opt.limit : table.paging.perPage
                                     };
                                 }
 
@@ -579,7 +580,7 @@ module.exports = Database
                                     queryOptions.sort = sort;
                                 }
 
-                                if (options && options.textSearch) {
+                                if (opt.textSearch) {
                                     queryOptions.textSearch = options.textSearch;
                                 }
 

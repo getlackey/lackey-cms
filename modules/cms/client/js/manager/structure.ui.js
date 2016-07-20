@@ -107,7 +107,8 @@ class StructureUI extends Emitter {
      * @returns {Promise<HTMLElement>}
      */
     buildUI() {
-        let self = this;
+        let self = this,
+            ignore = lackey.select('[data-lky-hook="header.settings"]')[0].getAttribute('data-lky-ignore').split(',');
         return Template
             .render('cms/cms/settings', this.options || {})
             .then((nodes) => {
@@ -130,7 +131,11 @@ class StructureUI extends Emitter {
                         '[data-lky-hook="settings.open.diff"]'
                     ], self.node)
                     .forEach((element) => {
-                        element.addEventListener('click', lackey.as(self.toggle, self), true);
+                        if (ignore.indexOf(element.getAttribute('data-lky-open')) !== -1) {
+                            element.parentNode.removeChild(element);
+                        } else {
+                            element.addEventListener('click', lackey.as(self.toggle, self), true);
+                        }
                     });
                 return self.drawMeta();
             })

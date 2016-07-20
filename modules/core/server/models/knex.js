@@ -52,6 +52,11 @@ module.exports = Schema
                     table.string('route');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'users', 'deleted', (table) => {
+                    table.boolean('deleted');
+                });
+            })
             //
             // TABLE identities
             // .userId -> users.id

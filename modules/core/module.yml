@@ -28,6 +28,7 @@ init:
         -
             name: developer
             acl:
+                deleteUser: '*'
                 /admin*: # ADMIN IFRAME
                     - get
                 /cms*: # CMS LAYER
@@ -51,6 +52,7 @@ init:
                 viewas: '*'
                 /api/*:
                     - get
+                adminMenu: '*'
         -
             name: admin
             acl:
@@ -77,11 +79,13 @@ init:
                 viewas: '*'
                 /api/*:
                     - get
+                adminMenu: '*'
     # Users
     User:
         -   email : test@example.com
             name: 'test account'
             password: 'password'
+            image: http://i.giphy.com/D4FZXy64fpoek.gif
             stages: *testStages
             roles:
                 - developer
