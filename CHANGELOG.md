@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.20
+
+ * Fixed date fields on xls exports
+
 ## 0.5.19
 
  * Improve user deletion
