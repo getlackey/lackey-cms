@@ -4,9 +4,8 @@
 
 ### Official Lackey Team
 
- * create/checkout version or feature branch
-  * we should create branch for `major.minor`
-  * if your branch already exists rebase it by master `git pull origin master --rebase` with fast forward
+ * fork [https://github.com/getlackey/lackey-cms](https://github.com/getlackey/lackey-cms)
+ * rebase to upstream/master
  * make your changes
   * code
   * `gulp lint`
@@ -15,10 +14,12 @@
   * see what [Travis](https://travis-ci.org/getlackey/lackey-cms/branches) thinks about your changes
  * squash your changes `git rebase -i HEAD~[number of commits]`
  * override brach in your fork with squashed changes `git push [remote] [branch] -f`
+ * rebase to upstream/master
  * version up
  * update CHANGE_LOG
  * create pull request
  * update documentation
+ * tag pull request merge
 
 #### Exceptions
 

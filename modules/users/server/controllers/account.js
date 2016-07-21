@@ -134,7 +134,7 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                                 /* istanbul ignore next */
                                 res.status(400).error(error);
                             } else {
-                                res.redirect('/cms/account');
+                                res.redirect('cms/account');
                             }
                         });
                     }, (error) => {

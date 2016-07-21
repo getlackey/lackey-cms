@@ -425,7 +425,7 @@ module.exports = SUtils
                 builder.withTaxonomies(options.includeTaxonomies);
                 builder.withoutTaxonomies(options.excludeTaxonomies);
                 builder.withAuthor(options.requireAuthor);
-                builder.withoutIds(options.exlcudeIds);
+                builder.withoutIds(options.excludeIds);
 
                 if (options.textSearch && options.textSearch.length > 3) {
                     builder.withTextSearch(options.textSearch);
