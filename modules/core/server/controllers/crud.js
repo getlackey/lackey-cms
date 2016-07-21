@@ -221,7 +221,10 @@ class CRUDController {
                         table: {
                             cols: data.columns.map(column => {
                                 return {
-                                    caption: column.label
+                                    caption: column.label,
+                                    beforeCellWrite: (row, cellData) => {
+                                        return column.date ? cellData.date : cellData;
+                                    }
                                 };
                             }),
                             rows: data.rows.map(row => row.columns.map(column => column.value !== undefined ? column.value : ''))
