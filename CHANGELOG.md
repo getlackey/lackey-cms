@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.21
+
+ * Fixed filter excluding current ID in complex query
+ * Fixes several redirects
+
 ## 0.5.20
 
  * Fixed date fields on xls exports

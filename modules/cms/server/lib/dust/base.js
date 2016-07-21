@@ -17,15 +17,17 @@
 */
 
 module.exports = (dust, config) => {
-  dust.filters.base = function (value) {
+  dust.filters.base = (value) => module.exports.base(config.get('host'), value);
+};
 
-    if (value && value.match(/^[a-zA-Z0-9]+\:\/\//)) {
-      return value;
-    }
+module.exports.base = function (host, value) {
 
-    let base = config.get('host').replace(/\/$/, ''),
-      val = value ? value.replace(/^\//, '') : '';
+  if (value && value.match(/^[a-zA-Z0-9]+\:\/\//)) {
+    return value;
+  }
 
-    return base + '/' + val;
-  };
+  let base = host.replace(/\/$/, ''),
+    val = value ? value.replace(/^\//, '') : '';
+
+  return base + '/' + val;
 };
