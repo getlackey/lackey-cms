@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.23
+
+ * Fix taxonomy dust helper in case of duplicate taxonomu - content links
+ * Fix base tag for CMS
+
+## 0.5.22
+
+ * Fix redirect base resolve
+
 ## 0.5.21
 
  * Fixed filter excluding current ID in complex query

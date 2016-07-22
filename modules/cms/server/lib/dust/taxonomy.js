@@ -35,9 +35,12 @@ module.exports = (dust) => {
         taxonomies = taxonomies.concat(data.content.template.taxonomies);
       }
       (taxonomies).forEach((taxonomy) => {
-        if (name) {
+        if (!found && name) {
           if (taxonomy.name === name && taxonomy.type.name === type) {
             chunk.render(bodies.block, context);
+            if (!many) {
+              found = true;
+            }
           }
         } else if (!found && taxonomy.type.name === type) {
           newContext = context.push({
