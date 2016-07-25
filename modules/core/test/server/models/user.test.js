@@ -378,8 +378,25 @@ describe('modules/core/server/models/user', () => {
                     .exists('test@example.com');
             })
             .then((result) => {
-                lock = result;
-                return result;
+                result.should.be.True;
+                return UserModel
+                    ._preQuery({}, {
+                        textSearch: 'łąki'
+                    })
+                    .then(query => UserModel.count(query));
+            })
+            .then(result => {
+                result.should.be.eql(1);
+                return UserModel
+                    ._preQuery({}, {
+                        textSearch: 'ŁĄKI'
+                    })
+                    .then(query => UserModel.count(query));
+            })
+            .then(result => {
+                result.should.be.eql(1);
+                lock = true;
+                return true;
             })
             .should.finally.be.eql(true);
     });

@@ -94,11 +94,11 @@ const SCli = require(LACKEY_PATH).cli,
         `,
     TEXT_SEARCH = `
         (
-            layout::TEXT like '%$1%'
+            LOWER(layout::TEXT) like LOWER('%$1%')
             OR
-            name like '%$1%'
+            LOWER(name) like LOWER('%$1%')
             OR
-            route like '%$1%'
+            LOWER(route) like ('%$1%')
         )`;
 
 module.exports = require(LACKEY_PATH)

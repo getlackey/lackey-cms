@@ -99,33 +99,42 @@ module.exports = SUtils
             }
 
             static byTypeAndParam(type, paramName, paramValue) {
-                let self = this,
-                    query = {
-                        type: type
-                    };
-                query[paramName] = paramValue;
-                return this._preQuery(query)
-                    .then((q) => {
-                        query = q;
+
+                let self = this;
+
+                return this
+                    ._preQuery((() => {
+                        let query = {
+                            type: type
+                        };
+
+                        query[paramName] = paramValue;
+                        return query;
+                    })())
+                    .then((query) => {
+
                         let cursor = TaxonomyModel.query();
+
                         Object.keys(query).forEach((key) => {
                             cursor = cursor.where(key, query[key]);
                         });
-                        return SCli.sql(cursor);
-                    })
-                    .then((list) => {
-                        if (list.length > 0) {
-                            return (new Taxonomy(list[0]))._populate();
-                        }
-                        if (!query.name) {
-                            query.name = query.label.replace(/[^a-zA-Z0-9_-]+/g, '_');
-                            return self.unique(query.type, query.name)
-                                .then((name) => {
-                                    query.name = name;
-                                    return self.create(query);
-                                });
-                        }
-                        return self.create(query);
+
+                        return SCli
+                            .sql(cursor)
+                            .then((list) => {
+                                if (list.length > 0) {
+                                    return (new Taxonomy(list[0]))._populate();
+                                }
+                                if (!query.name) {
+                                    query.name = query.label.replace(/[^a-zA-Z0-9_-]+/g, '_');
+                                    return self.unique(query.type, query.name)
+                                        .then((name) => {
+                                            query.name = name;
+                                            return self.create(query);
+                                        });
+                                }
+                                return self.create(query);
+                            });
                     });
             }
 
@@ -156,48 +165,66 @@ module.exports = SUtils
                 return this.byTypeAndParam(type, 'name', name);
             }
 
-            static _preQuery(query) {
+            static get likeables() {
+                return {
+                    name: 'lr',
+                    label: 'lr'
+                };
+            }
 
-                let promise = Promise.resolve(query);
-                if (query.type) {
-                    promise = TaxonomyType.query({
-                            name: query.type
-                        })
-                        .then((types) => {
-                            if (types && types.length) {
-                                query.taxonomyTypeId = types[0].id;
-                            } else {
-                                console.error('Taxonomy Type not found ' + query.type);
-                            }
-                            delete query.type;
-                            return query;
+            static _preQuery(query, options) {
+                return super
+                    ._preQuery(query, options)
+                    .then(query2 => {
+                        if (query2.type) {
 
-                        });
-                }
-                if (query.restrictive === '0' || query.restrictive === '1') {
-                    let innerQuery = {
-                        restrictive: true
-                    };
-                    if (query.restrictive !== '1') {
-                        innerQuery = {
-                            $or: [{
-                                restrictive: null
-                            }, {
-                                restrictive: false
-                            }]
-                        };
-                    }
-                    promise = TaxonomyType.query(innerQuery)
-                        .then((types) => {
-                            query.taxonomyTypeId = {
-                                $in: types.map((type) => type.id)
+                            return TaxonomyType
+                                .query({
+                                    name: query2.type
+                                })
+                                .then((types) => {
+                                    if (types && types.length) {
+                                        query2.taxonomyTypeId = types[0].id;
+                                    } else {
+                                        console.error('Taxonomy Type not found ' + query2.type);
+                                    }
+                                    delete query2.type;
+                                    return query2;
+                                });
+                        }
+                        return query2;
+                    })
+                    .then(query2 => {
+                        if (query2.restrictive === '0' || query2.restrictive === '1') {
+                            let innerQuery = {
+                                restrictive: true
                             };
-                            delete query.restrictive;
-                            return query;
-                        });
-                }
+                            if (query2.restrictive !== '1') {
+                                innerQuery = {
+                                    $or: [{
+                                        restrictive: null
+                                    }, {
+                                        restrictive: false
+                                    }]
+                                };
+                            }
+                            return TaxonomyType
+                                .query(innerQuery)
+                                .then((types) => {
+                                    query2.taxonomyTypeId = {
+                                        $in: types.map((type) => type.id)
+                                    };
+                                    delete query2.restrictive;
 
-                return promise;
+                                });
+
+                        }
+                        return query2;
+                    })
+                    .then(query2 => {
+                        return query2;
+                    });
+
 
             }
 

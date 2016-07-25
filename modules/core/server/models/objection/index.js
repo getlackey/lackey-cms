@@ -219,6 +219,10 @@ module.exports = Database
                         return ObjectionModel;
                     }
 
+                    static get likeables() {
+                        return {};
+                    }
+
                     /**
                      * Creates instance
                      * @param   {Mixed} data
@@ -361,6 +365,14 @@ module.exports = Database
                                         }
                                     });
                                 });
+                            }
+                            if (key === '$and') {
+                                cursor.andWhere(function () {
+                                    let inner = this;
+                                    query.$and.forEach((condition) => {
+                                        self.where(inner, condition);
+                                    });
+                                });
 
                             } else if (query[key] === null) {
                                 cursor[operand === 'or' ? 'orWhereNull' : 'whereNull'](key);
@@ -369,6 +381,8 @@ module.exports = Database
                                     cursor[operand === 'or' ? 'orWhereIn' : 'whereIn'](key, query[key].$in);
                                 } else if (query[key].$ne) {
                                     cursor[operand === 'or' ? 'orWhereNot' : 'whereNot'](key, query[key].$ne);
+                                } else if (query[key].operator === 'like') {
+                                    cursor[fn](knex.raw('LOWER("' + key.replace(/"/g, '') + '") LIKE LOWER(?)', query[key].value));
                                 } else {
                                     cursor[fn](key, query[key].operator, query[key].value);
                                 }
@@ -483,8 +497,45 @@ module.exports = Database
                         return value;
                     }
 
-                    static _preQuery(query) {
-                        return Promise.resolve(query);
+                    static _preQuery(query, options) {
+
+                        let amendedQuery = JSON.parse(JSON.stringify(query));
+
+                        if (this.likeables && options && options.textSearch) {
+
+                            let likeableKeys = Object.keys(this.likeables);
+
+
+                            if (likeableKeys.length) {
+
+                                let or = [];
+
+                                if (amendedQuery.$or) {
+                                    amendedQuery.$and = amendedQuery.$and || [];
+                                    amendedQuery.$and.push({
+                                        $or: amendedQuery.$or
+                                    });
+                                    amendedQuery.$and.push({
+                                        $or: or
+                                    });
+                                    delete amendedQuery.$or;
+                                } else {
+                                    amendedQuery.$or = or;
+                                }
+
+                                likeableKeys
+                                    .forEach(key => {
+                                        let obj = {};
+                                        obj[key] = {
+                                            operator: 'like',
+                                            value: this.likeables[key] === 'lr' ? ('%' + options.textSearch + '%') : (this.likeables[key] === 'l' ? ('%' + options.textSearch) : (options.textSearch + '%'))
+                                        };
+                                        or.push(obj);
+                                    });
+                            }
+                        }
+
+                        return Promise.resolve(amendedQuery);
                     }
 
                     /**

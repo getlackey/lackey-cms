@@ -172,28 +172,19 @@ module.exports = SUtils
                     });
             }
 
+            static get likeables() {
+                return {
+                    route: 'lr',
+                    state: 'lr',
+                    type: 'lr'
+                };
+            }
+
             static _preQuery(innerQuery, options) {
 
                 let query = JSON.parse(JSON.stringify(innerQuery));
 
-                if (options.textSearch) {
-                    query.$or = [{
-                        route: {
-                            operator: 'like',
-                            value: '%' + options.textSearch + '%'
-                        }
-                        }, {
-                        state: {
-                            operator: 'like',
-                            value: '%' + options.textSearch + '%'
-                        }
-                        }, {
-                        type: {
-                            operator: 'like',
-                            value: '%' + options.textSearch + '%'
-                        }
-                        }];
-                }
+
                 if (query.route) {
                     let pathParts = query.route.split('/');
 

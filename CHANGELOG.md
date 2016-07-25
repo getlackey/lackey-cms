@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6
+
+ * Introduce case insensitive search with UTF8 fallback (fallback is PSQL powered)
+ * Introduce case insensitive login by email
+
 ## 0.5.24
 
   * Further fix in redirect (login related)

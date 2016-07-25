@@ -21,6 +21,7 @@
 
 const
     SCli = require(LACKEY_PATH).cli,
+    DataSources = require(LACKEY_PATH).datasources,
     SUtils = require(LACKEY_PATH).utils,
     gravatar = require('gravatar'),
     crypto = require('crypto'),
@@ -39,9 +40,10 @@ module.exports = SUtils
     .waitForAs(__MODULE_NAME,
         SUtils.cmsMod('core').model('taggable'),
         require('../role'),
+        DataSources.get('knex', 'default'),
         require('../knex')
     )
-    .then((Taggable, Role) => {
+    .then((Taggable, Role, knex) => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -218,6 +220,13 @@ module.exports = SUtils
                     });
             }
 
+            static get likeables() {
+                return {
+                    name: 'lr',
+                    title: 'lr'
+                };
+            }
+
             static _preQuery(innerQuery, options) {
 
                 let query = innerQuery ? JSON.parse(JSON.stringify(innerQuery)) : {},
@@ -225,17 +234,34 @@ module.exports = SUtils
 
                 SCli.debug(__MODULE_NAME, '_preQuery', JSON.stringify(innerQuery), JSON.stringify(opts));
 
-                query.$or = [
-                    {
-                        deleted: false
+                query.$or = [{
+                    deleted: false
                     }, {
-                        deleted: null
-                    }
-                    ];
+                    deleted: null
+                }];
 
                 SCli.debug(__MODULE_NAME, '_preQuery after', JSON.stringify(query), JSON.stringify(opts));
 
-                return super._preQuery(query, opts);
+                return super
+                    ._preQuery(query, opts)
+                    .then(outputQuery => {
+                        if (opts.textSearch) {
+                            return SCli
+                                .sql(Identities
+                                    .query()
+                                    .where('provider', 'email')
+                                    .where(knex.raw('LOWER("accountId") LIKE LOWER(?)', '%' + opts.textSearch + '%')))
+                                .then(list => {
+                                    if (list && list.length) {
+                                        outputQuery.$and[outputQuery.$and.length - 1].$or.push({
+                                            id: list[0].userId
+                                        });
+                                    }
+                                    return outputQuery;
+                                });
+                        }
+                        return outputQuery;
+                    });
             }
 
             _preSave(options) {
@@ -489,7 +515,11 @@ module.exports = SUtils
                 }
 
                 if (uid) {
-                    query = query.andWhere('accountId', uid);
+                    if (provider === 'email' || (Array.isArray(provider) && provider.indexOf('email') > -1)) {
+                        query = query.andWhere(knex.raw('LOWER("accountId") = LOWER(?)', uid));
+                    } else {
+                        query = query.andWhere('accountId', uid);
+                    }
                 }
 
                 return SCli.sql(query)

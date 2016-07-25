@@ -93,6 +93,36 @@ describe('modules/users/server/controllers/login', () => {
                 redirect: (uri) => {
                     uri.should.be.eql('/');
                     done();
+                },
+                status: () => {
+                    done(new Error('Should\'t be here'));
+                }
+            },
+            next = (error) => {
+                /* istanbul ignore next */
+                console.error(error);
+            };
+        controller.login(req, res, next);
+    });
+
+    it('login -> 200', (done) => {
+        let req = {
+                body: {
+                    username: 'TEST@teSt.com',
+                    password: 'password'
+                },
+                login: (user, cb) => {
+                    req.user = user;
+                    cb();
+                }
+            },
+            res = {
+                redirect: (uri) => {
+                    uri.should.be.eql('/');
+                    done();
+                },
+                status: () => {
+                    done(new Error('Should\'t be here'));
                 }
             },
             next = (error) => {

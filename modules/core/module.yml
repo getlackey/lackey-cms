@@ -83,7 +83,7 @@ init:
     # Users
     User:
         -   email : test@example.com
-            name: 'test account'
+            name: 'test account Łąki łan'
             password: 'password'
             image: http://i.giphy.com/D4FZXy64fpoek.gif
             stages: *testStages
