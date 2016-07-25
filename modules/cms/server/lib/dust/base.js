@@ -18,6 +18,21 @@
 
 module.exports = (dust, config) => {
   dust.filters.base = (value) => module.exports.base(config.get('host'), value);
+
+  function renderBlock(block, chunk, context) {
+        var output = '';
+        chunk.tap(function (data) {
+            output += data;
+            return '';
+        }).render(block, context).untap();
+        return output;
+    }
+
+  dust.helpers.base = (chunk, context, bodies) => {
+    let content = renderBlock(bodies.block, chunk, context);
+    chunk.write(module.exports.base(config.get('host'), content));
+  };
+
 };
 
 module.exports.base = function (host, value) {

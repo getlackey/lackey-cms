@@ -25,7 +25,8 @@ describe('models/cms/server/lib/dust/base', () => {
 
     it('http://google.com/ + /url', () => {
         let dust = {
-                filters: {}
+                filters: {},
+                helpers: {}
             },
             config = {
                 get: () => 'http://google.com/'
@@ -36,7 +37,8 @@ describe('models/cms/server/lib/dust/base', () => {
 
     it('http://google.com + /url', () => {
         let dust = {
-                filters: {}
+                filters: {},
+                helpers: {}
             },
             config = {
                 get: () => 'http://google.com'
@@ -47,7 +49,8 @@ describe('models/cms/server/lib/dust/base', () => {
 
     it('http://google.com + url', () => {
         let dust = {
-                filters: {}
+                filters: {},
+                helpers: {}
             },
             config = {
                 get: () => 'http://google.com'
@@ -58,7 +61,8 @@ describe('models/cms/server/lib/dust/base', () => {
 
     it('http://google.com/url + /url', () => {
         let dust = {
-                filters: {}
+                filters: {},
+                helpers: {}
             },
             config = {
                 get: () => 'http://google.com/url'
@@ -69,7 +73,8 @@ describe('models/cms/server/lib/dust/base', () => {
 
     it('http://google.com/url/ + /url', () => {
         let dust = {
-                filters: {}
+                filters: {},
+                helpers: {}
             },
             config = {
                 get: () => 'http://google.com/url/'
@@ -80,7 +85,8 @@ describe('models/cms/server/lib/dust/base', () => {
 
     it('http://google.com/url + url', () => {
         let dust = {
-                filters: {}
+                filters: {},
+                helpers: {}
             },
             config = {
                 get: () => 'http://google.com/url'
@@ -91,7 +97,8 @@ describe('models/cms/server/lib/dust/base', () => {
 
     it('http://google.com/url + http://example.com', () => {
         let dust = {
-                filters: {}
+                filters: {},
+                helpers: {}
             },
             config = {
                 get: () => 'http://google.com/url'

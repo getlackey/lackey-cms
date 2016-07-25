@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.2
+
+ * Introduced base helper to resolve Chrome base issue
+
 ## 0.6.1
 
  * Fix base tag and force absoltue paths for some elemements

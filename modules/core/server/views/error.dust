@@ -2,8 +2,8 @@
     <head>
         <base href="{host}/" target="_top">
         {! to migrate elseewhre !}
-        <link rel="stylesheet" href="css/cms/core/base.css"/>
-        <link rel="stylesheet" href="css/cms/cms/base.css"/>
+        <link rel="stylesheet" href="{@base}css/cms/core/base.css{/base}"/>
+        <link rel="stylesheet" href="{@base}css/cms/cms/base.css{/base}"/>
     </head>
     <body>
         <h1>Error</h1>

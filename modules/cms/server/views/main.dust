@@ -3,11 +3,11 @@
         <base href="{host}" target="_top">
         {! to migrate elseewhre !}
         <meta http-equiv="content-language" content="{locale}">
-        <link rel="stylesheet" href="{host}css/cms/core/base.css"/>
-        <link rel="stylesheet" href="{host}ss/cms/cms/base.css"/>
+        <link rel="stylesheet" href="{@base}css/cms/core/base.css{/base}"/>
+        <link rel="stylesheet" href="{@base}css/cms/cms/base.css"{/base}"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
         {#stylesheets}
-            <link rel="stylesheet" href="{.}"/>
+            <link rel="stylesheet" href="{.|base}"/>
         {/stylesheets}
     </head>
     <body>
@@ -109,7 +109,7 @@
         </main>
         <div data-lky-hook="menu.overlay"></div>
         {#javascripts}
-            <script type="text/javascript" src="{.}"></script>
+            <script type="text/javascript" src="{.|base}"></script>
         {/javascripts}
     </body>
     </body>
