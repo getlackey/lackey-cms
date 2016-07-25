@@ -81,21 +81,11 @@ module.exports = SUtils
                 return '/cms/media';
             }
 
-            static _preQuery(query, options) {
-                if (options.textSearch) {
-                    query.$or = [{
-                        name: {
-                            operator: 'like',
-                            value: '%' + options.textSearch + '%'
-                        }
-                }, {
-                        source: {
-                            operator: 'like',
-                            value: '%' + options.textSearch + '%'
-                        }
-                }];
-                }
-                return super._preQuery(query, options);
+            static get likeables() {
+                return {
+                    name: 'lr',
+                    source: 'lr'
+                };
             }
 
             static get model() {
