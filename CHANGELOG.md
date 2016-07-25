@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.24
+
+  * Further fix in redirect (login related)
+
 ## 0.5.23
 
  * Fix taxonomy dust helper in case of duplicate taxonomu - content links
