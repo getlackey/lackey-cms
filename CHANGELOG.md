@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1
+
+ * Fix base tag and force absoltue paths for some elemements
+
 ## 0.6
 
  * Introduce case insensitive search with UTF8 fallback (fallback is PSQL powered)

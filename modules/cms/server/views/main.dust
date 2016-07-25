@@ -1,10 +1,10 @@
 <html lang="{locale}" data-default-locale="{defaultLocale}">
     <head>
-        <base href="{host}" target="_top"/>
+        <base href="{host}" target="_top">
         {! to migrate elseewhre !}
         <meta http-equiv="content-language" content="{locale}">
-        <link rel="stylesheet" href="css/cms/core/base.css"/>
-        <link rel="stylesheet" href="css/cms/cms/base.css"/>
+        <link rel="stylesheet" href="{host}css/cms/core/base.css"/>
+        <link rel="stylesheet" href="{host}ss/cms/cms/base.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
         {#stylesheets}
             <link rel="stylesheet" href="{.}"/>
