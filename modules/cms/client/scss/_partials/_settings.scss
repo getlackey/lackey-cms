@@ -103,12 +103,31 @@
                     padding: 15px 0px;
                     margin: 0px;
                     li {
+                        img {
+                            display: block;
+                            margin: auto;
+                        }
+                        > span {
+                            margin-top: 10px;
+                            width: 100%;
+                            display: block;
+                            text-align: center;
+                        }
+                        > button {
+                            float: right;
+                            height: 65px;
+                            border-radius: 5px;
+
+                        }
                         border-bottom: 1px solid lighten($color-lackey-light-gray, 30%);
                         div {
                             display: table-cell;
                             padding: 5px;
                             vertical-align: middle;
                             overflow: hidden;
+                        }
+                        div + img {
+                            text-align: right;
                         }
                         div:first-child {
                             width: 250px;
@@ -157,7 +176,6 @@
                     }
                 }
             }
-
             [data-lky-hook="settings.dimensions"] {
                 > div {
                     width: #{$settings-edit-width * 2};

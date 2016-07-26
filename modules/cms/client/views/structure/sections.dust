@@ -6,16 +6,16 @@
                     {:List}
                         <ul>
                             <li>
-                                <button data-lky-add-block="-1">+</button>
+                                <button data-lky-add-block="-1" data-lky-path="{itemPath}.items">+</button>
                             </li>
                         {#items}
                             <li data-lky-component="{type}" data-lky-type="{template}">
                                 {@templateData template=template}
-                                    {>"cms/cms/structure/item" thumb=thumb index=$idx/}
+                                    {>"cms/cms/structure/item" thumb=thumb index=$idx label=""/}
                                 {/templateData}
                             </li>
                             <li>
-                                <button data-lky-add-block={$idx}>+</button>
+                                <button data-lky-add-block={$idx} data-lky-path="{itemPath}.items">+</button>
                             </li>
                         {/items}
                         </ul>

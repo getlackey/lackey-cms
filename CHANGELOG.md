@@ -2,9 +2,14 @@
 
 Going forward we should add hash of issue next to change
 
-## 0.7
+## 0.7.0
 
- * Keep query string parameters in edit mode
+ * #55 Keep query string parameters in edit mode
+ * Allow adding blocks to list
+ * Allow removing blocks from list
+ * Fix editing properties in blocks #56 #57
+ * Deprecate `lackey.as`
+ * Improve CC to ~46.45%
 
 ## 0.6.3
 

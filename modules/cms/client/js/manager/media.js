@@ -30,7 +30,7 @@ class MediaRepository {
             this.total = 0;
             this.filter = null;
             this.search = null;
-            this.onClick = lackey.as(this._onClick, this);
+            this.onClick = this._onClick.bind(this);
 
             if (options) {
                   if (options.prev) {

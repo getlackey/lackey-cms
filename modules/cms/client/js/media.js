@@ -50,12 +50,12 @@ class Media {
                   }
                   this.attributes = JSON.parse(HTMLElement.getAttribute('data-lky-attributes') || '{}');
 
-                  this.onClick = lackey.as(function () {
+                  this.onClick = (function () {
                         let self = this;
                         this._listeners.forEach(function (listener) {
                               listener(self);
                         });
-                  }, this);
+                  }).bind(this);
 
                   this.set(JSON.parse(HTMLElement.getAttribute('data-lky-media')));
 

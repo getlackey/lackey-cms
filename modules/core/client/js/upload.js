@@ -16,7 +16,7 @@
     limitations under the License.
 */
 
-const lackey = require('core/client/js'),
+const
     guid = require('guid'),
     socket = require('core/client/js/socket');
 
@@ -37,9 +37,9 @@ Upload.prototype.browse = function (event) {
 
 Upload.prototype.input = function (HTMLElement, onClick) {
 
-    this._hover = lackey.as(this.hover, this);
-    this._drop = lackey.as(this.drop, this);
-    this._pick = lackey.as(this.pick, this);
+    this._hover = this.hover.bind(this);
+    this._drop = this.drop.bind(this);
+    this._pick = this.pick.bind(this);
 
     HTMLElement.addEventListener('dragover', this._hover, false);
     HTMLElement.addEventListener('dragleave', this._hover, false);

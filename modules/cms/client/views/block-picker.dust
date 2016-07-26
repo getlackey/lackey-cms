@@ -1,0 +1,10 @@
+<aside data-lky-component="settings">
+    <section data-lky-hook="settings.breadcrumbs">
+        <!-- later -->
+    </section>
+    <section data-lky-hook="settings.back"></section>
+    <section data-lky-hook="settings.picker">
+        <input type="search" data-lky-hook="filter" placeholder="Type name or path"/>
+        <ul data-lky-template="cms/cms/structure/blocks"></ul>
+    </section>
+</aside>
