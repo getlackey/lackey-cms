@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true, mocha:true */
+/* jslint node:true, esnext:true, mocha:true, -W030 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,31 +16,70 @@
     limitations under the License.
 */
 
-const server = require('../../../lib/server'),
+const
+    server = require('../../../lib/server'),
+    configuration = require('../../../lib/configuration'),
+    Generator = require('../../../lib/generator'),
     SUtils = require('../../../lib/utils'),
     should = require('should');
 
+function testServer(title, config, overrides) {
+    it(title, () => {
+        configuration.unload();
+        Generator.cleanup();
+        SUtils.setProjectPath(__dirname + '/../../../test/mockup/project/');
+        return server(config, overrides)
+            .then((instance) => {
+                return instance.init()
+                    .then(() => {
+                        let dumb = {};
+                        instance.setModule('cms/dumb', dumb);
+                        instance.getModule('cms/dumb').should.be.equal(dumb);
+                        should.exist(instance.getExpress());
+                        should.exist(instance.getConfig());
+                        return instance.stop();
+
+                    })
+                    .then(() => {
+                        return true;
+                    })
+                    .should.finally.be.eql(true);
+            });
+    });
+}
+
 describe('lib/server', () => {
 
-    it('Works', () => {
-        SUtils.setProjectPath(__dirname + '/../../../test/mockup/project/');
-        return server({
-            stage: 'test',
-            site: 'default'
-        }).then((instance) => {
-            return instance.init().then(() => {
-                let dumb = {};
-                instance.setModule('cms/dumb', dumb);
-                instance.getModule('cms/dumb').should.be.equal(dumb);
-                should.exist(instance.getExpress());
-                should.exist(instance.getConfig());
+    testServer('Works with drop', {
+        stage: 'test',
+        site: 'default'
+    }, {
+        yml: {
+            drop: true
+        }
+    });
 
-                return instance.stop();
+    testServer('Works without drop', {
+        stage: 'test',
+        site: 'default'
+    });
 
-            }).then(() => {
-                return true;
-            }).should.finally.be.eql(true);
-        });
+    testServer('Works without drop', {
+        stage: 'test',
+        site: 'default'
+    }, {
+        yml: {
+            override: '*'
+        }
+    });
+
+    testServer('Works with limited overrides', {
+        stage: 'test',
+        site: 'default'
+    }, {
+        yml: {
+            override: ['User']
+        }
     });
 
     after(() => {

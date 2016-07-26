@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true, mocha:true */
+/* jslint node:true, esnext:true, mocha:true, W030:false */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,20 +16,36 @@
     limitations under the License.
 */
 
-const Generator = require('../../../lib/generator'),
+const
+    Generator = require('../../../lib/generator'),
     lackey = require('../../../lib'),
+    SUtils = require('../../../lib/utils'),
+    configuration = require('../../../lib/configuration'),
+      path = require('path'),
     should = require('should');
 
 describe('lib/generator', () => {
 
-    let oldConf;
+    before(() => {
+        configuration.unload();
+        SUtils.setProjectPath(path.join(__dirname, '/../../../test/mockup/project/'));
+        return configuration('test');
+    });
 
     it('Loads', () => {
-        return Generator.load(__dirname + '/../../../modules/users/module.yml').then((doc) => {
-            should.exist(doc);
-            doc.should.be.Object;
-            return true;
-        });
+        return Generator
+            .load(__dirname + '/../../../modules/users/module.yml')
+            .then((doc) => {
+                should.exist(doc);
+                doc.should.be.Object;
+                return true;
+            });
+    });
+
+    it('Handle error', () => {
+        return Generator
+            .load(__dirname + '/../../../modules/users/notexistant.yml')
+            .should.be.rejected();
     });
 
     it('Mappers', () => {
@@ -38,27 +54,53 @@ describe('lib/generator', () => {
             return Promise.resolve(true);
         });
 
-        return Generator.load(__dirname + '/../../../modules/users/module.yml').then((doc) => {
-            should.exist(doc);
-            doc.should.be.Array;
-            return true;
-        });
+        return Generator
+            .load(__dirname + '/../../../modules/users/module.yml')
+            .then((doc) => {
+                should.exist(doc);
+                doc.should.be.Array;
+                return true;
+            });
 
     });
 
+    it('Edge cases', () => {
+        should.not.exist(Generator.map('User', null));
+        should.not.exist(Generator.map('User', {
+            stages: ['never-do-this']
+        }, {
+            get: () => 'other'
+        }));
+        return Generator
+            .processInitData({
+                WeDontHaveIt: [{}]
+            })
+            .then(result => {
+                result.should.be.eql({
+                    WeDontHaveIt: null
+                });
+            });
+    });
+
     it('Includes', () => {
-        return Generator.load(__dirname + '/../../../test/mockup/main.yml')
+        return Generator
+            .load(__dirname + '/../../../test/mockup/main.yml')
             .then((doc) => {
                 should.exist(doc);
                 return doc;
-            }).should.finally.be.eql({
+            })
+            .should.finally.be.eql({
                 field: [
-                123, 456
-            ],
+                    123, 456
+                ],
                 other: [
-                789, '0ab', 'cde', 'fgh', 'ijk'
-            ]
+                    789, '0ab', 'cde', 'fgh', 'ijk'
+                ]
             });
+    });
+
+    after(() => {
+        configuration.unload();
     });
 
 });
