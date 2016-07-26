@@ -11,8 +11,7 @@
                         {#items}
                             <li data-lky-component="{type}" data-lky-type="{template}">
                                 {@templateData template=template}
-                                    {>"cms/cms/structure/item" thumb=thumb /}
-
+                                    {>"cms/cms/structure/item" thumb=thumb index=$idx/}
                                 {/templateData}
                             </li>
                             <li>

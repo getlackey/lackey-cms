@@ -48,8 +48,9 @@ class StructureUI extends Emitter {
 
         return cache[templatePath]
             .then((ctx) => {
-                ctx.$idx = index;
-                return ctx;
+                let result = JSON.parse(JSON.stringify(ctx));
+                result.$idx = index;
+                return result;
             });
     }
 

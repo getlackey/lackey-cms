@@ -116,23 +116,25 @@ module.exports = SUtils
 
             get props() {
                 let props = this._doc.props || {};
-                props.og_title = props.og_title || {
-                    label: 'Title (used in OpenGraph)',
-                    name: 'og_title'
-                };
-                props.og_type = props.og_type || {
-                    label: 'Type (used in OpenGraph)',
-                    name: 'og_type'
-                };
-                props.og_description = props.og_description || {
-                    label: 'Description (used in OpenGraph)',
-                    name: 'og_description'
-                };
-                props.og_image = props.og_image || {
-                    label: 'Image (used in OpenGraph)',
-                    name: 'og_image',
-                    type: 'media'
-                };
+                if (this._doc.type !== 'block' && this._doc.type !== 'variant') {
+                    props.og_title = props.og_title || {
+                        label: 'Title (used in OpenGraph)',
+                        name: 'og_title'
+                    };
+                    props.og_type = props.og_type || {
+                        label: 'Type (used in OpenGraph)',
+                        name: 'og_type'
+                    };
+                    props.og_description = props.og_description || {
+                        label: 'Description (used in OpenGraph)',
+                        name: 'og_description'
+                    };
+                    props.og_image = props.og_image || {
+                        label: 'Image (used in OpenGraph)',
+                        name: 'og_image',
+                        type: 'media'
+                    };
+                }
                 return props;
             }
 
