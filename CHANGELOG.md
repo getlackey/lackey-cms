@@ -1,5 +1,15 @@
 # Changelog
 
+Going forward we should add hash of issue next to change
+
+## 0.7
+
+ * Keep query string parameters in edit mode
+
+## 0.6.3
+
+ * Force there is slash on end of base tag (was causing dsubdirectory )
+
 ## 0.6.2
 
  * Introduced base helper to resolve Chrome base issue
@@ -10,7 +20,7 @@
 
 ## 0.6
 
- * Introduce case insensitive search with UTF8 fallback (fallback is PSQL powered)
+ * #48 Introduce case insensitive search with UTF8 fallback (fallback is PSQL powered)
  * Introduce case insensitive login by email
 
 ## 0.5.24
@@ -37,9 +47,10 @@
 
 ## 0.5.19
 
- * Improve user deletion
+ *
+ * #25 Improve user deletion
  * build and implement acl dust helper
- * ACL dust helper
+ * #26 ACL dust helper
 
 ## 0.5.18
 
@@ -47,11 +58,11 @@
 
 ## 0.5.17
 
- * Tidy up media table
+ * #29 Tidy up media table
 
 ## 0.5.15-0.5.16
 
- * Allow to export tables as XSLS
+ * #28 Allow to export tables as XSLS
 
 ## 0.5.14
 
@@ -59,16 +70,17 @@
 
 ## 0.5.13
 
+ * #35 #36
  * Expose identities for user
  * Lock down API
 
 ## 0.5.12
 
- * Add ability to override static getters of crud controllers
+ * #24 Add ability to override static getters of crud controllers
 
 ## 0.5.11
 
- * Change path of attachment icon from `/img/cms/cms/svg/file.svg` to `img/cms/cms/svg/file.svg`
+ *  #22 Change path of attachment icon from `/img/cms/cms/svg/file.svg` to `img/cms/cms/svg/file.svg`
 
 ## 0.5.10
 
@@ -76,21 +88,21 @@
 
 ## 0.5.9
 
- * Fix create link https://github.com/getlackey/lackey-cms/issues/23
+ * #23 Fix create link
 
 ## 0.5.8
 
  * Fix sockets
- * https://github.com/getlackey/lackey-cms/pull/19
- * https://github.com/getlackey/lackey-cms/issues/22
+ * #19
+ * #22
 
 ## 0.5.7
 
- * fix failing tests https://github.com/getlackey/lackey-cms/pull/17
+ * #17 fix failing tests
 
 ## 0.5.6
 
- * add sendinblue provider https://github.com/getlackey/lackey-cms/pull/15
+ * #15 add sendinblue provider
 
 ## 0.5.5
 
@@ -98,11 +110,11 @@
 
 ## 0.5.4
 
- * default properties for templates https://github.com/getlackey/lackey-cms/pull/6
+ * #6 default properties for templates
 
 ## 0.5.3
 
- * fix action condition https://github.com/getlackey/lackey-cms/pull/8
+ * #6 fix action condition
 
 ## 0.5.2
 
