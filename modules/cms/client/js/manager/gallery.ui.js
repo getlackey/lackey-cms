@@ -100,7 +100,7 @@ class Gallery extends Emitter {
                         '[data-lky-hook="settings.open.gallery"]'
                     ], self.node)
                     .forEach((element) => {
-                        element.addEventListener('click', lackey.as(self.toggle, self), true);
+                        element.addEventListener('click', self.toggle.bind(self), true);
                     });
 
                 lackey
@@ -136,10 +136,10 @@ class Gallery extends Emitter {
 
                 self.query();
 
-                lackey.bind('input[data-lky-hook="alt"]', 'keyup', lackey.as(self.altChange, self), self.node);
-                lackey.bind('select[data-lky-hook="mime"]', 'change', lackey.as(self.mimeChange, self), self.node);
+                lackey.bind('input[data-lky-hook="alt"]', 'keyup', self.altChange.bind(self), self.node);
+                lackey.bind('select[data-lky-hook="mime"]', 'change', self.mimeChange.bind(self), self.node);
 
-                lackey.bind('input[type="search"]', 'keyup', lackey.as(self.keyup, self), self.node);
+                lackey.bind('input[type="search"]', 'keyup', self.keyup.bind(self), self.node);
 
                 if (self.options.media && self.options.media.type === 'video') {
                     self.alternative();

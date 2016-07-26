@@ -139,6 +139,9 @@ lackey = {
      * @returns {funciton}
      */
     as: function (fn, context, args) {
+
+        console.warn('lackey.as(fn,thisArg[,args]) is DEPRECATED, try to use funciton.bind(thisArg[, arg1[, arg2[, ...]]]). Feature will be dropped with version 1.0');
+
         var ctx = context,
             fcn = fn;
 

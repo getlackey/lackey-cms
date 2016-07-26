@@ -1,6 +1,6 @@
 <html lang="{locale}" data-default-locale="{defaultLocale}">
     <head>
-        <base href="{host}" target="_top">
+        <base href="{host|addshash}" target="_top">
         {! to migrate elseewhre !}
         <meta http-equiv="content-language" content="{locale}">
         <link rel="stylesheet" href="{@base}css/cms/core/base.css{/base}"/>
@@ -46,7 +46,7 @@
                         {#.}
                             {@acl perm="adminMenu" method=label}
                                 <li>
-                                    <a href="{uri}">{label}</a>
+                                    <a href="{uri|base}">{label}</a>
                                 </li>
                             {/acl}
                         {/.}
@@ -91,7 +91,7 @@
                     </label>
                 </button>
                 <div data-lky-hook="header.user">
-                    <img src="{admin.image.source}"/>
+                    <img src="{admin.image.source|base}"/>
                     <span data-lky-hook="header.user.name">{admin.name}</span>
                     <span data-lky-hook="header.user.acting"><span>Acting as:</span>Admin</span>
                 </div>

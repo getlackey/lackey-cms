@@ -41,23 +41,28 @@ describe('lib/sitemap', () => {
 
         sitemap.flush();
 
-        return sitemap.refresh().then((results) => {
-            results.length.should.be.eql(0);
-            sitemap.addSource(source);
-            return sitemap.refresh();
-        }).then((results) => {
-            results.should.be.eql([1, 2]);
-            counts.should.be.eql(2);
-            results = sitemap.getCached();
-            results.should.be.eql([1, 2]);
-            counts.should.be.eql(2);
-            sitemap.addSource(source);
-            return sitemap.refresh();
-        }).then((results) => {
-            results.should.be.eql([3, 4, 5, 6]);
-            counts.should.be.eql(6);
-            return true;
-        }).should.finally.be.eql(true);
+        return sitemap
+            .refresh()
+            .then((results) => {
+                results.length.should.be.eql(0);
+                sitemap.addSource(source);
+                return sitemap.refresh();
+            })
+            .then((results) => {
+                results.should.be.eql([1, 2]);
+                counts.should.be.eql(2);
+                results = sitemap.getCached();
+                results.should.be.eql([1, 2]);
+                counts.should.be.eql(2);
+                sitemap.addSource(source);
+                return sitemap.refresh();
+            })
+            .then((results) => {
+                results.should.be.eql([3, 4, 5, 6]);
+                counts.should.be.eql(6);
+                return true;
+            })
+            .should.finally.be.eql(true);
 
     });
 });

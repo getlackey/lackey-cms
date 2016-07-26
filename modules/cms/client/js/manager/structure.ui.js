@@ -48,8 +48,9 @@ class StructureUI extends Emitter {
 
         return cache[templatePath]
             .then((ctx) => {
-                ctx.$idx = index;
-                return ctx;
+                let result = JSON.parse(JSON.stringify(ctx));
+                result.$idx = index;
+                return result;
             });
     }
 
@@ -72,7 +73,7 @@ class StructureUI extends Emitter {
         this.options.settingsDictionary = options.settingsDictionary || this.defaultDictionary;
         this.options.expose = options.expose || this.defaultExpose;
 
-        this._onRepositoryChanged = lackey.as(this.onRepositoryChanged, this);
+        this._onRepositoryChanged = this.onRepositoryChanged.bind(this);
         this.repository = repository;
         this.repository.on('changed', this._onRepositoryChanged);
 
@@ -134,7 +135,7 @@ class StructureUI extends Emitter {
                         if (ignore.indexOf(element.getAttribute('data-lky-open')) !== -1) {
                             element.parentNode.removeChild(element);
                         } else {
-                            element.addEventListener('click', lackey.as(self.toggle, self), true);
+                            element.addEventListener('click', self.toggle.bind(self), true);
                         }
                     });
                 return self.drawMeta();
@@ -189,7 +190,53 @@ class StructureUI extends Emitter {
                     }, self.node);
             })
             .then((root) => {
-                lackey.bind('[data-lky-cog]', 'click', lackey.as(self.inspect, self), root[0]);
+                lackey.bind('[data-lky-cog]', 'click', self.inspect.bind(self), root[0]);
+                lackey.bind('[data-lky-bin]', 'click', self.removeBlock.bind(self), root[0]);
+                lackey.bind('[data-lky-add-block]', 'click', self.addBlock.bind(self), root[0]);
+            });
+    }
+
+    addBlock(event, hook) {
+        this.collapse();
+
+        let idx = hook.getAttribute('data-lky-add-block'),
+            self = this,
+            path = hook.getAttribute('data-lky-path'),
+            context;
+
+        return this
+            .options
+            .context()
+            .then((ctx) => {
+                context = ctx;
+                return this.options.stack.pickBlock();
+            })
+            .then((rt) => {
+                if (rt !== null) {
+                    treeParser.insertAfter(context, path + '.' + idx, {
+                        type: 'Block',
+                        template: rt,
+                        layout: {},
+                        props: {}
+                    });
+                    self.emit('changed');
+                    return self.drawSections();
+                }
+
+            });
+    }
+
+    removeBlock(event, hook) {
+        let path = hook.getAttribute('data-lky-path'),
+            self = this;
+
+        return this
+            .options
+            .context()
+            .then((context) => {
+                treeParser.remove(context, path);
+                self.emit('changed');
+                return self.drawSections();
             });
     }
 
@@ -220,11 +267,11 @@ class StructureUI extends Emitter {
             })
             .then((root) => {
                 lackey
-                    .bind('[data-lky-variant]', 'change', lackey.as(self.viewInVariant, self), root[0]);
+                    .bind('[data-lky-variant]', 'change', self.viewInVariant.bind(self), root[0]);
                 lackey
-                    .bind('[data-lky-locale]', 'change', lackey.as(self.viewInLocale, self), root[0]);
+                    .bind('[data-lky-locale]', 'change', self.viewInLocale.bind(self), root[0]);
                 lackey
-                    .bind('[data-lky-view-as]', 'change', lackey.as(self.viewAs, self), root[0]);
+                    .bind('[data-lky-view-as]', 'change', self.viewAs.bind(self), root[0]);
             });
     }
 
@@ -289,9 +336,9 @@ class StructureUI extends Emitter {
                     open: 'meta'
                 }, this.repository);
 
-                structureController.on('changed', lackey.as(() => {
+                structureController.on('changed', (function () {
                     this.emit('changed');
-                }, self));
+                }).bind(self));
                 return this.options.stack.inspectStructure(structureController);
             });
 
@@ -378,17 +425,17 @@ class StructureUI extends Emitter {
                         return responses[0];
                     });
             })
-            .then(lackey.as(this.bindMetaEvents, this));
+            .then(this.bindMetaEvents.bind(this));
 
     }
 
     bindMetaEvents(settings) {
         let self = this;
         lackey
-            .bind('[data-lky-hook="action:pick-article"]', 'click', lackey.as(this.pickArticle, this, [settings]), this.node);
+            .bind('[data-lky-hook="action:pick-article"]', 'click', this.pickArticle.bind(this, settings), this.node);
 
         lackey
-            .bind('[data-lky-hook="action:pick-media"]', 'click', lackey.as(this.pickMedia, this, [settings]), this.node);
+            .bind('[data-lky-hook="action:pick-media"]', 'click', this.pickMedia.bind(this, settings), this.node);
 
 
         lackey

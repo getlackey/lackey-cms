@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true, mocha:true */
+/* jslint node:true, esnext:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,25 +16,18 @@
     limitations under the License.
 */
 
-const
-    express = require('../../../lib/server/express');
-
-require('should');
-
-describe('lib/server/express', () => {
-
-    it('Works', () => {
-
-        return express({
-                get: function () {
-                    return null;
-                }
-            }, [() => {}], [() => {}])
-            .then((app) => {
-                return app;
-            })
-            .should.finally.be.fullfiled;
-
-    });
-
-});
+module.exports = () => {
+    let obj = {
+        send: (mail, callback) => {
+            obj._messages.push(mail);
+            callback(null, mail);
+        },
+        _messages: [],
+        last: () => {
+            return obj._messages[obj._messages.length - 1];
+        },
+        name: 'test',
+        version: '0.1.0'
+    };
+    return obj;
+};

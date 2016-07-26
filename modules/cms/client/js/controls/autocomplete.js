@@ -17,7 +17,7 @@
     limitations under the License.
 */
 
-const lackey = require('core/client/js'),
+const
     optionsFactory = require('core/client/js/options'),
     emit = require('cms/client/js/emit');
 
@@ -66,7 +66,7 @@ Autocomplete.prototype.draw = function (hook) {
 
     this._root = document.createElement('div');
     this._root.setAttribute('data-lky-autocomplete', '');
-    this._root.addEventListener('click', lackey.as(this.focus, this), true);
+    this._root.addEventListener('click', this.focus.bind(this), true);
 
     this._selected = null;
     this._selectedIndex = -1;
@@ -80,8 +80,8 @@ Autocomplete.prototype.draw = function (hook) {
 
     this._text = document.createElement('input');
     this._text.setAttribute('type', 'text');
-    this._text.addEventListener('keyup', lackey.as(this.onType, this), true);
-    this._text.addEventListener('keydown', lackey.as(this.onBeforeType, this), true);
+    this._text.addEventListener('keyup', this.onType.bind(this), true);
+    this._text.addEventListener('keydown', this.onBeforeType.bind(this), true);
 
     this._suggestions = document.createElement('ul');
     this._suggestions.setAttribute('data-lky-suggestions', '');
@@ -197,7 +197,7 @@ Autocomplete.prototype.selectIndex = function (index) {
     if (this._selected) {
         this._suggestions.childNodes[this._selectedIndex].removeAttribute('data-lky-selected');
     }
-    if(!this._suggestions.childNodes[index]) {
+    if (!this._suggestions.childNodes[index]) {
         return;
     }
     this._selected = this._suggestions.childNodes[index]._item;

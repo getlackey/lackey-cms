@@ -63,8 +63,7 @@ module.exports = (server) => {
             SessionController
         ) => {
 
-            server.route('/admin*')
-                .get(server.aclAdmin, CMSController.iframe);
+            server.route('/admin*').get(server.aclAdmin, CMSController.iframe);
 
             server.route('/api/view-as')
                 .get(server.aclAdmin, CMSController.viewingAs);

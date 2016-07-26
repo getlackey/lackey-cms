@@ -19,6 +19,7 @@
 const emit = require('cms/client/js/emit'),
     StructureUI = require('cms/client/js/manager/structure.ui.js'),
     ArticlePicker = require('cms/client/js/manager/article.picker.ui.js'),
+    BlockPicker = require('cms/client/js/manager/block.picker.ui.js'),
     Gallery = require('cms/client/js/manager/gallery.ui.js'),
     lackey = require('core/client/js');
 /**
@@ -111,6 +112,32 @@ Stack.prototype.pickArticle = function (route) {
         });
 };
 
+Stack.prototype.pickBlock = function () {
+
+    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
+
+    let self = this,
+        blockPicker = new BlockPicker({
+            stack: this
+        });
+
+    blockPicker
+        .buildUI()
+        .then((element) => {
+            self.node.appendChild(element);
+            return blockPicker.fadeIn();
+        });
+
+    this._stack.push(blockPicker);
+
+    return blockPicker
+        .promise
+        .then((rt) => {
+            self.pop();
+            return rt;
+        });
+};
+
 Stack.prototype.inspectMedia = function (media, node) {
 
     lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
@@ -159,7 +186,7 @@ Stack.prototype.pop = function (clearing) {
                     self._stack[self._stack.length - 1].node.setAttribute('data-lky-edit', 'blocks');
                 }
             }
-            if(!self._stack.length) {
+            if (!self._stack.length) {
                 lackey.hook('main-area').removeAttribute('data-lky-settings-open');
             }
         });

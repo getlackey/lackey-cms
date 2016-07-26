@@ -24,7 +24,7 @@ const Emitter = require('cms/client/js/emitter').Emitter,
 /**
  * @class
  */
-class ArticlePickerUI extends Emitter {
+class BlockPrickerUI extends Emitter {
 
     /**
      * @constructs lackey-cms/modules/cms/client/manager/StructureUI
@@ -55,7 +55,7 @@ class ArticlePickerUI extends Emitter {
     buildUI() {
         let self = this;
         return template
-            .render('cms/cms/article-picker', this.options || {})
+            .render('cms/cms/block-picker', this.options || {})
             .then((nodes) => {
                 self.node = nodes[0];
 
@@ -128,17 +128,17 @@ class ArticlePickerUI extends Emitter {
         let self = this,
             input = lackey.select('input[type="search"]', this.node)[0];
         api
-            .read('/cms/content?type=page&q=' + encodeURI(input.value))
+            .read('/cms/template?type=block&q=' + encodeURI(input.value))
             .then((list) => {
                 return template.redraw(lackey.select('ul', self.node)[0], list);
             })
             .then((nodes) => {
                 lackey.bind('[data-lky-btn]', 'click', (event, hook) => {
-                    self.resolve(hook.getAttribute('data-lky-route'));
+                    self.resolve(hook.getAttribute('data-lky-path'));
                 }, nodes[0]);
             });
     }
 
 }
 
-module.exports = ArticlePickerUI;
+module.exports = BlockPrickerUI;

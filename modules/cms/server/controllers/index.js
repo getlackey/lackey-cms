@@ -18,7 +18,9 @@
 */
 
 const SUtils = require(LACKEY_PATH).utils,
-    humanize = require('humanize');
+    SCli = require(LACKEY_PATH).cli,
+    humanize = require('humanize'),
+    MODULE_NAME = 'lackey-cms/modules/cms/server/controllers';
 
 module.exports = SUtils
     .waitForAs('lackey-cms/modules/cms/server/controllers',
@@ -56,6 +58,9 @@ module.exports = SUtils
 
                     iframePath = req.originalUrl.replace(/^\/admin/, '');
 
+                    SCli.debug(MODULE_NAME, 'IFRAME path', iframePath);
+                    SCli.debug(MODULE_NAME, 'IFRAME ADMIN path', fullIframePath);
+
                     if (iframePath === '') {
                         iframePath = iframePath + '/';
                     }
@@ -63,7 +68,7 @@ module.exports = SUtils
                     fullIframePath = req.__host + iframePath;
 
                     return Content
-                        .findByRoute(iframePath)
+                        .findByRoute(iframePath.split('?')[0])
                         .then((page) => {
                             if (page) {
                                 return page._template.canEdit(req.user);

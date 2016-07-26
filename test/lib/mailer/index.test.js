@@ -17,41 +17,34 @@
 */
 
 const
-    configuration = require('../../../lib/configuration'),
+    mailer = require('../../../lib/mailer'),
     SUtils = require('../../../lib/utils'),
+    configuration = require('../../../lib/configuration'),
     path = require('path'),
     should = require('should');
 
-describe('lib/configuration/index', () => {
-    it('Throws error for wrong load order', () => {
-        let error = null;
-        try {
-            configuration();
-        } catch (ex) {
-            error = ex;
-        }
-        should.exist(error);
-    });
-    it('Handle wrong path', () => {
-        SUtils.setProjectPath(path.join(__dirname, '/../../../test/mockup/whatever/'));
-        let instance = configuration('test');
-        return instance;
-    });
-    it('Works', () => {
+describe('lib/mailer/index', () => {
+    before(() => {
         configuration.unload();
         SUtils.setProjectPath(path.join(__dirname, '/../../../test/mockup/project/'));
-        let instance = configuration('test');
-
-        return instance
-            .then(config => {
-                config.isTest().should.eql(true);
-                return configuration('test');
+        return configuration('test', {
+            mailer: {
+                type: __dirname + '/../../../test/mockup/mailtransport'
+            }
+        });
+    });
+    it('Works', () => {
+        return mailer({
+                from: 'test@example.com',
+                to: 'test@example.com',
+                template: 'cms/users/emails/confirm-email',
+                subject: 'Hello world',
+                html: '<h1>Hello world</h1>',
+                text: 'Hello World'
             })
-            .then(config => {
-                config.isTest().should.eql(true);
-                return true;
-            })
-            .should.finally.be.eql(true);
-
+            .then(c => console.log(c));
+    });
+    after(() => {
+        configuration.unload();
     });
 });

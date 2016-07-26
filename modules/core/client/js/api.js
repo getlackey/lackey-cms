@@ -19,7 +19,6 @@
 const xhr = require('core/client/js/xhr');
 
 function parse(data, readAs, asError) {
-  console.log(data);
   let format = readAs || 'json';
   if (data === null || data === undefined) {
     if (asError) {

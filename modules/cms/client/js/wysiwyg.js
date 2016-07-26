@@ -173,7 +173,7 @@ class Wysiwyg {
 
     static init() {
 
-        if(!top.Lackey) {
+        if(!top.Lackey || !top.Lackey.manager) {
             setTimeout(() => {
                 Wysiwyg.init();
             }, 250);

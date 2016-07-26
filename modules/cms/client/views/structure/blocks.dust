@@ -1,0 +1,7 @@
+{#data}
+    <li>
+        <span>{name}</span>
+        <button data-lky-btn data-lky-path="{path}">Choose</button>
+        <img src="{thumb}"/>
+    </li>
+{/data}

@@ -75,11 +75,11 @@ function Manager() {
     });
 
     this.repository = new Repository();
-    this.repository.on('changed', lackey.as(this.onChanged, this));
+    this.repository.on('changed', this.onChanged.bind(this));
     this.repository.bubble(this, 'reset');
 
     this.stack = new Stack(this.repository);
-    this.stack.on('transition', lackey.as(this.onStackChange, this));
+    this.stack.on('transition', this.onStackChange.bind(this));
 
 
     overlay.addEventListener('mousewheel', (e) => {
@@ -325,7 +325,7 @@ Manager.prototype.onViewStructure = function () {
                     context: () => Promise.resolve(self.current),
                     stack: self.stack
                 }, this.repository);
-                structureController.on('changed', lackey.as(self.onStructureChange, self));
+                structureController.on('changed', self.onStructureChange.bind(self));
                 return self.stack.inspectStructure(structureController);
             });
     }
@@ -351,7 +351,7 @@ Manager.prototype.onPagePropertiesChanged = function (event) {
         .updateCurrent(function (content) {
             content.props = event.data;
         })
-        .then(lackey.as(this.preview, this));
+        .then(this.preview.bind(this));
 };
 
 
@@ -379,7 +379,7 @@ Manager.prototype.setupUI = function () {
 
     lackey
         .hook('header.settings')
-        .addEventListener('click', lackey.as(this.onViewStructure, this), true);
+        .addEventListener('click', this.onViewStructure.bind(this), true);
     this._changeUI = new ChangeUI(this.repository);
     lackey.select([
         '[data-lky-hook="header.settings"]',

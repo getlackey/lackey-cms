@@ -23,6 +23,10 @@ let base = document.querySelector('head base'),
     basePath = base ? base.getAttribute('href') : (loc.protocol + '//' + loc.host + (loc.port && loc.port.length ? (':' + loc.port) : '') + '/'),
     adminPath = resolve(basePath, document.location.pathname);
 
-if (top === window) {
+if (document.location.search && document.location.search.replace(/^\s+|\s+$/g, '').length) {
+    adminPath += document.location.search;
+}
+
+if (top === window && document.location.href !== adminPath) {
     document.location.href = adminPath;
 }

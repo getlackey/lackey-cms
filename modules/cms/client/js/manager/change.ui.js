@@ -42,11 +42,11 @@ ChangeUI.prototype.bindUI = function () {
     this._cancel = lackey.hook('header.cancel');
     this._changes = lackey.hook('header.changes');
 
-    this._changeHandler = lackey.as(this.onChange, this);
+    this._changeHandler = this.onChange.bind(this);
     this.repository.on('changed', this._changeHandler);
 
-    this._cancel.addEventListener('click', lackey.as(this.cancel, this), true);
-    this._save.addEventListener('click', lackey.as(this.save, this), true);
+    this._cancel.addEventListener('click', this.cancel.bind(this), true);
+    this._save.addEventListener('click', this.save.bind(this), true);
 
     this.onChange();
 };
