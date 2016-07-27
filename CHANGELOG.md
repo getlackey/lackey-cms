@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.8.0
+
+ * Added @filter dust helper
+
 ## 0.7.1
 
  * Open permissions due to `acl` dependency bug #66
