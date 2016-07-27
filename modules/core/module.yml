@@ -36,7 +36,7 @@ init:
                     - post
                 /cms/preview: # PREVIEW PAGE
                     - post
-                /api/cms/*: # API ENDPOINTS
+                /api/*: # API ENDPOINTS
                     - get
                     - delete
                     - post
@@ -44,14 +44,10 @@ init:
                 viewInVariant: '*' # VIEWING IN VARIANT
                 /session:
                     - get
-                /api/account/confirm-email:
-                    - post
                 edit: '*' # EDITING CONTENT
                 cms: '*'
                 debug: '*'
                 viewas: '*'
-                /api/*:
-                    - get
                 adminMenu: '*'
         -
             name: admin
@@ -63,7 +59,7 @@ init:
                     - post
                 /cms/preview: # PREVIEW PAGE
                     - post
-                /api/cms/*: # API ENDPOINTS
+                /api/*: # API ENDPOINTS
                     - get
                     - delete
                     - post
@@ -71,14 +67,10 @@ init:
                 viewInVariant: '*' # VIEWING IN VARIANT
                 /session:
                     - get
-                /api/account/confirm-email:
-                    - post
                 edit: '*' # EDITING CONTENT
                 cms: '*'
                 debug: '*'
                 viewas: '*'
-                /api/*:
-                    - get
                 adminMenu: '*'
     # Users
     User:

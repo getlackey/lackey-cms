@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.7.1
+
+ * Open permissions due to `acl` dependency bug #66
+
 ## 0.7.0
 
  * #55 Keep query string parameters in edit mode
