@@ -63,6 +63,14 @@ class CRUDController {
         return output;
     }
 
+    static alterQuery(req, query) {
+        return query;
+    }
+
+    static alterQueryOptions(req, options) {
+        return options;
+    }
+
     // ================================================ CRUD
     // Create
     static create(req, res) {
@@ -110,7 +118,7 @@ class CRUDController {
     // List
     static list(req, res) {
         let restParams = req.getRESTQuery(true);
-        this.__list(restParams)
+        this.__list(req, restParams)
             .then((data) => {
                 res.api(data);
             }, (error) => {
@@ -118,11 +126,11 @@ class CRUDController {
             });
     }
 
-    static __list(options) {
+    static __list(req, options) {
         let self = this;
 
         return this.model
-            .table(options.query, this.tableConfig, options.options)
+            .table(self.alterQuery(req, options.query), this.tableConfig, self.alterQueryOptions(req, options.options))
             .then((data) => {
                 if (options.options.format === 'table') {
                     self.mapActions(this.actions, data.columns, data.rows);
@@ -209,11 +217,11 @@ class CRUDController {
 
                 return self
                     .model
-                    .table(restParams.query, tableConfig, {
+                    .table(self.alterQuery(req, restParams.query), tableConfig, self.alterQueryOptions(req, {
                         format: 'table',
                         keepReference: true,
                         nolimit: isExport
-                    });
+                    }));
             })
             .then((data) => {
                 if (isExport) {

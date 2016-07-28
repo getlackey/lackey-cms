@@ -88,7 +88,6 @@ module.exports = Schema
                 return Schema.table(knex, 'sessions', (table) => {
                     table.string('sid');
                     table.json('sess').notNullable();
-                    table.timestamp('updatedAt').notNullable();
                     table.unique(['sid']);
                 });
             })
@@ -122,6 +121,12 @@ module.exports = Schema
                     table.string('os');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'sessions', 'updated', (table) => {
+                    table.timestamp('updated').notNullable().defaultTo(knex.raw('now()'));
+                });
+            })
+
             //
             // TABLE roles
             //
@@ -494,6 +499,19 @@ module.exports = Schema
                     table.string('originalValue');
                     table.string('language');
                     table.string('value');
+                });
+            })
+            //
+            // TABLE Translations
+            //
+            //
+            .then(() => {
+                return Schema.table(knex, 'analytics', (table) => {
+                    table.increments();
+                    table.string('metric').notNullable();
+                    table.integer('value').defaultTo(1).notNullable();
+                    table.date('date').notNullable();
+                    table.unique(['metric', 'date']);
                 });
             })
             .then(() => {

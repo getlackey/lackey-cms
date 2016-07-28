@@ -1,0 +1,23 @@
+[data-lky-calendar] {
+    border: 1px solid $color-lackey-light-blue;
+    margin: auto;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    a {
+        text-decoration: none;
+        color:$color-lackey-dark-gray;
+    }
+
+    thead {
+        background-color: $color-lackey-light-blue;
+        color: white;
+        a, a:hover, a:visited, a:link {
+            color: white;
+        }
+    }
+
+    td, th {
+        padding: 5px;
+        text-align: center;
+    }
+}

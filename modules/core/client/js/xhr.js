@@ -40,7 +40,7 @@ var XHR = {
         if (xhr.readyState === DONE) {
           if (xhr.status === OK) {
             resolve(xhr.responseText); // 'This is the returned text.'
-          } else if (xhr.status === '204') {
+          } else if (+xhr.status === 204) {
             resolve(null);
           } else {
             if (xhr.responseText && xhr.responseText.length) {

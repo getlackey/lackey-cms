@@ -1,0 +1,23 @@
+name : 'Lackey - Analytics'
+
+require:
+    #- 'cms/core'
+
+init:
+
+routes:
+    /cms/analytics:
+        get:
+            controller: cms/analytics/dashboard#index
+            ACLHelper: admin
+            # ACL - for future
+
+    /cms/analytics/:metricIndex:
+        get:
+            controller: cms/analytics/dashboard#table
+            inject:
+                - cms/core/server/models/analytics
+            ACLHelper: admin
+routeParams:
+    metricIndex:
+        field: metricIndex

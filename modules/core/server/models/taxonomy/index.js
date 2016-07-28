@@ -28,11 +28,11 @@ SCli.debug(__MODULE_NAME, 'REQUIRED');
 
 module.exports = SUtils
     .waitForAs(__MODULE_NAME,
-        SUtils.cmsMod('core').model('objection'),
+        SUtils.cmsMod('core').model('flyweight'),
         require('../taxonomy-type'),
         require('../knex')
     )
-    .then((ObjectionWrapper, TaxonomyType) => {
+    .then((FlyWeight, TaxonomyType) => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -46,7 +46,7 @@ module.exports = SUtils
         /**
          * @class
          */
-        class Taxonomy extends ObjectionWrapper {
+        class Taxonomy extends FlyWeight {
 
             static get api() {
                 return '/cms/taxonomy';

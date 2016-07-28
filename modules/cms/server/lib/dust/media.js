@@ -24,7 +24,7 @@ const SUtils = require(LACKEY_PATH).utils,
   treeParser = require('../../../shared/treeparser');
 
 
-function print(chunk, data, type, editMode) {
+function print(chunk, data, type, editMode, dust, log) {
   let source;
 
   SCli.debug('lackey-cms/modules/cms/server/lib/dust/media', 'Print', JSON.stringify(data, null, 4));
@@ -40,6 +40,9 @@ function print(chunk, data, type, editMode) {
       source = data.content ? data.content.source : null;
 
       if (type === 'url') {
+        if (log) {
+          source = dust.filters.analytics(source);
+        }
         chunk.write(source);
         return;
       }
@@ -138,6 +141,7 @@ module.exports = (dust) => {
       type = params.type,
       parent = params.parent,
       path = parent ? (parent + '.' + params.path) : params.path,
+      log = !!params.analytics,
       attrNames = Object.keys(params)
       .map((name) => {
         if (name.match(/^attr-/)) {
@@ -192,7 +196,7 @@ module.exports = (dust) => {
             if (bodies.block) {
               injected.render(bodies.block, context.push(dataObject));
             } else {
-              print(injected, dataObject, type, editMode, dust);
+              print(injected, dataObject, type, editMode, dust, log);
             }
             return injected.end();
           }, (error) => {
@@ -203,7 +207,7 @@ module.exports = (dust) => {
           });
       });
     }
-    print(chunk, dataObject, type, editMode, dust);
+    print(chunk, dataObject, type, editMode, dust, log);
 
   };
 

@@ -1,0 +1,37 @@
+<table data-lky-calendar>
+    <thead>
+        <tr>
+            <th>
+                <a href="#" data-previous-month>&laquo;</a>
+            </th>
+            <th colspan="5">
+                {viewing|monthLong} {viewing|year}
+            </th>
+            <th>
+                <a href="#" data-next-month>&raquo;</a>
+            </th>
+        </tr>
+        <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+    </thead>
+    <tbody>
+        {#calendar}
+            <tr>
+                {#.}
+                    <td>
+                        <a href="#" data-date="{.}">
+                            {.|day}
+                        </a>
+                    </td>
+                {/.}
+            </tr>
+        {/calendar}
+    </tbody>
+</table>

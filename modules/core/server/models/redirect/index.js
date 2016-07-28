@@ -28,10 +28,10 @@ SCli.debug(__MODULE_NAME, 'REQUIRED');
 
 module.exports = SUtils
     .waitForAs(__MODULE_NAME,
-        SUtils.cmsMod('core').model('objection'),
+        SUtils.cmsMod('core').model('flyweight'),
         require('../knex')
     )
-    .then((ObjectionWrapper) => {
+    .then((FlyWeight) => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -44,7 +44,7 @@ module.exports = SUtils
         /**
          * @class
          */
-        class Redirect extends ObjectionWrapper {
+        class Redirect extends FlyWeight {
 
             static get api() {
                 return '/cms/redirect';

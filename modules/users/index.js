@@ -83,6 +83,8 @@ module.exports.aclAdmin = (req, res, next) => {
 module.exports.setSession = (req, res, next) => {
     req.session.userAgent = req.headers['user-agent'];
     req.session.ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    req.session.cookie.maxAge = 3600000;
+    req.session.save();
     return next();
 };
 
