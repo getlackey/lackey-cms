@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.8.1
+
+ * Fix addSlash helper usage in templates
+
 ## 0.8.0
 
  * Added @filter dust helper

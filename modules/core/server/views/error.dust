@@ -1,6 +1,6 @@
 <html>
     <head>
-        <base href="{host|addshash}/" target="_top">
+        <base href="{host|addSlash}/" target="_top">
         {! to migrate elseewhre !}
         <link rel="stylesheet" href="{@base}css/cms/core/base.css{/base}"/>
         <link rel="stylesheet" href="{@base}css/cms/cms/base.css{/base}"/>

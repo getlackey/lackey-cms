@@ -10,7 +10,7 @@
 
 ![Lackey](./docs/lackey-logo.png)
 
-_Version 0.8.0_
+_Version 0.8.1_
 
 Lackey is __Best Practice Driven CMS__
 
