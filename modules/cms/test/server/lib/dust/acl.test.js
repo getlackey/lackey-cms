@@ -75,6 +75,7 @@ describe('models/cms/server/lib/dust/acl', () => {
                     done();
                 })
                 .catch((error) => {
+                    /* istanbul ignore next */
                     console.error(error);
                 });
         });

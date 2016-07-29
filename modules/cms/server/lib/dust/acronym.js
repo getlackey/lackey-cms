@@ -6,6 +6,6 @@
  */
 module.exports = (dust) => {
     dust.filters.acronym = function (value) {
-        return value.match(/\b([A-Z])/g).join('');
+        return value.match(/\b([A-Za-z])/g).join('').toUpperCase();
     };
 };

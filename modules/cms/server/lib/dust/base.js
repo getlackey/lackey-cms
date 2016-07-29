@@ -30,7 +30,7 @@ module.exports = (dust, config) => {
 
   dust.helpers.base = (chunk, context, bodies) => {
     let content = renderBlock(bodies.block, chunk, context);
-    chunk.write(module.exports.base(config.get('host'), content));
+    return chunk.write(module.exports.base(config.get('host'), content));
   };
 
   dust.filters.addSlash = module.exports.addSlash;
