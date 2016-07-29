@@ -38,6 +38,7 @@ module.exports = (dust) => {
                 }
                 return chunk;
             }, (error) => {
+                 /* istanbul ignore next */
                 console.error(error);
             });
     };

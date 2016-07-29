@@ -107,4 +107,46 @@ describe('models/cms/server/lib/dust/base', () => {
         dust.filters.base('http://example.com').should.be.eql('http://example.com');
     });
 
+    it('http://example.com - no slash', () => {
+        let dust = {
+                filters: {},
+                helpers: {}
+            },
+            config = {
+                get: () => 'http://google.com/url'
+            };
+        base(dust, config);
+        dust.filters.addSlash('http://example.com').should.be.eql('http://example.com/');
+    });
+
+    it('http://example.com - helper', () => {
+        let dust = {
+                filters: {},
+                helpers: {}
+            },
+            config = {
+                get: () => 'http://google.com/url'
+            },
+            chunk = {
+                tap: (cb) => {
+                    cb('http://example.com/');
+                    return {
+                        render: () => {
+                            return {
+                                untap: () => {
+                                    return;
+                                }
+                            };
+                        }
+                    };
+                },
+                write: (thing) => {
+                    return thing;
+                }
+            },
+            bodies = {};
+        base(dust, config);
+        dust.helpers.base(chunk, context, bodies).should.be.eql('http://example.com/');
+    });
+
 });
