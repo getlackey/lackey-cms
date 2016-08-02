@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.8.2
+
+ * Fix issue with duplicate taxonomies
+
 ## 0.8.1
 
  * Fix addSlash helper usage in templates

@@ -351,13 +351,14 @@ module.exports = Database
                         SCli.debug(__MODULE_NAME, 'where', this.model.tableName, JSON.stringify(query), operand);
 
                         let self = this,
-                            fn = operand === 'or' ? 'orWhere' : 'where';
+                            fn = operand === 'or' ? 'orWhere' : 'where',
+                            outputQuery = query || {};
 
-                        Object.keys(query).forEach((key) => {
+                        Object.keys(outputQuery).forEach((key) => {
                             if (key === '$or') {
                                 cursor.andWhere(function () {
                                     let inner = this;
-                                    query.$or.forEach((condition, index) => {
+                                    outputQuery.$or.forEach((condition, index) => {
                                         if (index === 0) {
                                             self.where(inner, condition);
                                         } else {
@@ -369,25 +370,25 @@ module.exports = Database
                             if (key === '$and') {
                                 cursor.andWhere(function () {
                                     let inner = this;
-                                    query.$and.forEach((condition) => {
+                                    outputQuery.$and.forEach((condition) => {
                                         self.where(inner, condition);
                                     });
                                 });
 
-                            } else if (query[key] === null) {
+                            } else if (outputQuery[key] === null) {
                                 cursor[operand === 'or' ? 'orWhereNull' : 'whereNull'](key);
-                            } else if (typeof query[key] === 'object') {
-                                if (Array.isArray(query[key].$in)) {
-                                    cursor[operand === 'or' ? 'orWhereIn' : 'whereIn'](key, query[key].$in);
-                                } else if (query[key].$ne) {
-                                    cursor[operand === 'or' ? 'orWhereNot' : 'whereNot'](key, query[key].$ne);
-                                } else if (query[key].operator === 'like') {
-                                    cursor[fn](knex.raw('LOWER("' + key.replace(/"/g, '') + '") LIKE LOWER(?)', query[key].value));
+                            } else if (typeof outputQuery[key] === 'object') {
+                                if (Array.isArray(outputQuery[key].$in)) {
+                                    cursor[operand === 'or' ? 'orWhereIn' : 'whereIn'](key, outputQuery[key].$in);
+                                } else if (outputQuery[key].$ne) {
+                                    cursor[operand === 'or' ? 'orWhereNot' : 'whereNot'](key, outputQuery[key].$ne);
+                                } else if (outputQuery[key].operator === 'like') {
+                                    cursor[fn](knex.raw('LOWER("' + key.replace(/"/g, '') + '") LIKE LOWER(?)', outputQuery[key].value));
                                 } else {
-                                    cursor[fn](key, query[key].operator, query[key].value);
+                                    cursor[fn](key, outputQuery[key].operator, outputQuery[key].value);
                                 }
                             } else {
-                                cursor[fn](key, query[key]);
+                                cursor[fn](key, outputQuery[key]);
                             }
                         });
                         return cursor;
@@ -498,7 +499,6 @@ module.exports = Database
                     }
 
                     static _preQuery(query, options) {
-
                         let amendedQuery = JSON.parse(JSON.stringify(query));
 
                         if (this.likeables && options && options.textSearch) {
@@ -534,7 +534,6 @@ module.exports = Database
                                     });
                             }
                         }
-
                         return Promise.resolve(amendedQuery);
                     }
 
@@ -585,7 +584,6 @@ module.exports = Database
                                 }
                             });
                         }
-
                         return this
                             ._preQuery(inputQuery, options)
                             .then((q) => {
@@ -593,7 +591,6 @@ module.exports = Database
                                 return this.count(query);
                             })
                             .then((count) => {
-
                                 let opt = options || {};
 
                                 if (opt.limit && !opt.nolimit) {
@@ -634,7 +631,6 @@ module.exports = Database
                                 if (opt.textSearch) {
                                     queryOptions.textSearch = options.textSearch;
                                 }
-
                                 return self.query(query, populate, queryOptions);
                             })
                             .then((data) => {

@@ -101,6 +101,8 @@ lackey.bind('form', 'submit', (event) => {
             });
         })
         .then((response) => {
-            top.document.location.replace('/admin' + response.route);
+            let base = document.querySelector('head base'),
+                basePath = base.getAttribute('href');
+            top.document.location.href = base + response.route.replace(/^\//, '');
         });
 });
