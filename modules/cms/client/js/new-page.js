@@ -103,6 +103,6 @@ lackey.bind('form', 'submit', (event) => {
         .then((response) => {
             let base = document.querySelector('head base'),
                 basePath = base.getAttribute('href');
-            top.document.location.href = base + response.route.replace(/^\//, '');
+            top.document.location.href = basePath + response.route.replace(/^\//, '');
         });
 });
