@@ -215,7 +215,7 @@ module.exports = SUtils
                                         $in: types.map((type) => type.id)
                                     };
                                     delete query2.restrictive;
-
+                                    return query2;
                                 });
 
                         }
