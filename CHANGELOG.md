@@ -4,7 +4,11 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
-### 0.9.0-alph
+### 0.9.0-alpha2
+
+ * fix include paths for SASS
+
+### 0.9.0-alpha
 
  * Date picker and created date
  * Analytics logger

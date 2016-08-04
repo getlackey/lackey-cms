@@ -143,7 +143,8 @@ module.exports = (gulp, projectDIR) => {
             .pipe(plumber())
             .pipe(sass({
                 includePaths: [
-                    lackeyDIR + '/node_modules'
+                    lackeyDIR + '/node_modules',
+                    projectDIR + '/node_modules'
                 ]
             }))
             .on('error', sass.logError)
