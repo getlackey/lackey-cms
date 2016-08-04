@@ -1,0 +1,10 @@
+{>"cms/cms/main"/}
+
+{<body}
+<section data-lky-component="table">
+    <input data-lky-hook="table.filter" type="search" placeholder="Find table items"/>
+    <a data-lky-btn class="tableAction" href="{route|base}.xlsx">Download as XLSX</a>
+    <h2>Analytics - {data.metric.name}</h2>
+    {>"cms/core/table" table=data.table/}
+</section>
+{/body}

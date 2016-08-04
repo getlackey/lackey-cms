@@ -7,6 +7,7 @@ require:
     - cms/core
     - cms/users
     - cms/i18n
+    - cms/analytics
 
 ##
 ## INITIAL DATA
@@ -26,3 +27,13 @@ init:
                 type: Fields
                 title:
                     abc
+
+Analytics:
+    -
+        name: Page Impressions
+        sqlMatch: impression:%
+        regex: ^impression:(.+)$
+    -
+        name: Sessions Per Day
+        sqlMatch: session:perday:%
+        regex: ^session:perday:(.+)$

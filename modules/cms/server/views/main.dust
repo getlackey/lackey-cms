@@ -40,6 +40,11 @@
                         <a href="cms/content">Content</a>
                     </li>
                 {/acl}
+                {@acl perm="adminMenu" method="analitycs"}
+                    <li>
+                        <a href="cms/analytics">Analytics</a>
+                    </li>
+                {/acl}
                 {@config}
                     {@path root=. path="cms.items"}
                         <li data-class="divider"></li>

@@ -1,3 +1,12 @@
+{?createdAt}
+<li>
+  <label>
+    <span>Created Date</span>
+        <input type="text" class="form-control" readonly value="{createdAt|dateTimeFormat}" name="createdAt"/>
+        <button name="createdAt" data-lky-btn data-name="createdAt" data-lky-hook="action:pick-created-at" data-value="{createdAt}" >Pick date</button>
+  </label>
+</li>
+{/createdAt}
 {#dictionary}
   <li>
     <label>
@@ -10,6 +19,9 @@
         {:media}
           <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
           <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-media" data-value="{@path root=values path=name/}">Change Image</button>
+        {:date}
+          <input type="text" class="form-control" readonly value="{@path root=values path=name filter="dateTimeFormat"/}"/>
+          <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-date-time" data-value="{@path root=values path=name/}" >Pick date</button>
         {:select}
           <select name="{name}">
             {#items}

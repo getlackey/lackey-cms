@@ -20,6 +20,7 @@ const emit = require('cms/client/js/emit'),
     StructureUI = require('cms/client/js/manager/structure.ui.js'),
     ArticlePicker = require('cms/client/js/manager/article.picker.ui.js'),
     BlockPicker = require('cms/client/js/manager/block.picker.ui.js'),
+    DateTimePicker = require('cms/client/js/manager/datetime.picker.ui.js'),
     Gallery = require('cms/client/js/manager/gallery.ui.js'),
     lackey = require('core/client/js');
 /**
@@ -107,7 +108,7 @@ Stack.prototype.pickArticle = function (route) {
     return articlePicker
         .promise
         .then((rt) => {
-            self.pop();
+            self.pop(true);
             return rt;
         });
 };
@@ -134,6 +135,40 @@ Stack.prototype.pickBlock = function () {
         .promise
         .then((rt) => {
             self.pop();
+            return rt;
+        });
+};
+
+Stack.prototype.pickDateTime = function (current) {
+
+    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
+
+    let dateTime = new Date();
+    try {
+        dateTime = (current && current instanceof Date) ? current : new Date(current);
+    } catch (e) {
+        console.error(e);
+    }
+
+    let self = this,
+        dateTimePicker = new DateTimePicker({
+            stack: this,
+            current: dateTime
+        });
+
+    dateTimePicker
+        .buildUI()
+        .then((element) => {
+            self.node.appendChild(element);
+            return dateTimePicker.fadeIn();
+        });
+
+    this._stack.push(dateTimePicker);
+
+    return dateTimePicker
+        .promise
+        .then((rt) => {
+            self.pop(true);
             return rt;
         });
 };

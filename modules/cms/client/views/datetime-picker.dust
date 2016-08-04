@@ -1,0 +1,8 @@
+<aside data-lky-component="settings">
+    <section data-lky-hook="settings.breadcrumbs">
+        <!-- later -->
+    </section>
+    <section data-lky-hook="settings.back"></section>
+    <section data-lky-hook="settings.picker" data-lky-template="cms/cms/calendar">
+    </section>
+</aside>

@@ -22,6 +22,7 @@ const Emitter = require('cms/client/js/emitter').Emitter,
     api = require('core/client/js/api'),
     formatters = require('jsondiffpatch/src/formatters'),
     Autocomplete = require('cms/client/js/controls/autocomplete'),
+    dateformat = require('dateformat'),
     treeParser = require('cms/shared/treeparser');
 
 let cache = {};
@@ -413,26 +414,44 @@ class StructureUI extends Emitter {
             .context()
             .then((context) => Promise.all([
                 self.options.settings(context),
-                self.options.settingsDictionary(context)
+                self.options.settingsDictionary(context),
+                context
             ]))
             .then((responses) => {
+                let data = {
+                    values: responses[0],
+                    dictionary: responses[1]
+                };
+                if (responses[2].createdAt) {
+                    try {
+                        data.createdAt = responses[2].createdAt;
+                        data.createdAtFormatted = dateformat(new Date(responses[2].createdAt));
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
                 return Template
-                    .redraw(self.metaNode, self.mapDictionary({
-                        values: responses[0],
-                        dictionary: responses[1]
-                    }))
+                    .redraw(self.metaNode, self.mapDictionary(data))
                     .then(() => {
-                        return responses[0];
+                        return responses;
                     });
             })
             .then(this.bindMetaEvents.bind(this));
 
     }
 
-    bindMetaEvents(settings) {
+    bindMetaEvents(responses) {
+        let settings = responses[0],
+            context = responses[2];
         let self = this;
         lackey
             .bind('[data-lky-hook="action:pick-article"]', 'click', this.pickArticle.bind(this, settings), this.node);
+
+        lackey
+            .bind('[data-lky-hook="action:pick-date-time"]', 'click', this.pickDateTime.bind(this, settings), this.node);
+
+        lackey
+            .bind('[data-lky-hook="action:pick-created-at"]', 'click', this.pickDateTime.bind(this, context), this.node);
 
         lackey
             .bind('[data-lky-hook="action:pick-media"]', 'click', this.pickMedia.bind(this, settings), this.node);
@@ -466,6 +485,23 @@ class StructureUI extends Emitter {
             });
     }
 
+    pickDateTime(settings, event, hook) {
+        this.collapse();
+        let self = this,
+            date = hook.getAttribute('data-value');
+
+        return this.options.stack
+            .pickDateTime(date)
+            .then((rt) => {
+                if (rt !== null) {
+                    settings[hook.getAttribute('data-name')] = rt;
+                    self.emit('changed', settings);
+                    self.drawMeta();
+                }
+                self.node.setAttribute('data-lky-edit', 'meta');
+            });
+    }
+
     pickMedia(settings, event, hook) {
         this.collapse();
         let self = this,
@@ -479,7 +515,6 @@ class StructureUI extends Emitter {
                     self.emit('changed', settings);
                     self.drawMeta();
                 }
-                console.log(self.node);
                 self.node.setAttribute('data-lky-edit', 'meta');
             });
     }

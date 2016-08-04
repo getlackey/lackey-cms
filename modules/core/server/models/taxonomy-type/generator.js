@@ -40,7 +40,6 @@ module.exports = (data) => {
             if (!type) {
                 return TaxonomyType.create(data);
             }
-
             if (Generator.override('TaxonomyType') && typeof data !== 'string' && type.diff(data)) {
                 SCli.debug('lackey/modules/cms/server/models/taxonomy-type/generator', 'Override ' + data.name);
                 return type.save();

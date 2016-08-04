@@ -1,0 +1,15 @@
+{>"cms/cms/main"/}
+
+{<body}
+<section data-lky-component="content">
+    <h2>Analytics</h2>
+    {#data.metrics}
+    <div data-lky-panel>
+        <h3>{name}</h3>
+        <div data-lky-chart="/cms/analytics/{$idx}.json"></div>
+        <a href="{@base}/cms/analytics/{$idx}{/base}">Learn More</a>
+    </div>
+    {/data.metrics}
+    <div style="clear:both"></div>
+</section>
+{/body}

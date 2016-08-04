@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "0.8.3",
+  "version": "0.9.0-alpha",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -31,6 +31,7 @@
     "bunyan": "^1.5.1",
     "bunyan-prettystream": "^0.1.3",
     "chalk": "^1.1.3",
+    "chartist": "^0.9.8",
     "command-line-args": "^3.0.0",
     "common-dustjs-helpers": "^1.4.1",
     "common-errors": "^0.5.3",
@@ -41,8 +42,10 @@
     "connect-slashes": "^1.3.1",
     "cookie-parser": "^1.4.1",
     "crypto": "0.0.3",
+    "dateformat": "^1.0.12",
     "debug": "^2.2.0",
     "del": "^2.2.0",
+    "ditoolkit": "^0.1.0",
     "dust-intl": "^1.1.1",
     "dust-naming-convention-filters": "^0.1.0",
     "dustjs-helpers": "^1.7.3",

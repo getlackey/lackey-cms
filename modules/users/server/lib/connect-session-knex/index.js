@@ -1,9 +1,13 @@
 /* jslint node:true, browser:true, esnext:true */
+/* global LACKEY_PATH */
 'use strict';
 var util = require('util');
 
 var oneDay = 86400000,
-	parse = require('user-agent-parser');
+	parse = require('user-agent-parser'),
+	SUtils = require(LACKEY_PATH).utils,
+	collector = SUtils.cmsMod('analytics').path('server/lib/collector');
+
 
 module.exports = function (connect) {
 
@@ -119,6 +123,18 @@ module.exports = function (connect) {
 		});
 	};
 
+	KnexStore.prototype.statSession = function (sid, sess) {
+		return this.knex
+			.raw(`SELECT count(*) FROM ${this.tablename} WHERE sid = ? AND "updated" <= ?::timestamp`, [sid, new Date()])
+			.then(result => result.rows[0].count)
+			.then(count => {
+				if (+count === 0) {
+					collector
+						.then(c => c.log('session:perday:' + (sess.userId || sess.ipAddress.replace())))
+						.catch(e => console.error(e));
+				}
+			});
+	};
 
 	/*
 	 * Commit the given `sess` object associated with the given `sid`.
@@ -128,7 +144,8 @@ module.exports = function (connect) {
 	 * @param {Function} fn
 	 * @api public
 	 */
-	KnexStore.prototype.set = function (sid, sess, fn) {
+	KnexStore.prototype._set = function (sid, sess, fn) {
+
 		var self = this;
 		var maxAge = sess.cookie.maxAge;
 		var now = new Date().getTime();
@@ -179,6 +196,12 @@ module.exports = function (connect) {
 
 	};
 
+	KnexStore.prototype.set = function (sid, sess, fn) {
+		this
+			.statSession(sid, sess)
+			.then(this._set.bind(this, sid, sess, fn));
+	};
+
 
 	/**
 	 * Touch the given session object associated with the given session ID.
@@ -188,7 +211,7 @@ module.exports = function (connect) {
 	 * @param {Function} fn
 	 * @public
 	 */
-	KnexStore.prototype.touch = function (sid, sess, fn) {
+	KnexStore.prototype._touch = function (sid, sess, fn) {
 		if (sess && sess.cookie && sess.cookie.expires) {
 			var condition = 'CAST(? as timestamp with time zone) <= expired';
 
@@ -196,7 +219,8 @@ module.exports = function (connect) {
 				.where('sid', '=', sid)
 				.andWhereRaw(condition, dateAsISO(this.knex))
 				.update({
-					expired: dateAsISO(this.knex, sess.cookie.expires)
+					expired: dateAsISO(this.knex, sess.cookie.expires),
+					updated: dateAsISO(this.knex, new Date())
 				})
 				.asCallback(fn);
 		}
@@ -204,6 +228,11 @@ module.exports = function (connect) {
 		fn();
 	};
 
+	KnexStore.prototype.touch = function (sid, sess, fn) {
+		this
+			.statSession(sid, sess)
+			.then(this._touch.bind(this, sid, sess, fn));
+	};
 
 	/*
 	 * Destroy the session associated with the given `sid`.

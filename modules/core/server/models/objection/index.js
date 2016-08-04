@@ -256,6 +256,11 @@ module.exports = Database
                      * @returns {Promise} of instance or null
                      */
                     static findBy(field, value) {
+
+                        if(typeof field !== 'string') {
+                            throw new Error('Field name should be a string');
+                        }
+
                         SCli.debug(__MODULE_NAME, 'findBy', this.model.tableName, field, value);
                         let Self = this,
                             hook = new Error();
@@ -265,7 +270,7 @@ module.exports = Database
                                 .where(field, value)
                             )
                             .then((result) => {
-                                SCli.debug(__MODULE_NAME, 'findBy', this.model.tableName, JSON.stringify(result));
+                                SCli.debug(__MODULE_NAME, 'findBy result', this.model.tableName, JSON.stringify(result));
                                 return Promise.all(result.map((data) => Self.factory(data)));
                             }, (err) => {
                                 handleError(hook)(err, true);
@@ -279,6 +284,11 @@ module.exports = Database
                      * @returns {Promise} of instance or null
                      */
                     static findOneBy(field, value) {
+
+                        if(typeof field !== 'string') {
+                            throw new Error('Field name should be a string');
+                        }
+
                         SCli.debug(__MODULE_NAME, 'findOneBy', this.model.tableName, field, value);
                         let Self = this,
                             hook = new Error();
@@ -291,7 +301,7 @@ module.exports = Database
                                 if (!result || !result.length) {
                                     return null;
                                 }
-                                SCli.debug(__MODULE_NAME, 'findOneBy', this.model.tableName, JSON.stringify(result[0]));
+                                SCli.debug(__MODULE_NAME, 'findOneBy result', this.model.tableName, JSON.stringify(result[0]));
                                 return Self.factory(result[0]);
                             }, (err) => {
                                 handleError(hook)(err, true);
@@ -499,7 +509,7 @@ module.exports = Database
                     }
 
                     static _preQuery(query, options) {
-                        let amendedQuery = JSON.parse(JSON.stringify(query));
+                        let amendedQuery = JSON.parse(JSON.stringify(query || {}));
 
                         if (this.likeables && options && options.textSearch) {
 

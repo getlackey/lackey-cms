@@ -24,7 +24,7 @@ module.exports = _.merge({}, require('./default'), {
     datasources: {
         pg: {
             'default': {
-                dsn: 'postgres://localhost/lackey-cms-test'
+                dsn: process.env.CI ? 'postgres://localhost:5433/lackey-cms-test'  : 'postgres://localhost/lackey-cms-test'
             }
         }
     },

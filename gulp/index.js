@@ -141,7 +141,11 @@ module.exports = (gulp, projectDIR) => {
         return gulp
             .src(from + '/modules/*/client/scss/*.scss')
             .pipe(plumber())
-            .pipe(sass())
+            .pipe(sass({
+                includePaths: [
+                    lackeyDIR + '/node_modules'
+                ]
+            }))
             .on('error', sass.logError)
             .pipe(autoprefixer({
                 browsers: ['last 2 versions', 'iOS >= 8', 'IE 9']
