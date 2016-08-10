@@ -94,7 +94,10 @@ describe('lib/server/init/format', () => {
                         route: '/hakuna/matata',
                         query: {},
                         env: 'development',
-                        host: 'host'
+                        host: 'host',
+                        session: {
+                            ip: 'n/a'
+                        }
                     });
                     callback();
                 },
@@ -117,7 +120,10 @@ describe('lib/server/init/format', () => {
 
         let req = {
                 headers: {},
-                path: '/hakuna/matata.json'
+                path: '/hakuna/matata.json',
+                session: {
+                    ipAddress: '1.1.1.1'
+                }
             },
             res = {
                 _headers: {},
@@ -142,7 +148,10 @@ describe('lib/server/init/format', () => {
                         route: '/hakuna/matata.json',
                         query: {},
                         env: 'development',
-                        host: 'host'
+                        host: 'host',
+                        session: {
+                            ip: '1.1.1.1'
+                        }
                     });
                     callback();
                 },
@@ -196,7 +205,10 @@ describe('lib/server/init/format', () => {
                         route: '/hakuna/matata.json',
                         query: {},
                         env: 'development',
-                        host: 'host'
+                        host: 'host',
+                        session: {
+                            ip: 'n/a'
+                        }
                     });
                     callback();
                 },
@@ -244,7 +256,10 @@ describe('lib/server/init/format', () => {
                         "route": "/hakuna/matata.json",
                         query: {},
                         env: 'development',
-                        host: 'host'
+                        host: 'host',
+                        session: {
+                            ip: 'n/a'
+                        }
                     });
                     res.__doc.should.be.eql({
                         stylesheets: ['my/css', 'my/css2'],
@@ -259,7 +274,10 @@ describe('lib/server/init/format', () => {
                         route: '/hakuna/matata.json',
                         query: {},
                         env: 'development',
-                        host: 'host'
+                        host: 'host',
+                        session: {
+                            ip: 'n/a'
+                        }
                     });
                     callback();
                 },
