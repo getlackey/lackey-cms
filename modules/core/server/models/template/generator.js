@@ -58,7 +58,9 @@ module.exports = (data) => {
                     SCli.log(__MODULE_NAME, 'Create Template ' + path);
                     return Template.create(wrapped);
                 }
+                console.log(wrapped);
                 if (Generator.override('Template') && templateObj.diff(wrapped)) {
+                    SCli.log(__MODULE_NAME, 'Override    Template ' + path);
                     return templateObj.save();
                 }
                 return templateObj;

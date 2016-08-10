@@ -27,6 +27,6 @@ if (document.location.search && document.location.search.replace(/^\s+|\s+$/g, '
     adminPath += document.location.search;
 }
 
-if (top === window && document.location.href !== adminPath) {
-    document.location.href = adminPath;
+if (top === window || top.document.location.href.replace(/\/$/, '') !== adminPath.replace(/\/$/, '')) {
+    top.document.location.href = adminPath;
 }

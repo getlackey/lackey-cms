@@ -4,6 +4,13 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.5
+
+ * force pages to be published to be listed
+ * fix iframe redirected
+ * force type 'image' for default medias
+ * override collections and objects in template objects
+
 ### 0.9.3-4
 
  * Fix user session stats

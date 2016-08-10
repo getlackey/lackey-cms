@@ -418,6 +418,10 @@ module.exports = SUtils
                 builder.withAuthor(options.requireAuthor);
                 builder.withoutIds(options.excludeIds);
 
+                if(!options.includeDrafts) {
+                    builder.excludeDrafts();
+                }
+
                 if (options.textSearch && options.textSearch.length > 3) {
                     builder.withTextSearch(options.textSearch);
                 }

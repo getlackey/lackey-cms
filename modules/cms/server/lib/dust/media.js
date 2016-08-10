@@ -31,7 +31,8 @@ function print(chunk, data, type, editMode, dust, log) {
 
   if (data && !data.content && data.default) {
     data.content = {
-      source: data.default
+      source: data.default,
+      type: 'image'
     };
   }
   try {

@@ -22,6 +22,7 @@ const SUtils = require(LACKEY_PATH).utils,
     objection = require('objection'),
     SCli = require(LACKEY_PATH).cli,
     Model = objection.Model,
+      _ = require('lodash'),
     __MODULE_NAME = 'lackey-cms/modules/core/server/models/activity-log';
 
 SCli.debug(__MODULE_NAME, 'REQUIRED');
@@ -166,6 +167,26 @@ module.exports = SUtils
                     .all(this.require.map(perm => user.isAllowed('templates', perm)))
                     .then(list => list.filter(result => result))
                     .then(list => list.length > 0);
+            }
+
+            diff(data) {
+                let self = this;
+                _.merge(self._doc, data);
+                [
+                    'javascripts',
+                    'stylesheets',
+                    'props',
+                    'populate',
+                    'expose',
+                    'variants',
+                    'require',
+                    'taxonomies'
+                ].forEach(key => {
+                    if(data[key] !== undefined) {
+                        self._doc[key] = data[key];
+                    }
+                });
+                return true;
             }
 
             toJSON() {

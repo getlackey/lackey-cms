@@ -289,7 +289,8 @@ module.exports = SUtils
                                 order: item.order,
                                 excludeIds: item.excludeContentId ? page.id : null,
                                 requestor: req.user,
-                                textSearch: textSearch
+                                textSearch: textSearch,
+                                includeDrafts: !!req.canEdit
                             });
 
                     })

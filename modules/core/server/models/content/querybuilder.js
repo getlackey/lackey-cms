@@ -171,6 +171,10 @@ module.exports = require(LACKEY_PATH)
                 this._wheres.push('"id" = ' + id);
             }
 
+            excludeDrafts() {
+                this._wheres.push('state = \'published\'');
+            }
+
             withTextSearch(text) {
                 this._wheres.push(TEXT_SEARCH.replace('$1', text.replace(/[^a-zA-Z0-9\s+]/g, '')));
             }
@@ -214,6 +218,9 @@ module.exports = require(LACKEY_PATH)
                         }
 
                         query += ' LIMIT ' + num_limit;
+
+                        console.log(countQuery);
+                        console.log(query);
 
                         return Promise.all([
                             SCli.sql(knex.raw(countQuery)).then((r) => r.rows),
