@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.3
+
+ * Fix user session stats
+
 ### 0.9.2
 
  * Capture X-Client-ip

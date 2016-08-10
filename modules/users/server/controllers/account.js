@@ -134,6 +134,7 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                                 /* istanbul ignore next */
                                 res.status(400).error(error);
                             } else {
+                                SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
                                 res.redirect('cms/account');
                             }
                         });

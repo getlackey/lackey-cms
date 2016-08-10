@@ -10,7 +10,7 @@
 
 ![Lackey](./docs/lackey-logo.png)
 
-_Version 0.9.2
+_Version 0.9.3
 
 **!** For production please use **0.8.3**
 

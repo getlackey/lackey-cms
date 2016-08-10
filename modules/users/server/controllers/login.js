@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,7 +17,8 @@
     limitations under the License.
 */
 
-const passport = require('passport');
+const passport = require('passport'),
+      SUtils = require(LACKEY_PATH).utils;
 
 module.exports = Promise.resolve({
 
@@ -46,6 +48,7 @@ module.exports = Promise.resolve({
                         /* istanbul ignore next */
                         res.status(400).error(error);
                     } else {
+                        SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
                         res.redirect('/');
                     }
                 });

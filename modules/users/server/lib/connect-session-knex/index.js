@@ -8,7 +8,6 @@ var oneDay = 86400000,
 	SUtils = require(LACKEY_PATH).utils,
 	collector = SUtils.cmsMod('analytics').path('server/lib/collector');
 
-
 module.exports = function (connect) {
 
 	/**
