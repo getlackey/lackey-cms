@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.2
+
+ * Capture X-Client-ip
+
 ### 0.9.1
 
  * Expose client IP in session

@@ -130,7 +130,7 @@ module.exports = function (connect) {
 			.then(count => {
 				if (+count === 0) {
 					collector
-						.then(c => c.log('session:perday:' + (sess.userId || sess.ipAddress.replace())))
+						.then(c => c.log('session:perday:' + (sess.userId || sess.ipAddress)))
 						.catch(e => console.error(e));
 				}
 			});
