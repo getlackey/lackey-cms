@@ -6,7 +6,7 @@
     {#data.metrics}
     <div data-lky-panel>
         <h3>{name}</h3>
-        <div data-lky-chart="/cms/analytics/{$idx}.json"></div>
+        <div data-lky-chart="{@base}/cms/analytics/{/base}{$idx}.json"></div>
         <a href="{@base}/cms/analytics/{$idx}{/base}">Learn More</a>
     </div>
     {/data.metrics}

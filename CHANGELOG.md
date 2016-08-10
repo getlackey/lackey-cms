@@ -4,7 +4,7 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
-### 0.9.3
+### 0.9.3-4
 
  * Fix user session stats
 
