@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.6
+
+ * Fix table condition on AJAX refresh
+
 ### 0.9.5
 
  * force pages to be published to be listed

@@ -17,6 +17,8 @@
     limitations under the License.
 */
 
+const _ = require('lodash');
+
 class CRUDController {
 
     static get model() {
@@ -43,7 +45,7 @@ class CRUDController {
         return this._overriden('tableConfig', null);
     }
 
-     static get exportConfig() {
+    static get exportConfig() {
         return this._overriden('exportConfig', null);
     }
 
@@ -118,6 +120,9 @@ class CRUDController {
     // List
     static list(req, res) {
         let restParams = req.getRESTQuery(true);
+        _.merge(restParams.options, {
+            keepReference: true
+        });
         this.__list(req, restParams)
             .then((data) => {
                 res.api(data);
@@ -128,7 +133,6 @@ class CRUDController {
 
     static __list(req, options) {
         let self = this;
-
         return this.model
             .table(self.alterQuery(req, options.query), this.tableConfig, self.alterQueryOptions(req, options.options))
             .then((data) => {
