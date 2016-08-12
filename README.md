@@ -14,17 +14,28 @@ _Version 0.9.6_
 
 **!** For production please use **0.8.3**
 
-Lackey is __Best Practice Driven CMS__
+Lackey is __a new breed of CMS__
 
- * Responsive First, FOSS, JS Front & Backend (Node.js)
+ * Responsive First, FOSS, JS Front & Backend (Node.js + PostgreSQL)
  * Unique WYSIWAG : What You See is What you Actually Get content management UI
  * CSS/JS framework independent
  * Specification driven
  * Modular
 
-It's just an awesome Node.js CMS and framework by ![Enigma Marketing Services](./docs/logo-spiral@2x.png) _Enigma_.
+Our mission is to bring:
 
+ * Ease for Admins
+ * Power to Developers
+ * Freedom for Designers
+
+This repo is for the main CMS core, deployed as an NPM module. To utilise, please see our:
+
+ * [Example site](https://github.com/getlackey/lackey-cms-site)
  * [Documentation](https://www.gitbook.com/book/sielay/lackey/details)
+
+# Security Disclosure
+
+Security is very important to us. If you have any issue regarding security, please disclose the information responsibly by sending an email to security@lackey.io and not by creating a GitHub issue.
 
 # License and Credits
 
@@ -32,4 +43,4 @@ Get Involved on [GitHub](https://github.com/getlackey) or Follow [@getlackey](ht
 
 Code licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-Open sourced by Enigma ![Enigma Marketing Services](./docs/logo-spiral@2x.png)
+Open sourced by Enigma ![Enigma Marketing Services]
