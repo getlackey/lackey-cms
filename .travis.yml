@@ -32,4 +32,6 @@ before_script:
   - npm install -g gulp
 script: 'gulp test'
 sudo: required
+notifications:
+  slack: enigma-marketing:yfkKsg1TfkVCvECHeeiLzq7Z
 # nop
