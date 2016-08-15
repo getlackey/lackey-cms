@@ -90,7 +90,10 @@ module.exports = SUtils
 
 
             static findByIds(ids) {
-                SCli.debug(__MODULE_NAME, 'findByIds', this.model.tableName, ids);
+                SCli.debug(__MODULE_NAME, 'findByIds', this.model.tableName, JSON.stringify(ids));
+                if (!ids || ids.length === 0) {
+                    return [];
+                }
                 let idsAsInts = ids.map(id => +id);
                 return this
                     .flightWeightPreload()

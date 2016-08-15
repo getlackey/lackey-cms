@@ -138,6 +138,10 @@ class CRUDController {
             .then((data) => {
                 if (options.options.format === 'table') {
                     self.mapActions(this.actions, data.columns, data.rows);
+                } else if (data.data) {
+                    data.data.forEach((row) => {
+                        delete row.___origial;
+                    });
                 }
                 return data;
             });
