@@ -76,26 +76,21 @@ module.exports = SUtils
 
             static map(list, ruleSet, regex) {
                 return Promise.all(list.map(item => {
-                    console.log('item', item);
                     let json = item.toJSON();
-                    if (!json) return json;
-                    console.log('json', json);
                     return Promise
                         .all(ruleSet.map(rule => {
-                            console.log(json, json.metric.replace(regex, rule.value));
+                            let id = json.metric.replace(regex, rule.value);
                             return SUtils
                                 .cmsMod('core') // TODO: support other modules
                                 .model(rule.model)
-                                .then(model => model.findById(json.metric.replace(regex, rule.value)))
+                                .then(model => model.findById(id))
                                 .then(object => {
-                                    console.log('obj', object);
                                     if (object) {
                                         json.view = object;
                                     }
-                                });
+                                }, () => json);
                         }))
-                        .then(a => console.log('a', a) && json)
-                        .catch(err => console.log('err', err));
+                        .then(() => json);
                 }));
             }
 
@@ -117,7 +112,6 @@ module.exports = SUtils
                     })
                     .then(list => map ? Analytics.map(list, map, regex) : list)
                     .then(list => {
-                        console.log('list', list);
                         return {
                             actions: [],
                             columns: [{
@@ -125,12 +119,16 @@ module.exports = SUtils
                                 name: 'metric'
                         }, {
                                 label: 'Value',
-                                name: 'vallue'
+                                name: 'value'
                         }],
                             rows: list.map(row => {
+                                let label = row.metric.match(regex)[1];
+                                if (row.view) {
+                                    label = row.view.name;
+                                }
                                 return {
                                     columns: [{
-                                        value: row.metric.match(regex)[1]
+                                        value: label
                                 }, {
                                         value: row.value
                                 }]
