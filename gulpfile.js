@@ -94,7 +94,7 @@ gulp.task('test', ['istanbul'], () => {
     if (!process.env.CI) {
         process.exit(0);
     }
-
+    process.exit(0); // until coveralls fixed
     return gulp.src(path.join(__dirname, 'coverage/lcov.info'))
         .pipe(coveralls())
         .on('end', () => {
