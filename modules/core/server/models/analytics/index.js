@@ -74,7 +74,32 @@ module.exports = SUtils
                     .then(r => +r.rows[0].count);
             }
 
-            static leaderboard(pattern, regPattern) {
+            static map(list, ruleSet, regex) {
+                return Promise.all(list.map(item => {
+                    console.log('item', item);
+                    let json = item.toJSON();
+                    if (!json) return json;
+                    console.log('json', json);
+                    return Promise
+                        .all(ruleSet.map(rule => {
+                            console.log(json, json.metric.replace(regex, rule.value));
+                            return SUtils
+                                .cmsMod('core') // TODO: support other modules
+                                .model(rule.model)
+                                .then(model => model.findById(json.metric.replace(regex, rule.value)))
+                                .then(object => {
+                                    console.log('obj', object);
+                                    if (object) {
+                                        json.view = object;
+                                    }
+                                });
+                        }))
+                        .then(a => console.log('a', a) && json)
+                        .catch(err => console.log('err', err));
+                }));
+            }
+
+            static leaderboard(pattern, regPattern, map) {
 
                 let regex = new RegExp(regPattern);
 
@@ -90,7 +115,9 @@ module.exports = SUtils
                                 .orderBy('value', 'desc')
                             );
                     })
+                    .then(list => map ? Analytics.map(list, map, regex) : list)
                     .then(list => {
+                        console.log('list', list);
                         return {
                             actions: [],
                             columns: [{
