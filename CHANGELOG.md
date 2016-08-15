@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.8
+
+ * Populate sub objects in analytics
+
 ### 0.9.7
 
  * Fix bug introduced in 0.9.6 that made circular references in CRUD responses

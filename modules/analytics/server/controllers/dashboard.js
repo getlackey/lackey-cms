@@ -42,7 +42,7 @@ class AnalititcsDashboardController {
         let metric = this.metrics[req.metricIndex];
 
         model
-            .leaderboard(metric.sqlMatch, metric.regex)
+            .leaderboard(metric.sqlMatch, metric.regex, metric.map)
             .then(table => {
                 if (req.__resFormat === 'xlsx') {
                     return res.send({
@@ -71,7 +71,7 @@ class AnalititcsDashboardController {
                     metric: metric,
                     table: table
                 });
-            });
+            }, err => console.log(err) && res.error(err));
 
 
     }

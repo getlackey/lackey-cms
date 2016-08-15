@@ -515,6 +515,11 @@ module.exports = Schema
                 });
             })
             .then(() => {
+                return Schema.addColumn(knex, 'analytics', 'map', (table) => {
+                    table.json('map');
+                });
+            })
+            .then(() => {
                 SCli.debug(__MODULE_NAME, 'Schema applied');
             });
     });

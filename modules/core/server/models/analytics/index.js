@@ -74,7 +74,27 @@ module.exports = SUtils
                     .then(r => +r.rows[0].count);
             }
 
-            static leaderboard(pattern, regPattern) {
+            static map(list, ruleSet, regex) {
+                return Promise.all(list.map(item => {
+                    let json = item.toJSON();
+                    return Promise
+                        .all(ruleSet.map(rule => {
+                            let id = json.metric.replace(regex, rule.value);
+                            return SUtils
+                                .cmsMod('core') // TODO: support other modules
+                                .model(rule.model)
+                                .then(model => model.findById(id))
+                                .then(object => {
+                                    if (object) {
+                                        json.view = object;
+                                    }
+                                }, () => json);
+                        }))
+                        .then(() => json);
+                }));
+            }
+
+            static leaderboard(pattern, regPattern, map) {
 
                 let regex = new RegExp(regPattern);
 
@@ -90,6 +110,7 @@ module.exports = SUtils
                                 .orderBy('value', 'desc')
                             );
                     })
+                    .then(list => map ? Analytics.map(list, map, regex) : list)
                     .then(list => {
                         return {
                             actions: [],
@@ -98,12 +119,16 @@ module.exports = SUtils
                                 name: 'metric'
                         }, {
                                 label: 'Value',
-                                name: 'vallue'
+                                name: 'value'
                         }],
                             rows: list.map(row => {
+                                let label = row.metric.match(regex)[1];
+                                if (row.view) {
+                                    label = row.view.name;
+                                }
                                 return {
                                     columns: [{
-                                        value: row.metric.match(regex)[1]
+                                        value: label
                                 }, {
                                         value: row.value
                                 }]

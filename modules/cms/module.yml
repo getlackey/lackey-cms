@@ -37,3 +37,7 @@ Analytics:
         name: Sessions Per Day
         sqlMatch: session:perday:%
         regex: ^session:perday:(.+)$
+        map:
+            -
+                value: $1
+                model: user
