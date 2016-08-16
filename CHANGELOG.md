@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.9
+
+ * Allow using dust vars in path for @path helper
+
 ### 0.9.8
 
  * Populate sub objects in analytics

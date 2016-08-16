@@ -19,6 +19,22 @@
 
 module.exports = (dust) => {
 
+    function renderParameter(name, chunk, context, bodies, params) {
+        if (params && params[name]) {
+            if (typeof params[name] === 'function') {
+                var output = '';
+                chunk.tap(function (data) {
+                    output += data;
+                    return '';
+                }).render(params[name], context).untap();
+                return output;
+            } else {
+                return params[name];
+            }
+        }
+        return '';
+    }
+
     function crawl(obj, path) {
         if (!obj) return null;
         if (!path) return obj;
@@ -33,7 +49,7 @@ module.exports = (dust) => {
     dust.helpers.path = function (chunk, context, bodies, params) {
 
         let root = params.root || null,
-            path = params.path + '',
+            path = renderParameter('path', chunk, context, bodies, params),
             filters = params.filters || [],
             value = crawl(root, path),
             equals = params.hasOwnProperty('eq') ? params.eq : undefined,
@@ -64,7 +80,7 @@ module.exports = (dust) => {
         } else {
             let template = value ? bodies.block : bodies.else;
 
-            if(!value && !template && allowEmpty) {
+            if (!value && !template && allowEmpty) {
                 template = bodies.block;
             }
 
