@@ -1,6 +1,6 @@
 # Contributing
 
-## Comitting
+## Committing
 
 ### Official Lackey Team
 
