@@ -57,16 +57,13 @@ module.exports = SUtils
              */
             static findOneBy(field, value) {
                 SCli.debug(__MODULE_NAME, 'findOneBy', this.model.tableName, field, value);
-                let checkValue = value,
-                    forceInt = false;
-                if (field === 'id') {
-                    forceInt = true;
-                    checkValue = +value;
-                }
-
                 return this
                     .flightWeightPreload()
-                    .then(list => list.reduce((previous, current) => (forceInt ? +current[field] : current[field]) === checkValue ? current : previous, null));
+                    // SQL has no strict equals
+                    /*eslint-disable */
+                    .then(list => list.reduce((previous, current) => current[field] == value ? current : previous, null));
+                /*eslint-enable */
+
             }
 
             /**
@@ -76,16 +73,12 @@ module.exports = SUtils
              */
             static findBy(field, value) {
                 SCli.debug(__MODULE_NAME, 'findBy', this.model.tableName, field, value);
-                let checkValue = value,
-                    forceInt = false;
-                if (field === 'id') {
-                    forceInt = true;
-                    checkValue = +value;
-                }
                 return this
                     .flightWeightPreload()
-                    .then(list => list.filter(current => (forceInt ? +current[field] : current[field]) === checkValue));
-
+                    // SQL has no strict equals
+                    /*eslint-disable */
+                    .then(list => list.filter(current => current[field] == value));
+                /*eslint-enable */
             }
 
 

@@ -4,6 +4,11 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.10
+
+ * Fix flightweight - allow non strict equals
+   * For proper testing we'd need dependency injeciton for models
+
 ### 0.9.9
 
  * Allow using dust vars in path for @path helper
