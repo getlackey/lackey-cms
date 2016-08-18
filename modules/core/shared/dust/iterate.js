@@ -26,12 +26,11 @@ module.exports = (dust) => {
             as = params.iterator || '$idx';
 
         if (from <= to) {
-            let old = context.stack.head[as];
             for (var i = from; i <= to; i++) {
-                context.stack.head[as] = i;
-                chunk = chunk.render(bodies.block, context);
+                let data = {};
+                data[as] = +i;
+                chunk = chunk.render(bodies.block, context.push(data));
             }
-            context.stack.head[as] = old;
         }
 
         return chunk;

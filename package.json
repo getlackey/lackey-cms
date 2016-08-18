@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
