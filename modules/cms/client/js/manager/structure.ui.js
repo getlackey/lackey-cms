@@ -92,6 +92,9 @@ class StructureUI extends Emitter {
     }
 
     defaultSettings(context) {
+        if(!context.props) {
+            context.props = {};
+        }
         return Promise.resolve(context.props);
     }
 

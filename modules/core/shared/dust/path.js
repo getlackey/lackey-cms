@@ -37,7 +37,8 @@ module.exports = (dust) => {
 
     function crawl(obj, path) {
         if (!obj) return null;
-        if (!path) return obj;
+        if (!path && path !== 0) return obj;
+        if (typeof path === 'number') return obj[path];
         if (path.indexOf('.') === -1) {
             return obj[path];
         }
@@ -49,9 +50,25 @@ module.exports = (dust) => {
     dust.helpers.path = function (chunk, context, bodies, params) {
 
         let root = params.root || null,
-            path = renderParameter('path', chunk, context, bodies, params),
-            filters = params.filters || [],
-            value = crawl(root, path),
+            prefixIfParent = params.prefixIfParent || '',
+            parent = (params.parent && params.parent.replace(/^\s+|\s+/g).length > 0) ? prefixIfParent + params.parent : null,
+            pathAsInt = !!params.pathAsInt && !parent,
+            levelUpIfParent = parent ? +params.levelUpIfParent : 0;
+
+        if(levelUpIfParent > 0) {
+            parent = parent.split('.');
+            while(levelUpIfParent > 0) {
+                parent.pop();
+                levelUpIfParent--;
+            }
+            parent = parent.join('.');
+        }
+
+        let
+            path = pathAsInt ? +params.path : ((parent ? (parent + '.') : '') + renderParameter('path', chunk, context, bodies, params)),
+            filters = params.filters || [];
+
+        let value = crawl(root, path, levelUpIfParent),
             equals = params.hasOwnProperty('eq') ? params.eq : undefined,
             allowEmpty = !!params.allowEmpty,
             data = context.push((function (args) {
