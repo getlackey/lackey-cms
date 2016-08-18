@@ -65,6 +65,10 @@ module.exports = SUtils
                 return this._type;
             }
 
+            get taxonomyTypeId() {
+                return this._doc.taxonomyTypeId;
+            }
+
             _populate() {
                 let self = this;
                 if (!this._doc) {
