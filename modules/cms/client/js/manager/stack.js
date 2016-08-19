@@ -22,6 +22,7 @@ const emit = require('cms/client/js/emit'),
     BlockPicker = require('cms/client/js/manager/block.picker.ui.js'),
     DateTimePicker = require('cms/client/js/manager/datetime.picker.ui.js'),
     Gallery = require('cms/client/js/manager/gallery.ui.js'),
+    UserPricker = require('cms/client/js/manager/user.picker.ui.js'),
     lackey = require('core/client/js');
 /**
  * @module lackey-cms/modules/cms/client/manager
@@ -106,6 +107,33 @@ Stack.prototype.pickArticle = function (route) {
     this._stack.push(articlePicker);
 
     return articlePicker
+        .promise
+        .then((rt) => {
+            self.pop(true);
+            return rt;
+        });
+};
+
+Stack.prototype.pickUser = function (id) {
+
+    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
+
+    let self = this,
+        userPicker = new UserPricker({
+            route: id,
+            stack: this
+        });
+
+    userPicker
+        .buildUI()
+        .then((element) => {
+            self.node.appendChild(element);
+            return userPicker.fadeIn();
+        });
+
+    this._stack.push(userPicker);
+
+    return userPicker
         .promise
         .then((rt) => {
             self.pop(true);

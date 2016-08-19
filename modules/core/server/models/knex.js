@@ -127,10 +127,10 @@ module.exports = Schema
                 });
             })
 
-            //
-            // TABLE roles
-            //
-            .then(() => {
+        //
+        // TABLE roles
+        //
+        .then(() => {
                 return Schema.table(knex, 'roles', (table) => {
                     table.increments();
                     table.string('name');
@@ -281,6 +281,15 @@ module.exports = Schema
                     table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
                     table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
                     table.unique(['route', 'type']);
+                });
+            })
+            .then(() => {
+                return Schema.addColumn(knex, 'content', 'authorId', (table) => {
+                    table.bigInteger('authorId')
+                        .unsigned()
+                        .references('id')
+                        .inTable('users')
+                        .onDelete('CASCADE');
                 });
             })
             //

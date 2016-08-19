@@ -92,7 +92,7 @@ class StructureUI extends Emitter {
     }
 
     defaultSettings(context) {
-        if(!context.props) {
+        if (!context.props) {
             context.props = {};
         }
         return Promise.resolve(context.props);
@@ -432,6 +432,12 @@ class StructureUI extends Emitter {
                     } catch (e) {
                         console.error(e);
                     }
+                    try {
+                        data.author = responses[2].author ? responses[2].author.id : 0;
+                        data.authorFormatted = responses[2].author ? responses[2].author.name : 'Not set';
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
                 return Template
                     .redraw(self.metaNode, self.mapDictionary(data))
@@ -458,6 +464,9 @@ class StructureUI extends Emitter {
 
         lackey
             .bind('[data-lky-hook="action:pick-media"]', 'click', this.pickMedia.bind(this, settings), this.node);
+
+        lackey
+            .bind('[data-lky-hook="action:pick-user"]', 'click', this.pickUser.bind(this, context), this.node);
 
 
         lackey
@@ -495,6 +504,23 @@ class StructureUI extends Emitter {
 
         return this.options.stack
             .pickDateTime(date)
+            .then((rt) => {
+                if (rt !== null) {
+                    settings[hook.getAttribute('data-name')] = rt;
+                    self.emit('changed', settings);
+                    self.drawMeta();
+                }
+                self.node.setAttribute('data-lky-edit', 'meta');
+            });
+    }
+
+    pickUser(settings, event, hook) {
+        this.collapse();
+        let self = this,
+            user = hook.getAttribute('data-value');
+
+        return this.options.stack
+            .pickUser(user)
             .then((rt) => {
                 if (rt !== null) {
                     settings[hook.getAttribute('data-name')] = rt;

@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.12
+
+ * Introduce author picker in meat
+
 ### 0.9.11
 
  * Temporary fix for paths. Issue will be reported.

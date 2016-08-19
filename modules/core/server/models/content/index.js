@@ -75,6 +75,9 @@ module.exports = SUtils
                         userId: {
                             type: 'integer'
                         },
+                        authorId: {
+                            type: 'integer'
+                        },
                         templateId: {
                             type: 'integer'
                         },
@@ -133,7 +136,7 @@ module.exports = SUtils
             }
 
             get author() {
-                return this._user ? this._user.toJSON() : null;
+                return this._author ? this._author.toJSON(true) : (this._user ? this._user.toJSON(true) : null);
             }
 
             set props(data) {
@@ -155,6 +158,10 @@ module.exports = SUtils
                     })
                     .then((user) => {
                         self._user = user;
+                        return User.findById(self._doc.authorId);
+                    })
+                    .then((user) => {
+                        self._author = user;
                         return Template.findById(this._doc.templateId);
                     })
                     .then((template) => {
@@ -239,7 +246,7 @@ module.exports = SUtils
                         if (typeof author === 'object') {
                             author = author ? author.id : null;
                         }
-                        self._doc.userId = author;
+                        self._doc.authorId = author;
                     }
 
                     delete self._doc.template;
@@ -266,7 +273,7 @@ module.exports = SUtils
                     route: this._doc.route,
                     createdAt: this._doc.createdAt,
                     props: this.props,
-                    author: this._user ? this._user.toJSON() : null,
+                    author: this.author,
                     template: this._template ? this._template.toJSON() : null,
                     state: this._doc.state,
                     layout: this._doc.layout,
@@ -293,8 +300,8 @@ module.exports = SUtils
 
                         let promise = Promise.resolve();
 
-                        if (self._user) {
-                            promise = self._user.getIdentity('email')
+                        if (self._author || self._user) {
+                            promise = (self._author || self._user).getIdentity('email')
                                 .then((email) => {
                                     if (email) {
                                         return email.accountId;
@@ -418,7 +425,7 @@ module.exports = SUtils
                 builder.withAuthor(options.requireAuthor);
                 builder.withoutIds(options.excludeIds);
 
-                if(!options.includeDrafts) {
+                if (!options.includeDrafts) {
                     builder.excludeDrafts();
                 }
 

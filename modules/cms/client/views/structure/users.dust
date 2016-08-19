@@ -1,0 +1,12 @@
+{#data}
+    <tr>
+        <td>
+            <img style="width: 38px; height: 38px; border-radius: 50px" src="{image.source|base}"/>
+        </td>
+        <td>{name}</td>
+        <td>{email}</td>
+        <td>
+            <button data-lky-btn data-lky-user="{.|js}">Choose</button>
+        </td>
+    </tr>
+{/data}
