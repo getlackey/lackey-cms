@@ -17,5 +17,3 @@
     limitations under the License.
 */
 require('cms/client/js/view');
-require('cms/client/js/manager/author');
-require('cms/client/js/manager/related');

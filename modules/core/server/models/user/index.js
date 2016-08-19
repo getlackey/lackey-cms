@@ -806,7 +806,14 @@ module.exports = SUtils
                 return user;
             }
 
-            toJSON() {
+            toJSON(safe) {
+                if (safe) {
+                    return {
+                        id: this.id,
+                        name: this.name,
+                        image: this.image ? this.image.toJSON() : null
+                    };
+                }
                 return {
                     name: this.name,
                     roles: this.roles,

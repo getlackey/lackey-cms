@@ -26,9 +26,10 @@ module.exports = SUtils
         SUtils.cmsMod('core').model('content'),
         SUtils.cmsMod('core').model('taxonomy'),
         SUtils.cmsMod('core').model('taxonomy-type'),
-        SUtils.cmsMod('core').model('template')
+        SUtils.cmsMod('core').model('template'),
+        SUtils.cmsMod('core').model('user')
     )
-    .then((ContentModel, Taxonomy, TaxonomyType, Template) => {
+    .then((ContentModel, Taxonomy, TaxonomyType, Template, User) => {
 
         class PageController {
 
@@ -46,12 +47,20 @@ module.exports = SUtils
                         if (page) {
                             page.layout = data.contents.layout;
                             page.props = data.contents.props;
-                            return PageController.print(page, fullPath, res, req, true);
+
+                            let promise = Promise.resolve(page.author);
+                            if (data.contents.author && data.contents.author.id) {
+                                promise = User.findById(data.contents.author.id);
+                            }
+
+                            return promise
+                                .then(user => {
+                                    page._author = user;
+                                    return PageController.print(page, fullPath, res, req, true);
+                                });
                         }
                         next();
                     });
-
-
             }
 
             static pageAccess() {

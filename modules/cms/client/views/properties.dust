@@ -7,6 +7,15 @@
   </label>
 </li>
 {/createdAt}
+{?author}
+<li>
+  <label>
+    <span>Author</span>
+        <input type="text" class="form-control" readonly value="{authorFormatted}" name="createdAt"/>
+        <button name="author" data-lky-btn data-name="author" data-lky-hook="action:pick-user" data-value="{author}" >Pick author</button>
+  </label>
+</li>
+{/author}
 {#dictionary}
   <li>
     <label>
@@ -15,7 +24,7 @@
           <input type="{type}" class="form-control" value="{@path root=values path=name/}" name="{name}"/>
         {:article}
           <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
-          <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-article" data-value="{@path root=values path=name/}">Change Preview</button>
+          <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-article" data-value="{@path root=values path=name/}">Change Referred Page</button>
         {:media}
           <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
           <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-media" data-value="{@path root=values path=name/}">Change Image</button>
