@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.9
 
+### 0.9.13
+
+ * Allow to set expire time for login tokens
+
 ### 0.9.12
 
  * Introduce author picker in meat

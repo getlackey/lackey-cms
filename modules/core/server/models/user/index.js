@@ -428,11 +428,12 @@ module.exports = SUtils
                 return promise;
             }
 
-            loginToken(email) {
+            loginToken(email, expireHours) {
 
                 SCli.debug(__MODULE_NAME, 'loginToken');
 
-                let EXPIRE = new Date((new Date()).getTime() + (1000 * 60 * 60 * 24)),
+                let hours = expireHours || 24,
+                    EXPIRE = new Date((new Date()).getTime() + (1000 * 60 * 60 * hours)),
                     algorithm = 'aes256', // or any other algorithm supported by OpenSSL
                     text = {
                         id: this.id,
