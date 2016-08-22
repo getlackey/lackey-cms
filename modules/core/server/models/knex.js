@@ -292,6 +292,11 @@ module.exports = Schema
                         .onDelete('CASCADE');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'content', 'publishAt', (table) => {
+                    table.date('publishAt').notNullable().defaultTo(knex.raw('now()'));
+                });
+            })
             //
             // TABLE redirect
             // userId -> users.id

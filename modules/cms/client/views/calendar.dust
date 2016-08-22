@@ -5,7 +5,7 @@
                 <a href="#" data-previous-month>&laquo;</a>
             </th>
             <th colspan="5">
-                {viewing|monthLong} {viewing|year}
+                {viewing|monthLongUTC} {viewing|yearUTC}
             </th>
             <th>
                 <a href="#" data-next-month>&raquo;</a>
@@ -26,8 +26,8 @@
             <tr>
                 {#.}
                     <td>
-                        <a href="#" data-date="{.}">
-                            {.|day}
+                        <a href="#" data-date="{.}" {@same key=. val=selected type="number"} class="active"{/same}>
+                            {.}
                         </a>
                     </td>
                 {/.}
@@ -35,3 +35,15 @@
         {/calendar}
     </tbody>
 </table>
+
+<ul>
+    <li>
+        <label>
+            <span>Time</span>
+            <input type="time" data-time value="{current|timeUTC}"/>
+        </label>
+    </li>
+</ul>
+<small>Time is relative to <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time" target="_blank">Coordinated Univestal Time UTC</a>.</small>
+<button data-lky-btn data-ok>OK</button>
+<button data-lky-btn data-cancel>Cancel</button>

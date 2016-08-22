@@ -433,6 +433,12 @@ class StructureUI extends Emitter {
                         console.error(e);
                     }
                     try {
+                        data.publishAt = responses[2].publishAt;
+                        data.publishAtFormatted = dateformat(new Date(responses[2].publishAt));
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    try {
                         data.author = responses[2].author ? responses[2].author.id : 0;
                         data.authorFormatted = responses[2].author ? responses[2].author.name : 'Not set';
                     } catch (e) {

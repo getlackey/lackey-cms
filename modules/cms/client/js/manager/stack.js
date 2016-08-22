@@ -198,7 +198,11 @@ Stack.prototype.pickDateTime = function (current) {
         .then((rt) => {
             self.pop(true);
             return rt;
+        }, () => {
+            self.pop(true);
+            return null;
         });
+
 };
 
 Stack.prototype.inspectMedia = function (media, node) {

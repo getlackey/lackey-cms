@@ -2,6 +2,13 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.10
+
+### 0.10.1
+
+ * Introduced `publishAt` which allows content scheduling
+ * Date picker became date-time picker
+
 ## 0.9
 
 ### 0.9.13
