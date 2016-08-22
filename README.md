@@ -24,9 +24,9 @@ Lackey is __a new breed of CMS__
 
 Our mission is to bring:
 
- * Ease for Admins
- * Power to Developers
- * Freedom for Designers
+ * **Ease for Admins**
+ * **Power to Developers**
+ * **Freedom for Designers**
 
 This repo is for the main CMS core, deployed as an NPM module. To utilise, please see our:
 
@@ -43,4 +43,4 @@ Get Involved on [GitHub](https://github.com/getlackey) or Follow [@getlackey](ht
 
 Code licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-Open sourced by Enigma ![Enigma Marketing Services]
+Open sourced by [Enigma](https://enigma-marketing.co.uk)
