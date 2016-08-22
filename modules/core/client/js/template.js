@@ -45,6 +45,12 @@ DustIntl.registerWith(engine);
 youtube(engine);
 dtf(engine);
 
+engine.helpers.same = (chunk, context, bodies, params) => {
+    if (params.key == params.val) { //eslint-disable-line eqeqeq
+        chunk.render(bodies.block, context);
+    }
+};
+
 function load(name) {
     return xhr.basedGet('dust/' + name + '.js').then((template) => {
         // need to do that so we don't have to expose dust compile

@@ -92,6 +92,9 @@ const SCli = require(LACKEY_PATH).cli,
             JOIN taxonomy ON "taxonomyTypeId" = "taxonomyType".id
             WHERE restrictive = true
         `,
+    RESTRICT_DATE = `
+        "publishAt" <= NOW()
+    `,
     TEXT_SEARCH = `
         (
             LOWER(layout::TEXT) like LOWER('%$1%')
@@ -165,6 +168,10 @@ module.exports = require(LACKEY_PATH)
                 if (q) {
                     this._wheres.push(q);
                 }
+            }
+
+            restrictDate() {
+                this._wheres.push(RESTRICT_DATE);
             }
 
             withId(id) {

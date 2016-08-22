@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "0.9.13",
+  "version": "0.10.1",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -91,6 +91,7 @@
     "method-override": "^2.3.5",
     "mime": "^1.3.4",
     "mkdirp": "^0.5.1",
+    "moment-timezone": "^0.5.5",
     "nodemailer": "^2.3.0",
     "nodemailer-html-to-text": "^2.1.0",
     "nodemailer-sendinblue-transport": "^1.0.1",

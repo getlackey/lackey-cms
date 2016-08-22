@@ -139,6 +139,10 @@ module.exports = SUtils
                             return Promise.reject('403');
                         }
 
+                        if (page.publishAt > Date.now() && !isAllowed) {
+                            return Promise.reject('403');
+                        }
+
                         if (pageJson.template) {
                             if (pageJson.template.javascripts) {
                                 javascripts = javascripts.concat(pageJson.template.javascripts);
@@ -288,6 +292,9 @@ module.exports = SUtils
                             pageNumber = item.page ? PageController.parse(item.page, req) : 0,
                             author = (item.author && PageController.parse(item.author.if, req, page)) ? page.author : null,
                             textSearch = item.textSearch ? PageController.parse(item.textSearch, req, page) : null;
+
+
+                        console.log('can edit', req.canEdit);
                         return ContentModel
                             .complexQuery({
                                 includeTaxonomies: taxes,

@@ -41,8 +41,8 @@ class DateTimePicker extends Emitter {
         this.options = options;
         this._locked = null;
         // http://stackoverflow.com/a/12372720/2802756
-        this._value = (options.current && options.current.getTime() === options.current.getTime()) ? options.current : new Date();
-        this._viewing = this._value;
+        options.current = (options.current && options.current.getTime() === options.current.getTime()) ? options.current : new Date();
+        this._viewing = options.current;
         let self = this;
         this.promise = new Promise((resolve, reject) => {
             self.resolve = resolve;
@@ -80,22 +80,42 @@ class DateTimePicker extends Emitter {
                 lackey.bind('[data-date]', 'click', (event, hook) => {
                     event.preventDefault();
                     event.stopPropagation();
-                    let date = new Date(hook.getAttribute('data-date'));
-                    this.resolve(date);
+                    let v = this._viewing,
+                        date = new Date(Date.UTC(v.getUTCFullYear(), v.getUTCMonth(), hook.getAttribute('data-date'), self.options.current.getUTCHours(), self.options.current.getUTCMinutes()));
+                    this.options.current = date;
+                    self.redraw(self.getOptions());
                 }, self.node);
 
                 lackey.bind('[data-previous-month]', 'click', (event) => {
                     event.preventDefault();
                     event.stopPropagation();
-                    self._viewing = new Date(self._viewing.getFullYear(), self._viewing.getMonth() - 1, 1, 12, 0, 0, 0);
+                    self._viewing = new Date(Date.UTC(self._viewing.getUTCFullYear(), self._viewing.getUTCMonth() - 1, 1, 12, 0, 0, 0));
                     self.redraw(self.getOptions());
                 }, self.node);
 
                 lackey.bind('[data-next-month]', 'click', (event) => {
                     event.preventDefault();
                     event.stopPropagation();
-                    self._viewing = new Date(self._viewing.getFullYear(), self._viewing.getMonth() + 1, 1, 12, 0, 0, 0);
+                    self._viewing = new Date(Date.UTC(self._viewing.getUTCFullYear(), self._viewing.getUTCMonth() + 1, 1, 12, 0, 0, 0));
                     self.redraw(self.getOptions());
+                }, self.node);
+
+                lackey.bind('input[type=time]', 'change', (event, hook) => {
+                    let value = hook.value.split(':');
+                    self.options.current.setUTCHours(+value[0]);
+                    self.options.current.setUTCMinutes(+value[1]);
+                }, self.node);
+
+                lackey.bind('[data-ok]', 'click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    self.resolve(self.options.current);
+                }, self.node);
+
+                lackey.bind('[data-cancel]', 'click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    self.reject();
                 }, self.node);
 
                 return self.node;
@@ -107,13 +127,15 @@ class DateTimePicker extends Emitter {
     getOptions() {
         let options = this.options,
             v = this._viewing,
-            firstOfMonth = new Date(v.getFullYear(), v.getMonth(), 1, 12, 0, 0, 0),
-            dow = firstOfMonth.getDay() - 1,
+            firstOfMonth = new Date(Date.UTC(v.getUTCFullYear(), v.getUTCMonth(), 1, options.current.getUTCHours(), options.current.getUTCMinutes(), 0, 0)),
+            dow = firstOfMonth.getUTCDay() - 1,
             currentRow = [],
             rows = [currentRow],
             nextDate = firstOfMonth;
 
-        while (firstOfMonth.getMonth() === nextDate.getMonth()) {
+        options.selected = null;
+
+        while (firstOfMonth.getUTCMonth() === nextDate.getUTCMonth()) {
             if (firstOfMonth === nextDate) {
                 while (dow-- > 0) {
                     currentRow.push(null);
@@ -123,8 +145,11 @@ class DateTimePicker extends Emitter {
                 currentRow = [];
                 rows.push(currentRow);
             }
-            currentRow.push(nextDate);
-            nextDate = new Date(nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate() + 1, 12, 0, 0, 0);
+            if (nextDate.toISOString().substr(0, 10) === options.current.toISOString().substr(0, 10)) {
+                options.selected = nextDate.getUTCDate();
+            }
+            currentRow.push(nextDate.getUTCDate());
+            nextDate = new Date(Date.UTC(nextDate.getUTCFullYear(), nextDate.getUTCMonth(), nextDate.getUTCDate() + 1, options.current.getUTCHours(), options.current.getUTCMinutes(), 0, 0));
         }
         while (currentRow.length < 7) {
             currentRow.push(null);

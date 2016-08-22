@@ -83,6 +83,9 @@ module.exports = SUtils
                         },
                         createdAt: {
                             type: ['date', 'string']
+                        },
+                        publishAt: {
+                            type: ['date', 'string']
                         }
                     }
                 };
@@ -272,6 +275,7 @@ module.exports = SUtils
                     name: this.name,
                     route: this._doc.route,
                     createdAt: this._doc.createdAt,
+                    publishAt: this._doc.publishAt,
                     props: this.props,
                     author: this.author,
                     template: this._template ? this._template.toJSON() : null,
@@ -317,6 +321,7 @@ module.exports = SUtils
                                 route: content.route,
                                 props: content.props || {},
                                 createdAt: content.createdAt || null,
+                                publishAt: content.publishAt || null,
                                 template: content.template ? content.template.path : '',
                                 taxonomies: taxonomies,
                                 state: content.state,
@@ -359,6 +364,10 @@ module.exports = SUtils
 
             get route() {
                 return this._doc.route;
+            }
+
+            get publishAt() {
+                return this._doc.publishAt;
             }
 
 
@@ -427,6 +436,7 @@ module.exports = SUtils
 
                 if (!options.includeDrafts) {
                     builder.excludeDrafts();
+                    builder.restrictDate();
                 }
 
                 if (options.textSearch && options.textSearch.length > 3) {

@@ -21,12 +21,12 @@ const dateformat = require('dateformat');
 
 module.exports = (dust) => {
 
-    function format(value, pattern) {
+    function format(value, pattern, utc) {
         if (value instanceof Date) {
-            return dateformat(value, pattern);
+            return dateformat(value, pattern, utc);
         }
         try {
-            return dateformat(new Date(value), pattern);
+            return dateformat(new Date(value), pattern, utc);
         } catch (e) {
             console.error(e);
             return value;
@@ -47,5 +47,29 @@ module.exports = (dust) => {
 
     dust.filters.year = function (value) {
         return format(value, 'yyyy');
+    };
+
+    dust.filters.dateTimeFormatUTC = function (value) {
+        return format(value, undefined, true);
+    };
+
+    dust.filters.dayUTC = function (value) {
+        return format(value, 'd', true);
+    };
+
+    dust.filters.monthLongUTC = function (value) {
+        return format(value, 'mmmm', true);
+    };
+
+    dust.filters.yearUTC = function (value) {
+        return format(value, 'yyyy', true);
+    };
+
+    dust.filters.timeUTC = function (value) {
+        return format(value, 'hh:MM', true);
+    };
+
+    dust.filters.time = function (value) {
+        return format(value, 'hh:MM');
     };
 };
