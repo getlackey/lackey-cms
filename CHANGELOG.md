@@ -4,11 +4,20 @@ Going forward we should add hash of issue next to change
 
 ## 0.11
 
+### 0.11.2
+
+ * Release 0.10.2
+
 ### 0.11.1
 
  * Added qs dust helper
 
 ## 0.10
+
+### 0.10.2
+
+ * Fix regex in YouTube libs
+ * Change copy for change info
 
 ### 0.10.1
 
