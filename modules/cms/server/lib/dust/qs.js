@@ -27,7 +27,7 @@ module.exports = (dust) => {
 
         Object.keys(query).forEach((key) => {
             if (except.indexOf(key) < 0) {
-                final = (final === '')? final + '?' + key + '=' + encodeURIComponent(query[key]) : final + '&' + key + '=' + encodeURIComponent(query[key]);
+                final = (final === '') ? final + '?' + key + '=' + encodeURIComponent(query[key]) : final + '&' + key + '=' + encodeURIComponent(query[key]);
             }
         });
 

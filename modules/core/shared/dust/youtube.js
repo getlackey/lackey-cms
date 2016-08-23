@@ -17,13 +17,16 @@
     limitations under the License.
 */
 
-var isYoutube;
+var isYoutube,
+    isVimeo;
 
 if (typeof window === 'undefined') {
     isYoutube = require('../../../cms/shared/youtube');
+    isVimeo = require('../../../cms/shared/vimeo');
 
 } else {
     isYoutube = require('cms/shared/youtube');
+    isVimeo = require('cms/shared/vimeo');
 }
 
 
@@ -36,6 +39,22 @@ module.exports = (dust) => {
 
         if(youtube) {
             chunk = chunk.render(bodies.block, context.push(youtube));
+        } else {
+            chunk = chunk.render(bodies.else, context);
+        }
+
+        return chunk;
+
+
+    };
+
+    dust.helpers.vimeo = function (chunk, context, bodies, params) {
+
+        let path = params.path,
+            vimeo = isVimeo(path);
+
+        if(vimeo) {
+            chunk = chunk.render(bodies.block, context.push(vimeo));
         } else {
             chunk = chunk.render(bodies.else, context);
         }
