@@ -139,8 +139,8 @@ module.exports = SUtils
                             return Promise.reject('403');
                         }
 
-                        if (page.publishAt > Date.now() && !isAllowed) {
-                            return Promise.reject('403');
+                        if (page.publishedAt && page.publishAt > Date.now() && !isAllowed) {
+                            return Promise.reject('403 - not published yet' + page.publishedAt);
                         }
 
                         if (pageJson.template) {

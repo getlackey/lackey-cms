@@ -10,9 +10,9 @@
 
 ![Lackey](./docs/lackey-logo.png)
 
-_Version 0.11.2_
+_Version 0.12.1_
 
-**!** For production please use **0.8.3**
+**!** For production please use latest version.
 
 Lackey is __a new breed of CMS__
 

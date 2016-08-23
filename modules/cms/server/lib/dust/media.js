@@ -21,6 +21,7 @@ const SUtils = require(LACKEY_PATH).utils,
   _ = require('lodash'),
   SCli = require(LACKEY_PATH).cli,
   isYoutube = require('../../../shared/youtube'),
+  isVimeo = require('../../../shared/vimeo'),
   treeParser = require('../../../shared/treeparser');
 
 
@@ -114,6 +115,8 @@ function print(chunk, data, type, editMode, dust, log) {
         chunk.write('</video>');
       } else if (isYoutube(data.content.source)) {
         chunk.write('<iframe type="text/html" src="https://www.youtube.com/embed/' + isYoutube(data.content.source) + '" frameborder="0"></iframe>');
+      } else if (isVimeo(data.content.source)) {
+        chunk.write('<iframe src="https://player.vimeo.com/video/' + isVimeo(data.content.source) + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
       } else if (data.content.type === 'image') {
 
         chunk.write('<img src="' + source + '"');

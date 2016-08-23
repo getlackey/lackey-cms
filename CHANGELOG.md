@@ -2,6 +2,13 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.12
+
+### 0.12.1
+
+ * Vimeo embed
+ * Fix in `publishedAt`
+
 ## 0.11
 
 ### 0.11.2
