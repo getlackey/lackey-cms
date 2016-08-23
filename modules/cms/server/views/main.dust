@@ -103,7 +103,7 @@
                 <div data-lky-hook="header.changes">
                     <button data-lky-hook="header.save" data-lky-btn>Save</button>
                     <span>
-                        <span>You've made 2 changes</span>
+                        <span>You've made changes</span>
                         <a data-lky-hook="header.cancel">Cancel all</a>
                     </span>
                 </div>
