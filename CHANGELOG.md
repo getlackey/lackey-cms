@@ -2,6 +2,12 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.11
+
+### 0.11.1
+
+ * Added qs dust helper
+
 ## 0.10
 
 ### 0.10.1

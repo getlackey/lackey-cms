@@ -30,6 +30,7 @@ const
     block = require('./server/lib/dust/block'),
     list = require('./server/lib/dust/list'),
     acronym = require('./server/lib/dust/acronym'),
+    qs = require('./server/lib/dust/qs'),
     is = require('./../core/shared/dust/is'),
     taxonomy = require('./server/lib/dust/taxonomy'),
     hasContent = require('./server/lib/dust/has-content'),
@@ -59,6 +60,7 @@ module.exports = (instance) => {
     instance.addDustHelper(is);
     instance.addDustHelper(translate);
     instance.addDustHelper(acronym);
+    instance.addDustHelper(qs);
     instance.addDustHelper(config);
     instance.addDustHelper(userHas);
     instance.addDustHelper(base);
