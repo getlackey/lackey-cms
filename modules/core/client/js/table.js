@@ -139,6 +139,12 @@ class Table {
                         table: response,
                         host: xhr.base
                     };
+                    response.rows.forEach(row =>
+                        row.columns.forEach((cell) => {
+                            if (cell.value && cell.value.date) {
+                                cell.value.date = new Date(cell.value.date);
+                            }
+                        }));
                     return self.drawRows(context);
                 })
                 .then(() => {

@@ -2,6 +2,11 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.15.0
+
+ * Improve table date handling
+ * Introduce sorting columns for tables
+
 ## 0.14.0
 
  * Add `lastActive` user field
