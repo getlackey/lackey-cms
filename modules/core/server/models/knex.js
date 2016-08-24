@@ -57,6 +57,11 @@ module.exports = Schema
                     table.boolean('deleted');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'users', 'lastActive', (table) => {
+                    table.timestamp('lastActive');
+                });
+            })
             //
             // TABLE identities
             // .userId -> users.id

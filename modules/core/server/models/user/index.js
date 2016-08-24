@@ -822,7 +822,8 @@ module.exports = SUtils
                     image: this.image ? this.image.toJSON() : null,
                     id: this.id,
                     taxonomies: this.taxonomies,
-                    identities: this.identities
+                    identities: this.identities,
+                    lastActive: this._doc.lastActive || null
                 };
             }
 

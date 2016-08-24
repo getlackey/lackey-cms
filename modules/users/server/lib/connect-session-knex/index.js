@@ -122,14 +122,23 @@ module.exports = function (connect) {
 		});
 	};
 
+	function currentUser(sess) {
+		if(sess.userId) return sess.userId;
+		if(sess.passport && sess.passport.user) return sess.passport.user;
+		return null;
+	}
+
 	KnexStore.prototype.statSession = function (sid, sess) {
+		if (currentUser(sess)) {
+			this.knex.raw('UPDATE "users" SET "lastActive" = NOW() WHERE "id" = ?::integer', [currentUser(sess)]).then(() => {}, err => console.error(err));
+		}
 		return this.knex
 			.raw(`SELECT count(*) FROM ${this.tablename} WHERE sid = ? AND "updated" <= ?::timestamp`, [sid, new Date()])
 			.then(result => result.rows[0].count)
 			.then(count => {
 				if (+count === 0) {
 					collector
-						.then(c => c.log('session:perday:' + (sess.userId || sess.ipAddress)))
+						.then(c => c.log('session:perday:' + (currentUser(sess) || sess.ipAddress)))
 						.catch(e => console.error(e));
 				}
 			});

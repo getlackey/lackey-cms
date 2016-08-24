@@ -87,6 +87,10 @@ module.exports = SUtils
                     taxonomies: {
                         label: 'Classification',
                         parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
+                    },
+                    lastActive: {
+                        label: 'Last Active',
+                        date: true
                     }
                 });
             }
