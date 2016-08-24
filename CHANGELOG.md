@@ -2,6 +2,12 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.13
+
+### 0.13.0
+
+ * Show restrictive and non restrictive taxonomies in abstract list
+
 ## 0.12
 
 ### 0.12.1

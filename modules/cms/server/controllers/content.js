@@ -57,6 +57,14 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     },
                     state: {
                         name: 'Status'
+                    },
+                    restrictiveTaxonomies: {
+                        label: 'Restrictive Taxonomies',
+                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive === true;}).map(function(r) { return r.label || r.name;}) : \'\''
+                    },
+                    nonRestrictiveTaxonomies: {
+                        label: 'Non-restrictive Taxonomies',
+                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive !== true;}).map(function(r) { return r.label || r.name;}) : \'\''
                     }
                 });
             }
