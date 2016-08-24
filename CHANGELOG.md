@@ -4,6 +4,10 @@ Going forward we should add hash of issue next to change
 
 ## 0.13
 
+### 0.13.1
+
+ * Add middleware to convert uppercase urls to lowercase
+
 ### 0.13.0
 
  * Show restrictive and non restrictive taxonomies in abstract list
