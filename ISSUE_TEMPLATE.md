@@ -9,7 +9,7 @@
  * Operating System:
  * Node version:
  * NPM version:
- * Version / Commit hash
+ * Version / Commit hash:
 
 ## Expected behaviour
 
