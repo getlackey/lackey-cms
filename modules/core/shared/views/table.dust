@@ -1,19 +1,24 @@
 {!}http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api{!}
-<table class="table" data-lky-table="{table.paging.api}" data-lky-paging="{table.paging|js}" data-lky-columns="{table.columns|js}">
-    <thead>
-        <tr>
-            <th></th>
-                {#table.columns}
-                    <th>{label}</th>
-                {/.table.columns}
-            <th>Action</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
-        {>"cms/core/table-body"/}
-    </tbody>
-    <tfoot data-lky-hook="table-footer" data-lky-template="cms/core/table-footer">
-        {>"cms/core/table-footer"/}
-    </tfoot>
-</table>
+<div class="table-wrapper">
+    <table class="table" data-lky-table="{table.paging.api}" data-lky-paging="{table.paging|js}" data-lky-columns="{table.columns|js}">
+        <thead>
+            <tr>
+                <th></th>
+                    {#table.columns}
+                        <th>{label}</th>
+                    {/table.columns}
+                <th>Action</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
+            {>"cms/core/table-body"/}
+        </tbody>
+        <tfoot data-lky-hook="table-footer" data-lky-template="cms/core/table-footer">
+            {>"cms/core/table-footer"/}
+        </tfoot>
+    </table>
+
+</div>
+
+

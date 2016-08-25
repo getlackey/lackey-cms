@@ -257,7 +257,7 @@ module.exports = Database
                      */
                     static findBy(field, value) {
 
-                        if(typeof field !== 'string') {
+                        if (typeof field !== 'string') {
                             throw new Error('Field name should be a string');
                         }
 
@@ -285,7 +285,7 @@ module.exports = Database
                      */
                     static findOneBy(field, value) {
 
-                        if(typeof field !== 'string') {
+                        if (typeof field !== 'string') {
                             throw new Error('Field name should be a string');
                         }
 
@@ -571,7 +571,11 @@ module.exports = Database
                         let
                             query,
                             self = this,
-                            columnsList = columns,
+                            columnsArray = columns ? Object.keys(columns).sort((a, b) => {
+                                if (columns[a].ord > columns[b].ord) return 1;
+                                if (columns[a].ord < columns[b].ord) return -1;
+                                return 0;
+                            }) : null,
                             perPage = (options ? options.perPage : false) || 10,
                             page = (options ? options.page : false) || 0,
                             sort = (options ? options.sort : null),
@@ -584,11 +588,11 @@ module.exports = Database
                             };
                         }
 
-                        if (columnsList) {
+                        if (columnsArray) {
                             populate = {};
-                            Object.keys(columnsList).forEach((column) => {
-                                if (typeof columnsList[column] === 'number') {
-                                    populate[column] = columnsList[column];
+                            columnsArray.forEach((column) => {
+                                if (typeof columns[column] === 'number') {
+                                    populate[column] = columns[column];
                                 } else {
                                     populate[column] = 1;
                                 }
@@ -649,27 +653,29 @@ module.exports = Database
                                     return content.toJSON();
                                 });
 
-                                if (!columnsList) {
-                                    columnsList = {};
+                                if (!columnsArray) {
+                                    columnsArray = [];
                                     rows.forEach((row) => {
                                         Object.keys(row).forEach((field) => {
-                                            columnsList[field] = {};
+                                            if (columnsArray.indexof(field) === -1) {
+                                                columnsArray.push(field);
+                                            }
                                         });
                                     });
                                 }
 
-                                Object.keys(columnsList).forEach((column) => {
-                                    let def = columnsList[column];
+                                columnsArray.forEach((column) => {
+                                    let def = columns[column];
                                     if (typeof def === 'string') {
-                                        def = columnsList[column] = {
+                                        def = columns[column] = {
                                             label: def
                                         };
                                     } else if (typeof def === 'number') {
                                         if (def === -1) {
-                                            delete columnsList[column];
+                                            delete columns[column];
                                             return;
                                         } else {
-                                            def = columnsList[column] = {
+                                            def = columns[column] = {
                                                 label: column
                                             };
                                         }
@@ -687,12 +693,12 @@ module.exports = Database
                                             id: row.id,
                                             columns: []
                                         };
-                                        Object.keys(columnsList).forEach((column) => {
+                                        columnsArray.forEach((column) => {
                                             let value = row[column],
                                                 parse;
-                                            if (columnsList[column].parse) {
+                                            if (columns[column].parse) {
                                                 try {
-                                                    parse = new Function('val', columnsList[column].parse); //eslint-disable-line no-new-func
+                                                    parse = new Function('val', columns[column].parse); //eslint-disable-line no-new-func
                                                     value = parse(value, row);
 
                                                 } catch (ex) {
@@ -700,16 +706,16 @@ module.exports = Database
                                                 }
                                             }
 
-                                            if (value && columnsList[column].link) {
+                                            if (value && columns[column].link) {
                                                 value = {
                                                     href: value,
-                                                    label: columnsList[column].linkText || value
+                                                    label: columns[column].linkText || value
                                                 };
                                             }
 
-                                            if (value && columnsList[column].date) {
+                                            if (value && columns[column].date) {
                                                 value = {
-                                                    date: value
+                                                    date: (typeof value === 'string' ? new Date(value) : value).getTime()
                                                 };
                                             }
 
@@ -739,11 +745,11 @@ module.exports = Database
                                 });
 
                                 let newColumns = [];
-                                Object.keys(columnsList).forEach((column) => {
-                                    if (columnsList[column].parse) {
-                                        columnsList[column].parse = columnsList[column].parse.toString();
+                                columnsArray.forEach((column) => {
+                                    if (columns[column].parse) {
+                                        columns[column].parse = columns[column].parse.toString();
                                     }
-                                    newColumns.push(columnsList[column]);
+                                    newColumns.push(columns[column]);
                                 });
                                 if (options && options.format === 'table') {
                                     table.columns = newColumns;
