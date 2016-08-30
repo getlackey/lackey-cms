@@ -41,3 +41,13 @@ Analytics:
             -
                 value: $1
                 model: user
+routes:
+    /download/:downloadToken:
+        get:
+            controller: cms/cms/download#download
+            inject:
+                - cms/core/server/models/media
+                - configuration
+routeParams:
+    downloadToken:
+        field: downloadToken

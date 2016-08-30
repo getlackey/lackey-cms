@@ -19,10 +19,15 @@
     limitations under the License.
 */
 
-const SCli = require(LACKEY_PATH).cli,
+const
+    SCli = require(LACKEY_PATH).cli,
     INCLUDE_QUERY = `
         id IN (
             SELECT id FROM content AS con WHERE $1
+       )`,
+    INCLUDE_QUERY_MEDIA = `
+        id IN (
+            SELECT id FROM media AS con WHERE $1
        )`,
     INCLUDE_SUB = `
         (
@@ -37,6 +42,14 @@ const SCli = require(LACKEY_PATH).cli,
                 ) AS FOO
          WHERE "taxonomyId" IN ($1)) > 0
     `,
+    INCLUDE_SUB_MEDIA = `
+        (
+            SELECT count(*) FROM (
+                SELECT ctt."taxonomyId" FROM "mediaToTaxonomy" AS ctt
+                    WHERE ctt."mediaId" = con.id
+                ) AS FOO
+         WHERE "taxonomyId" IN ($1)) > 0
+    `,
     EXCLUDE_QUERY = `
         id NOT IN (
             SELECT id FROM content WHERE "templateId" IN (
@@ -44,6 +57,10 @@ const SCli = require(LACKEY_PATH).cli,
             )
             UNION
             SELECT "contentId" FROM "contentToTaxonomy" WHERE "taxonomyId" IN ($1)
+        )`,
+    EXCLUDE_QUERY_MEDIA = `
+        id NOT IN (
+            SELECT "mediaId" FROM "mediaToTaxonomy" WHERE "taxonomyId" IN ($1)
         )`,
     EXCLUDE_QUERY_BUT = `
         id NOT IN (
@@ -59,38 +76,17 @@ const SCli = require(LACKEY_PATH).cli,
             EXCEPT
             SELECT "contentId" FROM "contentToTaxonomy" WHERE "taxonomyId" IN ($2)
         )`,
+    EXCLUDE_QUERY_BUT_MEDIA = `
+        id NOT IN (
+            SELECT "mediaId" FROM "mediaToTaxonomy" WHERE "taxonomyId" IN ($1)
+            EXCEPT
+            SELECT "mediaId" FROM "mediaToTaxonomy" WHERE "taxonomyId" IN ($2)
+        )`,
     EXCLUDE_IDS_QUERY = `
             id NOT IN ($1)
         `,
     REQUIRE_AUTHOR_QUERY = `
-            "userId" IN ($1)
-        `,
-    RESTRICT_FOR_USER = `
-        SELECT taxonomy.id FROM "taxonomyType"
-            JOIN taxonomy ON "taxonomyTypeId" = "taxonomyType".id
-            WHERE restrictive = true
-            AND taxonomy.id NOT IN (
-                /* TAXONOMIES */
-                SELECT "taxonomyId" FROM "userToTaxonomy" WHERE "taxonomyUserId" = $1
-                UNION
-                SELECT "taxonomyId" FROM "roleToTaxonomy" JOIN "acl" ON "roleToTaxonomy"."roleId" = "acl"."roleId" AND "acl"."userId" = $1
-            )
-        `,
-    UNRESTRICT_FOR_USER = `
-        SELECT taxonomy.id FROM "taxonomyType"
-            JOIN taxonomy ON "taxonomyTypeId" = "taxonomyType".id
-            WHERE restrictive = true
-            AND taxonomy.id IN (
-                /* TAXONOMIES */
-                SELECT "taxonomyId" FROM "userToTaxonomy" WHERE "taxonomyUserId" = $1
-                UNION
-                SELECT "taxonomyId" FROM "roleToTaxonomy" JOIN "acl" ON "roleToTaxonomy"."roleId" = "acl"."roleId" AND "acl"."userId" = $1
-            )
-        `,
-    RESTRICT_FOR_ALL = `
-        SELECT taxonomy.id FROM "taxonomyType"
-            JOIN taxonomy ON "taxonomyTypeId" = "taxonomyType".id
-            WHERE restrictive = true
+            "authorId" IN ($1)
         `,
     RESTRICT_DATE = `
         "publishAt" <= NOW()
@@ -112,32 +108,38 @@ module.exports = require(LACKEY_PATH)
 
             constructor() {
                 this._wheres = [];
+                this._type = 'content';
+            }
+
+            type(newType) {
+                this._type = newType;
             }
 
             withTaxonomies(taxonomies) {
                 if (taxonomies && Array.isArray(taxonomies) && taxonomies.length) {
 
-                    let output = [];
+                    let output = [],
+                        self = this;
 
                     taxonomies.forEach((group) => {
                         if (group && Array.isArray(group) && group.length) {
-                            output.push(INCLUDE_SUB.replace(/\$1/g, group.join(', ')));
+                            output.push((self._type === 'media' ? INCLUDE_SUB_MEDIA : INCLUDE_SUB).replace(/\$1/g, group.join(', ')));
                         }
                     });
 
                     if (output.length) {
-                        this._wheres.push(INCLUDE_QUERY.replace(/\$1/g, output.join(' AND ')));
+                        this._wheres.push((self._type === 'media' ? INCLUDE_QUERY_MEDIA : INCLUDE_QUERY).replace(/\$1/g, output.join(' AND ')));
                     } else {
-                        this._wheres.push(INCLUDE_QUERY.replace(/\$1/g, 'TRUE'));
+                        this._wheres.push((self._type === 'media' ? INCLUDE_QUERY_MEDIA : INCLUDE_QUERY).replace(/\$1/g, 'TRUE'));
                     }
                 }
             }
 
             withoutTaxonomies(taxonomies, butExceptThose) {
                 if (butExceptThose && butExceptThose.length) {
-                    return this.whereIn(EXCLUDE_QUERY_BUT, taxonomies, butExceptThose);
+                    return this.whereIn((this._type === 'media' ? EXCLUDE_QUERY_BUT_MEDIA : EXCLUDE_QUERY_BUT), taxonomies, butExceptThose);
                 }
-                this.whereIn(EXCLUDE_QUERY, taxonomies);
+                this.whereIn((this._type === 'media' ? EXCLUDE_QUERY_MEDIA : EXCLUDE_QUERY), taxonomies);
             }
 
             withoutIds(ids) {
@@ -197,41 +199,39 @@ module.exports = require(LACKEY_PATH)
             run(user, page, limit) {
 
                 let self = this,
-                    num_limit = limit || 10,
-                    excludeRestrictives;
+                    num_limit = limit || 10;
 
-                return this
-                    .getRestrictives(user ? (user.id ? user.id : user) : null)
-                    .then((restrictives) => {
-                        excludeRestrictives = restrictives;
-                        return self.getUnrestrictives(user ? (user.id ? user.id : user) : null);
-                    })
-                    .then((restrictives) => {
+                if (!user || !user.id) {
+                    console.log((new Error('!')).stack);
+                }
+                let countQuery = 'SELECT count(*) as "count" FROM ' + self._type,
+                    query = 'SELECT ' + (self._type === 'media' ? 'source' : 'route') + ' FROM  ' + self._type;
 
-                        self.withoutTaxonomies(excludeRestrictives, restrictives);
+                if (self._type === 'media') {
+                    self._wheres.push('public."MediaACL"(' + (user && user.id ? user.id : 0) + '::bigint, id::bigint)');
+                } else {
+                    self._wheres.push('public."ContentACL"(' + (user && user.id ? user.id : 0) + '::bigint, id::bigint)');
+                }
 
-                        let countQuery = 'SELECT count(*) as "count" FROM content ',
-                            query = 'SELECT route FROM content ';
+                query += ' WHERE ' + self._wheres.join(' AND ');
+                countQuery += ' WHERE ' + self._wheres.join(' AND ');
 
-                        if (self._wheres.length) {
-                            query += ' WHERE ' + self._wheres.join(' AND ');
-                            countQuery += ' WHERE ' + self._wheres.join(' AND ');
-                        }
+                query += ' ORDER BY "createdAt" DESC ';
 
-                        query += ' ORDER BY "createdAt" DESC ';
+                if (page > 0) {
+                    query += ' OFFSET ' + page * num_limit + ' ';
+                }
 
-                        if (page > 0) {
-                            query += ' OFFSET ' + page * num_limit + ' ';
-                        }
+                query += ' LIMIT ' + num_limit;
 
-                        query += ' LIMIT ' + num_limit;
+                //console.log(countQuery);
+                //console.log(query);
 
-                        return Promise.all([
+                return Promise
+                    .all([
                             SCli.sql(knex.raw(countQuery)).then((r) => r.rows),
                             SCli.sql(knex.raw(query)).then((r) => r.rows)
-                        ]);
-
-                    })
+                        ])
                     .then((results) => {
 
                         let count = +results[0][0].count;
@@ -251,27 +251,7 @@ module.exports = require(LACKEY_PATH)
                     });
             }
 
-            getRestrictives(userId) {
 
-                let query = userId ? RESTRICT_FOR_USER.replace(/\$1/g, userId) : RESTRICT_FOR_ALL;
-
-                return knex
-                    .raw(query)
-                    .then((results) => results.rows.map((row) => row.id));
-            }
-
-            getUnrestrictives(userId) {
-
-                if (!userId) {
-                    return Promise.resolve([]);
-                }
-
-                let query = UNRESTRICT_FOR_USER.replace(/\$1/g, userId);
-
-                return knex
-                    .raw(query)
-                    .then((results) => results.rows.map((row) => row.id));
-            }
         }
         return ContentQueryBuilder;
     });
