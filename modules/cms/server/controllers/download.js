@@ -35,12 +35,12 @@ class DownloadController {
                 Media
                     .findById(json.id)
                     .then(media => {
-                        return media.canSee(req.user ? req.user.id : null)
+                        return media.canSee(req.user)
                             .then((canSee) => {
                                 if (!canSee) {
                                     return res.error403(req);
                                 }
-                                res.api(media);
+                                res.redirect(media.source)
                             });
                     });
             } else {

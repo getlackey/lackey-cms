@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.16.1
+
+ * Fix to gated media
+
 ## 0.16.0
 
  * Media restriction
