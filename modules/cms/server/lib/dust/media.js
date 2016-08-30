@@ -22,10 +22,11 @@ const SUtils = require(LACKEY_PATH).utils,
   SCli = require(LACKEY_PATH).cli,
   isYoutube = require('../../../shared/youtube'),
   isVimeo = require('../../../shared/vimeo'),
-  treeParser = require('../../../shared/treeparser');
+  treeParser = require('../../../shared/treeparser'),
+  gate = require('../gate');
 
 
-function print(chunk, data, type, editMode, dust, log) {
+function print(chunk, data, type, editMode, dust, log, config) {
   let source;
 
   SCli.debug('lackey-cms/modules/cms/server/lib/dust/media', 'Print', JSON.stringify(data, null, 4));
@@ -36,12 +37,16 @@ function print(chunk, data, type, editMode, dust, log) {
       type: 'image'
     };
   }
+
   try {
     if (data && (data.content || editMode)) {
 
       source = data.content ? data.content.source : null;
 
       if (type === 'url') {
+        if (data.content.taxonomies && data.content.taxonomies.length) {
+          source = gate.generateLink(config.get('salt'), 'media', data.content.id);
+        }
         if (log) {
           source = dust.filters.analytics(source);
         }
@@ -135,7 +140,7 @@ function print(chunk, data, type, editMode, dust, log) {
   }
 }
 
-module.exports = (dust) => {
+module.exports = (dust, config) => {
 
   dust.helpers.media = function (chunk, context, bodies, params) {
 
@@ -200,7 +205,7 @@ module.exports = (dust) => {
             if (bodies.block) {
               injected.render(bodies.block, context.push(dataObject));
             } else {
-              print(injected, dataObject, type, editMode, dust, log);
+              print(injected, dataObject, type, editMode, dust, log, config);
             }
             return injected.end();
           }, (error) => {
@@ -211,7 +216,7 @@ module.exports = (dust) => {
           });
       });
     }
-    print(chunk, dataObject, type, editMode, dust, log);
+    print(chunk, dataObject, type, editMode, dust, log, config);
 
   };
 

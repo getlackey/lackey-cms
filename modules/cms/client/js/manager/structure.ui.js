@@ -373,7 +373,7 @@ class StructureUI extends Emitter {
                             20
                         ],
                         formatLabel: (item) => {
-                            return (item.type ? item.type.label + ': ' : '') + item.label;
+                            return (item.type ? item.type.label + ': ' : '') + (item.label || item.name);
                         },
                         equals: (item, term) => {
                             return item.label === term;

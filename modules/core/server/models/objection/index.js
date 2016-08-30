@@ -657,7 +657,7 @@ module.exports = Database
                                     columnsArray = [];
                                     rows.forEach((row) => {
                                         Object.keys(row).forEach((field) => {
-                                            if (columnsArray.indexof(field) === -1) {
+                                            if (columnsArray.indexOf(field) === -1) {
                                                 columnsArray.push(field);
                                             }
                                         });

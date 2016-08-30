@@ -388,7 +388,7 @@ module.exports = SUtils
                     .then((page) => {
                         if (page) {
                             return page
-                                .canSee(req.user ? req.user.id : null)
+                                .canSee(req.user ? req.user : null)
                                 .then((canSee) => {
                                     if (!canSee) {
                                         return res.error403(req);

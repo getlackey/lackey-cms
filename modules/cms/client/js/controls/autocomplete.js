@@ -243,6 +243,11 @@ Autocomplete.prototype.selectBest = function (term) {
 
 };
 
+Autocomplete.prototype.onItemClick = function (event) {
+    this._selected = event.target._item;
+    this.confirm();
+};
+
 Autocomplete.prototype.query = function (term) {
     let self = this,
         promise = (!this._options.query) ? Promise.resolve([term]) : this._options.query(term);
@@ -256,7 +261,7 @@ Autocomplete.prototype.query = function (term) {
             let li = (self._options.addSuggestion || self.addSuggestion)(item, term);
             li._item = item;
             li.innerText = self._options.formatLabel ? self._options.formatLabel(item) : item;
-
+            li.addEventListener('click', self.onItemClick.bind(self), true);
             self._suggestions.appendChild(li);
         });
         self.selectBest(term);

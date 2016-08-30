@@ -21,6 +21,7 @@ const Emitter = require('cms/client/js/emitter').Emitter,
     template = require('core/client/js/template'),
     api = require('core/client/js/api'),
     Upload = require('core/client/js/upload'),
+    Autocomplete = require('cms/client/js/controls/autocomplete'),
     mimes = require('mime/types.json'),
     mime = Object
     .keys(mimes)
@@ -145,8 +146,55 @@ class Gallery extends Emitter {
                     self.alternative();
                 }
 
+                return self.drawTaxonomy();
+            })
+            .then(() => {
                 return self.node;
             });
+    }
+
+    drawTaxonomy() {
+
+
+        if (!this.options.media) return;
+
+        let self = this,
+            context = self.options.media;
+
+
+        let
+            restrictionNode = lackey.hook('restricitons', this.node),
+            taxes = context.taxonomies || [],
+            restrictive = taxes.filter((tax) => tax.type && tax.type.restrictive),
+            options = {
+                createNew: false,
+                separators: [
+                            13,
+                            20
+                        ],
+                formatLabel: (item) => {
+                    return (item.type ? item.type.label + ': ' : '') + (item.label || item.name);
+                },
+                equals: (item, term) => {
+                    return item.label === term;
+                }
+
+            },
+            restrictiveControl = new Autocomplete(restrictionNode, lackey.merge(options, {
+                query: (text) => {
+                    return api
+                        .read('/cms/taxonomy?restrictive=1&name=' + encodeURI(text + '%'))
+                        .then((data) => data.data);
+                },
+                value: restrictive
+            })),
+            handler = () => {
+
+                context.taxonomies = [].concat(restrictiveControl.value);
+                top.Lackey.manager.setMedia(context.id, context);
+            };
+        restrictiveControl.on('changed', handler);
+
     }
 
     alternative() {

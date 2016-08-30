@@ -2,6 +2,13 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.16.0
+
+ * Media restriction
+ * Fix to permissions
+ * Stored PostgreSQL procedures
+ * Fix to automcomplete
+
 ## 0.15.0
 
  * Improve table date handling
