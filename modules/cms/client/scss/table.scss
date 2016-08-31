@@ -120,10 +120,10 @@
                 text-align: left;
             }
             ul {
-                display: inline-block;
                 list-style: none;
                 li {
                     display: inline-block;
+                    float: left;
                     a {
                         text-decoration: none;
                         display: inline-block;

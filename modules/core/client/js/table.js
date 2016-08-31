@@ -17,7 +17,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const template = require('core/client/js/template'),
+const
+    template = require('core/client/js/template'),
     lackey = require('core/client/js'),
     qs = require('query-string'),
     xhr = require('core/client/js/xhr'),
@@ -35,7 +36,6 @@ class Table {
         this._paging = JSON.parse(element.getAttribute('data-lky-paging'));
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
-        this._sorting = lackey.select('[data-lky-hook="table.sort"]')[0];
         this.paging();
 
         let waiting = null;
@@ -107,7 +107,7 @@ class Table {
             query = options || {},
             context,
             handler,
-            sort = this._sort.value || null;
+            sort =  this._sort ? (this._sort.value || null) : null;
 
         if (sort) {
             query.sort = sort;
