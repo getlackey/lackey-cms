@@ -43,7 +43,7 @@ function error(message) {
 }
 
 name.addEventListener('keyup', () => {
-    slug.value = slugLib(name.value);
+    slug.value = slugLib(name.value, {lower: true});
 });
 
 lackey.bind('form', 'submit', (event) => {
