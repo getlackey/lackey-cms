@@ -107,7 +107,7 @@ class Table {
             query = options || {},
             context,
             handler,
-            sort =  this._sort ? (this._sort.value || null) : null;
+            sort = this._sort ? (this._sort.value || null) : null;
 
         if (sort) {
             query.sort = sort;

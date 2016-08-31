@@ -561,15 +561,16 @@ module.exports = Database
                     /**
                      * Generates table data
                      * @param   {object} inputQuery
-                     * @param   {Array}    columns
+                     * @param   {Array}    inputColumns
                      * @param   {object}   options
                      */
-                    static table(inputQuery, columns, options) {
+                    static table(inputQuery, inputColumns, options) {
 
-                        SCli.debug(__MODULE_NAME, 'table', this.model.tableName, JSON.stringify(inputQuery), JSON.stringify(columns), JSON.stringify(options));
+                        SCli.debug(__MODULE_NAME, 'table', this.model.tableName, JSON.stringify(inputQuery), JSON.stringify(inputColumns), JSON.stringify(options));
 
                         let
                             query,
+                            columns = inputColumns,
                             self = this,
                             columnsArray = columns ? Object.keys(columns).sort((a, b) => {
                                 if (columns[a].ord > columns[b].ord) return 1;
@@ -654,11 +655,13 @@ module.exports = Database
                                 });
 
                                 if (!columnsArray) {
+                                    columns = {};
                                     columnsArray = [];
                                     rows.forEach((row) => {
                                         Object.keys(row).forEach((field) => {
                                             if (columnsArray.indexOf(field) === -1) {
                                                 columnsArray.push(field);
+                                                columns[field] = field;
                                             }
                                         });
                                     });
