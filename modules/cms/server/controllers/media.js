@@ -43,8 +43,11 @@ module.exports = SUtils
                         label: 'Type'
                     },
                     createdAt: {
-                        name: 'Created At',
+                        label: 'Created At',
                         date: true
+                    },
+                    source: {
+                        label: 'Source'
                     }
                 });
             }

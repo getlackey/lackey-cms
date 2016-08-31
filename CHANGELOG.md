@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.16.3
+
+ * Fix paging in tables
+
 ## 0.16.2
 
  * Allow sorting CMS tables

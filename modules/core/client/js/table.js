@@ -40,12 +40,14 @@ class Table {
 
         let waiting = null;
 
-        this._sort
-            .addEventListener('change', () => {
-                self.query({
-                    q: this._search.value
+        if (this._sort) {
+            this._sort
+                .addEventListener('change', () => {
+                    self.query({
+                        q: this._search.value
+                    });
                 });
-            });
+        }
 
         this._search
             .addEventListener('keyup', () => {
