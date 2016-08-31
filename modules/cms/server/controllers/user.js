@@ -48,6 +48,15 @@ module.exports = SUtils
                 }]);
             }
 
+            static get tableOptions() {
+                return this._overriden('tableOptions', {
+                    sorts: [{
+                        field: 'name',
+                        label: 'Names'
+                    }]
+                });
+            }
+
             // Delete
             static delete(req, res) {
 
@@ -87,6 +96,10 @@ module.exports = SUtils
                     taxonomies: {
                         label: 'Classification',
                         parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
+                    },
+                    lastActive: {
+                        label: 'Last Active',
+                        date: true
                     }
                 });
             }

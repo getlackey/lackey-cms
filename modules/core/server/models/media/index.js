@@ -34,10 +34,11 @@ SCli.debug(__MODULE_NAME, 'REQUIRED');
 
 module.exports = SUtils
     .waitForAs(__MODULE_NAME,
-        SUtils.cmsMod('core').model('objection'),
+        SUtils.cmsMod('core').model('taggable'),
+        require('../content/querybuilder'),
         require('../knex')
     )
-    .then((ObjectionWrapper) => {
+    .then((Taggable, QueryBuilder) => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -73,9 +74,15 @@ module.exports = SUtils
             }
         }
 
+        class MediaToTaxonomy extends Model {
+            static get tableName() {
+                return 'mediaToTaxonomy';
+            }
+        }
+
         let __debug = (typeof global.it === 'function') ? 'image/jpeg' : false;
 
-        class Media extends ObjectionWrapper {
+        class Media extends Taggable {
 
             static get api() {
                 return '/cms/media';
@@ -86,6 +93,14 @@ module.exports = SUtils
                     name: 'lr',
                     source: 'lr'
                 };
+            }
+
+            static get taxonomyRelationModel() {
+                return MediaToTaxonomy;
+            }
+
+            static get taxonomyRelationField() {
+                return 'mediaId';
             }
 
             static get model() {
@@ -106,11 +121,11 @@ module.exports = SUtils
                     return Promise.resolve(forceMime);
                 }
 
-                if(path.match(/^https:\/\/unsplash\.it/)) {
+                if (path.match(/^https:\/\/unsplash\.it/)) {
                     return Promise.resolve('image/jpeg');
                 }
 
-                if(path.match(/^https:\/\/www.youtube.com\//)) {
+                if (path.match(/^https:\/\/www.youtube.com\//)) {
                     return Promise.resolve('video/youtube');
                 }
 
@@ -337,8 +352,24 @@ module.exports = SUtils
                     type: this.type,
                     createdAt: this._doc.createdAt,
                     author: this._doc._userId,
-                    attributes: this._doc.attributes
+                    attributes: this._doc.attributes,
+                    taxonomies: this.taxonomies
                 };
+            }
+
+            canSee(user) {
+
+                let builder = new QueryBuilder();
+
+                builder.type('media');
+                builder.withId(this.id);
+
+                return builder
+                    .run(user, 0, 1)
+                    .then((results) => {
+                        return results.paging.count > 0;
+                    });
+
             }
 
             get uri() {

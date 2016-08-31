@@ -70,6 +70,17 @@ class Schema {
                 SCli.debug(__MODULE_NAME, 'Added column ' + columnName + ' to the table ' + tableName);
             });
     }
+
+    static loadSQL(knex, path) {
+        return SUtils
+            .read(path)
+            .then(content => {
+                return knex.schema.raw(content);
+            })
+            .then(() => {
+                SCli.debug(__MODULE_NAME, 'Loaded SQL ' + path);
+            });
+    }
 }
 
 module.exports = Schema;

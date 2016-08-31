@@ -43,8 +43,11 @@ module.exports = SUtils
                         label: 'Type'
                     },
                     createdAt: {
-                        name: 'Created At',
+                        label: 'Created At',
                         date: true
+                    },
+                    source: {
+                        label: 'Source'
                     }
                 });
             }
@@ -53,7 +56,7 @@ module.exports = SUtils
                 return this._overriden('actions', [{
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
-                    href: '{name}'
+                    href: '{source}'
                 }, {
                     label: 'Remove',
                     icon: 'img/cms/cms/svg/close.svg',

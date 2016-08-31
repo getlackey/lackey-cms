@@ -17,7 +17,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const template = require('core/client/js/template'),
+const
+    template = require('core/client/js/template'),
     lackey = require('core/client/js'),
     qs = require('query-string'),
     xhr = require('core/client/js/xhr'),
@@ -28,15 +29,27 @@ class Table {
 
     constructor(element) {
         let
-            self = this,
-            input = lackey.select('[data-lky-hook="table.filter"]')[0];
+            self = this;
+        this._search = lackey.select('[data-lky-hook="table.filter"]')[0];
+        this._sort = lackey.select('[data-lky-hook="table.sort"]')[0];
         this._root = element;
         this._paging = JSON.parse(element.getAttribute('data-lky-paging'));
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
         this.paging();
+
         let waiting = null;
-        input
+
+        if (this._sort) {
+            this._sort
+                .addEventListener('change', () => {
+                    self.query({
+                        q: this._search.value
+                    });
+                });
+        }
+
+        this._search
             .addEventListener('keyup', () => {
                 /* istanbul ignore next */
                 if (waiting) {
@@ -47,10 +60,11 @@ class Table {
                     clearTimeout(waiting);
                     waiting = null;
                     self.query({
-                        q: input.value
+                        q: this._search.value
                     });
                 }, 500);
             });
+
         this.api();
     }
 
@@ -79,42 +93,10 @@ class Table {
         });
     }
 
-    filter(event, hook) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.query(this.filters(lackey.form(hook)));
-    }
-
-    filters(filters) {
-        let self = this,
-            result = {};
-
-
-        Object.keys(filters).forEach((key) => {
-            if (filters[key] === '') {
-                return;
-            }
-            self._columns.forEach((column) => {
-
-                if (column.name === key) {
-                    if (column.like === true) {
-                        result[key] = '%' + filters[key] + '%';
-                    } else if (column.like === 'l') {
-                        result[key] = '%' + filters[key];
-                    } else if (column.like === 'r') {
-                        result[key] = filters[key] + '%';
-                    } else {
-                        result[key] = filters[key];
-                        return result[key];
-                    }
-                }
-            });
-        });
-        return result;
-    }
-
     page(pageNumber) {
-        this.query(lackey.merge(this.filters(lackey.form(lackey.hook('filters', this._root))), {
+        this.query(lackey.merge({
+            q: this._search.value
+        }, {
             page: pageNumber
         }));
     }
@@ -124,9 +106,16 @@ class Table {
             path = this._apiEndpoint,
             query = options || {},
             context,
-            handler;
+            handler,
+            sort =  this._sort ? (this._sort.value || null) : null;
+
+        if (sort) {
+            query.sort = sort;
+        }
 
         query.format = 'table';
+
+        console.log(query);
 
         path += '?' + qs.stringify(query);
 
@@ -139,6 +128,12 @@ class Table {
                         table: response,
                         host: xhr.base
                     };
+                    response.rows.forEach(row =>
+                        row.columns.forEach((cell) => {
+                            if (cell.value && cell.value.date) {
+                                cell.value.date = new Date(cell.value.date);
+                            }
+                        }));
                     return self.drawRows(context);
                 })
                 .then(() => {

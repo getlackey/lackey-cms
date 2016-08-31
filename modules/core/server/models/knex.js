@@ -57,6 +57,11 @@ module.exports = Schema
                     table.boolean('deleted');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'users', 'lastActive', (table) => {
+                    table.timestamp('lastActive');
+                });
+            })
             //
             // TABLE identities
             // .userId -> users.id
@@ -501,6 +506,41 @@ module.exports = Schema
                     table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
                 });
 
+            })
+            .then(() => {
+                return Schema.loadSQL(knex, __dirname + '/content/psql/ContentACL.sql');
+            })
+            //
+            // TABLE mediaToTaxonomy
+            // taxonomyId -> taxonomy.id
+            // userId -> users.id
+            // mediaId -> media.id
+            //
+            .then(() => {
+                return Schema.table(knex, 'mediaToTaxonomy', (table) => {
+                    table.increments();
+                    table.bigInteger('userId')
+                        .unsigned()
+                        .references('id')
+                        .inTable('users')
+                        .onDelete('CASCADE');
+                    table.bigInteger('taxonomyId')
+                        .unsigned()
+                        .references('id')
+                        .inTable('taxonomy')
+                        .onDelete('CASCADE');
+                    table.bigInteger('mediaId')
+                        .unsigned()
+                        .references('id')
+                        .inTable('media')
+                        .onDelete('CASCADE');
+                    table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
+                    table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
+                });
+
+            })
+            .then(() => {
+                return Schema.loadSQL(knex, __dirname + '/media/psql/MediaACL.sql');
             })
             //
             // TABLE Translations

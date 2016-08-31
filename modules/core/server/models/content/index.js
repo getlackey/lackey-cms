@@ -169,15 +169,6 @@ module.exports = SUtils
                     })
                     .then((template) => {
                         self._template = template;
-                        return SCli.sql(ContentToTaxonomy
-                            .query()
-                            .where('contentId', self.id));
-                    })
-                    .then((taxonomyIds) => {
-                        return Taxonomy.findByIds(taxonomyIds.map((row) => row.taxonomyId));
-                    })
-                    .then((taxonomies) => {
-                        self.taxonomies = taxonomies;
                         return self;
                     });
             }

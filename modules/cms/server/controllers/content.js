@@ -69,6 +69,18 @@ module.exports = SUtils.waitForAs('contentCtrl',
                 });
             }
 
+            static get tableOptions() {
+                return this._overriden('tableOptions', {
+                    sorts: [{
+                        field: 'createdAt',
+                        label: 'Created At'
+                    }, {
+                        field: 'route',
+                        label: 'Route'
+                    }]
+                });
+            }
+
             static create(req, res) {
 
                 if (!req.body) return res.error(req, new Error('No input'));

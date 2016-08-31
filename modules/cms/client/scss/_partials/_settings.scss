@@ -163,6 +163,7 @@
                 > div {
                     height: 100%;
                     width: $settings-edit-width;
+
                     > ul {
                         padding: 0px;
                         margin: 0px;
@@ -238,9 +239,15 @@
                 }
             }
             [data-lky-hook="settings.meta"] {
-                > div > ul {
-                    padding: 50px;
-                    list-style: none;
+                > div {
+                    > small {
+                        padding: 50px 50px 0px 50px;
+                        display: block;
+                    }
+                    > ul {
+                        padding: 50px;
+                        list-style: none;
+                    }
                 }
             }
             [data-lky-hook="settings.gallery"] {

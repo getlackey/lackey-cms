@@ -3,8 +3,8 @@
 {:else}
     {?value.date}
         <strong>
-            {@formatDate val=value.date weekday="long"/} {@formatDate val=value.date day="numeric"/} {@formatDate val=value.date month="long"/}
-        </strong> {@formatDate val=value.date hour="numeric"/}
+            {@formatDate val=value.date weekday="short"/} {@formatDate val=value.date day="numeric"/} {@formatDate val=value.date month="short"/}
+        </strong> {@formatDate val=value.date hour="numeric"/}:{@formatDate val=value.date minute="numeric"/}
     {:else}
         {value}
     {/value.date}
