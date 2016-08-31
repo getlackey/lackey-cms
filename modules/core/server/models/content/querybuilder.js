@@ -201,9 +201,6 @@ module.exports = require(LACKEY_PATH)
                 let self = this,
                     num_limit = limit || 10;
 
-                if (!user || !user.id) {
-                    console.log((new Error('!')).stack);
-                }
                 let countQuery = 'SELECT count(*) as "count" FROM ' + self._type,
                     query = 'SELECT ' + (self._type === 'media' ? 'source' : 'route') + ' FROM  ' + self._type;
 
@@ -223,9 +220,6 @@ module.exports = require(LACKEY_PATH)
                 }
 
                 query += ' LIMIT ' + num_limit;
-
-                //console.log(countQuery);
-                //console.log(query);
 
                 return Promise
                     .all([

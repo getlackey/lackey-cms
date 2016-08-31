@@ -3,6 +3,7 @@
     width: 100%;
     overflow-x: auto;
 }
+
 [data-lky-component="table"] {
     overflow-y: auto;
     height: calc(100% - #{$header-height});
@@ -10,7 +11,8 @@
         padding: 40px 150px 20px;
         text-transform: capitalize;
     }
-    > [data-lky-hook="table.add"], .tableAction {
+    > [data-lky-hook="table.add"],
+    .tableAction {
         float: right;
         margin: 68px 5px 0px 0px;
     }
@@ -22,6 +24,16 @@
         border-radius: 30px;
         padding: 8px 10px;
         width: 250px;
+    }
+    > select {
+        float: right;
+        margin: 68px 20px 0px 0px;
+        border: 1px solid $color-background-highlight;
+        color: $color-light-gray;
+        border-radius: 30px;
+        padding: 8px 10px;
+        width: 250px;
+        height: 30px;
     }
     form > label {
         margin: 0px 150px 15px;
@@ -59,7 +71,6 @@
         }
         td,
         th {
-
             border: none;
             text-align: left;
             > img {
@@ -72,10 +83,9 @@
                 background: transparent;
             }
         }
-        td
-        {
+        td {
             white-space: nowrap;
-            overflow:hidden;
+            overflow: hidden;
             text-overflow: ellipsis;
             button {
                 border: none;

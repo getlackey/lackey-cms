@@ -41,8 +41,13 @@ class CRUDController {
         return this._overriden('tableActions', undefined);
     }
 
+    // columns
     static get tableConfig() {
         return this._overriden('tableConfig', null);
+    }
+
+    static get tableOptions() {
+        return this._overriden('tableOptions', null);
     }
 
     static get exportConfig() {
@@ -216,7 +221,8 @@ class CRUDController {
             isExport = req.__resFormat === 'xlsx',
             self = this,
             config,
-            tableConfig = isExport && self.exportConfig ? self.exportConfig : self.tableConfig;
+            tableConfig = isExport && self.exportConfig ? self.exportConfig : self.tableConfig,
+            tableOptions = self.tableOptions || {};
 
         require(LACKEY_PATH)
             .configuration()
@@ -262,6 +268,7 @@ class CRUDController {
                     title: self.title || self.field,
                     create: self.model.createLink,
                     tableActions: self.tableActions,
+                    tableOptions: tableOptions,
                     template: 'cms/cms/tableview',
                     javascripts: [
                         'js/cms/cms/table.js'
