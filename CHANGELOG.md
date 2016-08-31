@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.16.6
+
+ * Fix to tables API (missing column setup)
+
 ## 0.16.5
 
  * Dont allow creation of uppercase urls
