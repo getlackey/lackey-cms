@@ -654,11 +654,13 @@ module.exports = Database
                                 });
 
                                 if (!columnsArray) {
+                                    columns = {};
                                     columnsArray = [];
                                     rows.forEach((row) => {
                                         Object.keys(row).forEach((field) => {
                                             if (columnsArray.indexOf(field) === -1) {
                                                 columnsArray.push(field);
+                                                columns[field] = field;
                                             }
                                         });
                                     });
