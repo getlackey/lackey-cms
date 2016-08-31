@@ -53,7 +53,7 @@ module.exports = SUtils
                 return this._overriden('actions', [{
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
-                    href: '{name}'
+                    href: '{source}'
                 }, {
                     label: 'Remove',
                     icon: 'img/cms/cms/svg/close.svg',
