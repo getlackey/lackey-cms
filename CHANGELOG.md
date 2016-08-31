@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.16.5
+
+ * Dont allow creation of uppercase urls
+
 ## 0.16.3 - 0.16.4
 
  * Fix paging in tables
