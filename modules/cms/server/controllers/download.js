@@ -40,7 +40,7 @@ class DownloadController {
                                 if (!canSee) {
                                     return res.error403(req);
                                 }
-                                res.redirect(media.source)
+                                res.redirect(media.source);
                             });
                     });
             } else {

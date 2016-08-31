@@ -48,6 +48,15 @@ module.exports = SUtils
                 }]);
             }
 
+            static get tableOptions() {
+                return this._overriden('tableOptions', {
+                    sorts: [{
+                        field: 'name',
+                        label: 'Names'
+                    }]
+                });
+            }
+
             // Delete
             static delete(req, res) {
 
