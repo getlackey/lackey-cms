@@ -259,6 +259,8 @@ module.exports = SUtils
                         delete self._doc.layout;
                     }
 
+                    self._doc.route = self._doc.route.toLowerCase();
+
                     return self;
                 });
             }
