@@ -35,6 +35,12 @@ exports.generateIsAllowed = function (acl, field) {
 
         SCli.debug('lackey-cms/modules/users/server/policies/auth', 'Excercise ACL rule ', roles, path, req.method.toLowerCase());
 
+        // hack for media as acl does it sooo wrong
+        if(path === '/api/cms/media/:media_id' && req.method.toLowerCase() === 'get' ) {
+            SCli.debug('lackey-cms/modules/users/server/policies/auth', 'ALLOWED HACK', roles, req.method.toLowerCase());
+            return next();
+        }
+
         // Check for user roles
         acl.areAnyRolesAllowed(roles, path, req.method.toLowerCase(), function (err, isAllowed) {
 
@@ -49,6 +55,7 @@ exports.generateIsAllowed = function (acl, field) {
                 SCli.debug('lackey-cms/modules/users/server/policies/auth', 'ALLOWED', roles, req.method.toLowerCase());
                 return next();
             }
+
             SCli.debug('lackey-cms/modules/users/server/policies/auth', 'NOT ALLOWED', roles, req.method.toLowerCase());
             return res.error403(req, {
                 message: 'User is not authorized'
