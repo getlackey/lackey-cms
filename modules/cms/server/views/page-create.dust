@@ -17,7 +17,7 @@
                 <tr>
                     <th></th>
                     <th>Preview</th>
-                    <th>Name</th>
+                    <th>Template</th>
                     <th>Prefix</th>
                     <th><button data-lky-btn type="submit">Create</button></th>
                     <th></th>

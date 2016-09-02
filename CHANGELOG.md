@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.16.8
+
+ * Content create page - rename `name` column to `template`
+
 ## 0.16.7
 
  * Workaround for problematic media routes in `acl`
