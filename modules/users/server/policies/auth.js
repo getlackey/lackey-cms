@@ -36,7 +36,7 @@ exports.generateIsAllowed = function (acl, field) {
         SCli.debug('lackey-cms/modules/users/server/policies/auth', 'Excercise ACL rule ', roles, path, req.method.toLowerCase());
 
         // hack for media as acl does it sooo wrong
-        if(path === '/api/cms/media/:media_id' && req.method.toLowerCase() === 'get' ) {
+        if (path === '/api/cms/media/:media_id' && req.method.toLowerCase() === 'get') {
             SCli.debug('lackey-cms/modules/users/server/policies/auth', 'ALLOWED HACK', roles, req.method.toLowerCase());
             return next();
         }

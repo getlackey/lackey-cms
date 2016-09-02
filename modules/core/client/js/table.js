@@ -25,10 +25,16 @@ const
     growl = require('cms/client/js/growl'),
     api = require('core/client/js/api');
 
+function pushState(href) {
+    let loc = document.location,
+        url = loc.protocol + '//' + loc.host + loc.pathname + '?' + qs.stringify(href);
+    window.history.pushState({}, document.title, url);
+}
+
 class Table {
 
     constructor(element) {
-        let
+        var
             self = this;
         this._search = lackey.select('[data-lky-hook="table.filter"]')[0];
         this._sort = lackey.select('[data-lky-hook="table.sort"]')[0];
@@ -37,6 +43,7 @@ class Table {
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
         this.paging();
+        this.pageNumber = 0;
 
         let waiting = null;
 
@@ -65,7 +72,16 @@ class Table {
                 }, 500);
             });
 
-        this.api();
+        if (document.location.search && document.location.search.length) {
+            self.query(qs.parse(document.location.search), true);
+        } else {
+            this.api();
+        }
+
+        window.addEventListener('popstate', () => {
+            self.query(qs.parse(document.location.search), true);
+            return true;
+        });
     }
 
     api() {
@@ -80,7 +96,7 @@ class Table {
                         api
                             .delete(apiAction[1])
                             .then(() => {
-                                self.page(0);
+                                self.page(self.pageNumber);
                             }, error => {
                                 growl({
                                     status: 'error',
@@ -94,61 +110,89 @@ class Table {
     }
 
     page(pageNumber) {
-        this.query(lackey.merge({
-            q: this._search.value
-        }, {
-            page: pageNumber
-        }));
+        let self = this;
+        this
+            .query(lackey.merge({
+                q: this._search.value
+            }, {
+                page: pageNumber
+            }))
+            .then(() => {
+                self.pageNumber = pageNumber;
+            });
     }
 
-    query(options) {
+    query(options, dontPushState) {
+
         let self = this,
             path = this._apiEndpoint,
             query = options || {},
+            href = options || {},
             context,
             handler,
-            sort = this._sort ? (this._sort.value || null) : null;
+            sort = options.sort ? options.sort : (this._sort ? (this._sort.value || null) : null);
+
+        if (self.locked) {
+            return;
+        }
 
         if (sort) {
             query.sort = sort;
+            href.sort = sort;
         }
 
         query.format = 'table';
 
-        console.log(query);
-
         path += '?' + qs.stringify(query);
 
-        handler = () => {
-            this._root.removeEventListener('transitionend', handler, false);
-            api
-                .read(path)
-                .then((response) => {
-                    context = {
-                        table: response,
-                        host: xhr.base
-                    };
-                    response.rows.forEach(row =>
-                        row.columns.forEach((cell) => {
-                            if (cell.value && cell.value.date) {
-                                cell.value.date = new Date(cell.value.date);
-                            }
-                        }));
-                    return self.drawRows(context);
-                })
-                .then(() => {
-                    self.api();
-                })
-                .then(() => {
-                    self.drawPaging(context);
-                })
-                .then(() => {
-                    this._root.removeAttribute('data-lky-busy');
-                });
-        };
+        return new Promise((resolve, reject) => {
 
-        this._root.addEventListener('transitionend', handler, false);
-        this._root.setAttribute('data-lky-busy', '');
+            handler = () => {
+                self._root.removeEventListener('transitionend', handler, false);
+                api
+                    .read(path)
+                    .then((response) => {
+                        context = {
+                            table: response,
+                            host: xhr.base
+                        };
+                        response.rows.forEach(row =>
+                            row.columns.forEach((cell) => {
+                                if (cell.value && cell.value.date) {
+                                    cell.value.date = new Date(cell.value.date);
+                                }
+                            }));
+                        return self.drawRows(context);
+                    })
+                    .then(() => {
+                        self.api();
+                    })
+                    .then(() => {
+                        self.drawPaging(context);
+                    })
+                    .then(() => {
+                        self._root.removeAttribute('data-lky-busy');
+                    })
+                    .then(() => {
+                        self.locked = true;
+                        self._search.value = href.q || '';
+                        if (self._sort) {
+                            self._sort.value = href.sort || null;
+                        }
+                        self.locked = false;
+                        if (dontPushState) {
+                            return;
+                        }
+                        pushState(href);
+
+                    })
+                    .then(resolve, reject);
+            };
+
+            self._root.addEventListener('transitionend', handler, false);
+            self._root.setAttribute('data-lky-busy', '');
+
+        });
 
 
     }

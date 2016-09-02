@@ -2,6 +2,13 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.17.0
+
+ * Table permalinks
+ * Table stay on page after delete action
+ * Table export use filters
+ * Table back button support
+
 ## 0.16.8
 
  * Content create page - rename `name` column to `template`

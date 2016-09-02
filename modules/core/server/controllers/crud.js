@@ -228,16 +228,15 @@ class CRUDController {
             .configuration()
             .then((_config) => {
                 config = _config;
-
                 return self
                     .model
-                    .table(self.alterQuery(req, restParams.query), tableConfig, self.alterQueryOptions(req, {
+                    .table(self.alterQuery(req, restParams.query), tableConfig, self.alterQueryOptions(req, _.merge({
                         format: 'table',
                         keepReference: true,
                         nolimit: isExport
-                    }));
+                    }, restParams.options)));
             })
-            .then((data) => {
+            .then(data => {
                 if (isExport) {
                     res.send({
                         table: {
@@ -281,7 +280,7 @@ class CRUDController {
                         table: data
                     }
                 });
-            }, (error) => {
+            }, error => {
                 res.error(req, error);
             });
     }
