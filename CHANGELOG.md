@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.17.1
+
+ * Fix for urls containing URI encoded entities
+
 ## 0.17.0
 
  * Table permalinks

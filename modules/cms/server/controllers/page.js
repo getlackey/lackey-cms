@@ -280,7 +280,8 @@ module.exports = SUtils
 
                 return PageController
                     .mapTaxonomyListGrouped(item.taxonomy || [], req, page)
-                    .then((taxonomies) => {
+                    .then(taxonomies => {
+                        console.log(taxonomies, item.taxonomy);
                         includeTaxonomies = taxonomies;
                         return PageController.mapTaxonomyList(item.excludeTaxonomy || [], req, page);
                     })
@@ -293,8 +294,6 @@ module.exports = SUtils
                             author = (item.author && PageController.parse(item.author.if, req, page)) ? page.author : null,
                             textSearch = item.textSearch ? PageController.parse(item.textSearch, req, page) : null;
 
-
-                        console.log('can edit', req.canEdit);
                         return ContentModel
                             .complexQuery({
                                 includeTaxonomies: taxes,

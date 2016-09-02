@@ -68,29 +68,29 @@ module.exports = SUtils
                     fullIframePath = req.__host + iframePath;
 
                     return Content
-                        .findByRoute(iframePath.split('?')[0])
-                        .then((page) => {
+                        .findByRoute(decodeURI(iframePath.split('?')[0]))
+                        .then(page => {
                             if (page) {
                                 return page._template.canEdit(req.user);
                             }
                             return false;
                         })
-                        .then((canEdit) => {
+                        .then(canEdit => {
                             if (!canEdit) {
                                 return res.redirect(fullIframePath);
                             }
 
                             return Template.getOfType('variant')
-                                .then((_variants) => {
+                                .then(_variants => {
                                     variants = _variants;
                                     return Language.getEnabled();
                                 })
-                                .then((languages) => {
+                                .then(languages => {
                                     res.edit(true);
                                     res.js('js/cms/cms/header.js');
                                     res.print('cms/cms/iframe', {
                                         page: fullIframePath,
-                                        variants: variants.map((variant) => {
+                                        variants: variants.map(variant => {
                                             return {
                                                 path: variant.path,
                                                 name: variant.name
