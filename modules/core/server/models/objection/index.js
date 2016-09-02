@@ -567,7 +567,6 @@ module.exports = Database
                     static table(inputQuery, inputColumns, options) {
 
                         SCli.debug(__MODULE_NAME, 'table', this.model.tableName, JSON.stringify(inputQuery), JSON.stringify(inputColumns), JSON.stringify(options));
-
                         let
                             query,
                             columns = inputColumns,
@@ -599,13 +598,14 @@ module.exports = Database
                                 }
                             });
                         }
+
                         return this
                             ._preQuery(inputQuery, options)
-                            .then((q) => {
+                            .then(q => {
                                 query = q;
                                 return this.count(query);
                             })
-                            .then((count) => {
+                            .then(count => {
                                 let opt = options || {};
 
                                 if (opt.limit && !opt.nolimit) {
