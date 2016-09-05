@@ -35,10 +35,15 @@ module.exports = (dust) => {
     dust.helpers.youtube = function (chunk, context, bodies, params) {
 
         let path = params.path,
-            youtube = isYoutube(path);
+            youtube = isYoutube(path),
+            type = params.type || '';
 
         if(youtube) {
-            chunk = chunk.render(bodies.block, context.push(youtube));
+            if (type === 'image') {
+                chunk = chunk.render(bodies.block, context.push('https://img.youtube.com/vi/' + youtube + '/default.jpg'));
+            } else {
+                chunk = chunk.render(bodies.block, context.push(youtube));
+            }
         } else {
             chunk = chunk.render(bodies.else, context);
         }
