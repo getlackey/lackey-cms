@@ -16,7 +16,7 @@ let b = 1;
 ### Brackets
 
 ```javascript
-function() {
+function() { // no enter here
   // empty line
   // ...
 }
