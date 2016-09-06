@@ -2,6 +2,16 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-alpha-1
+
+ **BREAKING CHANGES**
+ * Shorthand controller paths in YAML routes aren't supported anymore.
+ * Falcor support dropped completely
+ * `deleteUser` ACL is replaced by `manageUser`
+ * introduce `template.allowedTaxonomies`
+ * Introduce taxonomyPicker
+ * Kill `babelify`
+
 ## 0.17.11
 
  * Fix issue with publishAt where date was showing wrong on UI after saving.
@@ -13,6 +23,7 @@ Going forward we should add hash of issue next to change
 ## 0.17.8 - 0.17.9
 
  * Added dust helper for sorting arrays
+
 
 ## 0.17.5 - 0.17.7
 
@@ -30,7 +41,6 @@ Going forward we should add hash of issue next to change
 ## 0.17.2
 
  * Fixes to allow youtube thumbnail override
-
 
 ## 0.17.1
 

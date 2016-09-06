@@ -44,10 +44,32 @@ Analytics:
 routes:
     /download/:downloadToken:
         get:
-            controller: cms/cms/download#download
+            controller: cms/cms/server/controllers/download#download
             inject:
                 - cms/core/server/models/media
                 - configuration
+    /cms/user:
+        get:
+            controller: cms/cms/server/controllers/user#table
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/user
+
+    /cms/user/:profileId:
+        get:
+            controller: cms/cms/server/controllers/user#details
+            ACLHelper: admin
+
+    /api/cms/user:
+        crud:
+            controller: cms/cms/server/controllers/user
+            field: profile
+            options:
+                inject:
+                    - cms/core/server/models/user
+                ACLHelper: admin
+
 routeParams:
     downloadToken:
         field: downloadToken
+

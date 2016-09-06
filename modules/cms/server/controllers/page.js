@@ -281,15 +281,15 @@ module.exports = SUtils
                 return PageController
                     .mapTaxonomyListGrouped(item.taxonomy || [], req, page)
                     .then(taxonomies => {
-                        console.log(taxonomies, item.taxonomy);
                         includeTaxonomies = taxonomies;
                         return PageController.mapTaxonomyList(item.excludeTaxonomy || [], req, page);
                     })
-                    .then((taxonomies) => {
+                    .then(taxonomies => {
 
                         excludeTaxonomies = taxonomies;
-                        let taxes = includeTaxonomies.filter((tax) => !!tax),
-                            exTaxes = excludeTaxonomies.filter((tax) => !!tax),
+                        let
+                            taxes = includeTaxonomies.filter(tax => !!tax),
+                            exTaxes = excludeTaxonomies.filter(tax => !!tax),
                             pageNumber = item.page ? PageController.parse(item.page, req) : 0,
                             author = (item.author && PageController.parse(item.author.if, req, page)) ? page.author : null,
                             textSearch = item.textSearch ? PageController.parse(item.textSearch, req, page) : null;
@@ -309,7 +309,7 @@ module.exports = SUtils
                             });
 
                     })
-                    .then((results) => {
+                    .then(results => {
                         target[item.field] = results.rows;
                         if (item.paging) {
                             target[item.paging] = results.paging;
@@ -329,14 +329,14 @@ module.exports = SUtils
 
                 return PageController
                     .taxonomyType(item.taxonomyType)
-                    .then((taxonomyTypeId) => {
+                    .then(taxonomyTypeId => {
 
                         return Taxonomy.
                         findBy('taxonomyTypeId', taxonomyTypeId);
                     })
-                    .then((list) => {
+                    .then(list => {
                         target[item.field] = list
-                            .map((result) => {
+                            .map(result => {
                                 let res = result.toJSON();
                                 if (item.selected && selected.indexOf(res.name) !== -1) {
                                     res.selected = true;
@@ -349,7 +349,7 @@ module.exports = SUtils
             static taxonomyType(name) {
                 return TaxonomyType
                     .findOneBy('name', name)
-                    .then((taxonomyType) => taxonomyType.id);
+                    .then(taxonomyType => taxonomyType.id);
             }
 
             static parse(query, req, page) {
@@ -358,7 +358,7 @@ module.exports = SUtils
                 } else if (query.source === 'content') {
                     if (page.taxonomies) {
                         let res = [];
-                        page.taxonomies.forEach((tax) => {
+                        page.taxonomies.forEach(tax => {
                             if (tax.type.name === query.type) {
                                 res.push(tax.name);
                             }
@@ -384,17 +384,17 @@ module.exports = SUtils
 
                 ContentModel
                     .findByRoute(route)
-                    .then((page) => {
+                    .then(page => {
                         if (page) {
                             return page
                                 .canSee(req.user ? req.user : null)
-                                .then((canSee) => {
+                                .then(canSee => {
                                     if (!canSee) {
                                         return res.error403(req);
                                     }
                                     if (req.__resFormat === 'yaml') {
                                         return page.toYAML()
-                                            .then((yaml) => {
+                                            .then(yaml => {
                                                 return res.yaml(yaml);
                                             });
                                     }
@@ -403,7 +403,7 @@ module.exports = SUtils
                                 });
                         }
                         next();
-                    }, (error) => {
+                    }, error => {
                         console.error(error);
                         next(error);
                     });
