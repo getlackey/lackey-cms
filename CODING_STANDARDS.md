@@ -43,6 +43,6 @@ const
 return Promise
   .all(collection
     .map(a => a + 1))
-  .then((c => doSomething(c));
+  .then(c => doSomething(c));
 
 ```
