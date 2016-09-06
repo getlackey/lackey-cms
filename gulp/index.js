@@ -63,6 +63,7 @@ module.exports = (gulp, projectDIR) => {
             lackeyDIR + '/modules/*/shared/**/*',
             projectDIR + '/modules/*/client/**/*',
             projectDIR + '/modules/*/shared/**/*',
+            projectDIR + '/**/*.yml',
             projectDIR + '/node_modules'
         ], [
             'lackey.resources'

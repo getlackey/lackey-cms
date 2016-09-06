@@ -8,13 +8,13 @@ init:
 routes:
     /cms/analytics:
         get:
-            controller: cms/analytics/dashboard#index
+            controller: cms/analytics/server/controllers/dashboard#index
             ACLHelper: admin
             # ACL - for future
 
     /cms/analytics/:metricIndex:
         get:
-            controller: cms/analytics/dashboard#table
+            controller: cms/analytics/server/controllers/dashboard#table
             inject:
                 - cms/core/server/models/analytics
             ACLHelper: admin

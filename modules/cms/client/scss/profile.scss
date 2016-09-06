@@ -1,0 +1,27 @@
+[data-lky-component="profile"] {
+    max-width: 900px;
+    margin: auto;
+    >form {
+        > label {
+            display: block;
+            > input,
+            > textarea,
+            > select,
+            > ul {
+                display: block;
+            }
+        }
+    }
+    input, textarea, select {
+        width :100%;
+        padding: 10px;
+        font-size: 12px;
+        margin: 10px 5px;
+        border-radius: 3px;
+        border: 1px solid #aaa;
+    }
+    pre > {
+        width: 100%;
+
+    }
+}

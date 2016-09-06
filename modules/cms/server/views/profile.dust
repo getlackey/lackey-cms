@@ -1,0 +1,30 @@
+{>"cms/cms/main"/}
+
+{<body}
+<section data-lky-component="profile">
+    <h2>User profile</h2>
+    <form>
+        <label>
+            Display name
+            <input type="text" value="{data.profile.name}"/>
+        </label>
+        <label>
+            <span>Roles</span>
+            <ul>
+                {#data.roles}
+                    <li>{?label}{label}{:else}{name}{/label}</li>
+                {/data.roles}
+            </ul>
+        </label>
+        <label>
+            <span>Taxonomies</span>
+            <ul>
+                {#data.taxonomies}
+                    <li>{?label}{label}{:else}{name}{/label}</li>
+                {/data.taxonomies}
+            </ul>
+        </label>
+    </form>
+    <pre>{data.profile|js|s}</pre>
+</section>
+{/body}

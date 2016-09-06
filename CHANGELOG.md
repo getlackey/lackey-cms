@@ -2,6 +2,15 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-alpha-1
+
+ **BREAKING CHANGES**
+ * Shorthand controller paths in YAML routes aren't supported anymore.
+ * Falcor support dropped completely
+ * `deleteUser` ACL is replaced by `manageUser`
+ * introduce `template.allowedTaxonomies`
+ * Introduce taxonomyPicker
+
 ## 0.17.4
 
  * Remove ES6 from some clientside scripts
@@ -13,7 +22,6 @@ Going forward we should add hash of issue next to change
 ## 0.17.2
 
  * Fixes to allow youtube thumbnail override
-
 
 ## 0.17.1
 
