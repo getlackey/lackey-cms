@@ -131,10 +131,6 @@ function print(chunk, data, type, editMode, dust, log, config) {
         chunk.write('<iframe type="text/html" src="https://www.youtube.com/embed/' + isYoutube(data.content.source) + '" frameborder="0"></iframe>');
       } else if (isVimeo(data.content.source)) {
         chunk.write('<iframe src="https://player.vimeo.com/video/' + isVimeo(data.content.source) + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
-      } else if (isYoutube(data.content.source)) {
-        chunk.write('<iframe type="text/html" src="https://www.youtube.com/embed/' + isYoutube(data.content.source) + '" frameborder="0"></iframe>');
-      } else if (isVimeo(data.content.source)) {
-        chunk.write('<iframe src="https://player.vimeo.com/video/' + isVimeo(data.content.source) + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
       } else {
         chunk.write('<a target="_blank" href="' + source + '"><img src="img/cms/cms/svg/file.svg"/></a>');
       }
