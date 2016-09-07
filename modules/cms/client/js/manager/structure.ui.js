@@ -383,7 +383,7 @@ class StructureUI extends Emitter {
                     tagsControl = new Autocomplete(tagsNode, lackey.merge(options, {
                         query: (text) => {
                             return api
-                                .read('/cms/taxonomy?restrictive=0&name=' + encodeURI(text + '%'))
+                                .read('/cms/taxonomy?restrictive=0&q=' + encodeURI(text + '%'))
                                 .then((data) => data.data);
                         },
                         value: tags
@@ -391,7 +391,7 @@ class StructureUI extends Emitter {
                     restrictiveControl = new Autocomplete(restrictionNode, lackey.merge(options, {
                         query: (text) => {
                             return api
-                                .read('/cms/taxonomy?restrictive=1&name=' + encodeURI(text + '%'))
+                                .read('/cms/taxonomy?restrictive=1&q=' + encodeURI(text + '%'))
                                 .then((data) => data.data);
                         },
                         value: restrictive
