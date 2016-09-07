@@ -2,9 +2,14 @@
 
 Going forward we should add hash of issue next to change
 
-## 0.17.2
+## 0.17.3
 
  * Fix taxonomy autocomplete to search label instead of name
+
+## 0.17.2
+
+ * Fixes to allow youtube thumbnail override
+
 
 ## 0.17.1
 
