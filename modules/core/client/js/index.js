@@ -1,4 +1,4 @@
-/* jslint node:true, browser:true, esnext:true */
+/* jslint node:true, browser:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -35,17 +35,17 @@ function select(selector, root) {
     if (!selector) return [];
     if (selector.nodeType === 1) return [selector];
     if (Array.isArray(selector)) {
-        let result = [];
-        selector.forEach((singleSelector) => {
+        var result = [];
+        selector.forEach(function (singleSelector) {
             result = result.concat(select(singleSelector, root) || []);
         });
         return result;
     }
     if (selector.match(/^lky:(.+)$/)) {
-        let hookName = selector.split(':').slice(1).join(':');
+        var hookName = selector.split(':').slice(1).join(':');
         return lackey.hooks(hookName, root);
     }
-    let found = (root || document).querySelectorAll(selector);
+    var found = (root || document).querySelectorAll(selector);
     return [].slice.call(found);
 }
 

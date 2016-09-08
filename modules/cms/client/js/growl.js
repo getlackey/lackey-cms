@@ -1,4 +1,4 @@
-/* jslint node:true */
+/* jslint node:true, browser: true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -18,7 +18,7 @@
 
 module.exports = function (config) {
 
-    let text = typeof config === 'string' ? config : config.message,
+    var text = typeof config === 'string' ? config : config.message,
         status = config.status || 'info',
         div = document.createElement('div'),
         h;
@@ -28,15 +28,13 @@ module.exports = function (config) {
     top.document.body.appendChild(div);
     div.style.top = h = (-div.clientHeight) + 'px';
 
-    setTimeout(() => {
+    setTimeout(function () {
         div.style.top = '0px';
-        setTimeout(() => {
+        setTimeout(function () {
             div.style.top = h;
-            setTimeout(() => {
+            setTimeout(function () {
                 top.document.body.removeChild(div);
             }, 500);
         }, 1500);
     }, 0);
-
-
 };
