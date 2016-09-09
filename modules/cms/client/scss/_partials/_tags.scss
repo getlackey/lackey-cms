@@ -1,0 +1,15 @@
+[data-tag] {
+    display: block;
+    background-color: $color-lackey-light-blue;
+    color: white;
+    padding: 10px 15px;
+    margin-bottom: 3px;
+    &[disabled] {
+        background-color: $color-lackey-light-gray;
+        color: #eee;
+    }
+    > a {
+        float: right;
+        cursor: pointer;
+    }
+}

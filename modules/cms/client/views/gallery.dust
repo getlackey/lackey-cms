@@ -1,3 +1,4 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/gallery.ui.js !}
 <aside data-lky-component="settings" data-lky-has-media="false">
     <section data-lky-hook="settings.breadcrumbs">
         <!-- later -->

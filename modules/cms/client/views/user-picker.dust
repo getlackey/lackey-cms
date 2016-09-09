@@ -1,6 +1,6 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/user.picker.js !}
 <aside data-lky-component="settings">
     <section data-lky-hook="settings.breadcrumbs">
-        <!-- later -->
     </section>
     <section data-lky-hook="settings.back"></section>
     <section data-lky-hook="settings.picker">

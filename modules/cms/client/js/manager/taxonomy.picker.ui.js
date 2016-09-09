@@ -21,22 +21,22 @@ const Picker = require('cms/client/js/manager/picker.ui.js');
 /**
  * @class
  */
-class BlockPrickerUI extends Picker {
+class TaxonomyPickerUI extends Picker {
 
     get template() {
 
-        return 'cms/cms/block-picker';
+        return 'cms/cms/taxonomy-picker';
     }
 
     get uri() {
 
-        return '/cms/template?type=block&q=';
+        return '/cms/taxonomy?type=' + this.options.type + '&q=';
     }
 
     selected(hook) {
-
-        this.resolve(hook.getAttribute('data-lky-path'));
+        this.resolve(hook.getAttribute('data-lky-data'));
     }
+
 }
 
-module.exports = BlockPrickerUI;
+module.exports = TaxonomyPickerUI;

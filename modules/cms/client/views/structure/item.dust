@@ -1,3 +1,4 @@
+{! Used by lackey-cms/modules/cms/client/views/structure/sections.dust !}
 <span>{label}</span>
 <div data-lky-block {?locked}data-lky-locked{/locked}>
 

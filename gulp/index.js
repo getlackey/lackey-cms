@@ -213,6 +213,7 @@ module.exports = (gulp, projectDIR) => {
             from + '/modules/*/client/views/**/*.dust',
             from + '/modules/*/shared/views/**/*.dust'
         ])
+            .pipe(plumber())
             .pipe(dust({
                 name: (file) => {
                     let filePath = file.path;

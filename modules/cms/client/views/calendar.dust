@@ -1,3 +1,4 @@
+{! Used by lackey-cms/modules/cms/client/views/datetime-picker.dust !}
 <table data-lky-calendar>
     <thead>
         <tr>

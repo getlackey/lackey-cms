@@ -23,6 +23,7 @@ const emit = require('cms/client/js/emit'),
     DateTimePicker = require('cms/client/js/manager/datetime.picker.ui.js'),
     Gallery = require('cms/client/js/manager/gallery.ui.js'),
     UserPricker = require('cms/client/js/manager/user.picker.ui.js'),
+    TaxonomyPricker = require('cms/client/js/manager/taxonomy.picker.ui.js'),
     lackey = require('core/client/js');
 /**
  * @module lackey-cms/modules/cms/client/manager
@@ -70,21 +71,27 @@ function Stack(repository) {
     }, true);*/
 }
 
-Stack.prototype.inspectStructure = function (structureController) {
+Stack.prototype.inspectStructure = function (structureController, tab) {
+    try {
+        lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
 
-    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
+        let self = this,
+            promise = structureController
+            .buildUI()
+            .then(element => {
+                if (tab) {
+                    element.setAttribute('data-lky-edit', tab);
+                }
+                self.node.appendChild(element);
+                return structureController.fadeIn();
+            });
 
-    let self = this,
-        promise = structureController
-        .buildUI()
-        .then((element) => {
-            self.node.appendChild(element);
-            return structureController.fadeIn();
-        });
+        this._stack.push(structureController);
 
-    this._stack.push(structureController);
-
-    return promise;
+        return promise;
+    } catch (e) {
+        console.log(e);
+    }
 };
 
 Stack.prototype.pickArticle = function (route) {
@@ -136,6 +143,33 @@ Stack.prototype.pickUser = function (id) {
     return userPicker
         .promise
         .then((rt) => {
+            self.pop(true);
+            return rt;
+        });
+};
+
+Stack.prototype.pickTaxonomy = function (type) {
+
+    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
+
+    let self = this,
+        taxonomyPicker = new TaxonomyPricker({
+            type: type,
+            stack: this
+        });
+
+    taxonomyPicker
+        .buildUI()
+        .then((element) => {
+            self.node.appendChild(element);
+            return taxonomyPicker.fadeIn();
+        });
+
+    this._stack.push(taxonomyPicker);
+
+    return taxonomyPicker
+        .promise
+        .then(rt => {
             self.pop(true);
             return rt;
         });
@@ -261,6 +295,7 @@ Stack.prototype.pop = function (clearing) {
 };
 
 Stack.prototype.clear = function () {
+
     let self = this;
 
     return this

@@ -33,7 +33,7 @@ module.exports = SUtils
         SUtils.cmsMod('core').model('flyweight'),
         SUtils.cmsMod('core').model('knex')
     )
-    .then((FlyWeight) => {
+    .then(FlyWeight => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -69,12 +69,17 @@ module.exports = SUtils
                 return this._doc.restrictive;
             }
 
+            get description() {
+                return this._doc.description;
+            }
+
             toJSON() {
                 return {
                     id: this.id,
-                    name: this._doc.name,
-                    label: this._doc.label,
-                    restrictive: this._doc.restrictive
+                    name: this.name,
+                    label: this.label,
+                    restrictive: this.restrictive,
+                    description: this.description
                 };
             }
 

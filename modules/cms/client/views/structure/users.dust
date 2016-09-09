@@ -1,3 +1,4 @@
+{! Used by lackey-cms/modules/cms/client/views/user-picker.dust !}
 {#data}
     <tr>
         <td>
