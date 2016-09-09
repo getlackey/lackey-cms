@@ -8,7 +8,8 @@ Going forward we should add hash of issue next to change
  * Shorthand controller paths in YAML routes aren't supported anymore.
  * Falcor support dropped completely
  * `deleteUser` ACL is replaced by `manageUser`
- * introduce `template.allowedTaxonomies`
+ * introduce `template.allowTaxonomy`
+ * intrudoce `taxonomyType.description`
  * Introduce taxonomyPicker
 
 ## 0.17.4

@@ -2,8 +2,8 @@
             position: absolute;
             top: $header-height;
             left: 0px;
-            transform: translateX(-100%);
-            transition: transform $speed;
+            /*transform: translateX(-100%);
+            transition: transform $speed;*/
             pointer-events: none;
             box-shadow: 3px 23px 23px -2px rgba(0, 0, 0, 0.52);
             > [data-lky-hook="settings.back"] {
@@ -218,6 +218,16 @@
             [data-lky-hook="settings.meta"] {
                 input[type="text"] + [data-lky-btn] {
                     display: block;
+                    cursor: pointer;
+                    width: 100%;
+                    margin-top: 5px;
+                    padding: 3px 10px;
+                }
+            }
+            [data-lky-hook="settings.taxonomy"] {
+                [data-lky-btn] {
+                    display: block;
+                    cursor: pointer;
                     width: 100%;
                     margin-top: 5px;
                     padding: 3px 10px;

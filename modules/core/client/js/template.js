@@ -29,6 +29,7 @@ var
     caseSwitch = require('core/shared/dust/switch'),
     youtube = require('core/shared/dust/youtube'),
     dtf = require('core/shared/dust/dateTimeFormat'),
+    log = require('core/shared/dust/log'),
     DustIntl = require('dust-intl');
 
 //require('dustjs-linkedin/lib/compiler');
@@ -44,6 +45,7 @@ caseSwitch(engine);
 DustIntl.registerWith(engine);
 youtube(engine);
 dtf(engine);
+log(engine);
 
 engine.helpers.same = (chunk, context, bodies, params) => {
     if (params.key == params.val) { //eslint-disable-line eqeqeq

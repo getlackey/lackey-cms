@@ -1,5 +1,5 @@
-/* eslint no-cond-assign:0, no-new:0 */
-/* jslint browser:true, node:true, esnext:true */
+/* jslint node:true, esnext:true */
+/* eslint no-param-reassign:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,27 +16,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const Picker = require('cms/client/js/manager/picker.ui.js');
 
-/**
- * @class
- */
-class BlockPrickerUI extends Picker {
+module.exports = (dust) => {
 
-    get template() {
-
-        return 'cms/cms/block-picker';
-    }
-
-    get uri() {
-
-        return '/cms/template?type=block&q=';
-    }
-
-    selected(hook) {
-
-        this.resolve(hook.getAttribute('data-lky-path'));
-    }
-}
-
-module.exports = BlockPrickerUI;
+    // screw TypeError: Converting circular structure to JSON
+    dust.helpers.log = function (chunk, context, bodies, params) {
+        console.log('DUST LOG', params.key);
+        chunk.end();
+    };
+};

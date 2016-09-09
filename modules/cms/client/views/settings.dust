@@ -1,3 +1,4 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/structure.ui.js !}
 <aside data-lky-component="settings">
     <section data-lky-hook="settings.breadcrumbs">
         <!-- later -->
@@ -33,14 +34,7 @@
         </div>
     </section>
     <section data-lky-hook="settings.taxonomy">
-        <div>
-            <label>Tags</label>
-            <div data-lky-hook="tags"></div>
-            <small>Tags group things together so users can discover them e.g. you can add the Tag "Partner News" to a News article to have it listed on the /partner-news page.</small>
-            <label>Privacy</label>
-            <div data-lky-hook="restricitons"></div>
-            <small>Privacy tags allow you to restrict access to pages &amp; assets. No tags means public. If multiple tags are added, 'Tag A' OR 'Tag B' OR 'Tag X' will be restricted.
-            </small>
+        <div data-lky-hook="taxonomy" data-lky-template="cms/cms/structure/taxonomies">
         </div>
     </section>
     <section data-lky-hook="settings.blocks">

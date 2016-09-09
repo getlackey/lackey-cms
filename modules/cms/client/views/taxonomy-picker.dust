@@ -1,11 +1,11 @@
-{! Used by lackey-cms/modules/cms/client/js/manager/block.picker.js !}
+{! Used by lackey-cms/modules/cms/client/js/manager/article.picker.js !}
 <aside data-lky-component="settings">
     <section data-lky-hook="settings.breadcrumbs">
         <!-- later -->
     </section>
     <section data-lky-hook="settings.back"></section>
     <section data-lky-hook="settings.picker">
-        <input type="search" data-lky-hook="filter" placeholder="Type name or path"/>
-        <ul data-lky-template="cms/cms/structure/blocks"></ul>
+        <input type="search" data-lky-hook="filter" placeholder="Type title or route"/>
+        <ul data-lky-template="cms/cms/structure/taxonomy"></ul>
     </section>
 </aside>

@@ -4,7 +4,7 @@
         {! to migrate elseewhre !}
         <meta http-equiv="content-language" content="{locale}">
         <link rel="stylesheet" href="{@base}css/cms/core/base.css{/base}"/>
-        <link rel="stylesheet" href="{@base}css/cms/cms/base.css"{/base}"/>
+        <link rel="stylesheet" href="{@base}css/cms/cms/base.css{/base}"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
         {#stylesheets}
             <link rel="stylesheet" href="{.|base}"/>
@@ -89,12 +89,14 @@
                     {@acl perm="adminMenu" method="blocks"}{:else}blocks,{/acl}
                     {@acl perm="adminMenu" method="diff"}{:else}diff,{/acl}
                 ">Settings</button>
+
                 <button data-lky-hook="header.publish">
                     <label data-lky-switch>
                         <input type="checkbox" name="published"/>
                         <span></span>
                     </label>
                 </button>
+                <button data-lky-hook="header.taxonomy"><img src="{@base}img/cms/cms/svg/tags.svg{/base}" data-lky-tab="taxonomy"/></button>
                 <div data-lky-hook="header.user">
                     <img src="{admin.image.source|base}"/>
                     <span data-lky-hook="header.user.name">{admin.name}</span>

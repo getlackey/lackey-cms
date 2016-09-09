@@ -1,3 +1,4 @@
+{! Used by lackey-cms/modules/cms/client/views/article-picker.dust !}
 {#data}
     <li>
         <div>

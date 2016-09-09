@@ -259,6 +259,11 @@ module.exports = Schema
                     table.json('require');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'template', 'allowTaxonomies', (table) => {
+                    table.json('allowTaxonomies');
+                });
+            })
             //
             // TABLE content
             // .userId -> users.id
@@ -365,6 +370,11 @@ module.exports = Schema
             .then(() => {
                 return Schema.addColumn(knex, 'taxonomyType', 'restrictive', (table) => {
                     table.boolean('restrictive');
+                });
+            })
+            .then(() => {
+                return Schema.addColumn(knex, 'taxonomyType', 'description', (table) => {
+                    table.string('description');
                 });
             })
             //
