@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.17.5
+
+ * Babelify
+
 ## 0.17.4
 
  * Remove ES6 from some clientside scripts

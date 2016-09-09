@@ -22,6 +22,7 @@ const sass = require('gulp-sass'),
     del = require('del'),
     browserify = require('gulp-browserify'),
     nodemon = require('gulp-nodemon'),
+    babelify = require('babelify'),
     autoprefixer = require('gulp-autoprefixer'),
     dust = require('gulp-dust-2.7'),
     plumber = require('gulp-plumber');
@@ -167,14 +168,18 @@ module.exports = (gulp, projectDIR) => {
             .src(from + '/modules/*/client/js/**/*.js')
             .pipe(plumber())
             .pipe(browserify({
-                paths: [
+                    paths: [
                     from + '/modules/',
                     'node_modules/',
                     'node_modules/lackey-cms/modules',
                     'node_modules/lackey-cms/node_modules'
                 ],
-                debug: true
-            }))
+                    debug: true
+                })
+                .transform(babelify, {
+                    global: true,
+                    'presets': ['es2015']
+                }))
             .pipe(rename((path) => {
                 path.dirname = path.dirname.replace(/^([^\/]+)\/client\/js/, '$1/');
             }))
