@@ -2,9 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
-## 0.17.5
+## 0.17.5 - 0.17.7
 
  * Babelify
+ * NewRelic
 
 ## 0.17.4
 

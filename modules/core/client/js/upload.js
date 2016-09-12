@@ -21,8 +21,8 @@ const
     socket = require('core/client/js/socket');
 
 if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-    console.error('Upload not supported');
-    return;
+    throw new Error('Upload not supported');
+
 }
 
 function Upload(HTMLElement, onClick, justUpload) {
