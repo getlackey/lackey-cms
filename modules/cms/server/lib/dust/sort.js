@@ -25,8 +25,9 @@ module.exports = (dust) => {
                 return ((a < b) ? -1 : ((a > b) ? 1 : 0));
             }
         });
-        return chunk.render(bodies.block, context.push({
-            items: params.items
-        }));
+        params.items.forEach(function (item) {
+            chunk.render(bodies.block, context.push(item));
+        });
+        return chunk;
     };
 };
