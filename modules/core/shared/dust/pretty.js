@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* eslint no-param-reassign:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,4 +17,13 @@
     limitations under the License.
 */
 
-module.exports = require('core/client/js/es5/api');
+module.exports = (dust) => {
+
+    dust.filters.pretty = function (value) {
+        try {
+            return JSON.stringify(value, null, 4);
+        } catch (e) {
+            return e.toString();
+        }
+    };
+};

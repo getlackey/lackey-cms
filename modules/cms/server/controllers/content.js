@@ -181,49 +181,19 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     }, req.error);
             }
 
-            static taxonomyFromQuery(body) {
-                let promise = null;
-                if (!body.type) {
-                    throw new Error('Type required');
-                }
-                if (body.name) {
-                    promise = Taxonomy.byTypeAndName(body.type, body.name);
-                } else if (body.label) {
-                    promise = Taxonomy.byTypeAndLabel(body.type, body.label);
-                }
-
-                if (!promise) {
-                    return Promise.reject(new Error('Wrong params'));
-                }
-                return promise;
-            }
-
-            static addTaxonomy(req, res) {
-                this
-                    .taxonomyFromQuery(req.body).then((taxonomy) => {
-                        return req.content.addTaxonomy(taxonomy);
-                    })
-                    .then(() => {
-                        return res.api(req.content);
-                    }, (error) => {
-                        console.error(error.message);
-                        console.error(error.stack);
-                        return res.error(error);
-                    });
-            }
-
             static removeTaxonomy(req, res) {
+                let self = this;
                 this
-                    .taxonomyFromQuery({
+                    .taxonomyFromQuery(Taxonomy, {
                         type: req.taxonomyTypeName,
                         name: req.taxonomyName
                     })
-                    .then((taxonomy) => {
-                        return req.content.removeTaxonomy(taxonomy);
+                    .then(taxonomy => {
+                        return req[self.field].removeTaxonomy(taxonomy);
                     })
                     .then(() => {
-                        return res.api(req.content);
-                    }, (error) => {
+                        return res.api(req[self.field]);
+                    }, error => {
                         console.error(error);
                         return res.error(error);
                     });

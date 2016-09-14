@@ -38,6 +38,7 @@ module.exports = (data) => {
 
             function next() {
                 SCli.debug('lackey/modules/cms/server/models/taxonomy/generator', 'Ensure that taxonomy  ' + data.name + ' exists');
+                data.name = data.name.toLowerCase();
                 return Taxonomy
                     .byTypeAndName(data.type, data.name)
                     .then((tax) => {

@@ -584,6 +584,9 @@ module.exports = Schema
                 });
             })
             .then(() => {
+                return knex.schema.raw('UPDATE taxonomy SET name = lower(name)');
+            })
+            .then(() => {
                 SCli.debug(__MODULE_NAME, 'Schema applied');
             });
     });

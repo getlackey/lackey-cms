@@ -184,7 +184,7 @@ module.exports = SUtils
 
                             return TaxonomyType
                                 .query({
-                                    name: query2.type
+                                    name: typeof query2.type === 'string' ? query2.type : query2.type.name
                                 })
                                 .then((types) => {
                                     if (types && types.length) {

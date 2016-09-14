@@ -21,9 +21,7 @@ const sass = require('gulp-sass'),
     rename = require('gulp-rename'),
     del = require('del'),
     browserify = require('gulp-browserify'),
-    babel = require('gulp-babel'),
     nodemon = require('gulp-nodemon'),
-    babelify = require('babelify'),
     autoprefixer = require('gulp-autoprefixer'),
     dust = require('gulp-dust-2.7'),
     plumber = require('gulp-plumber');
@@ -177,9 +175,6 @@ module.exports = (gulp, projectDIR) => {
                     'node_modules/lackey-cms/node_modules'
                 ],
                 debug: true
-            }))
-            .pipe(babel({
-                presets: ['es2015']
             }))
             .pipe(rename((path) => {
                 path.dirname = path.dirname.replace(/^([^\/]+)\/client\/js/, '$1/');

@@ -53,6 +53,57 @@ class CRUDInjectionController {
         return this._overriden('exportConfig', null);
     }
 
+    static taxonomyFromQuery(Taxonomy, body) {
+        let promise = null;
+        if (!body.type) {
+            throw new Error('Type required');
+        }
+        if (body.name) {
+            promise = Taxonomy.byTypeAndName(body.type, body.name);
+        } else if (body.label) {
+            promise = Taxonomy.byTypeAndLabel(body.type, body.label);
+        }
+
+        if (!promise) {
+            return Promise.reject(new Error('Wrong params'));
+        }
+        return promise;
+    }
+
+    static addTaxonomy(Taxonomy, req, res) {
+        let self = this;
+        this
+            .taxonomyFromQuery(Taxonomy, req.body)
+            .then(taxonomy => {
+                return req[self.field].addTaxonomy(taxonomy);
+            })
+            .then(() => {
+                return res.api(req[self.field]);
+            }, error => {
+                console.error(error.message);
+                console.error(error.stack);
+                return res.error(error);
+            });
+    }
+
+    static removeTaxonomy(Taxonomy, req, res) {
+        let self = this;
+        this
+            .taxonomyFromQuery(Taxonomy, {
+                type: req.taxonomyTypeName,
+                name: req.taxonomyName
+            })
+            .then(taxonomy => {
+                return req[self.field].removeTaxonomy(taxonomy);
+            })
+            .then(() => {
+                return res.api(req[self.field]);
+            }, error => {
+                console.error(error);
+                return res.error(error);
+            });
+    }
+
     static overrideGetter(field, handler) {
         this.__overrides = this.__overrides || {};
         this.__overrides[field] = this.__overrides[field] || [];

@@ -32,8 +32,12 @@ var lackey,
  * @returns {Array}    of HTMLNodes
  */
 function select(selector, root) {
-    if (!selector) return [];
-    if (selector.nodeType === 1) return [selector];
+    if (!selector) {
+        return [];
+    }
+    if (selector.nodeType === 1) {
+        return [selector];
+    }
     if (Array.isArray(selector)) {
         var result = [];
         selector.forEach(function (singleSelector) {
@@ -87,7 +91,9 @@ function hasClass(ele, cls) {
 }
 
 function addClass(ele, cls) {
-    if (!hasClass(ele, cls)) ele.className += ' ' + cls;
+    if (!hasClass(ele, cls)) {
+        ele.className += ' ' + cls;
+    }
 }
 
 function removeClass(ele, cls) {
@@ -147,7 +153,7 @@ lackey = {
 
         return function () {
             var args2 = Array.prototype.slice.apply(arguments);
-            if(args) {
+            if (args) {
                 args2 = args.concat(args2);
             }
             return fcn.apply(ctx, args2);

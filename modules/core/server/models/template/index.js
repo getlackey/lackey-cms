@@ -359,6 +359,8 @@ module.exports = SUtils
 
                         if (typeof self._doc.allowTaxonomies === 'string') {
                             self._doc.allowTaxonomies = JSON.parse(self._doc.allowTaxonomies);
+                        } else if(!Array.isArray(self._doc.allowTaxonomies)) {
+                            self._doc.allowTaxonomies = [];
                         }
                         return Promise
                             .all((self._doc.allowTaxonomies || [])

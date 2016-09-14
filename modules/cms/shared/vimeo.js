@@ -1,9 +1,9 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true */
 'use strict';
 
-const regex = /^https:\/\/(player\.|)vimeo\.com(\/video|)\/(\d+)/;
+var regex = /^https:\/\/(player\.|)vimeo\.com(\/video|)\/(\d+)/;
 
-module.exports = (url) => {
+module.exports = function (url) {
     if (!url) {
         return null;
     }

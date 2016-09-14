@@ -59,6 +59,22 @@ routes:
         get:
             controller: cms/cms/server/controllers/user#details
             ACLHelper: admin
+            inject:
+                    - cms/core/server/models/taxonomy-type
+
+    /api/cms/user/:profileId/taxonomy:
+        post:
+            controller: cms/cms/server/controllers/user#addTaxonomy
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/taxonomy
+
+    /api/cms/user/:profileId/taxonomy/:taxonomyTypeName/:taxonomyName:
+        delete:
+            controller: cms/cms/server/controllers/user#removeTaxonomy
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/taxonomy
 
     /api/cms/user:
         crud:
@@ -72,4 +88,5 @@ routes:
 routeParams:
     downloadToken:
         field: downloadToken
+
 

@@ -136,11 +136,17 @@ class UserController extends CRUD {
         return this._overriden('tableActions', undefined);
     }
 
-    static details(req, res) {
-        res.css('css/cms/cms/profile.css');
-        res.print('cms/cms/profile', {
-            profile: req.profile.toJSON(false)
-        });
+    static details(TaxonomyType, req, res) {
+        TaxonomyType
+            .findBy('restrictive', true)
+            .then(restrictive => {
+                res.css('css/cms/cms/profile.css');
+                res.js('js/cms/cms/profile.js');
+                res.print('cms/cms/profile', {
+                    profile: req.profile.toJSON(false),
+                    restrictive: restrictive
+                });
+            });
     }
 
 }

@@ -22,5 +22,6 @@ module.exports = (instance) => {
             instance.addDustHelper(require('./shared/dust/switch'));
             instance.addDustHelper(require('./shared/dust/youtube'));
             instance.addDustHelper(require('./shared/dust/try'));
+            instance.addDustHelper(require('./shared/dust/pretty'));
         });
 };

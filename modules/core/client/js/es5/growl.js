@@ -16,4 +16,25 @@
     limitations under the License.
 */
 
-module.exports = require('core/client/js/es5/growl');
+module.exports = function (config) {
+
+    var text = typeof config === 'string' ? config : config.message,
+        status = config.status || 'info',
+        div = document.createElement('div'),
+        h;
+
+    div.setAttribute('data-lky-growl', status);
+    div.innerText = text;
+    top.document.body.appendChild(div);
+    div.style.top = h = (-div.clientHeight) + 'px';
+
+    setTimeout(function () {
+        div.style.top = '0px';
+        setTimeout(function () {
+            div.style.top = h;
+            setTimeout(function () {
+                top.document.body.removeChild(div);
+            }, 500);
+        }, 1500);
+    }, 0);
+};

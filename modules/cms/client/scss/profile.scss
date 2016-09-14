@@ -1,5 +1,9 @@
+@import "_vars";
+
 [data-lky-component="profile"] {
     max-width: 900px;
+    overflow-y: auto;
+    height: 100%;
     margin: auto;
     >form {
         > label {
@@ -23,5 +27,33 @@
     pre > {
         width: 100%;
 
+    }
+
+    .badges {
+        list-style: none;
+        padding: 0px;
+
+        > li {
+            display: inline-block;
+            border: 1px solid $color-lackey-light-blue;
+            background-color: $color-lackey-light-blue;
+            color: white;
+            padding: 5px 10px;
+            margin-right: 5px;
+            &.disabled {
+                background-color: $color-washed;
+                border-color: $color-washed;
+            }
+            &.action {
+                background-color: white;
+                border: 1px solid $color-lackey-light-blue;
+                color: $color-lackey-light-blue;
+                cursor: pointer;
+            }
+            > a {
+                margin-left: 5px;
+                cursor: pointer;
+            }
+        }
     }
 }

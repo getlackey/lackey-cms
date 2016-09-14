@@ -1,4 +1,5 @@
-/* jslint node:true, esnext:true */
+/* eslint no-cond-assign:0, no-new:0 */
+/* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,5 +16,27 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+const Picker = require('cms/client/js/manager/picker.ui.js');
 
-module.exports = require('core/client/js/es5/api');
+/**
+ * @class
+ */
+class RolePickerUI extends Picker {
+
+    get template() {
+
+        return 'cms/cms/role-picker';
+    }
+
+    get uri() {
+
+        return '/cms/role?type=' + this.options.type + '&q=';
+    }
+
+    selected(hook) {
+        this.resolve(hook.getAttribute('data-lky-data'));
+    }
+
+}
+
+module.exports = RolePickerUI;
