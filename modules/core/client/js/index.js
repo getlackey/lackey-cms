@@ -290,7 +290,11 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 } else {
     /* istanbul ignore next : atomus don't support before load */
     window.addEventListener('load', lackey.init);
+    window.Lackey = lackey;
+    top.Lackey = lackey;
+
 }
-window.Lackey = lackey;
 /** Lackey */
 module.exports = lackey;
+
+
