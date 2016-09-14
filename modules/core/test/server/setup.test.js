@@ -46,7 +46,7 @@ describe('modules/core/server/setup', () => {
             .then(() => {
                 middlewares.should.be.eql(1, 'middleware');
                 postware.should.be.eql(1, 'postware');
-                dust.should.be.eql(7, 'dust');
+                dust.should.be.eql(8, 'dust');
                 server.instance = null;
                 return true;
             }).should.finally.be.eql(true);
