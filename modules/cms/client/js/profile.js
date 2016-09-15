@@ -32,10 +32,9 @@ lackey.bind('[data-lky-hook="action:pick-role"]', 'click', (event, hook) => {
         .pickRole()
         .then(response => {
             if (response) {
-                console.log(response);
-                /*return api
-                    .create('/cms/user/' + userId + '/taxonomy', JSON.parse(response))
-                    .then(() => document.location.reload(true));*/
+                return api
+                    .create('/cms/user/' + userId + '/role/' + JSON.parse(response).name, {})
+                    .then(() => document.location.reload(true));
             }
             return null;
         });
@@ -49,5 +48,28 @@ lackey.bind('[data-lky-hook="action:remove-taxonomy"]', 'click', (event, hook) =
 
     return api
         .delete('/cms/user/' + userId + '/taxonomy/' + type + '/' + name)
+        .then(() => document.location.reload(true));
+});
+
+lackey.bind('[data-lky-hook="action:remove-role"]', 'click', (event, hook) => {
+    let
+        name = hook.getAttribute('data-role'),
+        userId = hook.getAttribute('data-profile');
+
+    return api
+        .delete('/cms/user/' + userId + '/role/' + name)
+        .then(() => document.location.reload(true));
+});
+
+lackey.bind('#username', 'submit', (event, hook) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    let data = lackey.form(hook);
+
+    return api
+        .update('/cms/user/' + data.id + '/name', {
+            name: data.name
+        })
         .then(() => document.location.reload(true));
 });

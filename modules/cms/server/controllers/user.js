@@ -149,6 +149,50 @@ class UserController extends CRUD {
             });
     }
 
+    static addRole(Role, req, res) {
+        Role
+            .findOneBy('name', req.roleName)
+            .then(role => {
+                req.profile.addRole(role);
+                return req.profile.save();
+            })
+            .then(() => {
+                return res.api(req.profile);
+            }, error => {
+                console.error(error.message);
+                console.error(error.stack);
+                return res.error(error);
+            });
+    }
+
+    static updateName(req, res) {
+        req.profile.name = req.body.name;
+        req.profile
+            .save()
+            .then(() => {
+                return res.api(req.profile);
+            }, error => {
+                console.error(error.message);
+                console.error(error.stack);
+                return res.error(error);
+            });
+    }
+
+    static removeRole(Role, req, res) {
+        Role
+            .findOneBy('name', req.roleName)
+            .then(role => {
+                req.profile.removeRole(role);
+                return req.profile.save();
+            })
+            .then(() => {
+                return res.api(req.profile);
+            }, error => {
+                console.error(error);
+                return res.error(error);
+            });
+    }
+
 }
 
 module.exports = UserController;

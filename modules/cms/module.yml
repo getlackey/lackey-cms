@@ -76,6 +76,8 @@ routes:
             inject:
                 - cms/core/server/models/taxonomy
 
+
+
     /api/cms/user:
         crud:
             controller: cms/cms/server/controllers/user
@@ -85,8 +87,26 @@ routes:
                     - cms/core/server/models/user
                 ACLHelper: admin
 
+    /api/cms/user/:profileId/name:
+        put:
+            controller: cms/cms/server/controllers/user#updateName
+            ACLHelper: admin
+
+    /api/cms/user/:profileId/role/:roleName:
+        post:
+            controller: cms/cms/server/controllers/user#addRole
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/role
+        delete:
+            controller: cms/cms/server/controllers/user#removeRole
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/role
+
 routeParams:
     downloadToken:
         field: downloadToken
-
+    roleName:
+        field: roleName
 

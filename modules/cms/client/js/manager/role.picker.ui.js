@@ -30,7 +30,7 @@ class RolePickerUI extends Picker {
 
     get uri() {
 
-        return '/cms/role?type=' + this.options.type + '&q=';
+        return '/cms/role?q=';
     }
 
     selected(hook) {

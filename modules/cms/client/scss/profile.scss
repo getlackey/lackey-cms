@@ -1,5 +1,4 @@
 @import "_vars";
-
 [data-lky-component="profile"] {
     max-width: 900px;
     overflow-y: auto;
@@ -16,8 +15,10 @@
             }
         }
     }
-    input, textarea, select {
-        width :100%;
+    input,
+    textarea,
+    select {
+        width: 100%;
         padding: 10px;
         font-size: 12px;
         margin: 10px 5px;
@@ -26,13 +27,35 @@
     }
     pre > {
         width: 100%;
-
     }
-
+    label {
+        > div {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-content: stretch;
+            align-items: stretch;
+            > input {
+                order: 0;
+                flex: 1 1 auto;
+                align-self: auto;
+            }
+            > button {
+                order: 0;
+                flex: 0 1 auto;
+                align-self: auto;
+                border: 1px solid $color-lackey-light-blue;
+                background-color: $color-lackey-light-blue;
+                color: white;
+                padding: 5px 10px;
+                margin-right: 5px;
+            }
+        }
+    }
     .badges {
         list-style: none;
         padding: 0px;
-
         > li {
             display: inline-block;
             border: 1px solid $color-lackey-light-blue;
@@ -53,6 +76,58 @@
             > a {
                 margin-left: 5px;
                 cursor: pointer;
+            }
+        }
+    }
+    table {
+        border-spacing: 0px;
+        border-collapse: collapse;
+        width: 100%;
+        font-size: $table-font-size;
+        > thead {
+            background-color: $color-background-highlight;
+            color: white;
+        }
+        td,
+        th {
+            border: none;
+            text-align: left;
+            a,
+            button {
+                display: inline-block;
+                background: transparent;
+                margin-left: 5px;
+            }
+        }
+        td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            button {
+                border: none;
+            }
+            &:nth-child(odd) {
+                background-color: lighten($color-background-highlight, 45%);
+            }
+        }
+        th {
+            padding: 25px 8px 20px;
+            font-weight: normal;
+            text-transform: capitalize;
+        }
+        td {
+            padding: 10px 8px 8px;
+            color: $color-washed;
+        }
+        > tbody {
+            > tr:nth-child(even) {
+                background-color: $color-lightest-gray;
+                td,
+                th {
+                    &:nth-child(odd) {
+                        background-color: lighten($color-lightest-gray, 30%);
+                    }
+                }
             }
         }
     }

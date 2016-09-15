@@ -3,7 +3,8 @@
     <table class="table" data-lky-table="{table.paging.api}" data-lky-paging="{table.paging|js}" data-lky-columns="{table.columns|js}">
         <thead>
             <tr>
-                <th></th>
+                <th>Actions</th>
+
                     {#table.columns}
                         <th>{label}
                             {?help}
@@ -13,8 +14,6 @@
                             {/help}
                         </th>
                     {/table.columns}
-                <th>Action</th>
-                <th></th>
             </tr>
         </thead>
         <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
