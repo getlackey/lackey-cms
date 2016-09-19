@@ -12,7 +12,7 @@
   <label>
     <span>Publish Date</span>
         <input type="text" class="form-control" readonly value="{publishAt|dateTimeFormat}" name="publishAt"/>
-        <button name="publishAt" data-lky-btn data-name="publishAt" data-lky-hook="action:pick-created-at" data-value="{createdAt}" >Pick date</button>
+        <button name="publishAt" data-lky-btn data-name="publishAt" data-lky-hook="action:pick-created-at" data-value="{publishAt}" >Pick date</button>
   </label>
 </li>
 {/publishAt}

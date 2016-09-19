@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.17.11
+
+ * Fix issue with publishAt where date was showing wrong on UI after saving.
+
 ## 0.17.10
 
  * Changes to content page in CMS
