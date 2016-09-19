@@ -55,7 +55,7 @@
                         </li>
                     {/eq}
                 {/data.profile.taxonomies}
-                <li class="action" data-lky-hook="action:pick-taxonomy" data-profile="{data.profile.id}" data-type="{name}">Add</li>
+                <li class="action" data-lky-hook="action:pick-taxonomy" data-profile="{data.profile.id}" data-type="{name}" data-addable="{type.allowCreation}">Add</li>
             </ul>
         </label>
     {/data.restrictive}

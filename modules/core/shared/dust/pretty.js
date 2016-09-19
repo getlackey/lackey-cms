@@ -1,5 +1,5 @@
-/* jslint node:true, esnext:true */
-/* eslint no-param-reassign:0 */
+/* jslint node:true, esnext:true  */
+/* eslint no-param-reassign:0, curly:0, eqeqeq:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -17,12 +17,29 @@
     limitations under the License.
 */
 
+function censor(censorObj) {
+    var i = 0;
+
+    return function (key, value) {
+        if (i !== 0 && typeof (censorObj) === 'object' && typeof (value) == 'object' && censorObj == value)
+            return '[Circular]';
+
+        if (i >= 29) // seems to be a harded maximum of 30 serialized objects?
+            return '[Unknown]';
+
+        ++i; // so we know we aren't using the original object anymore
+
+        return value;
+    };
+}
+
 module.exports = (dust) => {
 
     dust.filters.pretty = function (value) {
         try {
-            return JSON.stringify(value, null, 4);
+            return JSON.stringify(value, censor(value), 4);
         } catch (e) {
+            console.log(value);
             return e.toString();
         }
     };

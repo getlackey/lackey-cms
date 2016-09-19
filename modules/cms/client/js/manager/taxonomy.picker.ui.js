@@ -16,7 +16,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const Picker = require('cms/client/js/manager/picker.ui.js');
+const
+    Picker = require('cms/client/js/manager/picker.ui.js'),
+    lackey = require('core/client/js'),
+    api = require('core/client/js/api');
 
 /**
  * @class
@@ -35,6 +38,48 @@ class TaxonomyPickerUI extends Picker {
 
     selected(hook) {
         this.resolve(hook.getAttribute('data-lky-data'));
+    }
+
+    buildUI() {
+        let self = this;
+        return super
+            .buildUI()
+            .then(response => {
+                self.addButton = lackey.select('[data-lky-hook="create-taxonomy"]', self.node)[0];
+                self.addButton.addEventListener('click', self.addTaxonomy.bind(self), true);
+                return response;
+            });
+    }
+
+    addTaxonomy() {
+        let
+            self = this,
+            input = lackey.select('input[type="search"]', this.node)[0],
+            value = input.value.replace(/^\s+|\s+$/g);
+        if (value.length >= 3) {
+            api
+                .create('/cms/taxonomy', {
+                    type: this.options.type,
+                    name: value,
+                    label: value
+                })
+                .then(val => self.resolve(JSON.stringify(val)));
+        }
+    }
+
+    query() {
+        super.query();
+        if (!this.addButton) {
+            return;
+        }
+        let
+            input = lackey.select('input[type="search"]', this.node)[0],
+            value = input.value.replace(/^\s+|\s+$/g);
+        if (value.length >= 3) {
+            this.addButton.removeAttribute('disabled');
+        } else {
+            this.addButton.setAttribute('disabled', '');
+        }
     }
 
 }

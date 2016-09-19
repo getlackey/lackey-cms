@@ -76,7 +76,7 @@ module.exports = SUtils
                 }
                 return TaxonomyType
                     .findById(this._doc.taxonomyTypeId)
-                    .then((type) => {
+                    .then(type => {
                         self._type = type;
                         return self;
                     });
@@ -84,8 +84,19 @@ module.exports = SUtils
             }
 
             _preSave() {
+                let self = this;
+                this._doc.name = this._doc.name.toLowerCase();
                 if (this._doc) {
                     if (this._doc.type) {
+                        if (isNaN(this._doc.type)) {
+                            return TaxonomyType
+                                .findOneBy('name', this._doc.type)
+                                .then(type => {
+                                    self._doc.taxonomyTypeId = type.id;
+                                    delete self._doc.type;
+                                    return self;
+                                });
+                        }
                         this._doc.taxonomyTypeId = this._doc.type;
                         delete this._doc.type;
                     }

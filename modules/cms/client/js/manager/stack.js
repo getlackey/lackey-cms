@@ -139,10 +139,11 @@ Stack.prototype.pickUser = function (userId) {
         }), true);
 };
 
-Stack.prototype.pickTaxonomy = function (taxonmyType) {
+Stack.prototype.pickTaxonomy = function (taxonmyType, addable) {
     return this
         .pick(new TaxonomyPricker({
             type: taxonmyType,
+            addable: !!addable,
             stack: this
         }), true);
 };

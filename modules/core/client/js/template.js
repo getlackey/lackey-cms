@@ -30,7 +30,8 @@ var
     youtube = require('core/shared/dust/youtube'),
     dtf = require('core/shared/dust/dateTimeFormat'),
     log = require('core/shared/dust/log'),
-    DustIntl = require('dust-intl');
+    DustIntl = require('dust-intl'),
+    pretty = require('core/shared/dust/pretty');
 
 //require('dustjs-linkedin/lib/compiler');
 
@@ -46,6 +47,7 @@ DustIntl.registerWith(engine);
 youtube(engine);
 dtf(engine);
 log(engine);
+pretty(engine);
 
 engine.helpers.same = (chunk, context, bodies, params) => {
     if (params.key == params.val) { //eslint-disable-line eqeqeq

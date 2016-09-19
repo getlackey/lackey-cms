@@ -539,10 +539,11 @@ class StructureUI extends Emitter {
 
         this.collapse();
         let self = this,
-            type = hook.getAttribute('data-type');
+            type = hook.getAttribute('data-type'),
+            addable = hook.getAttribute('data-addable');
 
         return this.options.stack
-            .pickTaxonomy(type)
+            .pickTaxonomy(type, addable)
             .then(rt => {
                 if (rt !== null) {
                     self.options

@@ -407,7 +407,7 @@ module.exports = SUtils
                 }
 
                 if (options.textSearch && options.textSearch.length > 3) {
-                    builder.withTextSearch(options.textSearch);
+                    builder.withTextSearch(options.textSearch, options.freeTextTaxonomies || []);
                 }
 
                 return builder

@@ -235,7 +235,7 @@ module.exports = SUtils
             }
 
             static _mapTaxonomyList(list, req, page) {
-                return Promise.all(list.map((taxonomy) => {
+                return Promise.all(list.map(taxonomy => {
                         if (taxonomy.ifNot) {
                             if (PageController.parse(taxonomy.ifNot, req, page)) {
                                 return null;
@@ -248,26 +248,29 @@ module.exports = SUtils
                         }
 
                         let queryValue = PageController.parse(taxonomy, req, page);
+
                         if (typeof queryValue === 'string') {
                             queryValue = queryValue.split(',');
                         }
-                        if (!queryValue || !queryValue.length) return Promise.resolve(null);
+                        if (!queryValue || !queryValue.length) {
+                            return Promise.resolve(null);
+                        }
                         return PageController
                             .taxonomyType(taxonomy.type)
-                            .then((taxonomyTypeId) => {
+                            .then(taxonomyTypeId => {
+
                                 return SCli
                                     .sql(Taxonomy.model.query()
                                         .where('taxonomyTypeId', taxonomyTypeId)
-                                        .whereIn('name', queryValue))
-                                    .then((tax) => {
-                                        return tax || [];
-                                    });
-                            });
+                                        .whereIn('name', queryValue));
+                            })
+                            .then(tax => tax || []);
+
                     }))
-                    .then((l) => l.filter((t) => !!t && t.length))
-                    .then((l) => {
+                    .then(l => l.filter(t => !!t && t.length))
+                    .then(l => {
                         let sum = [];
-                        l.forEach((t) => {
+                        l.forEach(t => {
                             sum = sum.concat(t);
                         });
                         return sum;
@@ -297,6 +300,7 @@ module.exports = SUtils
                         return ContentModel
                             .complexQuery({
                                 includeTaxonomies: taxes,
+                                freeTextTaxonomies: item.freeTextTaxonomies ? item.freeTextTaxonomies : [],
                                 excludeTaxonomies: exTaxes,
                                 requireAuthor: author,
                                 limit: item.limit || 10,

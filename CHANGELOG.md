@@ -2,6 +2,15 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-alpha-3
+
+ * Search by taxonomy
+ * Add taxonomy
+
+## 1.0.0-alpha-2
+
+ * Fix scope issues
+
 ## 1.0.0-alpha-1
 
  **BREAKING CHANGES**

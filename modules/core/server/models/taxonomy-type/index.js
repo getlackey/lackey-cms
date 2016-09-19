@@ -73,13 +73,18 @@ module.exports = SUtils
                 return this._doc.description;
             }
 
+            get allowCreation() {
+                return this._doc.allowCreation;
+            }
+
             toJSON() {
                 return {
                     id: this.id,
                     name: this.name,
                     label: this.label,
                     restrictive: this.restrictive,
-                    description: this.description
+                    description: this.description,
+                    allowCreation: this.allowCreation
                 };
             }
 

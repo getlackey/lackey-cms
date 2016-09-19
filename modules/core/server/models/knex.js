@@ -377,6 +377,11 @@ module.exports = Schema
                     table.string('description');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'taxonomyType', 'allowCreation', (table) => {
+                    table.boolean('allowCreation');
+                });
+            })
             //
             // TABLE taxonomy
             // userId -> users.id

@@ -10,10 +10,11 @@ const
 lackey.bind('[data-lky-hook="action:pick-taxonomy"]', 'click', (event, hook) => {
     let
         type = hook.getAttribute('data-type'),
+        addable = hook.getAttribute('data-addable'),
         userId = hook.getAttribute('data-profile');
 
     stack
-        .pickTaxonomy(type)
+        .pickTaxonomy(type, addable)
         .then(response => {
             if (response) {
                 return api

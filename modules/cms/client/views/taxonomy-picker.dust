@@ -7,5 +7,7 @@
     <section data-lky-hook="settings.picker">
         <input type="search" data-lky-hook="filter" placeholder="Type title or route"/>
         <ul data-lky-template="cms/cms/structure/taxonomy"></ul>
+        <button data-lky-btn data-lky-hook="create-taxonomy" disabled>Create new {type}</button>
     </section>
+
 </aside>

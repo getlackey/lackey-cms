@@ -27,6 +27,11 @@
     color: white;
 }
 
+[data-lky-btn]:disabled {
+    background: $color-lackey-gray;
+    color: lighten($color-lackey-gray, 50%);
+}
+
 [data-lky-btn-inverted] {
     border: 1px solid $color-background-highlight;
     color: $color-lackey-light-blue;
