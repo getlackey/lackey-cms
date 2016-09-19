@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 0.17.10
+
+ * Changes to content page in CMS
+
 ## 0.17.8 - 0.17.9
 
  * Added dust helper for sorting arrays

@@ -5,7 +5,13 @@
             <tr>
                 <th></th>
                     {#table.columns}
-                        <th>{label}</th>
+                        <th>{label}
+                            {?help}
+                                <div class="help-tip">
+                                    <p>{help}</p>
+                                </div>
+                            {/help}
+                        </th>
                     {/table.columns}
                 <th>Action</th>
                 <th></th>

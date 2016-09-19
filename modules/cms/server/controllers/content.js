@@ -38,7 +38,7 @@ module.exports = SUtils.waitForAs('contentCtrl',
             static get tableConfig() {
                 return this._overriden('tableConfig', {
                     createdAt: {
-                        label: 'Created at',
+                        label: 'Created Date',
                         date: true
                     },
                     author: {
@@ -46,7 +46,7 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         parse: 'return arguments[0] ? arguments[0].name : \'\''
                     },
                     route: {
-                        label: 'Route'
+                        label: 'URL'
                     },
                     template: {
                         name: 'Template',
@@ -56,15 +56,18 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         name: 'Type'
                     },
                     state: {
-                        name: 'Status'
+                        name: 'Status',
+                        label: 'Status'
                     },
                     restrictiveTaxonomies: {
-                        label: 'Restrictive Taxonomies',
-                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive === true;}).map(function(r) { return r.label || r.name;}) : \'\''
+                        label: 'Restrictions',
+                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive === true;}).map(function(r) { return r.label || r.name;}) : \'\'',
+                        help: 'Tags used to restrict user access'
                     },
                     nonRestrictiveTaxonomies: {
-                        label: 'Non-restrictive Taxonomies',
-                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive !== true;}).map(function(r) { return r.label || r.name;}) : \'\''
+                        label: 'Search Tags',
+                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive !== true;}).map(function(r) { return r.label || r.name;}) : \'\'',
+                        help: 'Tags used to assist search results'
                     }
                 });
             }
@@ -73,10 +76,14 @@ module.exports = SUtils.waitForAs('contentCtrl',
                 return this._overriden('tableOptions', {
                     sorts: [{
                         field: 'createdAt',
-                        label: 'Created At'
+                        label: 'Created At',
+                        ascSuffix: 'to Most recently added',
+                        descSuffix: 'to Least recently added'
                     }, {
                         field: 'route',
-                        label: 'Route'
+                        label: 'Route',
+                        ascSuffix: 'to Title - A-Z',
+                        descSuffix: 'to Title - Z-A'
                     }]
                 });
             }
