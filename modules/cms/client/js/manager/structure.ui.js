@@ -290,8 +290,8 @@ class StructureUI extends Emitter {
                 return Template
                     .redraw('dimensions', {
                         context: context,
-                        locale: top.Lackey.manager.locale,
-                        variant: top.Lackey.manager.variant,
+                        locale: self.options.manager.locale,
+                        variant: self.options.manager.variant,
                         locales: locales,
                         viewAs: viewAs
                     }, self.node);
@@ -309,22 +309,22 @@ class StructureUI extends Emitter {
     viewAs(event, hook) {
 
         top.Lackey.setCookie('lky-view-as', hook.value);
-        top.Lackey.manager.preview();
-        top.Lackey.manager.stack.clear();
+        this.options.manager.preview();
+        this.options.manager.stack.clear();
         return;
     }
 
     viewInVariant(event, hook) {
 
-        top.Lackey.manager.preview(hook.value);
-        top.Lackey.manager.stack.clear();
+        this.options.manager.preview(hook.value);
+        this.options.manager.stack.clear();
         return;
     }
 
     viewInLocale(event, hook) {
 
-        top.Lackey.manager.preview(undefined, hook.value);
-        top.Lackey.manager.stack.clear();
+        this.options.manager.preview(undefined, hook.value);
+        this.options.manager.stack.clear();
         return;
     }
 
@@ -545,7 +545,6 @@ class StructureUI extends Emitter {
             .pickTaxonomy(type)
             .then(rt => {
                 if (rt !== null) {
-                    console.log(rt);
                     self.options
                         .context()
                         .then(ctx => {
@@ -623,30 +622,6 @@ class StructureUI extends Emitter {
     fadeIn() {
         this.node.setAttribute('data-lky-open', '');
         return Promise.resolve();
-        /*
-        return new Promise((resolve, reject) => {
-            try {
-                console.log('fi',1);
-                this.node.removeAttribute('data-lky-open');
-                var
-                    self = this,
-                    handler = () => {
-                        console.log('transitioned');
-                        self.node.removeEventListener('transitionend', handler, false);
-                        resolve();
-                    };
-                setTimeout(() => {
-                    console.log('fi',2)
-                    self.node.addEventListener('transitionend', handler, false);
-                    setTimeout(() => {
-                        console.log('fi',3)
-                        self.node.setAttribute('data-lky-open', '');
-                    }, 1);
-                }, 0);
-            } catch (error) {
-                reject(error);
-            }
-        });*/
     }
 
     /**
@@ -658,20 +633,6 @@ class StructureUI extends Emitter {
         this.repository = null;
         this.node.parentNode.removeChild(this.node);
         return Promise.resolve();
-        /*
-        return new Promise(resolve => {
-
-            let
-                self = this,
-                handler = () => {
-                    self.node.removeEventListener('transitionend', handler, false);
-                    self.node.parentNode.removeChild(self.node);
-                    resolve();
-                };
-
-            self.node.addEventListener('transitionend', handler, false);
-            self.node.removeAttribute('data-lky-open');
-        });*/
     }
 
     mapDictionary(data) {

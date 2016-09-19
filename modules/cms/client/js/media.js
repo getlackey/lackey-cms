@@ -22,7 +22,7 @@ const lackey = require('core/client/js'),
 
       class Media {
             static get manager() {
-                  return top.Lackey.manager;
+                  return top.LackeyManager;
             }
             constructor(HTMLElement) {
                   this._listeners = [];

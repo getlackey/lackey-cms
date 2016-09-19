@@ -36,7 +36,8 @@ function deepClone(object) {
 /**
  * @constructs lackey-cms/modules/cms/client/manager/Repository
  */
-function Repository() {
+function Repository(manager) {
+    this._manager = manager;
     this._resources = {};
     this._cache = {};
     this._copy = {};
@@ -101,7 +102,7 @@ Repository.prototype.load = function (type, id) {
 Repository.prototype.set = function (type, id, value) {
     let contentId = type + '-' + id;
     this._copy[contentId] = value;
-    top.Lackey.manager.diff();
+    this._manager.diff();
     this.emit('changed', {
         type: type,
         id: id

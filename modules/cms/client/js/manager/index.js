@@ -74,11 +74,11 @@ function Manager() {
         enumerable: false
     });
 
-    this.repository = new Repository();
+    this.repository = new Repository(this);
     this.repository.on('changed', this.onChanged.bind(this));
     this.repository.bubble(this, 'reset');
 
-    this.stack = new Stack(this.repository);
+    this.stack = new Stack(this.repository, this);
     this.stack.on('transition', this.onStackChange.bind(this));
 
 
@@ -104,7 +104,9 @@ emit(Manager.prototype);
  */
 Manager.prototype._loadCurrent = function () {
 
-    let loc = top.location.pathname;
+    let
+        loc = top.location.pathname,
+        self = this;
 
     if (prefix && prefix.length) {
         loc = loc.replace(new RegExp('^/' + prefix), '');
@@ -121,7 +123,7 @@ Manager.prototype._loadCurrent = function () {
         .read('/cms/content?route=' + loc)
         .then(data => {
             if (data.$locale) {
-                locale = top.Lackey.manager.locale = data.$locale;
+                locale = self.locale = data.$locale;
             }
             if (loc !== data.data[0].route) {
                 top.history.pushState('', top.document.title, '/admin' + data.data[0].route);
@@ -322,6 +324,7 @@ Manager.prototype.onViewStructure = function (event) {
 
             .then(current => {
             let structureController = new StructureUI({
+                manager: self,
                 type: 'content',
                 id: current.id,
                 context: () => Promise.resolve(self.current),
@@ -329,7 +332,7 @@ Manager.prototype.onViewStructure = function (event) {
             }, this.repository);
 
             structureController.on('changed', self.onStructureChange.bind(self));
-            return self.stack.inspectStructure(structureController, tab).then(() => console.log(1));
+            return self.stack.inspectStructure(structureController, tab);
         });
     }
 
@@ -424,7 +427,10 @@ Manager.prototype.setupUI = function () {
 
 
 Manager.init = function () {
-    lackey.manager = new Manager();
+    if (top.LackeyManager) {
+        return top.LackeyManager;
+    }
+    top.LackeyManager = new Manager();
 };
 
 Manager.prototype.diff = function () {

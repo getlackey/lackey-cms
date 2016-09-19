@@ -16,7 +16,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const Emitter = require('cms/client/js/emitter').Emitter,
+const
+    Emitter = require('cms/client/js/emitter').Emitter,
     lackey = require('core/client/js'),
     template = require('core/client/js/template'),
     api = require('core/client/js/api'),
@@ -191,7 +192,7 @@ class Gallery extends Emitter {
             handler = () => {
 
                 context.taxonomies = [].concat(restrictiveControl.value);
-                top.Lackey.manager.setMedia(context.id, context);
+                self.options.manager.setMedia(context.id, context);
             };
         restrictiveControl.on('changed', handler);
 
@@ -212,12 +213,12 @@ class Gallery extends Emitter {
 
                 lackey.bind('lky:remove', 'click', (event, hook) => {
                     let index = hook.getAttribute('data-lky-idx');
-                    return top.Lackey.manager
+                    return self.options.manager
                         .getMedia(self.options.media.id)
                         .then((media) => {
                             media.alternatives = media.alternatives || [];
                             media.alternatives.splice(index, 1);
-                            return top.Lackey.manager.setMedia(media.id, media);
+                            return self.options.manager.setMedia(media.id, media);
                         })
                         .then((media) => {
                             self.options.media = media;
@@ -239,7 +240,7 @@ class Gallery extends Emitter {
 
     addAlternative(source, mimeType, mediaQuery) {
         let self = this;
-        return top.Lackey.manager
+        return self.options.manager
             .getMedia(this.options.media.id)
             .then((media) => {
                 media.alternatives = media.alternatives || [];
@@ -248,7 +249,7 @@ class Gallery extends Emitter {
                     mime: mimeType,
                     media: mediaQuery
                 });
-                return top.Lackey.manager.setMedia(media.id, media);
+                return self.options.manager.setMedia(media.id, media);
             })
             .then((media) => {
                 self.options.media = media;
@@ -257,20 +258,22 @@ class Gallery extends Emitter {
     }
 
     altChange(event, hook) {
-        top.Lackey.manager
+        let self = this;
+        this.options.manager
             .getMedia(this.options.media.id)
             .then((media) => {
                 media.attributes.alt = hook.value;
-                top.Lackey.manager.setMedia(media.id, media);
+                self.options.manager.setMedia(media.id, media);
             });
     }
 
     mimeChange(event, hook) {
-        top.Lackey.manager
+        let self = this;
+        self.options.manager
             .getMedia(this.options.media.id)
             .then((media) => {
                 media.mime = hook.value;
-                top.Lackey.manager.setMedia(media.id, media);
+                self.options.manager.setMedia(media.id, media);
             });
     }
 

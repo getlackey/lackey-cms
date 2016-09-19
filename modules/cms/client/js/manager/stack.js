@@ -16,7 +16,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const emit = require('cms/client/js/emit'),
+const
+    emit = require('cms/client/js/emit'),
     StructureUI = require('cms/client/js/manager/structure.ui.js'),
     ArticlePicker = require('cms/client/js/manager/article.picker.ui.js'),
     BlockPicker = require('cms/client/js/manager/block.picker.ui.js'),
@@ -33,9 +34,10 @@ const emit = require('cms/client/js/emit'),
 /**
  * @constructs lackey-cms/modules/cms/client/manager/Stack
  */
-function Stack(repository) {
+function Stack(repository, manager) {
 
     this._repository = repository;
+    this.manager = manager;
     this._stack = [];
 
     Object.defineProperty(this, 'length', {
@@ -180,7 +182,8 @@ Stack.prototype.inspectMedia = function (media, node) {
         .pick(new Gallery({
             media: media,
             node: node,
-            stack: this
+            stack: this,
+            manager: this.manager
         }), true);
 };
 

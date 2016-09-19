@@ -49,7 +49,7 @@ Image.register('command', 'insert', {
       } : null,
       run: function (pm) {
             let self = this;
-            top.Lackey.manager.stack
+            top.LackeyManager.stack
                   .inspectMedia(null, img)
                   .then((result) => {
                         if (result || result === -1) {

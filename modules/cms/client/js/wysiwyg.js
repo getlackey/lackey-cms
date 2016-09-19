@@ -59,13 +59,12 @@ class Wysiwyg {
         this._contentId = div.getAttribute('data-lky-content');
         this._path = div.getAttribute('data-lky-path') || null;
 
-        top.Lackey
-            .manager
+        top.LackeyManager
             .get(this.contentId, this.path, this.variant, this._schema)
             .then(function (source) {
                 self._source = source;
                 self.render();
-                top.Lackey.manager.on('reset', (event) => {
+                top.LackeyManager.on('reset', (event) => {
                     if (event.data.type === 'content' && +event.data.id === +self._contentId) {
                         top.Lackey
                             .manager
@@ -156,7 +155,7 @@ class Wysiwyg {
                 }
                 self._changed = true;
                 let newContent = pm.getContent('json');
-                top.Lackey.manager.set(self.contentId, self.path, self.variant, newContent);
+                top.LackeyManager.set(self.contentId, self.path, self.variant, newContent);
             });
         } catch (error) {
             console.error('this', this);
@@ -173,7 +172,7 @@ class Wysiwyg {
 
     static init() {
 
-        if(!top.Lackey || !top.Lackey.manager) {
+        if(!top.Lackey || !top.LackeyManager) {
             setTimeout(() => {
                 Wysiwyg.init();
             }, 250);
@@ -186,7 +185,7 @@ class Wysiwyg {
             let media = new Media(element);
             media.selected((mediaObject) => {
 
-                top.Lackey.manager.stack
+                top.LackeyManager.stack
                     .inspectMedia(mediaObject.media, mediaObject.node)
 
                     .then((result) => {
