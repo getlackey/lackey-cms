@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-alpha-4
+
+ * Fix taxonomy key conflict
+
 ## 1.0.0-alpha-3
 
  * Search by taxonomy

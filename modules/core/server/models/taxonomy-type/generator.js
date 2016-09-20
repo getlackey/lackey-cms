@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle:0 */
 /* jslint node:true, esnext:true */
+/* globals LACKEY_PATH */
 'use strict';
 
 /*
@@ -18,14 +19,15 @@
     limitations under the License.
 */
 
-const SCli = require(LACKEY_PATH).cli,
+const
+    SCli = require(LACKEY_PATH).cli,
     Generator = require(LACKEY_PATH).generator;
 
 let TaxonomyType;
 
 module.exports = (data) => {
     return require('./index')
-        .then((type) => {
+        .then(type => {
             TaxonomyType = type;
 
             if (typeof data === 'string') {
@@ -36,7 +38,7 @@ module.exports = (data) => {
             SCli.debug('lackey/modules/cms/server/models/taxonomy-type/generator', 'Ensure that taxonomy type ' + data.name + ' exists');
             return TaxonomyType.getByName(data.name);
         })
-        .then((type) => {
+        .then(type => {
             if (!type) {
                 return TaxonomyType.create(data);
             }
@@ -46,7 +48,7 @@ module.exports = (data) => {
             }
             return type;
         })
-        .then((type) => {
+        .then(type => {
             SCli.debug('lackey/modules/cms/server/models/taxonomy-type/generator', 'Ensured that taxonomy type ' + data.name + ' exists');
             return type;
         });

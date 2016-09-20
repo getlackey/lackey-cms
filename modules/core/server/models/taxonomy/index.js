@@ -177,7 +177,7 @@ module.exports = SUtils
             }
 
             static byTypeAndName(type, name) {
-                return this.byTypeAndParam(type, 'name', name);
+                return this.byTypeAndParam(type, 'name', name.toLowerCase());
             }
 
             static get likeables() {
