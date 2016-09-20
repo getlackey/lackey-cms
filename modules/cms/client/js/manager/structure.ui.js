@@ -362,6 +362,7 @@ class StructureUI extends Emitter {
                     id: this.options.id,
                     context: () => Promise.resolve(data),
                     stack: self.options.stack,
+                    manager: self.options.manager,
                     expose: () => {
 
                         return Promise.resolve(template.expose || []);
