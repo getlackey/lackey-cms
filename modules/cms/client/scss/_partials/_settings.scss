@@ -159,7 +159,7 @@
                 float: left;
                 transition: width $speed;
                 overflow-x: hidden;
-                overflow-y: auto;
+                overflow-y: hidden;
                 > div {
                     height: 100%;
                     width: $settings-edit-width;
@@ -326,10 +326,12 @@
                 }
                 [data-lky-hook="settings.meta"] {
                     width: $settings-edit-width;
+                    overflow-y: auto;
                 }
                 &[data-lky-has-media="true"] {
                     [data-lky-hook="settings.meta"] {
                         width: #{$settings-edit-width * 2};
+                        overflow-y: auto;
                     }
                 }
             }
@@ -339,6 +341,7 @@
                 }
                 [data-lky-hook="settings.dimensions"] {
                     width: #{$settings-edit-width * 2};
+                    overflow-y: auto;
                 }
             }
             &[data-lky-edit="taxonomy"] {
@@ -347,6 +350,7 @@
                 }
                 [data-lky-hook="settings.taxonomy"] {
                     width: $settings-edit-width;
+                    overflow-y: auto;
                 }
             }
             &[data-lky-edit="blocks"] {
@@ -355,6 +359,7 @@
                 }
                 [data-lky-hook="settings.blocks"] {
                     width: $settings-edit-width;
+                    overflow-y: auto;
                 }
             }
             &[data-lky-edit="diff"] {
@@ -363,6 +368,7 @@
                 }
                 [data-lky-hook="settings.diff"] {
                     width: #{$settings-edit-width*2};
+                    overflow-y: auto;
                 }
             }
             &[data-lky-edit="url"] {
@@ -371,6 +377,7 @@
                 }
                 [data-lky-hook="settings.url"] {
                     width: #{$settings-edit-width};
+                    overflow-y: auto;
                 }
             }
             &[data-lky-edit="upload"] {
@@ -379,6 +386,7 @@
                 }
                 [data-lky-hook="settings.upload"] {
                     width: #{$settings-edit-width};
+                    overflow-y: auto;
                 }
             }
             &[data-lky-edit="gallery"] {
@@ -387,6 +395,7 @@
                 }
                 [data-lky-hook="settings.gallery"] {
                     width: #{$settings-edit-width*2};
+                    overflow-y: auto;
                 }
             }
         }
