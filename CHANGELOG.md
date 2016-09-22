@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-alpha-6
+
+ * Admin UI freeze fix
+
 ## 1.0.0-alpha-5
 
  * Fix missing manager injection
