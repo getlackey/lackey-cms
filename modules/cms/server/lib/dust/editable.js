@@ -18,7 +18,9 @@
 
 const
   treeParser = require('../../../shared/treeparser'),
-  marked = require('markdown-it');
+  MarkdownIt = require('markdown-it'),
+  marked = new MarkdownIt();
+
 
 function fromLayout(root, path, variant, locale) {
 
@@ -33,7 +35,7 @@ function fromLayout(root, path, variant, locale) {
 }
 
 const
-  inline = ['h1','h2','h3','h4','h5'];
+  inline = ['h1', 'h2', 'h3', 'h4', 'h5'];
 
 module.exports = (dust) => {
 
@@ -49,7 +51,8 @@ module.exports = (dust) => {
       type = params.type || 'doc',
       def = params.default || '',
       tag = params.tag || 'div',
-      locale = context.get('locale');
+      locale = context.get('locale'),
+      method;
 
 
 
@@ -59,10 +62,12 @@ module.exports = (dust) => {
 
     chunk.write('<' + tag);
 
+    method = inline.indexOf(tag) !== -1 ? 'renderInline' : 'render';
+
     if (editMode === true) {
       chunk.write(' data-lky-pm data-lky-content="' + id + '"');
       if (params.path) {
-        chunk.write('div data-lky-path="' + path + '"');
+        chunk.write('data-lky-path="' + path + '"');
       }
       if (params.type) {
         chunk.write(' data-lky-type="' + type + '"');
@@ -70,9 +75,19 @@ module.exports = (dust) => {
       if (variant) {
         chunk.write(' data-lky-variant="' + variant + '"');
       }
+      if (method === 'renderInline') {
+        chunk.write(' data-lky-singleline="true"');
+      }
     }
+
     layout = fromLayout(layout, path, variant, locale, type, params.route);
-    chunk.write('>' + (marked[inline.indexOf(tag) !== -1 ? 'renderInline' : 'render'](layout)) + '</' + tag + '>');
+    try {
+      layout = marked[method](layout);
+    } catch (e) {
+      console.error(e);
+      console.error(e.stack);
+    }
+    chunk.write('>' + layout + '</' + tag + '>');
 
 
     return chunk;

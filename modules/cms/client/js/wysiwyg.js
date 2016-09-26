@@ -17,19 +17,16 @@
 */
 const
     lackey = require('core/client/js'),
-    Media = require('cms/client/js/media');
+    Media = require('cms/client/js/media'),
+    MeMarkdown = require('medium-editor-markdown'),
+    MediumEditor = require('medium-editor');
 
-let pool = [],
-    style = ``,
-    styleBlock = document.createElement('style');
-
-styleBlock.innerHTML = style;
-document.body.appendChild(styleBlock);
+let pool = [];
 
 class Wysiwyg {
 
     constructor(div) {
-        /*
+
         var self = this;
 
         this._div = div;
@@ -38,32 +35,10 @@ class Wysiwyg {
         this.variant = div.getAttribute('data-lky-variant') || '*';
         this._placeholder = div.getAttribute('placeholder') || 'Type here';
 
-        this._schema = LackeySchema;
-        if (this._wrap === 'inline') {
-            this._schema = InlineSchema;
-        }
         this._contentId = div.getAttribute('data-lky-content');
         this._path = div.getAttribute('data-lky-path') || null;
+        this.render();
 
-        top.LackeyManager
-            .get(this.contentId, this.path, this.variant, this._schema)
-            .then(function (source) {
-                self._source = source;
-                self.render();
-                top.LackeyManager.on('reset', (event) => {
-                    if (event.data.type === 'content' && +event.data.id === +self._contentId) {
-                        top.Lackey
-                            .manager
-                            .get(self.contentId, self.path, self.variant, self._schema)
-                            .then((src) => {
-                                self._source = src;
-                                self._lock = true;
-                                self._pm.setContent(src, 'json');
-                                self._lock = false;
-                            });
-                    }
-                });
-            });*/
     }
 
     get contentId() {
@@ -92,62 +67,28 @@ class Wysiwyg {
                 docFormat: typeof this._source === 'string' ? 'text' : 'json',
                 doc: this._source
             };
-
         try {
-            //this._pm = pm = new ProseMirror(options);
+            let
+                options = {
+                    extensions: {
+                        markdown: new MeMarkdown(text => {
+                            // todo
+                        })
+                    }
+                };
 
-            let overlay = document.createElement('div');
 
-            overlay.style.pointeEvents = 'none';
-            overlay.style.position = 'absolute';
-            overlay.style.display = 'none';
-            overlay.innerText = this._placeholder;
-            overlay.style.width = '100%';
-            overlay.style.opacity = 0.5;
-            overlay.style.textAling = 'center';
-            this._div.parentNode.insertBefore(overlay, this._div);
-
-            if (!window.getComputedStyle(overlay.parentNode).position) {
-                overlay.parentNode.style.position = 'relative';
-                overlay.style.transform = 'translateY(-50%)';
-                overlay.style.top = '50%';
+            if(this._div.hasAttribute('data-lky-singleline')) {
+                options.disableReturn = true;
             }
 
-            if (self.isEmpty()) {
-                overlay.style.display = 'block';
-            }
+            new MediumEditor(this._div, options);
 
-            pm.on('focus', function () {
-                overlay.style.display = 'none';
-            });
 
-            pm.on('blur', function () {
-                if (self.isEmpty()) {
-                    overlay.style.display = 'block';
-                }
-            });
-
-            pm.setOption('tooltipMenu', {
-                selectedBlockMenu: true
-            });
-
-            /*pm.setOption('menuBar', {
-                float: true
-            });*/
-
-            pm.on('change', function () {
-                if (this._lock) {
-                    return;
-                }
-                self._changed = true;
-                let newContent = pm.getContent('json');
-                top.LackeyManager.set(self.contentId, self.path, self.variant, newContent);
-            });
         } catch (error) {
             console.error('this', this);
             console.error(error.stack);
             throw error;
-
         }
 
     }
@@ -158,35 +99,37 @@ class Wysiwyg {
 
     static init() {
 
-        if(!top.Lackey || !top.LackeyManager) {
+        if (!top.Lackey || !top.LackeyManager) {
             setTimeout(() => {
                 Wysiwyg.init();
             }, 250);
             return;
         }
 
-        lackey.getWithAttribute('data-lky-pm').forEach(Wysiwyg.factory);
+        lackey.getWithAttribute('data-lky-pm')
+            .forEach(Wysiwyg.factory);
 
-        lackey.select('[data-lky-media]').forEach((element) => {
-            let media = new Media(element);
-            media.selected((mediaObject) => {
+        lackey.select('[data-lky-media]')
+            .forEach(element => {
+                let media = new Media(element);
+                media.selected(mediaObject => {
 
-                top.LackeyManager.stack
-                    .inspectMedia(mediaObject.media, mediaObject.node)
+                    top.LackeyManager.stack
+                        .inspectMedia(mediaObject.media, mediaObject.node)
 
-                    .then((result) => {
+                    .then(result => {
                         if (result || result === -1) {
                             mediaObject.set(result !== -1 ? result : null);
                             mediaObject.notify();
                         }
                     });
+                });
             });
-        });
     }
 
     static getContents() {
         let content = [];
-        pool.forEach((instance) => {
+        pool.forEach(instance => {
             if (content.indexOf(instance.contentId) === -1) {
                 content.push(instance.contentId);
             }

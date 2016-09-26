@@ -78,7 +78,7 @@ module.exports = SUtils
                 let
                     path,
                     user = req.user,
-                    stylesheets = [],
+                    stylesheets,
                     pageJson = page.toJSON(),
                     isAllowed,
                     data = {
@@ -134,6 +134,8 @@ module.exports = SUtils
                         javascripts = isAllowed ? [
                             preview ? 'js/cms/cms/preview.js' : 'js/cms/cms/page.js'
                         ] : [];
+
+                        stylesheets = isAllowed ? ['css/cms/cms/wysiwyg.css'] : [];
 
                         if (page.state !== 'published' && !isAllowed) {
                             return Promise.reject('403');
