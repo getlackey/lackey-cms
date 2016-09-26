@@ -307,6 +307,15 @@ module.exports = Schema
                     table.date('publishAt').notNullable().defaultTo(knex.raw('now()'));
                 });
             })
+            .then(() => {
+                return knex.schema
+                    .hasColumn('content', 'plaintext')
+                    .then(exists => {
+                        if (!exists) {
+                            return require(__dirname + '/content/upgrade')(knex);
+                        }
+                    });
+            })
             //
             // TABLE redirect
             // userId -> users.id

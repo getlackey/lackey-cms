@@ -25,7 +25,6 @@ var
     list = require('core/shared/dust/list'),
     path = require('core/shared/dust/path'),
     is = require('core/shared/dust/is'),
-    snippet = require('cms/client/js/snippet'),
     caseSwitch = require('core/shared/dust/switch'),
     youtube = require('core/shared/dust/youtube'),
     dtf = require('core/shared/dust/dateTimeFormat'),
@@ -41,7 +40,6 @@ hashmap(engine);
 list(engine);
 path(engine);
 is(engine);
-snippet(engine);
 caseSwitch(engine);
 DustIntl.registerWith(engine);
 youtube(engine);

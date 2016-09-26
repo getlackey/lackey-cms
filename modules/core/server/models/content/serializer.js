@@ -20,13 +20,14 @@
 
 const
     SUtils = require(LACKEY_PATH).utils,
+    SCli = require(LACKEY_PATH).cli,
     CMS = SUtils.cmsMod('cms'),
     CORE = SUtils.cmsMod('core'),
     format = require('prosemirror/dist/format'),
     parseFrom = format.parseFrom,
     _ = require('lodash'),
     toMarkdown = require('prosemirror/dist/markdown').toMarkdown,
-    treeParser = CMS.path('shared/treeparser');
+    MODULE_NAME = 'lackey-cms/modules/cms/server/model/content/serializer';
 
 let mediaGenerator,
     Media,
@@ -34,27 +35,19 @@ let mediaGenerator,
     .path('server/lib/dust/editable')
     .then((editable) => editable.browser);
 
-module.exports.deserializeText = (text) => {
-    return browser.then((window) => {
-        return treeParser
-            .then((tree) => {
-                let md = parseFrom(window.LackeySchema, text.replace(/\\n/g, '  '), 'markdown'),
-                    json = md.toJSON(),
-                    output = tree
-                    .walk(json);
-                return output;
-            });
-    });
+module.exports.deserializeText = text => {
+    return Promise.resolve(text);
 };
 
-module.exports.serializeText = (node) => {
+module.exports.serializeText = node => {
+    SCli.debug(MODULE_NAME, 'serializeText');
     return browser.then(() => {
         return toMarkdown(parseFrom(window.LackeySchema, node, 'json')).replace(/\s\s\r\n/g, ' \\n');
     });
 };
 
 function crawl(data) {
-
+    SCli.debug(MODULE_NAME, 'crawl');
     if (!data) {
         return Promise.resolve(data);
     }
@@ -114,6 +107,7 @@ function crawl(data) {
 }
 
 function crawlBack(data) {
+    SCli.debug(MODULE_NAME, 'crawlBack');
     if (data) {
         if (data.type === 'doc') {
             return module.exports.serializeText(data);
@@ -166,29 +160,32 @@ function crawlBack(data) {
     return Promise.resolve(data);
 }
 
-module.exports.serialize = (content) => {
+module.exports.serialize = content => {
+    SCli.debug(MODULE_NAME, 'serialize');
     let output = _.cloneDeep(content);
     return CORE
         .model('media')
-        .then((media) => {
+        .then(media => {
+            SCli.debug(MODULE_NAME, 'got media');
             Media = media;
-            return crawlBack(output.layout).then((layout) => {
+            return crawlBack(output.layout).then(layout => {
                 output.layout = JSON.parse(JSON.stringify(layout));
                 return output;
             });
         });
 };
 
-module.exports.deserialize = (content) => {
+module.exports.deserialize = content => {
+    SCli.debug(MODULE_NAME, 'deserialize');
     let output = _.cloneDeep(content);
 
     return CORE
         .model('media')
-        .then((media) => {
+        .then(media => {
             mediaGenerator = media.generator;
             Media = media;
             return crawl(output.layout, true);
-        }).then((layout) => {
+        }).then(layout => {
             output.layout = layout;
             return output;
         });

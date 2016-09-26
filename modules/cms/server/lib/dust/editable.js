@@ -16,26 +16,11 @@
     limitations under the License.
 */
 
-const format = require('prosemirror/dist/format'),
-  parseFrom = format.parseFrom,
-  atomus = require('atomus'),
-  toHTML = format.toHTML,
-  toText = format.toText,
-  treeParser = require('../../../shared/treeparser');
+const
+  treeParser = require('../../../shared/treeparser'),
+  marked = require('markdown-it');
 
-let LackeySchema,
-  HeadingSchema;
-
-function schema(type) {
-  switch (type) {
-  case 'heading':
-    return HeadingSchema;
-  default:
-    return LackeySchema;
-  }
-}
-
-function fromLayout(root, path, variant, locale, type, route, toFormat) {
+function fromLayout(root, path, variant, locale) {
 
   let output = treeParser.get(root, path, variant, null, locale);
 
@@ -43,34 +28,18 @@ function fromLayout(root, path, variant, locale, type, route, toFormat) {
     return '';
   }
 
-  try {
-    if(typeof output === 'string') {
-      output = parseFrom(schema(type), output, 'markdown');
-    } else {
-      output = parseFrom(schema(type), output, 'json');
-    }
-    output = treeParser.walk(output);
-    output = (toFormat === 'text' ? toText : toHTML)(output, {
-      serverSide: true,
-      uri: route
-    });
-  } catch (e) {
-    let original = output;
-    output = e.message + '<br/>';
-    output += 'Variant: ' + variant + '<br/>';
-    output += 'Locale: ' + locale + '<br/>';
-    output += 'Type: ' + type + '<br/>';
-    output += 'Path: ' + path + '<br/>';
-    output += 'Output: ' + JSON.stringify(original);
-  }
   return output;
 
 }
 
+const
+  inline = ['h1','h2','h3','h4','h5'];
+
 module.exports = (dust) => {
 
   dust.helpers.editable = function (chunk, context, bodies, params) {
-    let editMode = params.editMode,
+    let
+      editMode = params.editMode,
       content = params.content,
       id = content ? content.id + '' : '',
       layout = content ? content.layout : {},
@@ -79,13 +48,19 @@ module.exports = (dust) => {
       parent = params.parent || null,
       type = params.type || 'doc',
       def = params.default || '',
+      tag = params.tag || 'div',
       locale = context.get('locale');
+
+
 
     if (parent) {
       path = parent + '.' + path;
     }
+
+    chunk.write('<' + tag);
+
     if (editMode === true) {
-      chunk.write('<div data-lky-pm data-lky-content="' + id + '"');
+      chunk.write(' data-lky-pm data-lky-content="' + id + '"');
       if (params.path) {
         chunk.write('div data-lky-path="' + path + '"');
       }
@@ -95,88 +70,14 @@ module.exports = (dust) => {
       if (variant) {
         chunk.write(' data-lky-variant="' + variant + '"');
       }
-      chunk.write('></div>');
-    } else {
-      try {
-
-        if (layout && layout.type) {
-          layout = fromLayout(layout, path, variant, locale, type, params.route);
-
-          let regexMulti = /<dust-template(.+?)template=('|")(.*?)('|")(.+?)<\/dust-template>/g,
-            regexSingle = /<dust-template(.+?)template=('|")(.*?)('|")(.+?)<\/dust-template>/,
-            matches = layout.match(regexMulti);
-          if (!matches || matches.length === 0) {
-            if (type === 'heading') {
-              layout = layout.replace(/<(\/|)p>/g, '');
-            }
-            if (layout.replace(/\s+/g, '').length === 0) {
-              layout = def;
-            }
-            return chunk.write(layout);
-          } else {
-            return chunk.map((injectedChunk) => {
-              Promise.all(matches.map((match) => {
-                let innerMatches = match.match(regexSingle);
-                return new Promise((resolve) => {
-                  dust.render(innerMatches[3], context, (error, result) => {
-                    if (error) {
-                      return resolve({
-                        original: match,
-                        replace: error.message
-                      });
-                    }
-                    resolve({
-                      original: match,
-                      replace: result
-                    });
-                  });
-                });
-              })).then((results) => {
-                results.forEach((result) => {
-                  layout = layout.replace(result.original, result.replace);
-                });
-                if (type === 'heading') {
-                  layout = layout.replace(/<(\/|)p>/g, '');
-                }
-
-                injectedChunk.write(layout);
-                injectedChunk.end();
-              }, (error) => {
-                throw error;
-              });
-            });
-          }
-        } else {
-          return chunk;
-        }
-      } catch (error) {
-        throw error;
-      }
     }
+    layout = fromLayout(layout, path, variant, locale, type, params.route);
+    chunk.write('>' + (marked[inline.indexOf(tag) !== -1 ? 'renderInline' : 'render'](layout)) + '</' + tag + '>');
+
 
     return chunk;
   };
-
 };
 
+
 module.exports.fromLayout = fromLayout;
-
-module.exports.browser = new Promise((resolve, reject) => {
-
-  atomus().html('<html></html>').ready(function (errors, window) {
-    try {
-      if (errors) {
-        return reject(errors);
-      }
-      GLOBAL.window = window;
-      GLOBAL.navigator = window.navigator;
-      GLOBAL.document = window.document;
-      LackeySchema = require('../../../shared/content-blocks').LackeySchema;
-      HeadingSchema = require('../../../shared/inline');
-      window.LackeySchema = LackeySchema;
-      resolve(window);
-    } catch (err) {
-      return reject(err);
-    }
-  });
-});

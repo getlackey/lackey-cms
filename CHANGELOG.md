@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.*
+
+ * Remove support from `<dust-template>` tag in editable areas
+
 ## 1.0.0-alpha-8
 
  * Fix user select in admin

@@ -17,24 +17,10 @@
 */
 const
     lackey = require('core/client/js'),
-    LackeySchema = require('cms/shared/content-blocks').LackeySchema,
-    InlineSchema = require('cms/shared/inline'),
-    edit = require('prosemirror/dist/edit'),
-    Media = require('cms/client/js/media'),
-    ProseMirror = edit.ProseMirror;
-
-require('prosemirror/dist/menu/tooltipmenu');
-require('prosemirror/dist/menu/menubar');
+    Media = require('cms/client/js/media');
 
 let pool = [],
-    style = `
-    .ProseMirror-tooltip,
-    .ProseMirror-menu-dropdown-menu,
-    .ProseMirror-menubar,
-    .ProseMirror-prompt {
-        font-size: 12px;
-    }
-`,
+    style = ``,
     styleBlock = document.createElement('style');
 
 styleBlock.innerHTML = style;
@@ -43,7 +29,7 @@ document.body.appendChild(styleBlock);
 class Wysiwyg {
 
     constructor(div) {
-
+        /*
         var self = this;
 
         this._div = div;
@@ -77,7 +63,7 @@ class Wysiwyg {
                             });
                     }
                 });
-            });
+            });*/
     }
 
     get contentId() {
@@ -108,7 +94,7 @@ class Wysiwyg {
             };
 
         try {
-            this._pm = pm = new ProseMirror(options);
+            //this._pm = pm = new ProseMirror(options);
 
             let overlay = document.createElement('div');
 
