@@ -118,6 +118,7 @@
     "slug": "^0.9.1",
     "socket.io": "^1.4.6",
     "socket.io-client": "^1.4.6",
+    "to-markdown": "^3.0.1",
     "tween.js": "^16.3.4",
     "twitter": "1.2.5",
     "url": "^0.11.0",

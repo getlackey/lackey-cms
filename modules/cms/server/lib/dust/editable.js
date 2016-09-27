@@ -18,10 +18,16 @@
 
 const
   treeParser = require('../../../shared/treeparser'),
-  MarkdownIt = require('markdown-it'),
-  marked = new MarkdownIt();
+  markdown = require('../../../shared/markdown');
 
-
+/**
+ * Gets string from layout object
+ * @param   {object} root
+ * @param   {string} path
+ * @param   {string|undefined} variant
+ * @param   {string|undefined} locale
+ * @returns {string}
+ */
 function fromLayout(root, path, variant, locale) {
 
   let output = treeParser.get(root, path, variant, null, locale);
@@ -34,12 +40,18 @@ function fromLayout(root, path, variant, locale) {
 
 }
 
-const
-  inline = ['h1', 'h2', 'h3', 'h4', 'h5'];
+module.exports = dust => {
 
-module.exports = (dust) => {
-
+  /**
+   * Editable DUSTJS helper
+   * @param   {Chunk} chunk
+   * @param   {Context} context
+   * @param   {object} bodies
+   * @param   {object}   params
+   * @returns {mixed}
+   */
   dust.helpers.editable = function (chunk, context, bodies, params) {
+
     let
       editMode = params.editMode,
       content = params.content,
@@ -52,9 +64,7 @@ module.exports = (dust) => {
       def = params.default || '',
       tag = params.tag || 'div',
       locale = context.get('locale'),
-      method;
-
-
+      route = params.route || '';
 
     if (parent) {
       path = parent + '.' + path;
@@ -62,34 +72,36 @@ module.exports = (dust) => {
 
     chunk.write('<' + tag);
 
-    method = inline.indexOf(tag) !== -1 ? 'renderInline' : 'render';
-
     if (editMode === true) {
+
       chunk.write(' data-lky-pm data-lky-content="' + id + '"');
+
       if (params.path) {
         chunk.write('data-lky-path="' + path + '"');
       }
+
       if (params.type) {
-        chunk.write(' data-lky-type="' + type + '"');
+        console.warn('DEPRECATED', '@editable:type', (new Error()).stack);
       }
+
       if (variant) {
         chunk.write(' data-lky-variant="' + variant + '"');
       }
-      if (method === 'renderInline') {
+
+      if (markdown.isInline(tag)) {
         chunk.write(' data-lky-singleline="true"');
       }
     }
 
-    layout = fromLayout(layout, path, variant, locale, type, params.route);
+    layout = fromLayout(layout, path, variant, locale, type, route);
+
     try {
-      layout = marked[method](layout);
+      layout = markdown.toHTML(layout, tag);
     } catch (e) {
       console.error(e);
       console.error(e.stack);
     }
     chunk.write('>' + layout + '</' + tag + '>');
-
-
     return chunk;
   };
 };

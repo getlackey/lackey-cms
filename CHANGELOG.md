@@ -5,6 +5,8 @@ Going forward we should add hash of issue next to change
 ## 1.*
 
  * Remove support from `<dust-template>` tag in editable areas
+ * Remove `type` param in `@editable`
+ * Add `tag` param in `@editable`
 
 ## 1.0.0-alpha-8
 

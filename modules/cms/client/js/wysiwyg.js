@@ -19,125 +19,204 @@ const
     lackey = require('core/client/js'),
     Media = require('cms/client/js/media'),
     MeMarkdown = require('medium-editor-markdown'),
-    MediumEditor = require('medium-editor');
+    MediumEditor = require('medium-editor'),
+    debug = require('debug')('lackey-cms/modules/cms/client/js/wysiwyg'),
+    markdown = require('cms/shared/markdown'),
+    inlineButtons = [
+        'bold',
+        'italic',
+        'underline',
+        'removeFormat'
+    ],
+    buttons = inlineButtons.concat([
+        'anchor',
+        'quote',
+        'pre',
+        'orderedlist',
+        'unorderedlist',
+        'justifyLeft',
+        'justifyCenter',
+        'justifyRight',
+        'justifyFull',
+        'h2',
+        'h3'
+    ]);
 
 let pool = [];
 
 class Wysiwyg {
 
-    constructor(div) {
+    constructor(element) {
+
+        debug('Constructor', element);
 
         var self = this;
 
-        this._div = div;
+        this._element = element;
         this._changed = false;
-        this._wrap = div.getAttribute('data-lky-type') || 'doc';
-        this.variant = div.getAttribute('data-lky-variant') || '*';
-        this._placeholder = div.getAttribute('placeholder') || 'Type here';
+        this._variant = element.getAttribute('data-lky-variant') || '*';
+        this._placeholder = element.getAttribute('placeholder') || 'Type here';
 
-        this._contentId = div.getAttribute('data-lky-content');
-        this._path = div.getAttribute('data-lky-path') || null;
-        this.render();
+        this._contentId = element.getAttribute('data-lky-content');
+        this._path = element.getAttribute('data-lky-path') || null;
+
+        this.setup();
 
     }
 
-    get contentId() {
+    get id() {
+
+        debug('get id');
         return this._contentId;
     }
 
     get path() {
+
+        debug('get path');
         return this._path;
     }
 
-    ready() {
+    get variant() {
+
+        debug('get variant');
+        return this._variant;
+    }
+
+    setup() {
+        let self = this;
+        top.LackeyManager
+            .get(this.id, this.path, this.variant)
+            .then(source => {
+                self._source = source;
+                self.render();
+                top.LackeyManager
+                    .on('reset', event => {
+                        if (event.data.type === 'content' && +event.data.id === +self.id) {
+                            self.reset();
+                        }
+                    });
+            });
 
     }
-    isEmpty() {
-        return (this._pm.getContent('text').replace(/^\s+|\s+$/g, '').length === 0);
+
+    reset() {
+        let self = this;
+        top.LackeyManager
+            .get(self.id, self.path, self.variant)
+            .then(src => {
+                self._source = src;
+                self._lock = true;
+                self._element.innerHTML = markdown.toHTML(self._source, self._element.tagName);
+                self._lock = false;
+            });
     }
+
     render() {
 
-        this._div.style.minHeight = '50px';
+        debug('render');
 
-        let pm,
+        let
             self = this,
             options = {
-                place: this._div,
-                schema: self._schema,
-                docFormat: typeof this._source === 'string' ? 'text' : 'json',
-                doc: this._source
+                paste: {
+                    cleanPastedHTML: true
+                },
+                extensions: {
+                    markdown: new MeMarkdown(text => {
+                        if (self._lock) {
+                            return;
+                        }
+                        self._changed = true;
+                        top.LackeyManager.set(self.id, self.path, self.variant, text);
+
+                    })
+                }
             };
-        try {
-            let
-                options = {
-                    extensions: {
-                        markdown: new MeMarkdown(text => {
-                            // todo
-                        })
-                    }
-                };
 
 
-            if(this._div.hasAttribute('data-lky-singleline')) {
-                options.disableReturn = true;
-            }
-
-            new MediumEditor(this._div, options);
-
-
-        } catch (error) {
-            console.error('this', this);
-            console.error(error.stack);
-            throw error;
+        if (this._element.hasAttribute('data-lky-singleline')) {
+            options.disableReturn = true;
+            options.toolbar = {
+                buttons: inlineButtons
+            };
+        } else {
+            options.toolbar = {
+                buttons: buttons
+            };
         }
+
+        self._lock = true;
+        new MediumEditor(this._element, options);
+        self._lock = false;
 
     }
 
-    static factory(div) {
-        return new Wysiwyg(div);
+    static factory(element) {
+
+        debug('factory', element);
+        return new Wysiwyg(element);
     }
 
     static init() {
 
+        debug('init');
+
         if (!top.Lackey || !top.LackeyManager) {
+            debug('init - wait');
             setTimeout(() => {
                 Wysiwyg.init();
             }, 250);
             return;
         }
 
-        lackey.getWithAttribute('data-lky-pm')
+        lackey
+            .getWithAttribute('data-lky-pm')
             .forEach(Wysiwyg.factory);
 
-        lackey.select('[data-lky-media]')
-            .forEach(element => {
-                let media = new Media(element);
-                media.selected(mediaObject => {
-
-                    top.LackeyManager.stack
-                        .inspectMedia(mediaObject.media, mediaObject.node)
-
-                    .then(result => {
-                        if (result || result === -1) {
-                            mediaObject.set(result !== -1 ? result : null);
-                            mediaObject.notify();
-                        }
-                    });
-                });
-            });
+        lackey
+            .select('[data-lky-media]')
+            .forEach(Wysiwyg.initMedia);
     }
 
-    static getContents() {
-        let content = [];
-        pool.forEach(instance => {
-            if (content.indexOf(instance.contentId) === -1) {
-                content.push(instance.contentId);
-            }
+    static initMedia(element) {
+
+        debug('initMedia', element);
+
+        let media = new Media(element);
+        media.selected(mediaObject => {
+
+            top.LackeyManager
+                .stack
+                .inspectMedia(mediaObject.media, mediaObject.node)
+
+            .then(result => {
+                if (result || result === -1) {
+                    mediaObject.set(result !== -1 ? result : null);
+                    mediaObject.notify();
+                }
+            });
         });
+    }
+
+
+    static getContents() {
+
+        debug('getContents');
+
+        let content = [];
+        pool
+            .forEach(instance => {
+                if (content.indexOf(instance.id) === -1) {
+                    content.push(instance.id);
+                }
+            });
         return content;
     }
 
     static get pool() {
+
+        debug('get pool');
+
         return pool;
     }
 
