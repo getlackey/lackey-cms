@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-alpha-8
+
+ * Fix user select in admin
+
 ## 1.0.0-alpha-6 - 1.0.0-alpha-7
 
  * Admin UI freeze fix

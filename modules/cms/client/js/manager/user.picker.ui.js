@@ -35,7 +35,7 @@ class UserPickerUI extends Picker {
 
     selected(hook) {
 
-        this.resolve(hook.getAttribute('data-lky-user'));
+        this.resolve(JSON.parse(hook.getAttribute('data-lky-user')));
     }
 
 }
