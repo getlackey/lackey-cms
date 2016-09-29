@@ -123,7 +123,7 @@ class Gallery extends Emitter {
                                 .create('/cms/media', {
                                     source: value
                                 })
-                                .then((media) => {
+                                .then(media => {
                                     self.resolve(media);
                                 });
                         }, true);
@@ -313,17 +313,8 @@ class Gallery extends Emitter {
      * @returns {Promise}
      */
     remove() {
-        return new Promise((resolve) => {
-
-            let self = this,
-                handler = () => {
-                    self.node.removeEventListener('transitionend', handler, false);
-                    self.node.parentNode.removeChild(self.node);
-                    resolve();
-                };
-            self.node.addEventListener('transitionend', handler, false);
-            self.node.removeAttribute('data-lky-open');
-        });
+        this.node.parentNode.removeChild(this.node);
+        return Promise.resolve();
     }
 
     toggle(event) {

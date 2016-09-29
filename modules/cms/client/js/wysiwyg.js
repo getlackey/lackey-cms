@@ -22,11 +22,15 @@ const
     MediumEditor = require('medium-editor'),
     debug = require('debug')('lackey-cms/modules/cms/client/js/wysiwyg'),
     markdown = require('cms/shared/markdown'),
+    Insert = require('medium-editor-vanilla-insert')({
+        MediumEditor: MediumEditor
+    }),
+    Plain = require('medium-editor-remove-formats')(),
     inlineButtons = [
         'bold',
         'italic',
         'underline',
-        'removeFormat'
+        'plain'
     ],
     buttons = inlineButtons.concat([
         'anchor',
@@ -49,8 +53,6 @@ class Wysiwyg {
     constructor(element) {
 
         debug('Constructor', element);
-
-        var self = this;
 
         this._element = element;
         this._changed = false;
@@ -117,20 +119,9 @@ class Wysiwyg {
 
         let
             self = this,
+            insertButtons = [],
             options = {
-                paste: {
-                    cleanPastedHTML: true
-                },
-                extensions: {
-                    markdown: new MeMarkdown(text => {
-                        if (self._lock) {
-                            return;
-                        }
-                        self._changed = true;
-                        top.LackeyManager.set(self.id, self.path, self.variant, text);
-
-                    })
-                }
+                paste: {}
             };
 
 
@@ -140,15 +131,134 @@ class Wysiwyg {
                 buttons: inlineButtons
             };
         } else {
+            insertButtons = ['insert-media'];
             options.toolbar = {
                 buttons: buttons
             };
+            options.insert = {
+                buttons: ['image']
+            };
         }
+
+        var InsertMedia = MediumEditor.Extension.extend({
+            name: 'insert-media',
+            getButton: function (editor, getter) {
+                var btn = document.createElement('button'),
+                    self = this;
+                btn.innerText = 'Media';
+                btn.addEventListener('click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    top.LackeyManager
+                        .stack
+                        .inspectMedia({}, null)
+
+                    .then(result => {
+
+                        if (result) {
+                            let
+                                node = getter(),
+                                media = new Media(null, true);
+                            media.node = node;
+                            media.set(result);
+                            Wysiwyg.initInTextMedia(media);
+
+                            var event = new Event('change');
+                            media.node.parentNode.dispatchEvent(event);
+
+                        }
+                    });
+
+                }, true);
+                return btn;
+            }
+        });
+
+        options.extensions = {
+            insertMedia: new InsertMedia(),
+            plain: new Plain({}),
+            insert: new Insert({
+                buttons: insertButtons
+            }),
+            markdown: new MeMarkdown({
+                toMarkdownOptions: {
+                    converters: [
+                        {
+                            filter: (node) => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
+                            replacement: content => content
+                        },
+                        {
+                            filter: 'iframe',
+                            replacement: (content, node) => '!iframe[](' + node.src + ')'
+                        },
+                        {
+                            filter: 'video',
+                            replacement: (content, node) => '!video[](' + node.src + ')'
+                        },
+                        {
+                            filter: 'img',
+                            replacement: (content, node) => {
+                                var alt = node.alt || ''
+                                var src = node.getAttribute('src') || '';
+                                var title = node.title || '';
+                                var titlePart = title ? ' "' + title + '"' : '';
+                                var type = '';
+
+                                if (src && node.hasAttribute('markdown-type')) {
+                                    type = node.getAttribute('markdown-type');
+                                    src = node.getAttribute('markdown-src');
+                                    return '@[' + type + ']' + '(' + src + ')';
+                                }
+                                return src ? '![' + alt + ']' + '(' + src + titlePart + ')' : '';
+                            }
+                        }
+                    ]
+                }
+            }, text => {
+
+                console.log(text);
+
+                if (self._lock) {
+                    return;
+                }
+                self._changed = true;
+
+                top.LackeyManager.set(self.id, self.path, self.variant, text);
+
+            })
+        };
 
         self._lock = true;
         new MediumEditor(this._element, options);
+
+        Array.prototype.slice
+            .call(this._element.querySelectorAll('img, video'))
+            .forEach(element => Wysiwyg.initInTextMedia(new Media(element, true)));
+
         self._lock = false;
 
+    }
+
+    static initInTextMedia(media) {
+
+        media.selected(mediaObject => {
+
+            top.LackeyManager
+                .stack
+                .inspectMedia(mediaObject.media, mediaObject.node)
+
+            .then(result => {
+                if (result) {
+                    mediaObject.set(result);
+                }
+                if (result === -1) {
+                    mediaObject.node.parentNode.removeChild(mediaObject.node);
+                }
+                var event = new Event('change');
+                parentNode.dispatchEvent(event);
+            });
+        });
     }
 
     static factory(element) {

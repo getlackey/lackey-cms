@@ -20,15 +20,48 @@ const
     inline = ['h1', 'h2', 'h3', 'h4', 'h5'],
     toMarkdown = require('to-markdown');
 
+marked
+    .use(require('markdown-it-video', {
+        youtube: {
+            width: 640,
+            height: 390
+        },
+        vimeo: {
+            width: 500,
+            height: 281
+        },
+        vine: {
+            width: 600,
+            height: 600,
+            embed: 'simple'
+        },
+        prezi: {
+            width: 550,
+            height: 400
+        }
+    }));
+
 module.exports = {
     toMarkdown(html) {
-            return toMarkdown(html);
+            try {
+                return toMarkdown(html);
+            } catch (err) {
+                console.error(err);
+                console.error(err.stack);
+                return html;
+            }
         },
         toHTML(markdown, parentTag) {
-            if (module.exports.isInline(parentTag)) {
-                return marked.renderInline(markdown);
+            try {
+                if (module.exports.isInline(parentTag)) {
+                    return marked.renderInline(markdown);
+                }
+                return marked.render(markdown);
+            } catch (err) {
+                console.error(err);
+                console.error(err.stack);
+                return markdown;
             }
-            return marked.render(markdown);
         },
         isInline(tag) {
             return inline.indexOf(tag ? tag.toLowerCase() : undefined) !== -1;
