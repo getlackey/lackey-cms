@@ -105,6 +105,12 @@ module.exports = () => new Promise((resolve, reject) => {
                         }
                     });
 
+                    Twitterable.prototype.serializeMarkdown = function (state, node) {
+                        state.wrapBlock('> ', null, node, function () {
+                            return state.renderContent(node);
+                        });
+                    };
+
                     Twitterable.prototype.serializeDOM = (node, serializer) => {
                         try {
                             let innerContent = '',
