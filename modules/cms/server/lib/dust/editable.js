@@ -81,7 +81,7 @@ module.exports = dust => {
       }
 
       if (params.type) {
-        console.warn('DEPRECATED', '@editable:type', (new Error()).stack);
+        //console.warn('DEPRECATED', '@editable:type', (new Error()).stack);
       }
 
       if (variant) {

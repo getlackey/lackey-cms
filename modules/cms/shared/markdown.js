@@ -16,7 +16,7 @@
 */
 const
     MarkdownIt = require('markdown-it'),
-    inline = ['h1', 'h2', 'h3', 'h4', 'h5'],
+    inline = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'time'],
     toMarkdown = require('to-markdown');
 
 var yt_regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
