@@ -43,7 +43,7 @@ module.exports = function (dust) {
 
         if (youtube) {
             if (type === 'image') {
-                chunk = chunk.render(bodies.block, context.push('https://img.youtube.com/vi/' + youtube + '/default.jpg'));
+                chunk = chunk.render(bodies.block, context.push('https://img.youtube.com/vi/' + youtube + '/maxresdefault.jpg'));
             } else {
                 chunk = chunk.render(bodies.block, context.push(youtube));
             }

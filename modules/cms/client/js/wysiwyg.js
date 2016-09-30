@@ -185,7 +185,7 @@ class Wysiwyg {
                 toMarkdownOptions: {
                     converters: [
                         {
-                            filter: (node) => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
+                            filter: node => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
                             replacement: content => content
                         },
                         {
@@ -216,8 +216,6 @@ class Wysiwyg {
                     ]
                 }
             }, text => {
-
-                console.log(text);
 
                 if (self._lock) {
                     return;

@@ -7,7 +7,7 @@
             {:else}
                 {@eq key=type value="image"}
                     {@youtube path=source}
-                        <img src="https://img.youtube.com/vi/{.}/default.jpg"/>
+                        <img src="https://img.youtube.com/vi/{.}/maxresdefault.jpg"/>
                     {:else}
                         <img src="{source}"/>
                     {/youtube}

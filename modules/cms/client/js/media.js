@@ -39,6 +39,14 @@ class Media {
                   this.input.style.marginLeft = '-1000px';
             }
 
+            this.onClick = (function () {
+                  let self = this;
+                  this._listeners
+                        .forEach(listener => {
+                              listener(self);
+                        });
+            }).bind(this);
+
             if (this.node) {
 
                   this.content = HTMLElement.getAttribute('data-lky-content') || false;
@@ -54,15 +62,19 @@ class Media {
                         this.updatePattern = 'url($1)';
                   }
                   this.attributes = JSON.parse(HTMLElement.getAttribute('data-lky-attributes') || '{}');
-                  this.set(JSON.parse(HTMLElement.getAttribute('data-lky-media')));
-            }
-            this.onClick = (function () {
-                  let self = this;
-                  this._listeners
-                        .forEach(listener => {
-                              listener(self);
+                  if (HTMLElement.hasAttribute('data-lky-media')) {
+                        this.set(JSON.parse(HTMLElement.getAttribute('data-lky-media')));
+                  }
+
+                  if (HTMLElement.hasAttribute('markdown-type')) {
+                        this.set({
+                              media: 'video/' + HTMLElement.getAttribute('markdown-type'),
+                              source: HTMLElement.getAttribute('markdown-src')
                         });
-            }).bind(this);
+
+                  }
+            }
+
       }
       render() {
             if (this.update) {
@@ -136,17 +148,18 @@ class Media {
             if (this.media.alternatives && Array.isArray(this.media.alternatives)) {
                   alternatives = alternatives.concat(this.media.alternatives);
             }
-            alternatives.forEach(source => {
-                  let sourceTag = document.createElement('source');
-                  sourceTag.src = Media.clearSource(source.src);
-                  if (source.media) {
-                        sourceTag.setAttribute('media', source.media);
-                  }
-                  if (source.type) {
-                        sourceTag.setAttribute('type', source.type);
-                  }
-                  videoTag.appendChild(sourceTag);
-            });
+            alternatives
+                  .forEach(source => {
+                        let sourceTag = document.createElement('source');
+                        sourceTag.src = Media.clearSource(source.src);
+                        if (source.media) {
+                              sourceTag.setAttribute('media', source.media);
+                        }
+                        if (source.type) {
+                              sourceTag.setAttribute('type', source.type);
+                        }
+                        videoTag.appendChild(sourceTag);
+                  });
 
             this.replace(videoTag);
       }
@@ -162,7 +175,7 @@ class Media {
                   yt = youtube(src),
                   vm = vimeo(src);
             if (yt) {
-                  src = 'https://img.youtube.com/vi/' + yt + '/default.jpg';
+                  src = 'https://img.youtube.com/vi/' + yt + '/maxresdefault.jpg';
                   img.setAttribute('markdown-type', 'youtube');
                   img.setAttribute('markdown-src', this.media.source);
             }

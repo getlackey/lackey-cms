@@ -96,7 +96,7 @@ module.exports = dust => {
     layout = fromLayout(layout, path, variant, locale, type, route);
 
     try {
-      layout = markdown.toHTML(layout, tag);
+      layout = markdown.toHTML(layout, tag, editMode);
     } catch (e) {
       console.error(e);
       console.error(e.stack);
