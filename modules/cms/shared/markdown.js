@@ -61,7 +61,7 @@ const
         'sup',
         'svg',
         'textarea',
-        'time'
+        'time',
         'u',
         'var',
         'video'
