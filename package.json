@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "1.0.0-alpha-me-1",
+  "version": "1.0.0-alpha-me-2",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -95,6 +95,7 @@
     "medium-editor": "^5.22.0",
     "medium-editor-autolist": "git+https://github.com/gruberro/medium-editor-autolist.git#add-package-json",
     "medium-editor-markdown": "git+https://github.com/IonicaBizau/medium-editor-markdown.git#master",
+    "medium-editor-remove-formats": "0.0.1",
     "medium-editor-tables": "git+https://github.com/sielay/medium-editor-tables.git",
     "medium-editor-vanilla-insert": "0.0.3",
     "method-override": "^2.3.5",
