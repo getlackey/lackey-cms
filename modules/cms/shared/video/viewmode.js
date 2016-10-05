@@ -1,3 +1,4 @@
+/* eslint space-in-parens:0, default-case:0, no-param-reassign:0 */
 //https://raw.githubusercontent.com/brianjgeiger/markdown-it-video/master/index.js
 // Process @[youtube](youtubeVideoID)
 // Process @[vimeo](vimeoVideoID)

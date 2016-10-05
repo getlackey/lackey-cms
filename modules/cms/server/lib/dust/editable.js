@@ -96,7 +96,11 @@ module.exports = dust => {
     layout = fromLayout(layout, path, variant, locale, type, route);
 
     try {
-      layout = markdown.toHTML(layout, tag, editMode);
+      if ((!layout || layout.replace(/^\s+|\s+$/g, '').length === 0) && def) {
+        layout = def;
+      } else {
+        layout = markdown.toHTML(layout, tag, editMode);
+      }
     } catch (e) {
       console.error(e);
       console.error(e.stack);

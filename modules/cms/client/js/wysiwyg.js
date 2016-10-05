@@ -1,4 +1,4 @@
-/* eslint no-cond-assign:0 */
+/* eslint no-cond-assign:0, no-new:0 */
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
@@ -143,8 +143,7 @@ class Wysiwyg {
         var InsertMedia = MediumEditor.Extension.extend({
             name: 'insert-media',
             getButton: function (editor, getter) {
-                var btn = document.createElement('button'),
-                    self = this;
+                var btn = document.createElement('button');
                 btn.innerText = 'Media';
                 btn.addEventListener('click', event => {
                     event.preventDefault();
@@ -163,9 +162,7 @@ class Wysiwyg {
                             media.node = node;
                             media.set(result);
                             Wysiwyg.initInTextMedia(media);
-
-                            var event = new Event('change');
-                            media.node.parentNode.dispatchEvent(event);
+                            media.node.parentNode.dispatchEvent(new Event('change'));
 
                         }
                     });
@@ -199,7 +196,7 @@ class Wysiwyg {
                         {
                             filter: 'img',
                             replacement: (content, node) => {
-                                var alt = node.alt || ''
+                                var alt = node.alt || '';
                                 var src = node.getAttribute('src') || '';
                                 var title = node.title || '';
                                 var titlePart = title ? ' "' + title + '"' : '';
@@ -254,7 +251,7 @@ class Wysiwyg {
                     mediaObject.node.parentNode.removeChild(mediaObject.node);
                 }
                 var event = new Event('change');
-                parentNode.dispatchEvent(event);
+                mediaObject.node.parentNode.dispatchEvent(event);
             });
         });
     }

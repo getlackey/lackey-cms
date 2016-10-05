@@ -1,3 +1,4 @@
+/* eslint space-in-parens:0, default-case:0 */
 'use strict';
 
 var yt_regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
@@ -109,4 +110,4 @@ module.exports = function imagizer(md, options) {
 
     md.renderer.rules.video = tokenize_video(md, options);
     md.inline.ruler.before('emphasis', 'video', video_embed(md, options));
-}
+};

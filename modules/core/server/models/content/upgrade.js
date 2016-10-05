@@ -23,8 +23,6 @@ let
     dom,
     elt;
 
-
-
 module.exports = () => new Promise((resolve, reject) => {
         atomus()
             .html('<html></html>')

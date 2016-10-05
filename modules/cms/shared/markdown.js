@@ -68,9 +68,6 @@ const
     ],
     toMarkdown = require('to-markdown');
 
-
-
-
 module.exports = {
     toMarkdown(html) {
             try {
