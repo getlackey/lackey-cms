@@ -272,7 +272,8 @@ module.exports = SUtils
 
                 if (!this.id) {
                     if (!this._doc.email && (!options || !options.noEmailRequired)) {
-                        return Promise.reject(new Error('Missing credentials'));
+                        return Promise
+                            .reject(new Error('Missing credentials'));
                     }
                 }
 
@@ -280,20 +281,24 @@ module.exports = SUtils
 
                 if (this._doc.email) {
                     promise = promise
-                        .then(this.bind(this._detectConflict, [User.EMAIL, this._doc.email]));
+                        .then(this
+                            .bind(this._detectConflict, [User.EMAIL, this._doc.email]));
                 }
 
                 if (this._doc.username) {
                     promise = promise
-                        .then(this.bind(this._detectConflict, [User.USERNAME, this._doc.username]));
+                        .then(this
+                            .bind(this._detectConflict, [User.USERNAME, this._doc.username]));
                 }
 
                 if (this._doc.image) {
                     promise = promise
-                        .then(this.bind(this._populateImage, [this._doc.image]));
+                        .then(this
+                            .bind(this._populateImage, [this._doc.image]));
                 }
 
-                return promise.then(this.bind(this._preSaveFinalize));
+                return promise
+                    .then(this.bind(this._preSaveFinalize));
             }
 
             _populateImage(imagePath) {
@@ -417,9 +422,9 @@ module.exports = SUtils
                         .then(() => {
                             return SCli.sql(ACL
                                 .query()
-                                .insert(cached.roles.map((role) => {
+                                .insert(cached.roles.map(role => {
                                     return {
-                                        roleId: role,
+                                        roleId: role.id || role,
                                         userId: self.id
                                     };
                                 })));
@@ -686,6 +691,23 @@ module.exports = SUtils
                 });
             }
 
+            addRole(role) {
+                this._doc.roles = this._roles;
+                if (!this.hasRole(role.name)) {
+                    this._roles.push(role);
+                }
+            }
+
+            removeRole(role) {
+                this._doc.roles = this._roles;
+                this._roles
+                    .forEach((ownedRole, index) => {
+                        if (ownedRole.name === role.name) {
+                            this._roles.splice(index, 1);
+                        }
+                    });
+            }
+
             /**
              * Gets combined ACL object
              * @param   {string} perm
@@ -696,13 +718,14 @@ module.exports = SUtils
                 SCli.debug(__MODULE_NAME, 'getACL');
 
                 let perms = [];
-                this.roles.forEach((role) => {
-                    if (Array.isArray(role.acl[perm])) {
-                        perms = perms.concat(role.acl[perm]);
-                    } else if (role.acl[perm]) {
-                        perms.push(role.acl[perm]);
-                    }
-                });
+                this.roles
+                    .forEach(role => {
+                        if (Array.isArray(role.acl[perm])) {
+                            perms = perms.concat(role.acl[perm]);
+                        } else if (role.acl[perm]) {
+                            perms.push(role.acl[perm]);
+                        }
+                    });
                 return perms;
 
             }
@@ -744,7 +767,7 @@ module.exports = SUtils
 
                 SCli.debug(__MODULE_NAME, 'hasRole');
 
-                return this.getRoleNames().then((roleNames) => roleNames.indexOf(role) !== -1);
+                return this.getRoleNames().indexOf(role) !== -1;
             }
 
             /**

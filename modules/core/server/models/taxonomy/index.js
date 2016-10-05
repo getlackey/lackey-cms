@@ -76,7 +76,7 @@ module.exports = SUtils
                 }
                 return TaxonomyType
                     .findById(this._doc.taxonomyTypeId)
-                    .then((type) => {
+                    .then(type => {
                         self._type = type;
                         return self;
                     });
@@ -84,8 +84,19 @@ module.exports = SUtils
             }
 
             _preSave() {
+                let self = this;
+                this._doc.name = this._doc.name.toLowerCase();
                 if (this._doc) {
                     if (this._doc.type) {
+                        if (isNaN(this._doc.type)) {
+                            return TaxonomyType
+                                .findOneBy('name', this._doc.type)
+                                .then(type => {
+                                    self._doc.taxonomyTypeId = type.id;
+                                    delete self._doc.type;
+                                    return self;
+                                });
+                        }
                         this._doc.taxonomyTypeId = this._doc.type;
                         delete this._doc.type;
                     }
@@ -166,7 +177,7 @@ module.exports = SUtils
             }
 
             static byTypeAndName(type, name) {
-                return this.byTypeAndParam(type, 'name', name);
+                return this.byTypeAndParam(type, 'name', name.toLowerCase());
             }
 
             static get likeables() {
@@ -184,7 +195,7 @@ module.exports = SUtils
 
                             return TaxonomyType
                                 .query({
-                                    name: query2.type
+                                    name: typeof query2.type === 'string' ? query2.type : query2.type.name
                                 })
                                 .then((types) => {
                                     if (types && types.length) {

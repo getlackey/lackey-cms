@@ -1,3 +1,4 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/block.picker.js !}
 <aside data-lky-component="settings">
     <section data-lky-hook="settings.breadcrumbs">
         <!-- later -->

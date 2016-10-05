@@ -25,11 +25,12 @@ var
     list = require('core/shared/dust/list'),
     path = require('core/shared/dust/path'),
     is = require('core/shared/dust/is'),
-    snippet = require('cms/client/js/snippet'),
     caseSwitch = require('core/shared/dust/switch'),
     youtube = require('core/shared/dust/youtube'),
     dtf = require('core/shared/dust/dateTimeFormat'),
-    DustIntl = require('dust-intl');
+    log = require('core/shared/dust/log'),
+    DustIntl = require('dust-intl'),
+    pretty = require('core/shared/dust/pretty');
 
 //require('dustjs-linkedin/lib/compiler');
 
@@ -39,11 +40,12 @@ hashmap(engine);
 list(engine);
 path(engine);
 is(engine);
-snippet(engine);
 caseSwitch(engine);
 DustIntl.registerWith(engine);
 youtube(engine);
 dtf(engine);
+log(engine);
+pretty(engine);
 
 engine.helpers.same = (chunk, context, bodies, params) => {
     if (params.key == params.val) { //eslint-disable-line eqeqeq

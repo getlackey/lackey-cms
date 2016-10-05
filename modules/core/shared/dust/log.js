@@ -1,4 +1,5 @@
 /* jslint node:true, esnext:true */
+/* eslint no-param-reassign:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,27 +16,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const model = require('prosemirror/dist/model'),
-      Schema = model.Schema,
-      defaultSchema = model.defaultSchema;
 
-let LackeySchema = new Schema(defaultSchema.spec.update({}));
+module.exports = (dust) => {
 
-LackeySchema.newDoc = (id) => {
-      let block = {
-            type: 'doc',
-            content: [{
-                  type: 'paragraph',
-                  content: [{
-                        type: 'text',
-                        text: ''
-                  }]
-            }]
-      };
-      if (id) {
-            block.id = id;
-      }
-      return block;
+    // screw TypeError: Converting circular structure to JSON
+    dust.helpers.log = function (chunk, context, bodies, params) {
+        console.log('DUST LOG', params.key);
+        chunk.end();
+    };
 };
-
-module.exports = LackeySchema;

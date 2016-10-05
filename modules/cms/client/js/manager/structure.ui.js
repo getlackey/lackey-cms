@@ -16,29 +16,39 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const Emitter = require('cms/client/js/emitter').Emitter,
+const
+    Emitter = require('cms/client/js/emitter').Emitter,
     lackey = require('core/client/js'),
     Template = require('core/client/js/template'),
     api = require('core/client/js/api'),
     formatters = require('jsondiffpatch/src/formatters'),
-    Autocomplete = require('cms/client/js/controls/autocomplete'),
     dateformat = require('dateformat'),
     treeParser = require('cms/shared/treeparser');
 
-let cache = {};
+let
+    cache = {};
 
 /**
  * @class
+ * @name lackey-cms/modules/cms/client/js/manager/StructureUI
  */
 class StructureUI extends Emitter {
 
+    /**
+     * Gets template meta data
+     * @param   {string} templatePath
+     * @param   {number} index
+     * @returns {Promise<object>}
+     */
     static readTemplate(templatePath, index) {
+
         if (typeof templatePath === 'object') {
             return Promise.resolve(templatePath);
         }
+
         cache[templatePath] = cache[templatePath] || api
             .read('/cms/template?path=' + encodeURI(templatePath) + '&limit=1')
-            .then((data) => {
+            .then(data => {
                 let ctx = {};
                 if (data && data.data && data.data.length) {
                     ctx = data.data[0];
@@ -48,7 +58,7 @@ class StructureUI extends Emitter {
             });
 
         return cache[templatePath]
-            .then((ctx) => {
+            .then(ctx => {
                 let result = JSON.parse(JSON.stringify(ctx));
                 result.$idx = index;
                 return result;
@@ -84,10 +94,14 @@ class StructureUI extends Emitter {
         return lackey.select('[data-lky-template="cms/cms/properties"]', this.node)[0];
     }
 
+    get taxonomyNode() {
+        return lackey.select('[data-lky-template="cms/cms/structure/taxonomies"]', this.node)[0];
+    }
+
     defaultExpose(context) {
         return StructureUI
             .readTemplate(context.template)
-            .then((template) => template.expose || []);
+            .then(template => template.expose || []);
 
     }
 
@@ -102,7 +116,7 @@ class StructureUI extends Emitter {
         if (typeof context.template === 'string') {
             return StructureUI
                 .readTemplate(context.template)
-                .then((template) => template.props);
+                .then(template => template.props);
         }
         return context.template.props;
     }
@@ -112,15 +126,20 @@ class StructureUI extends Emitter {
      * @returns {Promise<HTMLElement>}
      */
     buildUI() {
-        let self = this,
+
+        let
+            self = this,
             ignore = lackey.select('[data-lky-hook="header.settings"]')[0].getAttribute('data-lky-ignore').split(',');
+
         return Template
             .render('cms/cms/settings', this.options || {})
-            .then((nodes) => {
+            .then(nodes => {
                 self.node = nodes[0];
 
                 if (self.options.open) {
                     self.node.setAttribute('data-lky-edit', self.options.open);
+                } else {
+                    self.node.removeAttribute('data-lky-edit');
                 }
 
                 lackey.bind('[data-lky-hook="settings.back"]', 'click', () => {
@@ -135,7 +154,7 @@ class StructureUI extends Emitter {
                         '[data-lky-hook="settings.open.blocks"]',
                         '[data-lky-hook="settings.open.diff"]'
                     ], self.node)
-                    .forEach((element) => {
+                    .forEach(element => {
                         if (ignore.indexOf(element.getAttribute('data-lky-open')) !== -1) {
                             element.parentNode.removeChild(element);
                         } else {
@@ -176,24 +195,26 @@ class StructureUI extends Emitter {
     }
 
     drawSections() {
-        let context,
+
+        let
+            context,
             self = this;
 
         return this
             .options
             .context()
-            .then((ctx) => {
+            .then(ctx => {
                 context = ctx;
                 return self.options.expose(ctx);
             })
-            .then((expose) => {
+            .then(expose => {
                 return Template
                     .redraw('sections', {
                         context: context,
                         expose: expose
                     }, self.node);
             })
-            .then((root) => {
+            .then(root => {
                 lackey.bind('[data-lky-cog]', 'click', self.inspect.bind(self), root[0]);
                 lackey.bind('[data-lky-bin]', 'click', self.removeBlock.bind(self), root[0]);
                 lackey.bind('[data-lky-add-block]', 'click', self.addBlock.bind(self), root[0]);
@@ -201,9 +222,11 @@ class StructureUI extends Emitter {
     }
 
     addBlock(event, hook) {
+
         this.collapse();
 
-        let idx = hook.getAttribute('data-lky-add-block'),
+        let
+            idx = hook.getAttribute('data-lky-add-block'),
             self = this,
             path = hook.getAttribute('data-lky-path'),
             context;
@@ -211,11 +234,11 @@ class StructureUI extends Emitter {
         return this
             .options
             .context()
-            .then((ctx) => {
+            .then(ctx => {
                 context = ctx;
                 return this.options.stack.pickBlock();
             })
-            .then((rt) => {
+            .then(rt => {
                 if (rt !== null) {
                     treeParser.insertAfter(context, path + '.' + idx, {
                         type: 'Block',
@@ -231,13 +254,15 @@ class StructureUI extends Emitter {
     }
 
     removeBlock(event, hook) {
-        let path = hook.getAttribute('data-lky-path'),
+
+        let
+            path = hook.getAttribute('data-lky-path'),
             self = this;
 
         return this
             .options
             .context()
-            .then((context) => {
+            .then(context => {
                 treeParser.remove(context, path);
                 self.emit('changed');
                 return self.drawSections();
@@ -245,31 +270,33 @@ class StructureUI extends Emitter {
     }
 
     drawDimensions() {
-        let self = this,
+
+        let
+            self = this,
             locales,
             viewAs;
 
         return api
             .read('/cms/language?enabled=true')
-            .then((locs) => {
+            .then(locs => {
                 locales = locs.data;
                 return api.read('/view-as');
             })
-            .then((response) => {
+            .then(response => {
                 viewAs = response;
                 return self.options.context();
             })
-            .then((context) => {
+            .then(context => {
                 return Template
                     .redraw('dimensions', {
                         context: context,
-                        locale: top.Lackey.manager.locale,
-                        variant: top.Lackey.manager.variant,
+                        locale: self.options.manager.locale,
+                        variant: self.options.manager.variant,
                         locales: locales,
                         viewAs: viewAs
                     }, self.node);
             })
-            .then((root) => {
+            .then(root => {
                 lackey
                     .bind('[data-lky-variant]', 'change', self.viewInVariant.bind(self), root[0]);
                 lackey
@@ -280,27 +307,31 @@ class StructureUI extends Emitter {
     }
 
     viewAs(event, hook) {
+
         top.Lackey.setCookie('lky-view-as', hook.value);
-        top.Lackey.manager.preview();
-        top.Lackey.manager.stack.clear();
+        this.options.manager.preview();
+        this.options.manager.stack.clear();
         return;
     }
 
     viewInVariant(event, hook) {
-        top.Lackey.manager.preview(hook.value);
-        top.Lackey.manager.stack.clear();
+
+        this.options.manager.preview(hook.value);
+        this.options.manager.stack.clear();
         return;
     }
 
     viewInLocale(event, hook) {
-        top.Lackey.manager.preview(undefined, hook.value);
-        top.Lackey.manager.stack.clear();
+
+        this.options.manager.preview(undefined, hook.value);
+        this.options.manager.stack.clear();
         return;
     }
 
     inspect(event, hook) {
 
-        let path = hook.getAttribute('data-lky-path'),
+        let
+            path = hook.getAttribute('data-lky-path'),
             templatePath = hook.getAttribute('data-lky-template'),
             structureController,
             context,
@@ -312,12 +343,13 @@ class StructureUI extends Emitter {
         return this
             .options
             .context()
-            .then((ctx) => {
+            .then(ctx => {
+
                 context = ctx;
                 return StructureUI
                     .readTemplate(templatePath);
             })
-            .then((template) => {
+            .then(template => {
 
                 data = treeParser.get(context, path);
                 if (!data) {
@@ -330,11 +362,14 @@ class StructureUI extends Emitter {
                     id: this.options.id,
                     context: () => Promise.resolve(data),
                     stack: self.options.stack,
+                    manager: self.options.manager,
                     expose: () => {
+
                         return Promise.resolve(template.expose || []);
 
                     },
                     settingsDictionary: () => {
+
                         return Promise.resolve(template.props);
                     },
                     open: 'meta'
@@ -355,58 +390,23 @@ class StructureUI extends Emitter {
     }
 
     drawTaxonomy() {
-        let self = this;
+
+        let
+            self = this,
+            context;
+
         return this.options
             .context()
-            .then((context) => {
-
-                let
-                    tagsNode = lackey.hook('tags', this.node),
-                    restrictionNode = lackey.hook('restricitons', this.node),
-                    taxes = context.taxonomies || [],
-                    tags = taxes.filter((tax) => !tax.type || !tax.type.restrictive),
-                    restrictive = taxes.filter((tax) => tax.type && tax.type.restrictive),
-                    options = {
-                        createNew: false,
-                        separators: [
-                            13,
-                            20
-                        ],
-                        formatLabel: (item) => {
-                            return (item.type ? item.type.label + ': ' : '') + (item.label || item.name);
-                        },
-                        equals: (item, term) => {
-                            return item.label === term;
-                        }
-
-                    },
-                    tagsControl = new Autocomplete(tagsNode, lackey.merge(options, {
-                        query: (text) => {
-                            return api
-                                .read('/cms/taxonomy?restrictive=0&q=' + encodeURI(text + '%'))
-                                .then((data) => data.data);
-                        },
-                        value: tags
-                    })),
-                    restrictiveControl = new Autocomplete(restrictionNode, lackey.merge(options, {
-                        query: (text) => {
-                            return api
-                                .read('/cms/taxonomy?restrictive=1&q=' + encodeURI(text + '%'))
-                                .then((data) => data.data);
-                        },
-                        value: restrictive
-                    })),
-                    handler = () => {
-
-                        return self.options
-                            .context()
-                            .then((ctx) => {
-                                ctx.taxonomies = [].concat(tagsControl.value, restrictiveControl.value);
-                                self.emit('changed');
-                            });
-                    };
-                tagsControl.on('changed', handler);
-                restrictiveControl.on('changed', handler);
+            .then(ctx => {
+                context = ctx;
+                return ctx;
+            })
+            .then(ctx => Template.redraw(self.taxonomyNode, ctx))
+            .then(() => {
+                lackey
+                    .bind('[data-lky-hook="action:pick-taxonomy"]', 'click', self.pickTaxonomy.bind(self, context), self.node);
+                lackey
+                    .bind('[data-lky-hook="taxonomy-remove"]', 'click', self.deleteTaxonomy.bind(self, context), self.node);
             });
     }
 
@@ -415,12 +415,12 @@ class StructureUI extends Emitter {
 
         return this.options
             .context()
-            .then((context) => Promise.all([
+            .then(context => Promise.all([
                 self.options.settings(context),
                 self.options.settingsDictionary(context),
                 context
             ]))
-            .then((responses) => {
+            .then(responses => {
                 let data = {
                     values: responses[0],
                     dictionary: responses[1]
@@ -474,10 +474,9 @@ class StructureUI extends Emitter {
         lackey
             .bind('[data-lky-hook="action:pick-user"]', 'click', this.pickUser.bind(this, context), this.node);
 
-
         lackey
             .select(['input', 'select'], self.metaNode)
-            .forEach((input) => {
+            .forEach(input => {
                 input.addEventListener('change', () => {
                     settings[input.name] = input.value;
                     self.emit('changed', settings);
@@ -493,7 +492,7 @@ class StructureUI extends Emitter {
 
         return this.options.stack
             .pickArticle(route)
-            .then((rt) => {
+            .then(rt => {
                 if (rt !== null) {
                     settings[hook.getAttribute('data-name')] = rt;
                     self.emit('changed', settings);
@@ -510,7 +509,7 @@ class StructureUI extends Emitter {
 
         return this.options.stack
             .pickDateTime(date)
-            .then((rt) => {
+            .then(rt => {
                 if (rt !== null) {
                     settings[hook.getAttribute('data-name')] = rt;
                     self.emit('changed', settings);
@@ -527,13 +526,57 @@ class StructureUI extends Emitter {
 
         return this.options.stack
             .pickUser(user)
-            .then((rt) => {
+            .then(rt => {
                 if (rt !== null) {
                     settings[hook.getAttribute('data-name')] = rt;
                     self.emit('changed', settings);
                     self.drawMeta();
                 }
                 self.node.setAttribute('data-lky-edit', 'meta');
+            });
+    }
+
+    pickTaxonomy(settings, event, hook) {
+
+        this.collapse();
+        let self = this,
+            type = hook.getAttribute('data-type'),
+            addable = hook.getAttribute('data-addable');
+
+        return this.options.stack
+            .pickTaxonomy(type, addable)
+            .then(rt => {
+                if (rt !== null) {
+                    self.options
+                        .context()
+                        .then(ctx => {
+                            ctx.taxonomies = (ctx.taxonomies || []);
+                            ctx.taxonomies.push(JSON.parse(rt));
+                            self.emit('changed');
+                            return self.drawTaxonomy();
+                        });
+
+                }
+                self.node.setAttribute('data-lky-edit', 'taxonomy');
+            });
+    }
+
+    deleteTaxonomy(settings, event, hook) {
+
+        let self = this,
+            type = hook.getAttribute('data-type'),
+            name = hook.getAttribute('data-name');
+
+        return this.options
+            .context()
+            .then(ctx => {
+                (ctx.taxonomies || []).forEach((taxonomy, index) => {
+                    if (taxonomy.name === name && taxonomy.type.name === type) {
+                        ctx.taxonomies.splice(index, 1);
+                    }
+                });
+                self.emit('changed');
+                return self.drawTaxonomy();
             });
     }
 
@@ -544,7 +587,7 @@ class StructureUI extends Emitter {
 
         return this.options.stack
             .inspectMedia(route)
-            .then((rt) => {
+            .then(rt => {
                 if (rt !== null) {
                     settings[hook.getAttribute('data-name')] = rt.source;
                     self.emit('changed', settings);
@@ -579,17 +622,8 @@ class StructureUI extends Emitter {
      * @returns {Promise}
      */
     fadeIn() {
-        return new Promise((resolve) => {
-            let self = this,
-                handler = () => {
-                    self.node.removeEventListener('transitionend', handler, false);
-                    resolve();
-                };
-            setTimeout(() => {
-                self.node.addEventListener('transitionend', handler, false);
-                self.node.setAttribute('data-lky-open', '');
-            }, 0);
-        });
+        this.node.setAttribute('data-lky-open', '');
+        return Promise.resolve();
     }
 
     /**
@@ -599,23 +633,14 @@ class StructureUI extends Emitter {
     remove() {
         this.repository.off('changed', this._onRepositoryChanged);
         this.repository = null;
-        return new Promise((resolve) => {
-
-            let self = this,
-                handler = () => {
-                    self.node.removeEventListener('transitionend', handler, false);
-                    self.node.parentNode.removeChild(self.node);
-                    resolve();
-                };
-            self.node.addEventListener('transitionend', handler, false);
-            self.node.removeAttribute('data-lky-open');
-        });
+        this.node.parentNode.removeChild(this.node);
+        return Promise.resolve();
     }
 
     mapDictionary(data) {
         data.dictionary = Object
             .keys(data.dictionary)
-            .map((key) => {
+            .map(key => {
                 let value = data.dictionary[key];
                 if (Array.isArray(value)) {
                     return {
@@ -668,15 +693,16 @@ Template.dust.helpers.templateData = function (chunk, context, bodies, params) {
     let templatePath = params.template,
         index = context.get('$idx');
 
-    return chunk.map((injectedChunk) => {
-        StructureUI
-            .readTemplate(templatePath, index)
-            .then((data) => {
-                injectedChunk
-                    .render(bodies.block, context.push(data))
-                    .end();
-            });
-    });
+    return chunk
+        .map(injectedChunk => {
+            StructureUI
+                .readTemplate(templatePath, index)
+                .then(data => {
+                    injectedChunk
+                        .render(bodies.block, context.push(data))
+                        .end();
+                });
+        });
 
 
 };

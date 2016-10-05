@@ -2,6 +2,7 @@
 @import "_vars";
 @import "_partials/_growl";
 @import "_partials/_structure";
+@import "_partials/_tags";
 @import "_partials/_blocks";
 @import "_partials/_autocomplete";
 @import "_partials/_diff";
@@ -24,6 +25,11 @@
     border: 1px solid white;
     background: $color-lackey-light-blue;
     color: white;
+}
+
+[data-lky-btn]:disabled {
+    background: $color-lackey-gray;
+    color: lighten($color-lackey-gray, 50%);
 }
 
 [data-lky-btn-inverted] {

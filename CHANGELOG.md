@@ -2,6 +2,48 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.*
+
+ * Remove support from `<dust-template>` tag in editable areas
+ * Remove `type` param in `@editable`
+ * Add `tag` param in `@editable`
+
+## 1.0.0-alpha-8
+
+ * Fix user select in admin
+
+## 1.0.0-alpha-6 - 1.0.0-alpha-7
+
+ * Admin UI freeze fix
+
+## 1.0.0-alpha-5
+
+ * Fix missing manager injection
+
+## 1.0.0-alpha-4
+
+ * Fix taxonomy key conflict
+
+## 1.0.0-alpha-3
+
+ * Search by taxonomy
+ * Add taxonomy
+
+## 1.0.0-alpha-2
+
+ * Fix scope issues
+
+## 1.0.0-alpha-1
+
+ **BREAKING CHANGES**
+ * Shorthand controller paths in YAML routes aren't supported anymore.
+ * Falcor support dropped completely
+ * `deleteUser` ACL is replaced by `manageUser`
+ * introduce `template.allowTaxonomy`
+ * intrudoce `taxonomyType.description`
+ * Introduce taxonomyPicker
+ * Kill `babelify`
+
 ## 0.17.11
 
  * Fix issue with publishAt where date was showing wrong on UI after saving.
@@ -13,6 +55,7 @@ Going forward we should add hash of issue next to change
 ## 0.17.8 - 0.17.9
 
  * Added dust helper for sorting arrays
+
 
 ## 0.17.5 - 0.17.7
 
@@ -30,7 +73,6 @@ Going forward we should add hash of issue next to change
 ## 0.17.2
 
  * Fixes to allow youtube thumbnail override
-
 
 ## 0.17.1
 

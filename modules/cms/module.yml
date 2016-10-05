@@ -44,10 +44,69 @@ Analytics:
 routes:
     /download/:downloadToken:
         get:
-            controller: cms/cms/download#download
+            controller: cms/cms/server/controllers/download#download
             inject:
                 - cms/core/server/models/media
                 - configuration
+    /cms/user:
+        get:
+            controller: cms/cms/server/controllers/user#table
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/user
+
+    /cms/user/:profileId:
+        get:
+            controller: cms/cms/server/controllers/user#details
+            ACLHelper: admin
+            inject:
+                    - cms/core/server/models/taxonomy-type
+
+    /api/cms/user/:profileId/taxonomy:
+        post:
+            controller: cms/cms/server/controllers/user#addTaxonomy
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/taxonomy
+
+    /api/cms/user/:profileId/taxonomy/:taxonomyTypeName/:taxonomyName:
+        delete:
+            controller: cms/cms/server/controllers/user#removeTaxonomy
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/taxonomy
+
+
+
+    /api/cms/user:
+        crud:
+            controller: cms/cms/server/controllers/user
+            field: profile
+            options:
+                inject:
+                    - cms/core/server/models/user
+                ACLHelper: admin
+
+    /api/cms/user/:profileId/name:
+        put:
+            controller: cms/cms/server/controllers/user#updateName
+            ACLHelper: admin
+
+    /api/cms/user/:profileId/role/:roleName:
+        post:
+            controller: cms/cms/server/controllers/user#addRole
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/role
+        delete:
+            controller: cms/cms/server/controllers/user#removeRole
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/role
+
 routeParams:
     downloadToken:
         field: downloadToken
+    roleName:
+        field: roleName
+

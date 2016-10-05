@@ -17,103 +17,182 @@
     limitations under the License.
 */
 
-const SUtils = require(LACKEY_PATH).utils;
+const
+    SUtils = require(LACKEY_PATH).utils,
+    CRUD = SUtils.cmsMod('core').controller('crud.injection', true);
 
+/**
+ * @class
+ * @name UserController
+ * Users CMS Controller
+ *
+ */
+class UserController extends CRUD {
 
-module.exports = SUtils
-    .waitForAs('usersController',
-        SUtils.cmsMod('core').model('user'),
-        SUtils.cmsMod('core').controller('crud')
-    )
-    .then((Model, Crud) => {
-        class Controller extends Crud {
+    /**
+     * @override
+     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#field
+     */
+    static get field() {
+        return this._overriden('field', 'profile');
+    }
 
-            static get model() {
-                return this._overriden('model', Model);
-            }
+    /**
+     * @override
+     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#title
+     */
+    static get title() {
+        return this._overriden('title', 'Users');
+    }
 
-            static get field() {
-                return this._overriden('field', 'user');
-            }
+    /**
+     * @override
+     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#actions
+     */
+    static get actions() {
+        return this._overriden('actions', [{
+            label: 'Edit',
+            icon: 'img/cms/cms/svg/preview.svg',
+            href: '/cms/user/{id}'
+        }, {
+            label: 'Remove',
+            icon: 'img/cms/cms/svg/close.svg',
+            api: 'DELETE:/cms/user/{id}'
+        }]);
+    }
 
-            static get title() {
-                return this._overriden('title', 'Users');
-            }
-
-            static get actions() {
-                return this._overriden('actions', [{
-                    label: 'Remove',
-                    icon: 'img/cms/cms/svg/close.svg',
-                    api: 'DELETE:/cms/user/{id}'
-                }]);
-            }
-
-            static get tableOptions() {
-                return this._overriden('tableOptions', {
-                    sorts: [{
-                        field: 'name',
-                        label: 'Names'
+    /**
+     * @override
+     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#tableOptions
+     */
+    static get tableOptions() {
+        return this._overriden('tableOptions', {
+            sorts: [{
+                field: 'name',
+                label: 'Names'
                     }]
-                });
-            }
+        });
+    }
 
-            // Delete
-            static delete(req, res) {
+    /**
+     * @override
+     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#delete
+     */
+    static delete(model, req, res) {
 
-                let del = super.delete;
+        let del = super.delete;
 
-                if (!req.admin) {
-                    return res.error403();
-                }
-
-                if (req.admin.id === req.user.id) {
-                    return res.error('Can\'t delete yourself');
-                }
-
-                return Promise
-                    .all(req.user.roles.map(role => {
-                        return req.admin.isAllowed('deleteUser', role.name);
-                    }))
-                    .then(isAllowed => {
-                        if (isAllowed.filter(allowed => !allowed).length === 0) {
-                            return del.apply(this, [req, res]);
-                        } else {
-                            return res.error403();
-                        }
-                    });
-            }
-
-            static get tableConfig() {
-                return this._overriden('tableConfig', {
-                    name: {
-                        label: 'Name',
-                        like: true
-                    },
-                    roles: {
-                        label: 'Roles',
-                        parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
-                    },
-                    taxonomies: {
-                        label: 'Classification',
-                        parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
-                    },
-                    lastActive: {
-                        label: 'Last Active',
-                        date: true
-                    }
-                });
-            }
-
-            static get tableActions() {
-                return this._overriden('tableActions', undefined);
-            }
-
-            static preview(req, res) {
-                res.css('css/cms/cms/table.css');
-                res.print('cms/users/preview', req.user);
-            }
-
+        if (!req.admin) {
+            return res.error403();
         }
 
-        return Promise.resolve(Controller);
-    });
+        if (req.admin.id === req.profile.id) {
+            return res.error('Can\'t delete yourself');
+        }
+
+        return Promise
+            .all(req.profile.roles.map(role => {
+                return req.admin.isAllowed('manageUser', role.name);
+            }))
+            .then(isAllowed => {
+                if (isAllowed.filter(allowed => !allowed).length === 0) {
+                    return del.apply(this, [model, req, res]);
+                } else {
+                    return res.error403();
+                }
+            });
+    }
+
+    /**
+     * @override
+     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#tableConfig
+     */
+    static get tableConfig() {
+        return this._overriden('tableConfig', {
+            name: {
+                label: 'Name',
+                like: true
+            },
+            roles: {
+                label: 'Roles',
+                parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
+            },
+            taxonomies: {
+                label: 'Classification',
+                parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
+            },
+            lastActive: {
+                label: 'Last Active',
+                date: true
+            }
+        });
+    }
+
+    /**
+     * @override
+     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#tableActions
+     */
+    static get tableActions() {
+        return this._overriden('tableActions', undefined);
+    }
+
+    static details(TaxonomyType, req, res) {
+        TaxonomyType
+            .findBy('restrictive', true)
+            .then(restrictive => {
+                res.css('css/cms/cms/profile.css');
+                res.js('js/cms/cms/profile.js');
+                res.print('cms/cms/profile', {
+                    profile: req.profile.toJSON(false),
+                    restrictive: restrictive
+                });
+            });
+    }
+
+    static addRole(Role, req, res) {
+        Role
+            .findOneBy('name', req.roleName)
+            .then(role => {
+                req.profile.addRole(role);
+                return req.profile.save();
+            })
+            .then(() => {
+                return res.api(req.profile);
+            }, error => {
+                console.error(error.message);
+                console.error(error.stack);
+                return res.error(error);
+            });
+    }
+
+    static updateName(req, res) {
+        req.profile.name = req.body.name;
+        req.profile
+            .save()
+            .then(() => {
+                return res.api(req.profile);
+            }, error => {
+                console.error(error.message);
+                console.error(error.stack);
+                return res.error(error);
+            });
+    }
+
+    static removeRole(Role, req, res) {
+        Role
+            .findOneBy('name', req.roleName)
+            .then(role => {
+                req.profile.removeRole(role);
+                return req.profile.save();
+            })
+            .then(() => {
+                return res.api(req.profile);
+            }, error => {
+                console.error(error);
+                return res.error(error);
+            });
+    }
+
+}
+
+module.exports = UserController;

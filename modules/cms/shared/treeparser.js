@@ -49,7 +49,7 @@ module.exports.walk = function walk(schema) {
         let hasYOUTUBE = false;
         schema.content.forEach((node) => {
             if (node.marks && node.text === 'IFRAME') {
-                node.marks.forEach((mark) => {
+                node.marks.forEach(mark => {
                     if (mark._ === 'link') {
                         hasYOUTUBE = mark.href;
                     }

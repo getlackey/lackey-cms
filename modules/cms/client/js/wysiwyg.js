@@ -1,4 +1,4 @@
-/* eslint no-cond-assign:0 */
+/* eslint no-cond-assign:0, no-new:0 */
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
@@ -17,199 +17,311 @@
 */
 const
     lackey = require('core/client/js'),
-    LackeySchema = require('cms/shared/content-blocks').LackeySchema,
-    InlineSchema = require('cms/shared/inline'),
-    edit = require('prosemirror/dist/edit'),
     Media = require('cms/client/js/media'),
-    ProseMirror = edit.ProseMirror;
+    MeMarkdown = require('medium-editor-markdown'),
+    MediumEditor = require('medium-editor'),
+    debug = require('debug')('lackey-cms/modules/cms/client/js/wysiwyg'),
+    markdown = require('cms/shared/markdown'),
+    Insert = require('medium-editor-vanilla-insert')({
+        MediumEditor: MediumEditor
+    }),
+    Plain = require('medium-editor-remove-formats')(),
+    inlineButtons = [
+        'bold',
+        'italic',
+        'underline',
+        'plain'
+    ],
+    buttons = inlineButtons.concat([
+        'anchor',
+        'quote',
+        'pre',
+        'orderedlist',
+        'unorderedlist',
+        'justifyLeft',
+        'justifyCenter',
+        'justifyRight',
+        'justifyFull',
+        'h2',
+        'h3'
+    ]);
 
-require('prosemirror/dist/menu/tooltipmenu');
-require('prosemirror/dist/menu/menubar');
-
-let pool = [],
-    style = `
-    .ProseMirror-tooltip,
-    .ProseMirror-menu-dropdown-menu,
-    .ProseMirror-menubar,
-    .ProseMirror-prompt {
-        font-size: 12px;
-    }
-`,
-    styleBlock = document.createElement('style');
-
-styleBlock.innerHTML = style;
-document.body.appendChild(styleBlock);
+let pool = [];
 
 class Wysiwyg {
 
-    constructor(div) {
+    constructor(element) {
 
-        var self = this;
+        debug('Constructor', element);
 
-        this._div = div;
+        this._element = element;
         this._changed = false;
-        this._wrap = div.getAttribute('data-lky-type') || 'doc';
-        this.variant = div.getAttribute('data-lky-variant') || '*';
-        this._placeholder = div.getAttribute('placeholder') || 'Type here';
+        this._variant = element.getAttribute('data-lky-variant') || '*';
+        this._placeholder = element.getAttribute('placeholder') || 'Type here';
 
-        this._schema = LackeySchema;
-        if (this._wrap === 'inline') {
-            this._schema = InlineSchema;
-        }
-        this._contentId = div.getAttribute('data-lky-content');
-        this._path = div.getAttribute('data-lky-path') || null;
+        this._contentId = element.getAttribute('data-lky-content');
+        this._path = element.getAttribute('data-lky-path') || null;
 
-        top.Lackey
-            .manager
-            .get(this.contentId, this.path, this.variant, this._schema)
-            .then(function (source) {
-                self._source = source;
-                self.render();
-                top.Lackey.manager.on('reset', (event) => {
-                    if (event.data.type === 'content' && +event.data.id === +self._contentId) {
-                        top.Lackey
-                            .manager
-                            .get(self.contentId, self.path, self.variant, self._schema)
-                            .then((src) => {
-                                self._source = src;
-                                self._lock = true;
-                                self._pm.setContent(src, 'json');
-                                self._lock = false;
-                            });
-                    }
-                });
-            });
+        this.setup();
+
     }
 
-    get contentId() {
+    get id() {
+
+        debug('get id');
         return this._contentId;
     }
 
     get path() {
+
+        debug('get path');
         return this._path;
     }
 
-    ready() {
+    get variant() {
+
+        debug('get variant');
+        return this._variant;
+    }
+
+    setup() {
+        let self = this;
+        top.LackeyManager
+            .get(this.id, this.path, this.variant)
+            .then(source => {
+                self._source = source;
+                self.render();
+                top.LackeyManager
+                    .on('reset', event => {
+                        if (event.data.type === 'content' && +event.data.id === +self.id) {
+                            self.reset();
+                        }
+                    });
+            });
 
     }
-    isEmpty() {
-        return (this._pm.getContent('text').replace(/^\s+|\s+$/g, '').length === 0);
+
+    reset() {
+        let self = this;
+        top.LackeyManager
+            .get(self.id, self.path, self.variant)
+            .then(src => {
+                self._source = src;
+                self._lock = true;
+                self._element.innerHTML = markdown.toHTML(self._source, self._element.tagName);
+                self._lock = false;
+            });
     }
+
     render() {
 
-        this._div.style.minHeight = '50px';
+        debug('render');
 
-        let pm,
+        let
             self = this,
+            insertButtons = [],
             options = {
-                place: this._div,
-                schema: self._schema,
-                docFormat: typeof this._source === 'string' ? 'text' : 'json',
-                doc: this._source
+                paste: {}
             };
 
-        try {
-            this._pm = pm = new ProseMirror(options);
 
-            let overlay = document.createElement('div');
+        if (this._element.hasAttribute('data-lky-singleline')) {
+            options.disableReturn = true;
+            options.toolbar = {
+                buttons: inlineButtons
+            };
+        } else {
+            insertButtons = ['insert-media'];
+            options.toolbar = {
+                buttons: buttons
+            };
+            options.insert = {
+                buttons: ['image']
+            };
+        }
 
-            overlay.style.pointeEvents = 'none';
-            overlay.style.position = 'absolute';
-            overlay.style.display = 'none';
-            overlay.innerText = this._placeholder;
-            overlay.style.width = '100%';
-            overlay.style.opacity = 0.5;
-            overlay.style.textAling = 'center';
-            this._div.parentNode.insertBefore(overlay, this._div);
+        var InsertMedia = MediumEditor.Extension.extend({
+            name: 'insert-media',
+            getButton: function (editor, getter) {
+                var btn = document.createElement('button');
+                btn.innerText = 'Media';
+                btn.addEventListener('click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
 
-            if (!window.getComputedStyle(overlay.parentNode).position) {
-                overlay.parentNode.style.position = 'relative';
-                overlay.style.transform = 'translateY(-50%)';
-                overlay.style.top = '50%';
+                    top.LackeyManager
+                        .stack
+                        .inspectMedia({}, null)
+
+                    .then(result => {
+
+                        if (result) {
+                            let
+                                node = getter(),
+                                media = new Media(null, true);
+                            media.node = node;
+                            media.set(result);
+                            Wysiwyg.initInTextMedia(media);
+                            media.node.parentNode.dispatchEvent(new Event('change'));
+
+                        }
+                    });
+
+                }, true);
+                return btn;
             }
+        });
 
-            if (self.isEmpty()) {
-                overlay.style.display = 'block';
-            }
+        options.extensions = {
+            insertMedia: new InsertMedia(),
+            plain: new Plain({}),
+            insert: new Insert({
+                buttons: insertButtons
+            }),
+            markdown: new MeMarkdown({
+                toMarkdownOptions: {
+                    converters: [
+                        {
+                            filter: node => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
+                            replacement: content => content
+                        },
+                        {
+                            filter: 'iframe',
+                            replacement: (content, node) => '!iframe[](' + node.src + ')'
+                        },
+                        {
+                            filter: 'video',
+                            replacement: (content, node) => '!video[](' + node.src + ')'
+                        },
+                        {
+                            filter: 'img',
+                            replacement: (content, node) => {
+                                var alt = node.alt || '';
+                                var src = node.getAttribute('src') || '';
+                                var title = node.title || '';
+                                var titlePart = title ? ' "' + title + '"' : '';
+                                var type = '';
 
-            pm.on('focus', function () {
-                overlay.style.display = 'none';
-            });
-
-            pm.on('blur', function () {
-                if (self.isEmpty()) {
-                    overlay.style.display = 'block';
+                                if (src && node.hasAttribute('markdown-type')) {
+                                    type = node.getAttribute('markdown-type');
+                                    src = node.getAttribute('markdown-src');
+                                    return '@[' + type + ']' + '(' + src + ')';
+                                }
+                                return src ? '![' + alt + ']' + '(' + src + titlePart + ')' : '';
+                            }
+                        }
+                    ]
                 }
-            });
+            }, text => {
 
-            pm.setOption('tooltipMenu', {
-                selectedBlockMenu: true
-            });
-
-            /*pm.setOption('menuBar', {
-                float: true
-            });*/
-
-            pm.on('change', function () {
-                if (this._lock) {
+                if (self._lock) {
                     return;
                 }
                 self._changed = true;
-                let newContent = pm.getContent('json');
-                top.Lackey.manager.set(self.contentId, self.path, self.variant, newContent);
-            });
-        } catch (error) {
-            console.error('this', this);
-            console.error(error.stack);
-            throw error;
 
-        }
+                top.LackeyManager.set(self.id, self.path, self.variant, text);
+
+            })
+        };
+
+        self._lock = true;
+        new MediumEditor(this._element, options);
+
+        Array.prototype.slice
+            .call(this._element.querySelectorAll('img, video'))
+            .forEach(element => Wysiwyg.initInTextMedia(new Media(element, true)));
+
+        self._lock = false;
 
     }
 
-    static factory(div) {
-        return new Wysiwyg(div);
+    static initInTextMedia(media) {
+
+        media.selected(mediaObject => {
+
+            top.LackeyManager
+                .stack
+                .inspectMedia(mediaObject.media, mediaObject.node)
+
+            .then(result => {
+                if (result) {
+                    mediaObject.set(result);
+                }
+                if (result === -1) {
+                    mediaObject.node.parentNode.removeChild(mediaObject.node);
+                }
+                var event = new Event('change');
+                mediaObject.node.parentNode.dispatchEvent(event);
+            });
+        });
+    }
+
+    static factory(element) {
+
+        debug('factory', element);
+        return new Wysiwyg(element);
     }
 
     static init() {
 
-        if(!top.Lackey || !top.Lackey.manager) {
+        debug('init');
+
+        if (!top.Lackey || !top.LackeyManager) {
+            debug('init - wait');
             setTimeout(() => {
                 Wysiwyg.init();
             }, 250);
             return;
         }
 
-        lackey.getWithAttribute('data-lky-pm').forEach(Wysiwyg.factory);
+        lackey
+            .getWithAttribute('data-lky-pm')
+            .forEach(Wysiwyg.factory);
 
-        lackey.select('[data-lky-media]').forEach((element) => {
-            let media = new Media(element);
-            media.selected((mediaObject) => {
+        lackey
+            .select('[data-lky-media]')
+            .forEach(Wysiwyg.initMedia);
+    }
 
-                top.Lackey.manager.stack
-                    .inspectMedia(mediaObject.media, mediaObject.node)
+    static initMedia(element) {
 
-                    .then((result) => {
-                        if (result || result === -1) {
-                            mediaObject.set(result !== -1 ? result : null);
-                            mediaObject.notify();
-                        }
-                    });
+        debug('initMedia', element);
+
+        let media = new Media(element);
+        media.selected(mediaObject => {
+
+            top.LackeyManager
+                .stack
+                .inspectMedia(mediaObject.media, mediaObject.node)
+
+            .then(result => {
+                if (result || result === -1) {
+                    mediaObject.set(result !== -1 ? result : null);
+                    mediaObject.notify();
+                }
             });
         });
     }
 
+
     static getContents() {
+
+        debug('getContents');
+
         let content = [];
-        pool.forEach((instance) => {
-            if (content.indexOf(instance.contentId) === -1) {
-                content.push(instance.contentId);
-            }
-        });
+        pool
+            .forEach(instance => {
+                if (content.indexOf(instance.id) === -1) {
+                    content.push(instance.id);
+                }
+            });
         return content;
     }
 
     static get pool() {
+
+        debug('get pool');
+
         return pool;
     }
 

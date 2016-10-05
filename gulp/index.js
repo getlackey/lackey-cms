@@ -21,9 +21,7 @@ const sass = require('gulp-sass'),
     rename = require('gulp-rename'),
     del = require('del'),
     browserify = require('gulp-browserify'),
-    babel = require('gulp-babel'),
     nodemon = require('gulp-nodemon'),
-    babelify = require('babelify'),
     autoprefixer = require('gulp-autoprefixer'),
     dust = require('gulp-dust-2.7'),
     plumber = require('gulp-plumber');
@@ -65,6 +63,7 @@ module.exports = (gulp, projectDIR) => {
             lackeyDIR + '/modules/*/shared/**/*',
             projectDIR + '/modules/*/client/**/*',
             projectDIR + '/modules/*/shared/**/*',
+            projectDIR + '/**/*.yml',
             projectDIR + '/node_modules'
         ], [
             'lackey.resources'
@@ -177,9 +176,6 @@ module.exports = (gulp, projectDIR) => {
                 ],
                 debug: true
             }))
-            .pipe(babel({
-                presets: ['es2015']
-            }))
             .pipe(rename((path) => {
                 path.dirname = path.dirname.replace(/^([^\/]+)\/client\/js/, '$1/');
             }))
@@ -212,6 +208,7 @@ module.exports = (gulp, projectDIR) => {
             from + '/modules/*/client/views/**/*.dust',
             from + '/modules/*/shared/views/**/*.dust'
         ])
+            .pipe(plumber())
             .pipe(dust({
                 name: (file) => {
                     let filePath = file.path;

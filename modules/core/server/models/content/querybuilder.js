@@ -98,6 +98,30 @@ const
             LOWER(name) like LOWER('%$1%')
             OR
             LOWER(route) like ('%$1%')
+            $2
+        )`,
+    TAXONIMIES_FREE_TEXT_SEARCH = `
+        OR
+            id IN (
+                SELECT c."contentId"
+                    FROM "contentToTaxonomy" c
+                    JOIN "taxonomy" t ON
+                        t.id = c."taxonomyId"
+                        AND (t.name LIKE '%$1%' OR t.label LIKE '%$1%')
+                    JOIN "taxonomyType" tt ON
+                        tt.id = t."taxonomyTypeId"
+                        AND tt.name = '$2'
+            )
+        OR
+            "templateId" IN (
+                SELECT c."templateId"
+                    FROM "templateToTaxonomy" c
+                    JOIN "taxonomy" t ON
+                        t.id = c."taxonomyId"
+                        AND (t.name LIKE '%$1%' OR t.label LIKE '%$1%')
+                    JOIN "taxonomyType" tt ON
+                        tt.id = t."taxonomyTypeId"
+                        AND tt.name = '$2'
         )`;
 
 module.exports = require(LACKEY_PATH)
@@ -184,8 +208,20 @@ module.exports = require(LACKEY_PATH)
                 this._wheres.push('state = \'published\'');
             }
 
-            withTextSearch(text) {
-                this._wheres.push(TEXT_SEARCH.replace('$1', text.replace(/[^a-zA-Z0-9\s+]/g, '')));
+            withTextSearch(text, freeTextTax) {
+
+                let
+                    taxes = '',
+                    value = text.replace(/[^a-zA-Z0-9\s+]/g, '');
+
+                if (freeTextTax && freeTextTax.length) {
+                    freeTextTax
+                        .forEach(tax => {
+                            taxes += TAXONIMIES_FREE_TEXT_SEARCH.replace(/\$1/g, value).replace(/\$2/g, tax);
+                        });
+                }
+
+                this._wheres.push(TEXT_SEARCH.replace(/\$1/g, value).replace('$2', taxes));
             }
 
             /**

@@ -259,6 +259,11 @@ module.exports = Schema
                     table.json('require');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'template', 'allowTaxonomies', (table) => {
+                    table.json('allowTaxonomies');
+                });
+            })
             //
             // TABLE content
             // .userId -> users.id
@@ -301,6 +306,15 @@ module.exports = Schema
                 return Schema.addColumn(knex, 'content', 'publishAt', (table) => {
                     table.date('publishAt').notNullable().defaultTo(knex.raw('now()'));
                 });
+            })
+            .then(() => {
+                return knex.schema
+                    .hasColumn('content', 'plaintext')
+                    .then(exists => {
+                        if (!exists) {
+                            return require(__dirname + '/content/upgrade')(knex);
+                        }
+                    });
             })
             //
             // TABLE redirect
@@ -365,6 +379,16 @@ module.exports = Schema
             .then(() => {
                 return Schema.addColumn(knex, 'taxonomyType', 'restrictive', (table) => {
                     table.boolean('restrictive');
+                });
+            })
+            .then(() => {
+                return Schema.addColumn(knex, 'taxonomyType', 'description', (table) => {
+                    table.string('description');
+                });
+            })
+            .then(() => {
+                return Schema.addColumn(knex, 'taxonomyType', 'allowCreation', (table) => {
+                    table.boolean('allowCreation');
                 });
             })
             //
@@ -572,6 +596,9 @@ module.exports = Schema
                 return Schema.addColumn(knex, 'analytics', 'map', (table) => {
                     table.json('map');
                 });
+            })
+            .then(() => {
+                return knex.schema.raw('UPDATE taxonomy SET name = lower(name)');
             })
             .then(() => {
                 SCli.debug(__MODULE_NAME, 'Schema applied');

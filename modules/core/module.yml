@@ -28,7 +28,7 @@ init:
         -
             name: developer
             acl:
-                deleteUser: '*'
+                manageUser: '*'
                 /admin*: # ADMIN IFRAME
                     - get
                 /cms*: # CMS LAYER

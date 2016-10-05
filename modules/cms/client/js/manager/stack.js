@@ -16,13 +16,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const emit = require('cms/client/js/emit'),
+const
+    emit = require('cms/client/js/emit'),
     StructureUI = require('cms/client/js/manager/structure.ui.js'),
     ArticlePicker = require('cms/client/js/manager/article.picker.ui.js'),
     BlockPicker = require('cms/client/js/manager/block.picker.ui.js'),
     DateTimePicker = require('cms/client/js/manager/datetime.picker.ui.js'),
     Gallery = require('cms/client/js/manager/gallery.ui.js'),
     UserPricker = require('cms/client/js/manager/user.picker.ui.js'),
+    TaxonomyPricker = require('cms/client/js/manager/taxonomy.picker.ui.js'),
+    RolePicker = require('cms/client/js/manager/role.picker.ui.js'),
     lackey = require('core/client/js');
 /**
  * @module lackey-cms/modules/cms/client/manager
@@ -31,9 +34,10 @@ const emit = require('cms/client/js/emit'),
 /**
  * @constructs lackey-cms/modules/cms/client/manager/Stack
  */
-function Stack(repository) {
+function Stack(repository, manager) {
 
     this._repository = repository;
+    this.manager = manager;
     this._stack = [];
 
     Object.defineProperty(this, 'length', {
@@ -70,106 +74,95 @@ function Stack(repository) {
     }, true);*/
 }
 
-Stack.prototype.inspectStructure = function (structureController) {
+Stack.prototype.inspectStructure = function (structureController, tab) {
+    try {
+        lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
+
+        let self = this,
+            promise = structureController
+            .buildUI()
+            .then(element => {
+                if (tab) {
+                    element.setAttribute('data-lky-edit', tab);
+                }
+                self.node.appendChild(element);
+                return structureController.fadeIn();
+            });
+
+        this._stack.push(structureController);
+
+        return promise;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+Stack.prototype.pick = function (picker, pop) {
 
     lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
 
-    let self = this,
-        promise = structureController
+    let self = this;
+
+    picker
         .buildUI()
-        .then((element) => {
+        .then(element => {
             self.node.appendChild(element);
-            return structureController.fadeIn();
+            return picker.fadeIn();
         });
 
-    this._stack.push(structureController);
+    this._stack.push(picker);
 
-    return promise;
+    return picker
+        .promise
+        .then(rt => {
+            self.pop(pop);
+            return rt;
+        }, () => {
+            self.pop(pop);
+            return null;
+        });
 };
 
 Stack.prototype.pickArticle = function (route) {
-
-    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
-
-    let self = this,
-        articlePicker = new ArticlePicker({
+    return this
+        .pick(new ArticlePicker({
             route: route,
             stack: this
-        });
-
-    articlePicker
-        .buildUI()
-        .then((element) => {
-            self.node.appendChild(element);
-            return articlePicker.fadeIn();
-        });
-
-    this._stack.push(articlePicker);
-
-    return articlePicker
-        .promise
-        .then((rt) => {
-            self.pop(true);
-            return rt;
-        });
+        }), true);
 };
 
-Stack.prototype.pickUser = function (id) {
-
-    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
-
-    let self = this,
-        userPicker = new UserPricker({
-            route: id,
+Stack.prototype.pickUser = function (userId) {
+    return this
+        .pick(new UserPricker({
+            route: userId,
             stack: this
-        });
+        }), true);
+};
 
-    userPicker
-        .buildUI()
-        .then((element) => {
-            self.node.appendChild(element);
-            return userPicker.fadeIn();
-        });
+Stack.prototype.pickTaxonomy = function (taxonmyType, addable) {
+    return this
+        .pick(new TaxonomyPricker({
+            type: taxonmyType,
+            addable: !!addable,
+            stack: this
+        }), true);
+};
 
-    this._stack.push(userPicker);
-
-    return userPicker
-        .promise
-        .then((rt) => {
-            self.pop(true);
-            return rt;
-        });
+Stack.prototype.pickRole = function () {
+    return this
+        .pick(new RolePicker({
+            stack: this
+        }), true);
 };
 
 Stack.prototype.pickBlock = function () {
-
-    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
-
-    let self = this,
-        blockPicker = new BlockPicker({
+    return this
+        .pick(new BlockPicker({
             stack: this
-        });
-
-    blockPicker
-        .buildUI()
-        .then((element) => {
-            self.node.appendChild(element);
-            return blockPicker.fadeIn();
-        });
-
-    this._stack.push(blockPicker);
-
-    return blockPicker
-        .promise
-        .then((rt) => {
-            self.pop();
-            return rt;
-        });
+        }), undefined);
 };
 
 Stack.prototype.pickDateTime = function (current) {
-
-    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
 
     let dateTime = new Date();
     try {
@@ -178,59 +171,21 @@ Stack.prototype.pickDateTime = function (current) {
         console.error(e);
     }
 
-    let self = this,
-        dateTimePicker = new DateTimePicker({
+    return this
+        .pick(new DateTimePicker({
             stack: this,
             current: dateTime
-        });
-
-    dateTimePicker
-        .buildUI()
-        .then((element) => {
-            self.node.appendChild(element);
-            return dateTimePicker.fadeIn();
-        });
-
-    this._stack.push(dateTimePicker);
-
-    return dateTimePicker
-        .promise
-        .then((rt) => {
-            self.pop(true);
-            return rt;
-        }, () => {
-            self.pop(true);
-            return null;
-        });
-
+        }), true);
 };
 
 Stack.prototype.inspectMedia = function (media, node) {
-
-    lackey.hook('main-area').setAttribute('data-lky-settings-open', 'true');
-
-    let self = this,
-        gallery = new Gallery({
+    return this
+        .pick(new Gallery({
             media: media,
             node: node,
-            stack: this
-        });
-
-    gallery
-        .buildUI(true)
-        .then((element) => {
-            self.node.appendChild(element);
-            return gallery.fadeIn();
-        });
-
-    this._stack.push(gallery);
-
-    return gallery
-        .promise
-        .then((mediaObject) => {
-            self.pop(true);
-            return mediaObject;
-        });
+            stack: this,
+            manager: this.manager
+        }), true);
 };
 
 /**
@@ -261,6 +216,7 @@ Stack.prototype.pop = function (clearing) {
 };
 
 Stack.prototype.clear = function () {
+
     let self = this;
 
     return this

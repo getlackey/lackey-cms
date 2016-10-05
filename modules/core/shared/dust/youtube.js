@@ -1,4 +1,5 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true */
+/* THIS ONE HAS TO BE ES5!!! */
 /* eslint no-param-reassign:0 */
 'use strict';
 /*
@@ -17,7 +18,8 @@
     limitations under the License.
 */
 
-var isYoutube,
+var
+    isYoutube,
     isVimeo;
 
 if (typeof window === 'undefined') {
@@ -30,17 +32,18 @@ if (typeof window === 'undefined') {
 }
 
 
-module.exports = (dust) => {
+module.exports = function (dust) {
 
     dust.helpers.youtube = function (chunk, context, bodies, params) {
 
-        let path = params.path,
+        var
+            path = params.path,
             youtube = isYoutube(path),
             type = params.type || '';
 
-        if(youtube) {
+        if (youtube) {
             if (type === 'image') {
-                chunk = chunk.render(bodies.block, context.push('https://img.youtube.com/vi/' + youtube + '/default.jpg'));
+                chunk = chunk.render(bodies.block, context.push('https://img.youtube.com/vi/' + youtube + '/maxresdefault.jpg'));
             } else {
                 chunk = chunk.render(bodies.block, context.push(youtube));
             }
@@ -55,10 +58,11 @@ module.exports = (dust) => {
 
     dust.helpers.vimeo = function (chunk, context, bodies, params) {
 
-        let path = params.path,
+        var
+            path = params.path,
             vimeo = isVimeo(path);
 
-        if(vimeo) {
+        if (vimeo) {
             chunk = chunk.render(bodies.block, context.push(vimeo));
         } else {
             chunk = chunk.render(bodies.else, context);

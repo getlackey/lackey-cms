@@ -18,11 +18,12 @@
     limitations under the License.
 */
 
-const SUtils = require(LACKEY_PATH).utils,
+const
+    SUtils = require(LACKEY_PATH).utils,
     objection = require('objection'),
     SCli = require(LACKEY_PATH).cli,
     Model = objection.Model,
-      _ = require('lodash'),
+    _ = require('lodash'),
     __MODULE_NAME = 'lackey-cms/modules/core/server/models/activity-log';
 
 SCli.debug(__MODULE_NAME, 'REQUIRED');
@@ -34,9 +35,10 @@ SCli.debug(__MODULE_NAME, 'REQUIRED');
 module.exports = SUtils
     .waitForAs(__MODULE_NAME,
         SUtils.cmsMod('core').model('taggable'),
+        SUtils.cmsMod('core').model('taxonomy-type'),
         require('../knex')
     )
-    .then((Taggable) => {
+    .then((Taggable, TaxonomyType) => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -46,6 +48,7 @@ module.exports = SUtils
          * @private
          */
         class TemplateModel extends Model {
+
             static get tableName() {
                 return 'template';
             }
@@ -57,6 +60,7 @@ module.exports = SUtils
          * @private
          */
         class TemplateToTaxonomy extends Model {
+
             static get tableName() {
                 return 'templateToTaxonomy';
             }
@@ -75,31 +79,38 @@ module.exports = SUtils
              * @property {string}
              */
             static get api() {
+
                 return '/cms/template';
             }
 
 
             static get model() {
+
                 return TemplateModel;
             }
 
             static get taxonomyRelationModel() {
+
                 return TemplateToTaxonomy;
             }
 
             static get taxonomyRelationField() {
+
                 return 'templateId';
             }
 
             get path() {
+
                 return this._doc.path;
             }
 
             get type() {
+
                 return this._doc.type;
             }
 
             get populate() {
+
                 return this._doc.populate || [];
             }
 
@@ -115,8 +126,14 @@ module.exports = SUtils
                 return this._doc.require || [];
             }
 
+            get allowTaxonomies() {
+                return this._doc.allowTaxonomies || [];
+            }
+
             get props() {
+
                 let props = this._doc.props || {};
+
                 if (this._doc.type !== 'block' && this._doc.type !== 'variant') {
                     props.og_title = props.og_title || {
                         label: 'Title (used in OpenGraph)',
@@ -140,6 +157,7 @@ module.exports = SUtils
             }
 
             static selectable(user) {
+
                 SCli.debug('lackey-cms/modules/cms/server/models/template', 'selectable', this.model.tableName);
                 let Self = this;
                 return SCli
@@ -148,14 +166,17 @@ module.exports = SUtils
                         .where('selectable', true)
                         .where('type', 'template')
                     )
-                    .then((results) => {
-                        return Promise.all(results.map((result) => Self.factory(result)));
-                    })
-                    .then((templates) => {
-                        return Promise.all(templates.map(template => template.canEdit(user).then(canEdit => canEdit ? template : null)));
+                    .then(results => {
+                        return Promise
+                            .all(results.map(result => Self.factory(result)));
                     })
                     .then(templates => {
-                        return templates.filter(template => template !== null);
+                        return Promise
+                            .all(templates.map(template => template.canEdit(user).then(canEdit => canEdit ? template : null)));
+                    })
+                    .then(templates => {
+                        return templates
+                            .filter(template => template !== null);
                     });
             }
 
@@ -170,8 +191,10 @@ module.exports = SUtils
             }
 
             diff(data) {
+
                 let self = this;
                 _.merge(self._doc, data);
+
                 [
                     'javascripts',
                     'stylesheets',
@@ -182,7 +205,7 @@ module.exports = SUtils
                     'require',
                     'taxonomies'
                 ].forEach(key => {
-                    if(data[key] !== undefined) {
+                    if (data[key] !== undefined) {
                         self._doc[key] = data[key];
                     }
                 });
@@ -190,6 +213,7 @@ module.exports = SUtils
             }
 
             toJSON() {
+
                 return {
                     id: this.id,
                     name: this._doc.name,
@@ -205,7 +229,8 @@ module.exports = SUtils
                     prefix: this._doc.prefix || '',
                     variants: this.variants || [],
                     require: this._doc.require || [],
-                    taxonomies: this.taxonomies || []
+                    taxonomies: this.taxonomies || [],
+                    allowTaxonomies: this.allowTaxonomies || []
                 };
             }
 
@@ -213,7 +238,7 @@ module.exports = SUtils
 
                 return super
                     ._preSave()
-                    .then((self) => {
+                    .then(self => {
                         if (self._doc) {
 
                             if (self._doc.javascripts) {
@@ -252,6 +277,19 @@ module.exports = SUtils
                                 }
                                 self._doc.require = JSON.stringify(self._doc.require);
                             }
+                            if (self._doc.allowTaxonomies) {
+                                if (!Array.isArray(self._doc.allowTaxonomies)) {
+                                    self._doc.allowTaxonomies = [self._doc.allowTaxonomies];
+                                }
+                                self._doc.allowTaxonomies = JSON.stringify(self._doc.allowTaxonomies
+                                    .filter(a => !!a)
+                                    .map(taxonomyType => {
+                                        if (typeof taxonomyType === 'string') {
+                                            return taxonomyType;
+                                        }
+                                        return taxonomyType.name;
+                                    }));
+                            }
                             if (!self._doc.type) {
                                 self._doc.type = 'template';
                             }
@@ -261,22 +299,30 @@ module.exports = SUtils
             }
 
             static getOfType(type) {
-                return SCli.sql(TemplateModel
+
+                return SCli
+                    .sql(TemplateModel
                         .query()
                         .where('type', type))
-                    .then((results) => {
-                        return results.map((result) => new Template(result));
+                    .then(results => {
+                        return results
+                            .map(result => new Template(result));
                     });
             }
 
             static getByPath(path) {
+
                 return this.findOneBy('path', path);
             }
 
             _populate() {
+
+                let self = this;
+
                 return super
                     ._populate()
-                    .then((self) => {
+                    .then(() => {
+
                         if (typeof self._doc.javascripts === 'string') {
                             self._doc.javascripts = JSON.parse(self._doc.javascripts);
                         }
@@ -289,22 +335,39 @@ module.exports = SUtils
                         if (typeof self._doc.require === 'string') {
                             self._doc.require = JSON.parse(self._doc.require);
                         }
+
                         if (Array.isArray(self._doc.variants)) {
+
                             let promises = self
                                 ._doc
                                 .variants
-                                .map((variant) => {
+                                .map(variant => {
                                     return Template
                                         .getByPath(variant);
 
                                 });
+
                             return Promise
                                 .all(promises)
-                                .then((variants) => {
+                                .then(variants => {
                                     self.variants = variants;
                                     return self;
                                 });
                         }
+                    })
+                    .then(() => {
+
+                        if (typeof self._doc.allowTaxonomies === 'string') {
+                            self._doc.allowTaxonomies = JSON.parse(self._doc.allowTaxonomies);
+                        } else if(!Array.isArray(self._doc.allowTaxonomies)) {
+                            self._doc.allowTaxonomies = [];
+                        }
+                        return Promise
+                            .all((self._doc.allowTaxonomies || [])
+                                .map(taxonomyTypeName => TaxonomyType.getByName(taxonomyTypeName)));
+                    })
+                    .then(taxonomyTypes => {
+                        self._doc.allowTaxonomies = taxonomyTypes;
                         return self;
                     });
             }

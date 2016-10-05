@@ -1,0 +1,12 @@
+{! Used by lackey-cms/modules/cms/client/views/article-picker.dust !}
+{#data}
+    <li>
+        <div>
+            <span>{?label}{label}{:else}{name}{/label}</span>
+            <pre>{count}</pre>
+        </div>
+        <div>
+            <button data-lky-btn data-lky-data="{.|js}">Choose</button>
+        </div>
+    </li>
+{/data}

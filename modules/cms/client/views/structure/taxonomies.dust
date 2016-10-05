@@ -1,0 +1,24 @@
+{#template.allowTaxonomies}
+    <label>{label}</label>
+    <small>{description}</small>
+    {#. taxtype=name}
+    {#taxonomies}
+        {@eq key=type.name value=taxtype}
+        <span data-tag>
+            {?label}{label}{:else}{name}{/label}
+            <a data-lky-hook="taxonomy-remove" data-type="{type.name}" data-name="{name}">&times;</a>
+        </span>
+        {/eq}
+    {/taxonomies}
+    {/.}
+    <button data-lky-btn="" data-lky-hook="action:pick-taxonomy" data-type="{name}" data-addable="{?allowCreation}true{/allowCreation}">Add</button>
+
+{/template.allowTaxonomies}
+<br/>
+<h5>Taxonomies Inherited from the template</h5>
+<small>Can be used as filter in search or restrict access</small>
+{#template.taxonomies}
+<span data-tag disabled>
+    {type.label} : {label}
+</span>
+{/template.taxonomies}

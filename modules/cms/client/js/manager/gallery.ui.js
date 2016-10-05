@@ -16,7 +16,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const Emitter = require('cms/client/js/emitter').Emitter,
+const
+    Emitter = require('cms/client/js/emitter').Emitter,
     lackey = require('core/client/js'),
     template = require('core/client/js/template'),
     api = require('core/client/js/api'),
@@ -122,7 +123,7 @@ class Gallery extends Emitter {
                                 .create('/cms/media', {
                                     source: value
                                 })
-                                .then((media) => {
+                                .then(media => {
                                     self.resolve(media);
                                 });
                         }, true);
@@ -165,14 +166,14 @@ class Gallery extends Emitter {
         let
             restrictionNode = lackey.hook('restricitons', this.node),
             taxes = context.taxonomies || [],
-            restrictive = taxes.filter((tax) => tax.type && tax.type.restrictive),
+            restrictive = taxes.filter(tax => tax.type && tax.type.restrictive),
             options = {
                 createNew: false,
                 separators: [
-                            13,
-                            20
-                        ],
-                formatLabel: (item) => {
+                    13,
+                    20
+                ],
+                formatLabel: item => {
                     return (item.type ? item.type.label + ': ' : '') + (item.label || item.name);
                 },
                 equals: (item, term) => {
@@ -184,14 +185,14 @@ class Gallery extends Emitter {
                 query: (text) => {
                     return api
                         .read('/cms/taxonomy?restrictive=1&name=' + encodeURI(text + '%'))
-                        .then((data) => data.data);
+                        .then(data => data.data);
                 },
                 value: restrictive
             })),
             handler = () => {
 
                 context.taxonomies = [].concat(restrictiveControl.value);
-                top.Lackey.manager.setMedia(context.id, context);
+                self.options.manager.setMedia(context.id, context);
             };
         restrictiveControl.on('changed', handler);
 
@@ -212,14 +213,14 @@ class Gallery extends Emitter {
 
                 lackey.bind('lky:remove', 'click', (event, hook) => {
                     let index = hook.getAttribute('data-lky-idx');
-                    return top.Lackey.manager
+                    return self.options.manager
                         .getMedia(self.options.media.id)
-                        .then((media) => {
+                        .then(media => {
                             media.alternatives = media.alternatives || [];
                             media.alternatives.splice(index, 1);
-                            return top.Lackey.manager.setMedia(media.id, media);
+                            return self.options.manager.setMedia(media.id, media);
                         })
-                        .then((media) => {
+                        .then(media => {
                             self.options.media = media;
                             return self.alternative();
                         });
@@ -239,38 +240,40 @@ class Gallery extends Emitter {
 
     addAlternative(source, mimeType, mediaQuery) {
         let self = this;
-        return top.Lackey.manager
+        return self.options.manager
             .getMedia(this.options.media.id)
-            .then((media) => {
+            .then(media => {
                 media.alternatives = media.alternatives || [];
                 media.alternatives.push({
                     source: source,
                     mime: mimeType,
                     media: mediaQuery
                 });
-                return top.Lackey.manager.setMedia(media.id, media);
+                return self.options.manager.setMedia(media.id, media);
             })
-            .then((media) => {
+            .then(media => {
                 self.options.media = media;
                 return self.alternative();
             });
     }
 
     altChange(event, hook) {
-        top.Lackey.manager
+        let self = this;
+        this.options.manager
             .getMedia(this.options.media.id)
             .then((media) => {
                 media.attributes.alt = hook.value;
-                top.Lackey.manager.setMedia(media.id, media);
+                self.options.manager.setMedia(media.id, media);
             });
     }
 
     mimeChange(event, hook) {
-        top.Lackey.manager
+        let self = this;
+        self.options.manager
             .getMedia(this.options.media.id)
-            .then((media) => {
+            .then(media => {
                 media.mime = hook.value;
-                top.Lackey.manager.setMedia(media.id, media);
+                self.options.manager.setMedia(media.id, media);
             });
     }
 
@@ -292,7 +295,7 @@ class Gallery extends Emitter {
      * @returns {Promise}
      */
     fadeIn() {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             let self = this,
                 handler = () => {
                     self.node.removeEventListener('transitionend', handler, false);
@@ -310,17 +313,8 @@ class Gallery extends Emitter {
      * @returns {Promise}
      */
     remove() {
-        return new Promise((resolve) => {
-
-            let self = this,
-                handler = () => {
-                    self.node.removeEventListener('transitionend', handler, false);
-                    self.node.parentNode.removeChild(self.node);
-                    resolve();
-                };
-            self.node.addEventListener('transitionend', handler, false);
-            self.node.removeAttribute('data-lky-open');
-        });
+        this.node.parentNode.removeChild(this.node);
+        return Promise.resolve();
     }
 
     toggle(event) {
@@ -347,10 +341,10 @@ class Gallery extends Emitter {
             input = lackey.select('input[type="search"]', this.node)[0];
         api
             .read('/cms/media?q=' + encodeURI(input.value))
-            .then((list) => {
+            .then(list => {
                 return template.redraw(lackey.select('[data-lky-hook="settings.gallery"] tbody', self.node)[0], list);
             })
-            .then((nodes) => {
+            .then(nodes => {
                 lackey.bind('[data-lky-btn]', 'click', (event, hook) => {
                     self.resolve(JSON.parse(hook.getAttribute('data-lky-media')));
                 }, nodes[0]);

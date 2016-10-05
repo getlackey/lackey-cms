@@ -1,4 +1,5 @@
-/* jslint node:true, esnext:true */
+/* eslint no-cond-assign:0, no-new:0 */
+/* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -15,24 +16,27 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+const Picker = require('cms/client/js/manager/picker.ui.js');
 
-const
-    LackeySchema = require('cms/shared/content-blocks').LackeySchema,
-    format = require('prosemirror/dist/format'),
-    toText = format.toText,
-    parseFrom = format.parseFrom;
+/**
+ * @class
+ */
+class RolePickerUI extends Picker {
 
+    get template() {
 
-module.exports = (dust) => {
+        return 'cms/cms/role-picker';
+    }
 
-    dust.helpers.snippet = function (chunk, context, bodies, params) {
-        let source = params.source || {
-                'type': 'doc'
-            },
-            limit = params.limit || 100,
-            text = toText(parseFrom(LackeySchema, source, 'json')).substring(0, limit);
-        return chunk.write(text);
+    get uri() {
 
-    };
+        return '/cms/role?q=';
+    }
 
-};
+    selected(hook) {
+        this.resolve(hook.getAttribute('data-lky-data'));
+    }
+
+}
+
+module.exports = RolePickerUI;

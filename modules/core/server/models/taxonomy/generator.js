@@ -29,7 +29,7 @@ function getTaxonomyType(data) {
 
 module.exports = (data) => {
     return require('./index')
-        .then((Taxonomy) => {
+        .then(Taxonomy => {
 
             if (typeof data === 'string') {
                 SCli.debug('lackey/modules/cms/server/models/taxonomy/generator', 'Gets taxonomy ' + data + ' by name');
@@ -38,9 +38,10 @@ module.exports = (data) => {
 
             function next() {
                 SCli.debug('lackey/modules/cms/server/models/taxonomy/generator', 'Ensure that taxonomy  ' + data.name + ' exists');
+                data.name = data.name.toLowerCase();
                 return Taxonomy
                     .byTypeAndName(data.type, data.name)
-                    .then((tax) => {
+                    .then(tax => {
                         delete data.type;
 
                         if (!tax) {
@@ -51,7 +52,7 @@ module.exports = (data) => {
                         }
                         return tax;
                     })
-                    .then((tax) => {
+                    .then(tax => {
                         SCli.debug('lackey/modules/cms/server/models/taxonomy/generator', 'Ensured that taxonomy ' + data.name + ' exists');
                         return tax;
                     });
@@ -59,8 +60,9 @@ module.exports = (data) => {
 
             if (data.type && !data.type.id) {
                 return getTaxonomyType(data.type)
-                    .then((type) => {
+                    .then(type => {
                         data.taxonomyTypeId = type.id;
+                        data.type = type.name;
                         return next();
                     });
 
@@ -82,21 +84,22 @@ module.exports.parse = (data) => {
     }
     return Promise.all(Object.keys(feed).map((typeName) => {
             return getTaxonomyType({
-                name: typeName
-            }).then((taxonomyType) => {
-                return Promise
-                    .all(feed[typeName]
-                        .map((taxonomyName) => {
-                            return module.exports({
-                                    taxonomyTypeId: taxonomyType.id,
-                                    name: taxonomyName
-                                })
-                                .then((taxonomy) => {
-                                    taxonomies.push(taxonomy.id);
-                                });
-                        }));
+                    name: typeName
+                })
+                .then(taxonomyType => {
+                    return Promise
+                        .all(feed[typeName]
+                            .map(taxonomyName => {
+                                return module.exports({
+                                        taxonomyTypeId: taxonomyType.id,
+                                        name: taxonomyName
+                                    })
+                                    .then(taxonomy => {
+                                        taxonomies.push(taxonomy.id);
+                                    });
+                            }));
 
-            });
+                });
         }))
         .then(() => {
             return taxonomies;

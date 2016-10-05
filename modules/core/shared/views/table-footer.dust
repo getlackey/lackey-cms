@@ -1,5 +1,4 @@
 <tr>
-    <td></td>
     <td colspan="{@math key=table.columns.length method="add" operand=1 /}">
         <ul>
         {@iterate from=1 to=table.paging.pages}
@@ -19,5 +18,4 @@
         {/iterate}
         </ul>
     </td>
-    <td></td>
 </tr>

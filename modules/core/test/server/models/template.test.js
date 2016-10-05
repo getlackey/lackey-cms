@@ -90,6 +90,7 @@ describe('models/cms/server/models/template', () => {
                         },
                     },
                     selectable: true,
+                    allowTaxonomies: [],
                     thumb: null,
                     type: 'template',
                     prefix: '',

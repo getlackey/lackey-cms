@@ -84,6 +84,43 @@ module.exports = SUtils
 
             }
 
+
+            addTaxonomy(taxonomy) {
+                let self = this,
+                    parent = this.constructor,
+                    query = {
+
+                        taxonomyId: taxonomy.id
+                    };
+                query[parent.taxonomyRelationField] = this.id;
+
+                console.log(this);
+                console.log(this.taxonomyRelationModel);
+                console.log(this.taxonomyRelationField);
+
+
+                return SCli.sql(parent.taxonomyRelationModel
+                        .query()
+                        .insert(query))
+                    .then(() => {
+                        return self._populate();
+                    });
+            }
+
+            removeTaxonomy(taxonomy) {
+                let self = this,
+                    parent = this.constructor;
+                return SCli.sql(parent.taxonomyRelationModel
+                        .query()
+                        .del()
+                        .where(parent.taxonomyRelationField, this.id)
+                        .where('taxonomyId', taxonomy.id)
+                    )
+                    .then(() => {
+                        return self._populate();
+                    });
+            }
+
             /**
              * Post save hanlder to store taxonomies
              * @returns {Promise}

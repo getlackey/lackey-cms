@@ -43,7 +43,6 @@ module.exports = (server) => {
             require('../controllers/language'),
             require('../controllers/activity'),
             require('../controllers/role'),
-            require('../controllers/user'),
             require('../controllers/template'),
             require('../controllers/page'),
             require('../controllers/session')
@@ -57,7 +56,6 @@ module.exports = (server) => {
             LanguageController,
             ActivityController,
             RoleController,
-            UserController,
             TemplateController,
             PageController,
             SessionController
@@ -101,12 +99,9 @@ module.exports = (server) => {
             cmsResourceRoutes(server, 'taxonomy-type', 'taxonomyType', TaxonomyTypeController);
             cmsResourceRoutes(server, 'media', 'media', MediaController);
             cmsResourceRoutes(server, 'language', 'language', LanguageController);
-            cmsResourceRoutes(server, 'user', 'user', UserController);
             cmsResourceRoutes(server, 'role', 'role', RoleController);
             cmsResourceRoutes(server, 'template', 'template', TemplateController);
             cmsResourceRoutes(server, 'session', 'session', SessionController);
-
-            server.route('/cms/user/:user_id').get(server.aclAdmin, UserController.preview);
 
         });
 };

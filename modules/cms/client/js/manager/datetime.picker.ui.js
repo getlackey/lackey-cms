@@ -16,14 +16,15 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const Emitter = require('cms/client/js/emitter').Emitter,
+const
+    Picker = require('cms/client/js/manager/picker.ui.js'),
     lackey = require('core/client/js'),
     template = require('core/client/js/template');
 
 /**
  * @class
  */
-class DateTimePicker extends Emitter {
+class DateTimePicker extends Picker {
 
     /**
      * @constructs lackey-cms/modules/cms/client/manager/StructureUI
@@ -37,7 +38,7 @@ class DateTimePicker extends Emitter {
      * @param {function} vars.pullLatest
      */
     constructor(options) {
-        super();
+        super(options);
         this.options = options;
         this._locked = null;
         // http://stackoverflow.com/a/12372720/2802756
@@ -50,13 +51,20 @@ class DateTimePicker extends Emitter {
         });
     }
 
+    selected(hook) {
+
+        this.resolve(hook.getAttribute('data-lky-path'));
+    }
+
     /**
      * Builds UI
      * @returns {Promise<HTMLElement>}
      */
     buildUI() {
+
         let self = this,
             options = this.getOptions();
+
         return template
             .render('cms/cms/datetime-picker', options)
             .then((nodes) => {
@@ -65,6 +73,7 @@ class DateTimePicker extends Emitter {
                 return self.redraw(options);
             });
     }
+
     redraw(options) {
 
         let self = this;
@@ -159,43 +168,7 @@ class DateTimePicker extends Emitter {
 
         return options;
     }
-
-    /**
-     * Makes fade in animation
-     * @returns {Promise}
-     */
-    fadeIn() {
-        return new Promise((resolve) => {
-            let self = this,
-                handler = () => {
-                    self.node.removeEventListener('transitionend', handler, false);
-                    resolve();
-                };
-            setTimeout(() => {
-                self.node.addEventListener('transitionend', handler, false);
-                self.node.setAttribute('data-lky-open', '');
-            }, 50);
-        });
-    }
-
-    /**
-     * Makes fade out animation
-     * @returns {Promise}
-     */
-    remove() {
-        return new Promise((resolve) => {
-
-            let self = this,
-                handler = () => {
-                    self.node.removeEventListener('transitionend', handler, false);
-                    self.node.parentNode.removeChild(self.node);
-                    resolve();
-                };
-            self.node.addEventListener('transitionend', handler, false);
-            self.node.removeAttribute('data-lky-open');
-        });
-    }
-
 }
+
 
 module.exports = DateTimePicker;

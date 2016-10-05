@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true, es6:true */
+/* jslint node:true, esnext:true, es6:true, browser:true */
 /* eslint default-case:0 no-alert:0 */
 /* global top */
 'use strict';

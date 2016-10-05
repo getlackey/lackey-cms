@@ -329,32 +329,6 @@ module.exports = SUtils
 
             }
 
-            addTaxonomy(taxonomy) {
-                let self = this;
-                return SCli.sql(ContentToTaxonomy
-                        .query()
-                        .insert({
-                            contentId: this.id,
-                            taxonomyId: taxonomy.id
-                        }))
-                    .then(() => {
-                        return self._populate();
-                    });
-            }
-
-            removeTaxonomy(taxonomy) {
-                let self = this;
-                return SCli.sql(ContentToTaxonomy
-                        .query()
-                        .del()
-                        .where('contentId', this.id)
-                        .where('taxonomyId', taxonomy.id)
-                    )
-                    .then(() => {
-                        return self._populate();
-                    });
-            }
-
             get route() {
                 return this._doc.route;
             }
@@ -433,7 +407,7 @@ module.exports = SUtils
                 }
 
                 if (options.textSearch && options.textSearch.length > 3) {
-                    builder.withTextSearch(options.textSearch);
+                    builder.withTextSearch(options.textSearch, options.freeTextTaxonomies || []);
                 }
 
                 return builder
