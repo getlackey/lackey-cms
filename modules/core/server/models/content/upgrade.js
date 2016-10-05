@@ -23,6 +23,25 @@ let
     dom,
     elt;
 
+function getPlainText(object) {
+
+    let str = '';
+
+    if (!object) {
+        return '';
+    }
+    if (typeof object === 'object') {
+        str += (Array.isArray(object) ? object : Object.keys(object).map(key => key === 'type' ? '' : object[key]))
+            .map(item => getPlainText(item))
+            .filter(value => value && value.replace(/^\s+|\s+$/, '').length > 0)
+            .join('\n');
+    } else if (typeof object === 'string') {
+        return object;
+    }
+    return str.replace(/\n+/g, '\n');
+}
+
+
 module.exports = () => new Promise((resolve, reject) => {
         atomus()
             .html('<html></html>')
@@ -281,12 +300,14 @@ module.exports = () => new Promise((resolve, reject) => {
                             let output = _.cloneDeep(page.layout);
                             return crawlBack(output)
                                 .then(layout => {
+
                                     return SCli
                                         .sql(
                                             ContentModel
                                             .query()
                                             .patch({
-                                                layout: layout
+                                                layout: layout,
+                                                plaintext: getPlainText(layout)
                                             })
                                             .where('id', page.id)
                                         );

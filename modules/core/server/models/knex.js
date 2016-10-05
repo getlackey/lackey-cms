@@ -35,7 +35,7 @@ module.exports = Schema
             //
             // TABLE Users
             //
-            .table(knex, 'users', (table) => {
+            .table(knex, 'users', table => {
                 table.increments();
                 table.string('name');
                 table.string('title');
@@ -48,17 +48,17 @@ module.exports = Schema
                 table.timestamp('updatedAt').notNullable().defaultTo(knex.raw('now()'));
             })
             .then(() => {
-                return Schema.addColumn(knex, 'users', 'route', (table) => {
+                return Schema.addColumn(knex, 'users', 'route', table => {
                     table.string('route');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'users', 'deleted', (table) => {
+                return Schema.addColumn(knex, 'users', 'deleted', table => {
                     table.boolean('deleted');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'users', 'lastActive', (table) => {
+                return Schema.addColumn(knex, 'users', 'lastActive', table => {
                     table.timestamp('lastActive');
                 });
             })
@@ -67,7 +67,7 @@ module.exports = Schema
             // .userId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'identities', (table) => {
+                return Schema.table(knex, 'identities', table => {
                     table.increments();
                     table.string('provider');
                     table.string('accountId');
@@ -90,44 +90,44 @@ module.exports = Schema
             //
             //
             .then(() => {
-                return Schema.table(knex, 'sessions', (table) => {
+                return Schema.table(knex, 'sessions', table => {
                     table.string('sid');
                     table.json('sess').notNullable();
                     table.unique(['sid']);
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'sessions', 'userId', (table) => {
+                return Schema.addColumn(knex, 'sessions', 'userId', table => {
                     table.bigInteger('userId');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'sessions', 'device', (table) => {
+                return Schema.addColumn(knex, 'sessions', 'device', table => {
                     table.string('device');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'sessions', 'ipAddress', (table) => {
+                return Schema.addColumn(knex, 'sessions', 'ipAddress', table => {
                     table.string('ipAddress');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'sessions', 'userAgent', (table) => {
+                return Schema.addColumn(knex, 'sessions', 'userAgent', table => {
                     table.string('userAgent');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'sessions', 'browser', (table) => {
+                return Schema.addColumn(knex, 'sessions', 'browser', table => {
                     table.string('browser');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'sessions', 'os', (table) => {
+                return Schema.addColumn(knex, 'sessions', 'os', table => {
                     table.string('os');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'sessions', 'updated', (table) => {
+                return Schema.addColumn(knex, 'sessions', 'updated', table => {
                     table.timestamp('updated').notNullable().defaultTo(knex.raw('now()'));
                 });
             })
@@ -136,7 +136,7 @@ module.exports = Schema
         // TABLE roles
         //
         .then(() => {
-                return Schema.table(knex, 'roles', (table) => {
+                return Schema.table(knex, 'roles', table => {
                     table.increments();
                     table.string('name');
                     table.string('label');
@@ -153,7 +153,7 @@ module.exports = Schema
             // .roleId -> roles.id
             //
             .then(() => {
-                return Schema.table(knex, 'acl', (table) => {
+                return Schema.table(knex, 'acl', table => {
                     table.increments();
                     table.bigInteger('userId')
                         .unsigned()
@@ -174,7 +174,7 @@ module.exports = Schema
             // .userId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'tokens', (table) => {
+                return Schema.table(knex, 'tokens', table => {
                     table.increments();
                     table.bigInteger('userId')
                         .unsigned()
@@ -194,7 +194,7 @@ module.exports = Schema
             // .userId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'activityLog', (table) => {
+                return Schema.table(knex, 'activityLog', table => {
                     table.increments();
                     table.string('method');
                     table.string('url');
@@ -217,7 +217,7 @@ module.exports = Schema
             // userId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'template', (table) => {
+                return Schema.table(knex, 'template', table => {
                     table.increments();
                     table.string('name');
                     table.string('path');
@@ -240,27 +240,27 @@ module.exports = Schema
 
             })
             .then(() => {
-                return Schema.addColumn(knex, 'template', 'expose', (table) => {
+                return Schema.addColumn(knex, 'template', 'expose', table => {
                     table.json('expose');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'template', 'prefix', (table) => {
+                return Schema.addColumn(knex, 'template', 'prefix', table => {
                     table.string('prefix');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'template', 'variants', (table) => {
+                return Schema.addColumn(knex, 'template', 'variants', table => {
                     table.json('variants');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'template', 'require', (table) => {
+                return Schema.addColumn(knex, 'template', 'require', table => {
                     table.json('require');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'template', 'allowTaxonomies', (table) => {
+                return Schema.addColumn(knex, 'template', 'allowTaxonomies', table => {
                     table.json('allowTaxonomies');
                 });
             })
@@ -270,7 +270,7 @@ module.exports = Schema
             // .templateId -> template.id
             //
             .then(() => {
-                return Schema.table(knex, 'content', (table) => {
+                return Schema.table(knex, 'content', table => {
                     table.increments();
                     table.string('name');
                     table.string('type');
@@ -294,7 +294,7 @@ module.exports = Schema
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'content', 'authorId', (table) => {
+                return Schema.addColumn(knex, 'content', 'authorId', table => {
                     table.bigInteger('authorId')
                         .unsigned()
                         .references('id')
@@ -303,7 +303,7 @@ module.exports = Schema
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'content', 'publishAt', (table) => {
+                return Schema.addColumn(knex, 'content', 'publishAt', table => {
                     table.date('publishAt').notNullable().defaultTo(knex.raw('now()'));
                 });
             })
@@ -311,9 +311,16 @@ module.exports = Schema
                 return knex.schema
                     .hasColumn('content', 'plaintext')
                     .then(exists => {
-                        if (!exists) {
-                            return require(__dirname + '/content/upgrade')(knex);
-                        }
+                        //if (!exists) {
+                        return require(__dirname + '/content/upgrade')(knex)
+                            .then(() => {
+                                if (!exists) {
+                                    return Schema.addColumn(knex, 'content', 'plaintext', table => {
+                                        table.text('plaintext');
+                                    });
+                                }
+                            });
+                        //}
                     });
             })
             //
@@ -321,7 +328,7 @@ module.exports = Schema
             // userId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'redirect', (table) => {
+                return Schema.table(knex, 'redirect', table => {
                     table.increments();
                     table.string('route');
                     table.string('target');
@@ -341,7 +348,7 @@ module.exports = Schema
             // userId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'media', (table) => {
+                return Schema.table(knex, 'media', table => {
                     table.increments();
                     table.string('mime');
                     table.string('name');
@@ -362,7 +369,7 @@ module.exports = Schema
             // userId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'taxonomyType', (table) => {
+                return Schema.table(knex, 'taxonomyType', table => {
                     table.increments();
                     table.string('name');
                     table.string('label');
@@ -377,17 +384,17 @@ module.exports = Schema
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'taxonomyType', 'restrictive', (table) => {
+                return Schema.addColumn(knex, 'taxonomyType', 'restrictive', table => {
                     table.boolean('restrictive');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'taxonomyType', 'description', (table) => {
+                return Schema.addColumn(knex, 'taxonomyType', 'description', table => {
                     table.string('description');
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'taxonomyType', 'allowCreation', (table) => {
+                return Schema.addColumn(knex, 'taxonomyType', 'allowCreation', table => {
                     table.boolean('allowCreation');
                 });
             })
@@ -397,7 +404,7 @@ module.exports = Schema
             // taxonomyTypeId -> taxonomyType.id
             //
             .then(() => {
-                return Schema.table(knex, 'taxonomy', (table) => {
+                return Schema.table(knex, 'taxonomy', table => {
                     table.increments();
                     table.string('name');
                     table.string('label');
@@ -422,7 +429,7 @@ module.exports = Schema
             // taxonomyUserId -> users.id
             //
             .then(() => {
-                return Schema.table(knex, 'userToTaxonomy', (table) => {
+                return Schema.table(knex, 'userToTaxonomy', table => {
                     table.increments();
                     table.bigInteger('taxonomyUserId')
                         .unsigned()
@@ -451,7 +458,7 @@ module.exports = Schema
             // roleId -> roles.id
             //
             .then(() => {
-                return Schema.table(knex, 'roleToTaxonomy', (table) => {
+                return Schema.table(knex, 'roleToTaxonomy', table => {
                     table.increments();
                     table.bigInteger('roleId')
                         .unsigned()
@@ -480,7 +487,7 @@ module.exports = Schema
             // templateId -> templates.id
             //
             .then(() => {
-                return Schema.table(knex, 'templateToTaxonomy', (table) => {
+                return Schema.table(knex, 'templateToTaxonomy', table => {
                     table.increments();
                     table.bigInteger('userId')
                         .unsigned()
@@ -509,7 +516,7 @@ module.exports = Schema
             // contentId -> content.id
             //
             .then(() => {
-                return Schema.table(knex, 'contentToTaxonomy', (table) => {
+                return Schema.table(knex, 'contentToTaxonomy', table => {
                     table.increments();
                     table.bigInteger('userId')
                         .unsigned()
@@ -541,7 +548,7 @@ module.exports = Schema
             // mediaId -> media.id
             //
             .then(() => {
-                return Schema.table(knex, 'mediaToTaxonomy', (table) => {
+                return Schema.table(knex, 'mediaToTaxonomy', table => {
                     table.increments();
                     table.bigInteger('userId')
                         .unsigned()
@@ -571,7 +578,7 @@ module.exports = Schema
             //
             //
             .then(() => {
-                return Schema.table(knex, 'translations', (table) => {
+                return Schema.table(knex, 'translations', table => {
                     table.increments();
                     table.string('reference');
                     table.string('originalValue');
@@ -584,7 +591,7 @@ module.exports = Schema
             //
             //
             .then(() => {
-                return Schema.table(knex, 'analytics', (table) => {
+                return Schema.table(knex, 'analytics', table => {
                     table.increments();
                     table.string('metric').notNullable();
                     table.integer('value').defaultTo(1).notNullable();
@@ -593,7 +600,7 @@ module.exports = Schema
                 });
             })
             .then(() => {
-                return Schema.addColumn(knex, 'analytics', 'map', (table) => {
+                return Schema.addColumn(knex, 'analytics', 'map', table => {
                     table.json('map');
                 });
             })

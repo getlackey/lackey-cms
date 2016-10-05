@@ -63,6 +63,9 @@ module.exports = SUtils
                         layout: {
                             type: 'object'
                         },
+                        plaintext: {
+                            type: 'string'
+                        },
                         props: {
                             type: 'object'
                         },
@@ -248,12 +251,33 @@ module.exports = SUtils
 
                     if (self._doc.layout === undefined) {
                         delete self._doc.layout;
+                    } else {
+                        self._doc.plaintext = self.getPlainText(self._doc.layout);
                     }
 
                     self._doc.route = self._doc.route.toLowerCase();
 
                     return self;
                 });
+            }
+
+            getPlainText(object) {
+                if (!object) {
+                    return '';
+                }
+                let
+                    self = this;
+
+
+                if (typeof object === 'object') {
+                    return (Array.isArray(object) ? object : Object.keys(object).map(key => key === 'type' ? '' : object[key]))
+                        .map(item => self.getPlainText(item))
+                        .filter(value => value && value.replace(/^\s+|\s+$/, '').length > 0)
+                        .join('\n');
+                } else if (typeof object === 'string') {
+                    return object;
+                }
+                return null;
             }
 
             _postSave(cached) {

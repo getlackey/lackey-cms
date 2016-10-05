@@ -93,7 +93,7 @@ const
     `,
     TEXT_SEARCH = `
         (
-            LOWER(layout::TEXT) like LOWER('%$1%')
+            LOWER(plaintext::TEXT) like LOWER('%$1%')
             OR
             LOWER(name) like LOWER('%$1%')
             OR
