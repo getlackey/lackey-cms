@@ -45,7 +45,12 @@ class TaxonomyPickerUI extends Picker {
         return super
             .buildUI()
             .then(response => {
-                self.addButton = lackey.select('[data-lky-hook="create-taxonomy"]', self.node)[0];
+            self.addButton = lackey.select('[data-lky-hook="create-taxonomy"]', self.node)[0];
+                if(!this.options.addable) {
+                    self.addButton.style.display = 'none';
+                    return response;
+                }
+
                 self.addButton.addEventListener('click', self.addTaxonomy.bind(self), true);
                 return response;
             });

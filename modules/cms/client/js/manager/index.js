@@ -31,13 +31,15 @@ const
 let locale = 'en',
     defaultLocale = 'en';
 
-lackey.select('html').forEach((elem) => {
-    locale = elem.getAttribute('lang');
-    defaultLocale = elem.getAttribute('data-default-locale');
-    if (locale === defaultLocale) {
-        locale = '*';
-    }
-});
+lackey
+    .select('html')
+    .forEach((elem) => {
+        locale = elem.getAttribute('lang');
+        defaultLocale = elem.getAttribute('data-default-locale');
+        if (locale === defaultLocale) {
+            locale = '*';
+        }
+    });
 
 
 /**
@@ -391,13 +393,15 @@ Manager.prototype.setupUI = function () {
         .addEventListener('click', this.onViewStructure.bind(this), true);
 
     this._changeUI = new ChangeUI(this.repository);
-    lackey.select([
-        '[data-lky-hook="header.settings"]',
-        '[data-lky-hook="header.publish"]',
-        '[data-lky-hook="header.taxonomy"]'
-    ]).forEach(element => {
-        element.style.display = 'block';
-    });
+    lackey
+        .select([
+            '[data-lky-hook="header.settings"]',
+            '[data-lky-hook="header.publish"]',
+            '[data-lky-hook="header.taxonomy"]'
+        ])
+        .forEach(element => {
+            element.style.display = 'block';
+        });
 
     this
         .current
@@ -418,7 +422,7 @@ Manager.prototype.setupUI = function () {
             }, true);
 
             publishControl.addEventListener('click', () => {
-                self.updateCurrent((cur) => {
+                self.updateCurrent(cur => {
                     cur.state = publishControl.checked ? 'published' : null;
                 });
             }, true);
