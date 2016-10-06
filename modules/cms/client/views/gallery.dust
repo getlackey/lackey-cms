@@ -63,8 +63,8 @@
                                 <thead>
                                     <tr>
                                         <th>URL</th>
-                                        <th>Media</th>
                                         <th>Mime</th>
+                                        <th>Media Query</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

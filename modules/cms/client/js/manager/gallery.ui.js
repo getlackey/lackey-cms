@@ -22,27 +22,7 @@ const
     template = require('core/client/js/template'),
     api = require('core/client/js/api'),
     Upload = require('core/client/js/upload'),
-    Autocomplete = require('cms/client/js/controls/autocomplete'),
-    mimes = require('mime/types.json'),
-    mime = Object
-    .keys(mimes)
-    .map((key) => {
-        let type = key.split('/')[0];
-        if (type === 'application') {
-            type = 'file';
-        }
-        return {
-            mime: key,
-            label: type + ' ' + mimes[key][0],
-            type: type
-        };
-    })
-    .sort((a, b) => {
-        if (a.label === b.label) {
-            return 0;
-        }
-        return a.label < b.label ? -1 : 0;
-    });
+    Autocomplete = require('cms/client/js/controls/autocomplete');
 
 
 /**
@@ -64,7 +44,6 @@ class Gallery extends Emitter {
     constructor(options) {
         super();
         this.options = options;
-        this.options.mimes = mime;
         this._locked = null;
         let self = this;
         this.promise = new Promise((resolve, reject) => {
@@ -81,7 +60,7 @@ class Gallery extends Emitter {
         let self = this;
         return template
             .render('cms/cms/gallery', this.options || {})
-            .then((nodes) => {
+            .then(nodes => {
                 self.node = nodes[0];
 
                 lackey.bind('[data-lky-hook="settings.back"]', 'click', () => {
@@ -101,19 +80,19 @@ class Gallery extends Emitter {
                         '[data-lky-hook="settings.open.meta"]',
                         '[data-lky-hook="settings.open.gallery"]'
                     ], self.node)
-                    .forEach((element) => {
+                    .forEach(element => {
                         element.addEventListener('click', self.toggle.bind(self), true);
                     });
 
                 lackey
                     .select('[data-lky-hook="settings.open.clear"]', self.node)
-                    .forEach((element) => {
+                    .forEach(element => {
                         element.addEventListener('click', () => self.resolve(-1), true);
                     });
 
                 lackey
                     .select('[data-lky-hook="settings.open.url"]', self.node)
-                    .forEach((element) => {
+                    .forEach(element => {
                         element.addEventListener('click', () => {
                             let value = prompt('Please enter URL');
                             if (!value) {
@@ -204,11 +183,51 @@ class Gallery extends Emitter {
             .redraw(lackey.hook('sources', this.node), this.options)
             .then(() => {
                 lackey.bind('lky:add', 'click', () => {
-                    let
-                        sourceNode = lackey.hook('new-source', this.node),
-                        mimeNode = lackey.hook('new-mime', this.node),
-                        mediaNode = lackey.hook('new-media', this.node);
-                    return self.addAlternative(sourceNode.value, mimeNode.value, mediaNode.value);
+                    self.node.setAttribute('data-lky-edit', '');
+                    self.options.stack
+                        .editSource(null)
+                        .then(result => {
+                            setTimeout(() => {
+                                self.node.setAttribute('data-lky-edit', 'meta');
+                            }, 5);
+                            return self.addAlternative(result.src, result.mime, result.media);
+
+                        });
+
+                });
+
+                lackey.bind('lky:edit', 'click', (event, hook) => {
+                    let index = +hook.getAttribute('data-lky-idx');
+                    return self.options.manager
+                        .getMedia(self.options.media.id)
+                        .then(media => {
+                            let medium;
+                            if (index === -1) {
+                                medium = {
+                                    src: media.src,
+                                    mime: media.mime,
+                                    default: true
+                                };
+
+                            } else {
+                                medium = media.alternatives[index];
+                            }
+                            return self.options.stack
+                                .editSource(medium)
+                                .then(sources => {
+                                    if (index === -1) {
+                                        media.source = sources.src;
+                                        media.mime = sources.mime;
+                                    } else {
+                                        media.alternatives[index] = sources;
+                                    }
+                                    return self.options.manager.setMedia(media.id, media);
+                                })
+                                .then(mediaItem => {
+                                    self.options.media = mediaItem;
+                                    return self.alternative();
+                                });
+                        });
                 });
 
                 lackey.bind('lky:remove', 'click', (event, hook) => {

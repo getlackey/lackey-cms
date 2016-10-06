@@ -1,0 +1,40 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/article.picker.js !}
+<aside data-lky-component="settings">
+    <section data-lky-hook="settings.breadcrumbs">
+        <!-- later -->
+    </section>
+    <section data-lky-hook="settings.back"></section>
+    <section data-lky-hook="settings.picker">
+        <ul>
+            <li>
+                <label>
+                    <span>URL</span>
+                    <input type="input" name="src" value="{source.src}"/>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <span>MEDIA</span>
+                    <select name="mime">
+                        {#mimes}
+                            {@eq key=type value="video"}
+                                <option value="{mime}" {@eq key=source.mime value=mime}selected{/eq}>
+                                    {label}
+                                </option>
+                            {/eq}
+                        {/mimes}
+                    </select>
+                </label>
+            </li>
+            {^source.default}
+            <li>
+                <label>
+                    <span>MIME</span>
+                    <input type="input" name="media" value="{source.media}"/>
+                </label>
+            </li>
+            {/source.default}
+        </ul>
+        <button data-lky-btn data-lky-hook="save">Save</button>
+    </section>
+</aside>

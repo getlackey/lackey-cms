@@ -131,6 +131,9 @@ class Media {
             this.replace(iframe);
       }
       static clearSource(src) {
+            if(!src) {
+                  return '';
+            }
             return src.replace(/^\s+|\s+$|\n+|\r+/g, '');
       }
       renderVideo() {

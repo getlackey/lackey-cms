@@ -10,12 +10,13 @@
         default
     </td>
     <td>
+        <button data-lky-bt data-lky-hook="edit" data-lky-idx="-1" data-lky-btn>Edit</button>
     </td>
 </tr>
 {#media.alternatives}
 <tr>
     <td>
-        {source}
+        {src}
     </td>
     <td>
         {mime}
@@ -24,29 +25,13 @@
         {media}
     </td>
     <td>
+        <button data-lky-bt data-lky-hook="edit" data-lky-idx="{$idx}" data-lky-btn>Edit</button>
         <button data-lky-bt data-lky-hook="remove" data-lky-idx="{$idx}" data-lky-btn>Remove</button>
     </td>
 </tr>
 {/media.alternatives}
 <tr>
-    <td>
-        <input data-lky-hook="new-source" type="text"/>
-    </td>
-    <td>
-        <select data-lky-hook="new-mime">
-            {#mimes}
-                {@eq key=type value="video"}
-                    <option value="{mime}" >
-                        {label}
-                    </option>
-                {/eq}
-            {/mimes}
-        </select>
-    </td>
-    <td>
-        <input data-lky-hook="new-media" type="text"/>
-    </td>
-    <td>
+    <td colspan="4">
         <button data-lky-btn data-lky-hook="add">Add</button>
         <button data-lky-btn data-lky-hook="source-upload">Upload</button>
     </td>

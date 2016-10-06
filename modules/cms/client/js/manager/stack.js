@@ -26,6 +26,7 @@ const
     UserPricker = require('cms/client/js/manager/user.picker.ui.js'),
     TaxonomyPricker = require('cms/client/js/manager/taxonomy.picker.ui.js'),
     RolePicker = require('cms/client/js/manager/role.picker.ui.js'),
+    SourceEditor = require('cms/client/js/manager/sources.editor.ui.js'),
     lackey = require('core/client/js');
 /**
  * @module lackey-cms/modules/cms/client/manager
@@ -127,6 +128,14 @@ Stack.prototype.pickArticle = function (route) {
     return this
         .pick(new ArticlePicker({
             route: route,
+            stack: this
+        }), true);
+};
+
+Stack.prototype.editSource = function (source) {
+    return this
+        .pick(new SourceEditor({
+            source: source,
             stack: this
         }), true);
 };
