@@ -38,6 +38,7 @@ module.exports = function (dust) {
 
         var
             path = params.path,
+            allowList = !params.list,
             youtube = isYoutube(path),
             type = params.type || '';
 
@@ -45,7 +46,7 @@ module.exports = function (dust) {
             if (type === 'image') {
                 chunk = chunk.render(bodies.block, context.push('https://img.youtube.com/vi/' + youtube + '/maxresdefault.jpg'));
             } else {
-                chunk = chunk.render(bodies.block, context.push(youtube));
+                chunk = chunk.render(bodies.block, context.push(isYoutube(path, allowList)));
             }
         } else {
             chunk = chunk.render(bodies.else, context);

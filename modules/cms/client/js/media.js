@@ -219,7 +219,7 @@ class Media {
             this.node.style.cursor = 'pointer';
       }
       notify() {
-            if (!this.content) {
+            if (this.content) {
                   Media.manager
                         .set(this.content, this.path, this.variant, this.media ? {
                               id: this.media.id,
