@@ -40,6 +40,22 @@ function fromLayout(root, path, variant, locale) {
 
 }
 
+function renderParameter(name, chunk, context, bodies, params) {
+  if (params && params[name]) {
+    if (typeof params[name] === 'function') {
+      var output = '';
+      chunk.tap(function (data) {
+        output += data;
+        return '';
+      }).render(params[name], context).untap();
+      return output;
+    } else {
+      return params[name];
+    }
+  }
+  return '';
+}
+
 module.exports = dust => {
 
   /**
@@ -71,6 +87,11 @@ module.exports = dust => {
     }
 
     chunk.write('<' + tag);
+
+    Object
+      .keys(params)
+      .filter(key => key.match(/^data-/))
+      .forEach(key => chunk.write(' ' + key.replace(/^data-/, '') + '="' + renderParameter(key, chunk, context, bodies, params) + '"'));
 
     if (editMode === true) {
 
