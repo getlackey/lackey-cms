@@ -97,6 +97,10 @@ module.exports = dust => {
 
       chunk.write(' data-lky-pm data-lky-content="' + id + '"');
 
+      if (params.buttons) {
+        chunk.write('data-lky-buttons="' + params.buttons + '"');
+      }
+
       if (params.path) {
         chunk.write('data-lky-path="' + path + '"');
       }

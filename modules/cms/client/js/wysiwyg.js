@@ -38,10 +38,6 @@ const
         'pre',
         'orderedlist',
         'unorderedlist',
-        'justifyLeft',
-        'justifyCenter',
-        'justifyRight',
-        'justifyFull',
         'h2',
         'h3'
     ]);
@@ -122,18 +118,23 @@ class Wysiwyg {
             insertButtons = [],
             options = {
                 paste: {}
-            };
+            },
+            customButtons = this._element.getAttribute('data-lky-buttons');
+
+        if (customButtons) {
+            customButtons = customButtons.split(',');
+        }
 
 
         if (this._element.hasAttribute('data-lky-singleline')) {
             options.disableReturn = true;
             options.toolbar = {
-                buttons: inlineButtons
+                buttons: customButtons || inlineButtons
             };
         } else {
             insertButtons = ['insert-media'];
             options.toolbar = {
-                buttons: buttons
+                buttons: customButtons || buttons
             };
             options.insert = {
                 buttons: ['image']
@@ -173,11 +174,8 @@ class Wysiwyg {
         });
 
         options.extensions = {
-            insertMedia: new InsertMedia(),
+
             plain: new Plain({}),
-            insert: new Insert({
-                buttons: insertButtons
-            }),
             markdown: new MeMarkdown({
                 toMarkdownOptions: {
                     converters: [
@@ -223,6 +221,13 @@ class Wysiwyg {
 
             })
         };
+
+        if (insertButtons.length) {
+            options.extensions.insert = new Insert({
+                buttons: insertButtons
+            });
+            options.extensions.insertMedia = new InsertMedia();
+        }
 
         self._lock = true;
         new MediumEditor(this._element, options);

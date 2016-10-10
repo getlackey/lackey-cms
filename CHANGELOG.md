@@ -2,6 +2,16 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-7
+
+ * Buttons on `@editable`
+ * Don't install injector on wysiwyg when there is nothing to insert
+
+## 1.0.0-beta-*
+
+TO DO
+
+
 ## 1.*
 
  * Remove support from `<dust-template>` tag in editable areas
