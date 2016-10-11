@@ -1,111 +1,92 @@
 {>"cms/cms/main"/}
 
 {<body}
-<div class="lackey-cms">
-    <div class="bt">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3">
-                    <h4>Account Details</h4>
-                    <form>
-                        <dl>
-                            <dt>Name</dt>
-                            <dd>
-                                <input type="text"
-                                       name="name"
-                                       class="form-control"
-                                       value="{user.name|h}"/>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>Image</dt>
-                            <dd class="avatar">
-                                <img src="{user.image.source}"
-                                     data-lky-hook="avatar"
-                                     data-lky-media="{admin.image|js}"
-                                     />
-                            </dd>
-                        </dl>
-                    </form>
-                    <h4>Credentials</h4>
-                    <form data-lky-hook="password">
-                        <dl>
-                            <dt>Password</dt>
-                            <dd>
-                                <input type="password"
-                                        name="newPassword"
-                                        class="form-control"
-                                        placeholder="New password"
-                                       />
-                                <input type="password"
-                                        name="newPassword2"
-                                        class="form-control"
-                                        placeholder="Repeat new password"/>
-                            </dd>
-                        </dl>
-                        <button class="btn btn-block btn-primary">
-                            Change Password
-                        </button>
-                    </form>
-                    <dl>
-                        <dt>Emails</dt>
-                        <dd>
-                            {#data.emails}
-                            <div class="input-group">
-                                <input type="email"
-                                       readonly="readonly"
-                                       value="{email|h}"
-                                       class="form-control"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-secondary" type="button">
-                                        <i class="fa fa-trash"></i>&nbsp;
-                                    </button>
-                                </span>
-                            </div>
-                            {@ne key=confirmed value=true}
-                                <div class="alert alert-warning">
-                                    <h5>This email is not confirmed.</h5>
-                                    <button class="btn btn-sm btn-warning" data-lky-hook="confirm-email" data-lky-email="{email|h}">
-                                        <i class="fa fa-envelope"></i> Resend Email
-                                    </button>
-                                </div>
-                            {/ne}
-                            {/data.emails}
-                            <div class="input-group">
-                                <input type="email"
-                                       name="email"
-                                       class="form-control"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-secondary" type="button">
-                                        <i class="fa fa-plus"></i>&nbsp;
-                                    </button>
-                                </span>
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>Sessions</dt>
-                        <dd>
-                            {#data.sessions}
-                            <div class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">
-                                {_doc.ipAddress} - {_doc.browser} - {_doc.os} &nbsp;
-                                {@eq key="{_doc.sid}" value="{data.currentSession}"}
-                                    (current session)
-                                {:else}
-                                    <a data-id="{_doc.sid}" class="sess-rm" href="#">delete</a> - last active: {_doc.humanLastActive}
-                                {/eq}
-                            </div>
-                            {/data.sessions}
+<div data-lky-hook="lackey" data-theme="anonymous">
+    <header>
+        <h2>Account Details</h2>
+    </header>
+    <main>
+        <section>
+            <form>
+                <label>
+                    <span>Name</span>
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           value="{user.name|h}"/>
+                </label>
+                <label>
+                    <span>Image</span>
+                    <img src="{user.image.source}"
+                         data-lky-hook="avatar"
+                         data-lky-media="{admin.image|js}"
+                         />
+                    </label>
+                </form>
+                <h3>Credentials</h3>
+                <form data-lky-hook="password">
+                    <label>
+                        <span>Password</span>
+                    <input type="password"
+                                name="newPassword"
+                                class="form-control"
+                                placeholder="New password"
+                               />
+                    <input type="password"
+                            name="newPassword2"
+                            class="form-control"
+                            placeholder="Repeat new password"/>
+                    </label>
+                    <button class="btn btn-block btn-primary">
+                        Change Password
+                    </button>
+                </form>
+                <h3>Credentials</h3>
 
-                            <div>
-                                <button class="btn btn-sm btn-warning sess-rmAll">Delete All Sesssions</button>
-                            </div>
+                                {#data.emails}
+                                <label>
+                                    <input type="email"
+                                           readonly="readonly"
+                                           value="{email|h}"
+                                           class="form-control"/>
 
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                        <button class="btn btn-secondary" type="button">
+                                            <i class="fa fa-trash"></i>&nbsp;
+                                        </button>
+
+                                {@ne key=confirmed value=true}
+                                        <small>This email is not confirmed</small>
+                                        <button class="btn btn-sm btn-warning" data-lky-hook="confirm-email" data-lky-email="{email|h}">
+                                            <i class="fa fa-envelope"></i> Resend Email
+                                        </button>
+                                {/ne}
+                                    </label>
+                                {/data.emails}
+                        <label>
+                                    <input type="email"
+                                           name="email"
+                                           class="form-control"/>
+
+                                        <button class="btn btn-secondary" type="button">
+                                            <i class="fa fa-plus"></i>&nbsp;
+                                        </button>
+                         </label>
+                        <h3>Sessions</h3>
+                                {#data.sessions}
+                                <label class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">
+                                    {_doc.ipAddress} - {_doc.browser} - {_doc.os} &nbsp;
+                                    {@eq key="{_doc.sid}" value="{data.currentSession}"}
+                                        (current session)
+                                    {:else}
+                                        <a data-id="{_doc.sid}" class="sess-rm" href="#">delete</a> - last active: {_doc.humanLastActive}
+                                    {/eq}
+                                </label>
+                                {/data.sessions}
+
+
+                                    <button class="btn btn-sm btn-warning sess-rmAll">Delete All Sesssions</button>
+
+</section>
+
+
 {/body}

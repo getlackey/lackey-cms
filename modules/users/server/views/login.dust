@@ -1,43 +1,25 @@
 {>"cms/core/main"/}
 
 {<body}
-<div class="lackey-cms">
-    <div class="bt">
-        <div class="container">
+<div data-lky-hook="lackey" data-theme="anonymous">
+    <header>
+        <img src="img/cms/core/lackey-logo.png"/>
+        <h2>Login</h2>
+    </header>
+    <main>
+        <form method="post">
+            <label for="username">
+                <span>{@translate ref="login.username" }Username{/translate}</span>
+                <input type="text" name="username" id="username" class="form-control"/>
+            </label>
+            <label for="password">
+                <span>{@translate ref="login.password" }Password{/translate}</span>
+                    <input type="password" name="password" id="password" class="form-control"/>
+            </label>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
 
-            <div class="jumbotron">
-                <img src="img/cms/core/lackey-logo.png"
-            </div>
-
-            <h2>Login</h2>
-
-            <section>
-                <form method="post">
-                    <dl>
-                        <dt>
-                            <label for="username">
-                                {@translate ref="login.username" }Username{/translate}
-                            </label>
-                        </dt>
-                        <dd>
-                            <input type="text" name="username" id="username" class="form-control"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>
-                            <label for="password">
-                                {@translate ref="login.password" }Password{/translate}
-                            </label>
-                        </dt>
-                        <dd>
-                            <input type="password" name="password" id="password" class="form-control"/>
-                        </dd>
-                    </dl>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-                <a href="cms/account/forgot-password">Forgot Password</a>
-            </section>
-        </div>
-    </div>
+        <a href="{@base}cms/account/forgot-password{/base}">Forgot Password</a>
+    </main>
 </div>
 {/body}

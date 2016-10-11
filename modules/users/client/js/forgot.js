@@ -15,20 +15,28 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-var lackey = require('core/client/js'),
-    api = require('core/client/js/api');
+var
+    lackey = require('core/client/js'),
+    api = require('core/client/js/es5/api'),
+    growl = require('core/client/js/es5/growl');
 
 lackey.bind('lky:cms.account.forgot', 'submit', function (event, hook) {
 
     event.preventDefault();
     event.stopPropagation();
 
-    api.create('/account/forgot-password', lackey.form(hook)).then(function () {
-        //lackey.hide('#new');
-        //top.document.location.reload(true);
-    }, function () {
-        //lackey.hide('#new');
-        //top.document.location.reload(true);
+    var data = lackey.form(hook);
+
+    api.create('/account/forgot-password', data).then(function () {
+        growl({
+            status: 'success',
+            message: 'Link has been sent to ' + data.username
+        });
+    }, function (error) {
+        growl({
+            status: 'error',
+            message: error.toString()
+        });
     });
 
     return false;

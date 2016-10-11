@@ -1,0 +1,103 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+@import "fonts/_geomanist";
+[data-theme="anonymous"] {
+    /*
+    $color-lackey-blue: #00ABFC;
+    $color-lackey-light-blue: #00CBFF;
+    $color-lackey-ligher-blue: #ACEEFF;
+    $color-lackey-gray: #3A5675;
+    $color-lackey-light-gray: #6F8BAC;
+    $color-lackey-dark-gray: #1E3B5E;
+    $color-lackey-darker-gray: #0B223E;
+    */
+    background-color: $color-lackey-blue;
+    height: auto;
+    flex-direction: column;
+    > header {
+        padding: 7rem 1rem 1rem;
+        text-align: center;
+        background-color: $color-lackey-light-blue;
+        > h2 {
+            color: white;
+        }
+    }
+    h3 {
+        color: white;
+        font-size: 2rem;
+        border-top: 1px solid white;
+        padding-top: 1.5rem;
+    }
+    > main {
+        > section {
+            overflow-y: auto;
+            padding: 2rem 0rem 5rem;
+        }
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        a,
+        a:link,
+        a:visited,
+        a:hover {
+            text-decoration: none;
+        }
+        a,
+        a:link,
+        a:visited {
+            color: $color-lackey-light-blue;
+        }
+        a:hover {
+            color: white;
+        }
+        label {
+            display: block;
+            > span {
+                display: block;
+                color: white;
+                font-family: $default-header-font-family;
+                font-size: 2rem;
+            }
+            small {
+                display: block;
+                color: white;
+                font-family: $default-header-font-family;
+                font-size: 1rem;
+                padding-top: 1rem;
+            }
+            > input {
+                width: 100%;
+                padding: 1rem;
+                font-size: 150%;
+            }
+            padding-top: 1rem;
+            border-top: 1px solid $color-lackey-light-blue;
+        }
+        button {
+            border: none;
+            background: $color-lackey-light-blue;
+            color: white;
+            border-radius: 30px;
+            font-size: 13px;
+            padding: 8px 10px;
+            cursor: pointer;
+            text-decoration: none;
+            width: 100%;
+            margin-top: 1rem;
+            font-family: $default-header-font-family;
+            font-size: 125%;
+            &:hover {
+                color: $color-lackey-light-blue;
+                background: white;
+            }
+        }
+        p {
+            font-size: 2rem;
+            text-align: center;
+            color: white;
+        }
+    }
+}

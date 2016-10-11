@@ -35,12 +35,12 @@ module.exports = Promise.resolve({
         if (req.body && req.body.remember > 0) {
             req.session.cookie.maxAge = req.body.remember * 86400000;
         }
-        passport.authenticate('local', (err, user, info) => {
+        passport.authenticate('local', (err, user) => {
             if (err) {
                 /* istanbul ignore next */
                 res.status(400).error(err);
             } else if (!user) {
-                res.status(400).error(new Error('Invalid credentials: ' + JSON.stringify(info, null, 4)));
+                res.status(400).error(new Error('Invalid credentials'));
             } else {
                 // Remove sensitive data before login
                 req.login(user, (error) => {

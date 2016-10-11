@@ -53,9 +53,30 @@ module.exports = (dust) => {
       ).then(() => {
         injectedChunk.end();
       }, (error) => {
-        dust.helpers.error(injectedChunk, error);
+
+
+        if (bodies.error) {
+          try {
+            console.log('render');
+
+            return dust.render(bodies.error, data.push({
+              error: error
+            }), (err, out) => {
+              if (err) {
+                console.error(err);
+              }
+              injectedChunk.write(out);
+              injectedChunk.end();
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        } else {
+          dust.helpers.error(injectedChunk, error);
+          injectedChunk.end();
+        }
         console.error(error, error.stack);
-        injectedChunk.end();
+
       });
     });
   };
@@ -145,26 +166,27 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
     }
 
     promise.then(() => {
-      SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'last steps');
-      if (!template) {
-        SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'no template');
-        return resolve(injectedChunk);
-      }
-
-      SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'rendering');
-      dust.render(template, data, (err, out) => {
-        if (err) {
-          console.error(err);
-          reject(err);
+        SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'last steps');
+        if (!template) {
+          SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'no template');
+          return resolve(injectedChunk);
         }
-        injectedChunk.write(out);
-        SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'Rendered ');
-        resolve(injectedChunk);
-      });
 
-    }, (error) => {
-      reject(error);
-    });
+        SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'rendering');
+        dust.render(template, data, (err, out) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          }
+          injectedChunk.write(out);
+          SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'Rendered ');
+          resolve(injectedChunk);
+        });
+
+      }, (error) => {
+        reject(error);
+      })
+      .catch(e => console.error(e));
 
 
   });

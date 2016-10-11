@@ -10,7 +10,6 @@
             <link rel="stylesheet" href="{.|base}"/>
         {/stylesheets}
     </head>
-    <body>
         <body data-lky-hook="lackey">
         <aside data-lky-hook="menu">
             <section data-lky-hook="menu.logo">
@@ -99,7 +98,7 @@
                 <button data-lky-hook="header.taxonomy"><img src="{@base}img/cms/cms/svg/tags.svg{/base}" data-lky-tab="taxonomy"/></button>
                 <div data-lky-hook="header.user">
                     <img src="{admin.image.source|base}"/>
-                    <span data-lky-hook="header.user.name">{admin.name}</span>
+                    <a href="{@base}cms/account{/base}" data-lky-hook="header.user.name">{admin.name}</a>
                     <span data-lky-hook="header.user.acting"><span>Acting as:</span>Admin</span>
                 </div>
                 <div data-lky-hook="header.changes">
@@ -118,6 +117,5 @@
         {#javascripts}
             <script type="text/javascript" src="{.|base}"></script>
         {/javascripts}
-    </body>
     </body>
 </html>

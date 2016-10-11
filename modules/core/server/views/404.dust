@@ -1,7 +1,13 @@
 {>"cms/core/main"/}
 
-{<body}
-<h1>Blimey!</h1>
-
-Path `{path}` doesn't exist
-{/body}
+<div data-lky-hook="lackey" data-theme="anonymous">
+    <header>
+        <img src="img/cms/core/lackey-logo.png"/>
+        <h2>Blimey!</h2>
+    </header>
+    <main>
+        <p>
+            Path `{data.path}` doesn't exist
+        </p>
+    </main>
+</div>

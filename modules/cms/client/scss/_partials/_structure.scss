@@ -12,6 +12,7 @@
     @import "./_switch";
     [data-lky-hook="main-area"] {
         transition: transform $speed;
+        overflow-y: auto;
         position: fixed;
         top: 0px;
         left: 0px;
