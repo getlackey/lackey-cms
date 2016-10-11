@@ -11,6 +11,8 @@
     @import "./_menu";
     @import "./_switch";
     [data-lky-hook="main-area"] {
+        display: flex;
+        flex-direction: column;
         transition: transform $speed;
         overflow-y: auto;
         position: fixed;
