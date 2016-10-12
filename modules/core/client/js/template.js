@@ -1,4 +1,4 @@
-/* jslint node:true, esnext:true */
+/* jslint node:true, esnext:true, browser:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -30,9 +30,14 @@ var
     dtf = require('core/shared/dust/dateTimeFormat'),
     log = require('core/shared/dust/log'),
     DustIntl = require('dust-intl'),
-    pretty = require('core/shared/dust/pretty');
-
-//require('dustjs-linkedin/lib/compiler');
+    pretty = require('core/shared/dust/pretty'),
+    base = require('cms/server/lib/dust/base'),
+    basePath = (function () {
+        let basetag = document.querySelector('head base'),
+            loc = document.location;
+        return (basetag ? basetag.getAttribute('href')
+            .replace(/(.{1})\/$/, '$1') : (loc.protocol + '//' + loc.host + (loc.port && loc.port.length ? (':' + loc.port) : ''))) + '/';
+    }());
 
 engine.helpers = helpers.helpers;
 iterate(engine);
@@ -47,6 +52,8 @@ dtf(engine);
 log(engine);
 pretty(engine);
 
+engine.filters.base = value => base.base(basePath, value);
+
 engine.helpers.same = (chunk, context, bodies, params) => {
     if (params.key == params.val) { //eslint-disable-line eqeqeq
         chunk.render(bodies.block, context);
@@ -54,14 +61,15 @@ engine.helpers.same = (chunk, context, bodies, params) => {
 };
 
 function load(name) {
-    return xhr.basedGet('dust/' + name + '.js').then((template) => {
-        // need to do that so we don't have to expose dust compile
-        /*jslint evil: true */
-        let loadTemplate = new Function('dust', template); //eslint-disable-line no-new-func
-        /*jslint evil: false */
-        loadTemplate(engine);
-        return template;
-    });
+    return xhr.basedGet('dust/' + name + '.js')
+        .then(template => {
+            // need to do that so we don't have to expose dust compile
+            /*jslint evil: true */
+            let loadTemplate = new Function('dust', template); //eslint-disable-line no-new-func
+            /*jslint evil: false */
+            loadTemplate(engine);
+            return template;
+        });
 }
 
 engine.onLoad = function () {

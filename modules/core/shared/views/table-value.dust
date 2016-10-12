@@ -4,7 +4,7 @@
     {?value.date}
         <strong>
             {@formatDate val=value.date weekday="short"/} {@formatDate val=value.date day="numeric"/} {@formatDate val=value.date month="short"/}
-        </strong> {@formatDate val=value.date hour="numeric"/}:{@formatDate val=value.date minute="numeric"/}
+        </strong> {@formatDate val=value.date hour="numeric" minute="numeric"/}
     {:else}
         {value}
     {/value.date}
