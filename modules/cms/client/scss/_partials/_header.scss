@@ -7,10 +7,11 @@
             color: inherit;
             background-color: transparent;
         }
-        > button {
+        > button, > a {
             border: 0;
             margin: 0;
             overflow: visible;
+            display: block;
             cursor: pointer;
             text-transform: uppercase;
             font-size: 14px;
@@ -33,6 +34,13 @@
         [data-lky-hook="header.taxonomy"] {
             display: none;
             padding: 0px 30px;
+
+        }
+        [data-lky-hook="header.create"] {
+            padding: 0px 30px;
+            > img {
+                margin-top: 1rem; /* css wtf */
+            }
         }
         [data-lky-hook="header.publish"] {
             [data-lky-switch] {
@@ -58,6 +66,7 @@
         [data-lky-hook="header.hamburger"],
         [data-lky-hook="header.settings"],
         [data-lky-hook="header.publish"],
+        [data-lky-hook="header.create"],
         [data-lky-hook="header.taxonomy"] {
             float: left;
             height: $header-height;

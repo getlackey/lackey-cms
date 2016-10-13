@@ -1,4 +1,5 @@
 /* jslint esnext:true, node:true */
+/* eslint no-return-assign:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -16,7 +17,9 @@
     limitations under the License.
 */
 
-const SUtils = require(LACKEY_PATH).utils;
+const SUtils = require(LACKEY_PATH).utils,
+    slug = require('slug'),
+    shortid = require('shortid');
 
 module.exports = SUtils.waitForAs('contentCtrl',
         SUtils.cmsMod('core').model('content'),
@@ -88,26 +91,37 @@ module.exports = SUtils.waitForAs('contentCtrl',
                 });
             }
 
+            static unique(route, originalRoute) {
+                let self = this;
+                return this.model
+                    .getByTypeAndRoute('page', route)
+                    .then(instance => instance ? self.unique(originalRoute + '-' + shortid.generate(), originalRoute) : route);
+            }
+
             static create(req, res) {
 
                 if (!req.body) return res.error(req, new Error('No input'));
-                if (!req.body.route) return res.error(req, new Error('No route given'));
                 if (!req.body.templateId) return res.error(req, new Error('No template id given'));
+                if (!req.body.name) return res.error(req, new Error('No name given'));
 
                 req.body.templateId = 1 * req.body.templateId;
+                req.body.type = 'page';
 
-                this.model
-                    .getByTypeAndRoute('page', req.body.route)
-                    .then((instance) => {
-                        if (instance) {
-                            throw new Error('Given route is already taken');
-                        }
-                        req.body.type = 'page';
-                        return this.model.create(req.body);
+                let self = this;
+
+                Template
+                    .findById(req.body.templateId)
+                    .then(template => {
+
+                        let prefix = template.prefix || '/',
+                            route = prefix + slug(req.body.name);
+
+                        return self.unique(route, route);
                     })
-                    .then((instance) => {
-                        res.api(instance);
-                    }, function (error) {
+                    .then(url => req.body.route = url)
+                    .then(() => self.model.create(req.body))
+                    .then(instance => res.api(instance))
+                    .catch(error => {
                         console.error(error);
                         res.error(req, error);
                     });

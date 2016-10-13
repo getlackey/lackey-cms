@@ -1,4 +1,4 @@
-/* jslint node:true */
+/* jslint node:true, esnext:true, browser:true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -24,10 +24,10 @@ var lackey = require('core/client/js'),
 
 lackey
     .select('tbody tr')
-    .forEach((row) => {
+    .forEach(row => {
         lackey
             .select('input[type="radio"]', row)
-            .forEach((input) => {
+            .forEach(input => {
                 row.style.cursor = 'pointer';
                 row.addEventListener('click', () => {
                     input.checked = true;
@@ -43,18 +43,17 @@ function error(message) {
 }
 
 name.addEventListener('keyup', () => {
-    slug.value = slugLib(name.value, {lower: true});
+    slug.value = slugLib(name.value, {
+        lower: true
+    });
 });
 
-lackey.bind('form', 'submit', (event) => {
+lackey.bind('form', 'submit', event => {
     event.preventDefault();
     event.stopPropagation();
 
     let pageName = name.value.replace(/^\s+|\s+$/g, ''),
-        pageSlug = slug.value.replace(/^\s+|\s+$/g, ''),
-        pageTemplate = null,
-        templatePrefix = '',
-        route;
+        pageTemplate = null;
 
     if (pageName.length === 0) {
         return error('Please type page title');
@@ -65,14 +64,9 @@ lackey.bind('form', 'submit', (event) => {
         .forEach((tableRow) => {
             lackey
                 .select('input[type="radio"]', tableRow)
-                .forEach((input) => {
+                .forEach(input => {
                     if (input.checked) {
                         pageTemplate = input.value;
-                        lackey
-                            .select('pre', tableRow)
-                            .forEach((pre) => {
-                                templatePrefix = pre.innerText;
-                            });
                     }
                 });
         });
@@ -81,28 +75,20 @@ lackey.bind('form', 'submit', (event) => {
         return error('Please chooose page template');
     }
 
-    route = templatePrefix + pageSlug;
+    return api.create('/cms/content', {
+        name: pageName,
+        layout: {
+            type: 'Fields',
+            title: pageName
+        },
+        templateId: pageTemplate,
+        type: 'page'
+    })
 
-    api
-        .read('/cms/content?route=' + encodeURI(route))
-        .then((list) => {
-            if (list && list.data && list.data.length) {
-                return error('This route is already taken');
-            }
-            return api.create('/cms/content', {
-                name: pageName,
-                layout: {
-                    type: 'Fields',
-                    title: pageName
-                },
-                templateId: pageTemplate,
-                route: route,
-                type: 'page'
-            });
-        })
-        .then((response) => {
+    .then(response => {
             let base = document.querySelector('head base'),
                 basePath = base.getAttribute('href');
             top.document.location.href = basePath + response.route.replace(/^\//, '');
-        });
+        })
+        .catch(issue => error(issue));
 });

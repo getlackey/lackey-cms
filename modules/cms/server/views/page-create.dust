@@ -8,10 +8,6 @@
             <span>Title</span>
             <input data-lky-input type="text" name="title" placeholder="Place your path here"/>
         </label>
-        <label>
-            <span>Slug</span>
-            <input data-lky-input type="text" name="slug" placeholder="/place-your/path/here"/>
-        </label>
         <table class="table" data-lky-table data-lky-table-hover>
             <thead>
                 <tr>
