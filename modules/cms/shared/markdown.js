@@ -80,7 +80,9 @@ module.exports = {
         },
         toHTML(markdown, parentTag, editMode) {
 
-            let marked = new MarkdownIt();
+            let marked = new MarkdownIt({
+                html: true
+            });
 
             if (editMode) {
                 marked.use(require('./video/editmode'));
@@ -108,6 +110,8 @@ module.exports = {
                     }));
 
             }
+
+            //markdown = markdown.replace(/\\n/g,'\n');
 
             try {
                 if (module.exports.isInline(parentTag)) {

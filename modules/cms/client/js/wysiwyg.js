@@ -118,6 +118,7 @@ class Wysiwyg {
             insertButtons = [],
             options = {
                 paste: {}
+                //disableDoubleReturn: true
             },
             customButtons = this._element.getAttribute('data-lky-buttons');
 
@@ -127,7 +128,7 @@ class Wysiwyg {
 
 
         if (this._element.hasAttribute('data-lky-singleline')) {
-            options.disableReturn = true;
+            //options.disableReturn = true;
             options.toolbar = {
                 buttons: customButtons || inlineButtons
             };
@@ -180,7 +181,11 @@ class Wysiwyg {
                 toMarkdownOptions: {
                     converters: [
                         {
-                            filter: node => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
+                            filter: 'br',
+                            replacement: () => '<br />'
+                        },
+                        {
+                            filter: node => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'br', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
                             replacement: content => content
                         },
                         {
@@ -230,7 +235,18 @@ class Wysiwyg {
         }
 
         self._lock = true;
-        new MediumEditor(this._element, options);
+        let editor = new MediumEditor(this._element, options);
+        editor.subscribe('editableKeydownEnter', function (event) {
+            if (event.shiftKey) {
+                //var node = MediumEditor.selection.getSelectionStart(editor.options.ownerDocument);
+                MediumEditor.util.insertHTMLCommand(editor.options.ownerDocument, '[BR]');
+                self._element.innerHTML = self._element.innerHTML.replace(/\[BR\]/g, '<br />');
+                self._element.dispatchEvent(new Event('change'));
+                event.preventDefault();
+            } else if (self._element.hasAttribute('data-lky-singleline')) {
+                event.preventDefault();
+            }
+        });
 
         Array.prototype.slice
             .call(this._element.querySelectorAll('img, video'))
