@@ -107,6 +107,10 @@ module.exports = SUtils
                 return 'taxonomyUserId';
             }
 
+            static get createLink() {
+                return 'cms/user/create';
+            }
+
             constructor(data) {
                     super(data);
                     this._roles = this._roles || [];
@@ -136,9 +140,9 @@ module.exports = SUtils
                     return Promise.reject(new Error('No email given'));
                 }
 
-                if (!data.password) {
-                    return Promise.reject(new Error('No password given'));
-                }
+//                if (!data.password) {
+//                    return Promise.reject(new Error('No password given'));
+//                }
 
                 return super.create.apply(this, [data]);
             }
@@ -436,7 +440,16 @@ module.exports = SUtils
             loginToken(email, expireHours) {
 
                 SCli.debug(__MODULE_NAME, 'loginToken');
+                return this.createToken(email, expireHours, 'login');
+            }
 
+            passwordToken(email, expireHours) {
+
+                SCli.debug(__MODULE_NAME, 'passwordToken');
+                return this.createToken(email, expireHours, 'password');
+            }
+
+            createToken(email, expireHours, type) {
                 let hours = expireHours || 24,
                     EXPIRE = new Date((new Date()).getTime() + (1000 * 60 * 60 * hours)),
                     algorithm = 'aes256', // or any other algorithm supported by OpenSSL
@@ -445,7 +458,7 @@ module.exports = SUtils
                         email: email,
                         expire: EXPIRE.getTime()
                     },
-                    cipher = crypto.createCipher(algorithm, this._doc.salt),
+                    cipher = crypto.createCipher(algorithm, new Buffer(crypto.randomBytes(16).toString('base64'), 'base64').toString('base64')),
                     token = cipher.update(JSON.stringify(text), 'utf8', 'hex') + cipher.final('hex');
 
                 return SCli.sql(Tokens
@@ -454,7 +467,7 @@ module.exports = SUtils
                             userId: this.id,
                             expire: EXPIRE,
                             used: false,
-                            type: 'login',
+                            type: type,
                             token: token
                         }))
                     .then(() => {
@@ -488,6 +501,56 @@ module.exports = SUtils
                             });
                     })
                     .then(() => {
+                        return self;
+                    });
+            }
+
+            invalidatePasswordToken(token) {
+
+                SCli.debug(__MODULE_NAME, 'invalidatePasswordToken');
+
+                let self = this;
+                return SCli.sql(Tokens
+                        .query()
+                        .where('userId', this.id)
+                        .where('expire', '>=', new Date())
+                        .where('used', false)
+                        .where('type', 'password')
+                        .where('token', token))
+                    .then((list) => {
+                        if (!list || !list.length) {
+                            throw Error('Invalid token');
+                        }
+                        return SCli.sql(Tokens
+                                .query()
+                                .where('userId', this.id)
+                                .where('type', 'password')
+                                .where('token', token))
+                            .update({
+                                'used': true
+                            });
+                    })
+                    .then(() => {
+                        return self;
+                    });
+            }
+
+            validateToken(token, type) {
+
+                SCli.debug(__MODULE_NAME, 'validatePasswordToken');
+
+                let self = this;
+                return SCli.sql(Tokens
+                        .query()
+                        .where('userId', this.id)
+                        .where('expire', '>=', new Date())
+                        .where('used', false)
+                        .where('type', type)
+                        .where('token', token))
+                    .then((list) => {
+                        if (!list || !list.length) {
+                            throw Error('Invalid token');
+                        }
                         return self;
                     });
             }

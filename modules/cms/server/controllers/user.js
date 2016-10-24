@@ -193,6 +193,101 @@ class UserController extends CRUD {
             });
     }
 
+    static createUser(Role, req, res) {
+        Role
+            .find()
+            .then(roles => {
+                res.css('css/cms/cms/table.css');
+                res.js('js/cms/cms/new-user.js');
+                res.print('cms/cms/user-create', {roles: roles});
+            }, error => {
+                console.error(error);
+                return res.error(error);
+            });
+    }
+
+    static create(User, config, mailer, req, res) {
+        var create = {},
+            user;
+        create.name = req.body.name;
+        create.email = req.body.email;
+        create.roles = [req.body.role];
+
+        User.exists(create.email)
+            .then((exists) => {
+                if (!exists) {
+                    User.generator(JSON.parse(JSON.stringify(create)))
+                        .then(createdUser => {
+                            user = createdUser;
+                            return user.passwordToken(create.email, 168);
+                        })
+                        .then(token => {
+                            return mailer({
+                                subject: 'Account Created on ' + config.get('host'),
+                                from: config.get('mailer.from'),
+                                to: create.email,
+                                template: 'cms/cms/emails/user-created',
+                                token: token,
+                                name: user._doc.name,
+                                id: user._doc.id
+                            });
+                        })
+                        .then(() => {
+                            res.api({
+                                status: 'success',
+                                msg: 'User created'
+                            });
+                        }, error => {
+                            res.error(error);
+                        });
+                } else {
+                    res.api({
+                        status: 'error',
+                        msg: 'User already exists'
+                    });
+                }
+        });
+    }
+
+    static passwordValidate(User, req, res) {
+        let user;
+        User.findById(req.params.passwordUid)
+            .then((usr) => {
+                user = usr;
+                return user.validateToken(req.params.passwordToken, 'password');
+            })
+            .then(() => {
+                res.css('css/cms/cms/table.css');
+                res.js('js/cms/cms/new-user-password.js');
+                res.print('cms/cms/user-set-password', user);
+            }, (error) => {
+                res.error(error);
+            });
+    }
+
+    static setPassword(User, req, res) {
+        let user;
+        User.findById(req.params.passwordUid)
+            .then((usr) => {
+                user = usr;
+                return user.invalidatePasswordToken(req.params.passwordToken);
+            })
+            .then(() => {
+                user.password = req.body.password;
+                user.save();
+                req.login(user, function (error) {
+                    if (error) {
+                        /* istanbul ignore next */
+                        res.status(400).error(error);
+                    } else {
+                        SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
+                        res.redirect('/');
+                    }
+                });
+            }, (error) => {
+                res.error(error);
+            });
+    }
 }
 
 module.exports = UserController;
