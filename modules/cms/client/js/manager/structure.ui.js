@@ -287,6 +287,7 @@ class StructureUI extends Emitter {
                 return self.options.context();
             })
             .then(context => {
+
                 return Template
                     .redraw('dimensions', {
                         context: context,

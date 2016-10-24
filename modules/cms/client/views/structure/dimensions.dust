@@ -26,7 +26,13 @@
             <span>View in language</span>
             <select data-lky-locale>
                 {#locales}
-                    <option value="{code}" {@eq key=locale value=code}selected{/eq}>{name}</option>
+                    <option value="{code}"
+                        {@eq key=locale value="*"}
+                                {?default}selected{/default}
+                            {:else}
+                                {@eq key=locale value=code}selected{/eq}
+                        {/eq}
+                    >{name}</option>
                 {/locales}
             </select>
         </label>

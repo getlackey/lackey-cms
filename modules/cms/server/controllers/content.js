@@ -224,7 +224,9 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         return list.map((item) => {
                             return {
                                 url: item.route,
-                                lastmod: new Date()
+                                lastmod: item.publishAt.toISOString().substr(0,10),
+                                priority: '0.8',
+                                changefreq: 'daily'
                             };
                         });
                     });

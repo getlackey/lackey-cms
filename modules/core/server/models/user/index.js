@@ -174,7 +174,7 @@ module.exports = SUtils
                 let self = this;
 
                 if (!this.id) {
-                    return Promise.revole(this);
+                    return Promise.resolve(this);
                 }
 
                 return super
