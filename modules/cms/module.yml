@@ -55,6 +55,30 @@ routes:
             inject:
                 - cms/core/server/models/user
 
+    /cms/user/create:
+        get:
+            controller: cms/cms/server/controllers/user#createUser
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/role
+        post:
+            controller: cms/cms/server/controllers/user#create
+            ACLHelper: admin
+            inject:
+                - cms/core/server/models/user
+                - configuration
+                - mailer
+
+    /cms/user/password/token/:passwordToken/:passwordUid:
+        get:
+            controller: cms/cms/server/controllers/user#passwordValidate
+            inject:
+                - cms/core/server/models/user
+        post:
+            controller: cms/cms/server/controllers/user#setPassword
+            inject:
+                - cms/core/server/models/user
+
     /cms/user/:profileId:
         get:
             controller: cms/cms/server/controllers/user#details
