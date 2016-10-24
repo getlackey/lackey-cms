@@ -254,7 +254,7 @@ class UserController extends CRUD {
         User.findById(req.params.passwordUid)
             .then((usr) => {
                 user = usr;
-                return user.validatePasswordToken(req.params.passwordToken);
+                return user.validateToken(req.params.passwordToken, 'password');
             })
             .then(() => {
                 res.css('css/cms/cms/table.css');

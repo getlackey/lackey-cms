@@ -440,36 +440,16 @@ module.exports = SUtils
             loginToken(email, expireHours) {
 
                 SCli.debug(__MODULE_NAME, 'loginToken');
-
-                let hours = expireHours || 24,
-                    EXPIRE = new Date((new Date()).getTime() + (1000 * 60 * 60 * hours)),
-                    algorithm = 'aes256', // or any other algorithm supported by OpenSSL
-                    text = {
-                        id: this.id,
-                        email: email,
-                        expire: EXPIRE.getTime()
-                    },
-                    cipher = crypto.createCipher(algorithm, this._doc.salt),
-                    token = cipher.update(JSON.stringify(text), 'utf8', 'hex') + cipher.final('hex');
-
-                return SCli.sql(Tokens
-                        .query()
-                        .insert({
-                            userId: this.id,
-                            expire: EXPIRE,
-                            used: false,
-                            type: 'login',
-                            token: token
-                        }))
-                    .then(() => {
-                        return token;
-                    });
+                return this.createToken(email, expireHours, 'login');
             }
 
             passwordToken(email, expireHours) {
 
                 SCli.debug(__MODULE_NAME, 'passwordToken');
+                return this.createToken(email, expireHours, 'password');
+            }
 
+            createToken(email, expireHours, type) {
                 let hours = expireHours || 24,
                     EXPIRE = new Date((new Date()).getTime() + (1000 * 60 * 60 * hours)),
                     algorithm = 'aes256', // or any other algorithm supported by OpenSSL
@@ -487,7 +467,7 @@ module.exports = SUtils
                             userId: this.id,
                             expire: EXPIRE,
                             used: false,
-                            type: 'password',
+                            type: type,
                             token: token
                         }))
                     .then(() => {
@@ -555,7 +535,7 @@ module.exports = SUtils
                     });
             }
 
-            validatePasswordToken(token) {
+            validateToken(token, type) {
 
                 SCli.debug(__MODULE_NAME, 'validatePasswordToken');
 
@@ -565,7 +545,7 @@ module.exports = SUtils
                         .where('userId', this.id)
                         .where('expire', '>=', new Date())
                         .where('used', false)
-                        .where('type', 'password')
+                        .where('type', type)
                         .where('token', token))
                     .then((list) => {
                         if (!list || !list.length) {
