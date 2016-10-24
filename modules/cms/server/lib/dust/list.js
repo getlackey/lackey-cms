@@ -29,14 +29,23 @@ module.exports = (dust) => {
 
         return chunk.map((injectedChunk) => {
 
-            let container = treeParser.get(params.content.layout, params.path, params.field || false),
-                promise;
+            let
+                promise,
+                parent = params.parent,
+                path = params.path;
+
+            if (parent) {
+                path = parent + '.' + path;
+            }
+
+            let
+                container = treeParser.get(params.content.layout, path, params.field || false);
 
             if (container && Array.isArray(container.items)) {
                 promise = SUtils.serialPromise(container.items, (item, idx) => {
                     let innerParams = _.merge({}, params, {
-                        path: (params.path ? (params.path + '.') : '') + 'items.' + idx,
-                        parent: params.path
+                        path: (path ? (path + '.') : '') + 'items.' + idx,
+                        parent: path
                     });
                     return block.block(item, injectedChunk, context, bodies, innerParams, dust, params.content.id);
                 });
