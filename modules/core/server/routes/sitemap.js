@@ -20,11 +20,12 @@
 
 const sitemap = require(LACKEY_PATH).sitemap;
 
-module.exports = (server) => {
+module.exports = (server, config) => {
     server.get('/sitemap.xml', function (req, res) {
         res.header('Content-Type', 'application/xml');
         res.print('cms/core/sitemap', {
-            urls: sitemap.getCached()
+            urls: sitemap.getCached(),
+            host: config.get('host')
         });
 
     });
