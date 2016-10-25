@@ -228,10 +228,10 @@ class Wysiwyg {
         };
 
         if (insertButtons.length) {
+            options.extensions.insertMedia = new InsertMedia();
             options.extensions.insert = new Insert({
                 buttons: insertButtons
             });
-            options.extensions.insertMedia = new InsertMedia();
         }
 
         self._lock = true;
