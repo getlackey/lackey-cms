@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-16
+
+ * Add support for robots.txt
+
 ## 1.0.0-beta-15
 
  * Added create user to CMS
