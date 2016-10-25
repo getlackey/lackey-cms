@@ -212,6 +212,7 @@ class UserController extends CRUD {
         create.name = req.body.name;
         create.email = req.body.email;
         create.roles = [req.body.role];
+        create.cms = true;
 
         User.exists(create.email)
             .then((exists) => {

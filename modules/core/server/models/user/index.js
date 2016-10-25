@@ -140,9 +140,13 @@ module.exports = SUtils
                     return Promise.reject(new Error('No email given'));
                 }
 
-//                if (!data.password) {
-//                    return Promise.reject(new Error('No password given'));
-//                }
+                if (!data.password && !data.cms) {
+                    return Promise.reject(new Error('No password given'));
+                }
+
+                if (data.cms) {
+                    delete data.cms;
+                }
 
                 return super.create.apply(this, [data]);
             }
