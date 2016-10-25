@@ -86,6 +86,35 @@ module.exports = SUtils
                     });
             }
 
+            static get actions() {
+                return this._overriden('actions', [{
+                    label: 'Remove',
+                    icon: 'img/cms/cms/svg/close.svg',
+                    api: 'DELETE:/cms/redirect/{id}'
+                }]);
+            }
+
+            static createRedirect(req, res) {
+                res.css('css/cms/cms/table.css');
+                res.print('cms/cms/redirect-create');
+            }
+
+            static create(req, res) {
+
+                if (!req.body) return res.error(req, new Error('No input'));
+                if (!req.body.route) return res.error(req, new Error('No route id given'));
+                if (!req.body.target) return res.error(req, new Error('No target given'));
+                if (!req.body.type) return res.error(req, new Error('No code given'));
+
+
+                this.model.create(req.body)
+                    .then(() => res.redirect('/cms/redirect'))
+                    .catch(error => {
+                        console.error(error);
+                        res.error(req, error);
+                    });
+            }
+
         }
         return Promise.resolve(RedirectCtrl);
     });

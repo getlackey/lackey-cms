@@ -50,6 +50,9 @@ module.exports = SUtils
                 return '/cms/redirect';
             }
 
+            static get createLink() {
+                return 'cms/redirect/create';
+            }
 
             static get model() {
                 return RedirectModel;

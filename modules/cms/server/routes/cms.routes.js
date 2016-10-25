@@ -45,7 +45,8 @@ module.exports = (server) => {
             require('../controllers/role'),
             require('../controllers/template'),
             require('../controllers/page'),
-            require('../controllers/session')
+            require('../controllers/session'),
+            require('../controllers/redirect')
         )
         .then((
             CMSController,
@@ -58,7 +59,8 @@ module.exports = (server) => {
             RoleController,
             TemplateController,
             PageController,
-            SessionController
+            SessionController,
+            RedirectController
         ) => {
 
             server.route('/admin*').get(server.aclAdmin, CMSController.iframe);
@@ -102,6 +104,10 @@ module.exports = (server) => {
             cmsResourceRoutes(server, 'role', 'role', RoleController);
             cmsResourceRoutes(server, 'template', 'template', TemplateController);
             cmsResourceRoutes(server, 'session', 'session', SessionController);
+            cmsResourceRoutes(server, 'redirect', 'redirect', RedirectController);
+
+            server.route('/cms/redirect/create')
+                .get(server.aclAdmin, RedirectController.createRedirect);
 
         });
 };

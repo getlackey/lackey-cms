@@ -1,0 +1,25 @@
+{>"cms/cms/main"/}
+
+{<body}
+<section data-lky-component="table">
+    <h2>Create Redirect</h2>
+    <form method="post" action="{@base}/api/cms/redirect{/base}">
+        <label>
+            <span>Source</span>
+            <input data-lky-input type="text" name="route"/>
+        </label>
+        <label>
+            <span>Target</span>
+            <input data-lky-input type="text" name="target"/>
+        </label>
+        <label>
+            <span>Source</span>
+            <select data-lky-input name="type">
+                <option>301</option>
+                <option>302</option>
+            </select>
+        </label>
+        <button data-lky-btn type="submit">Create</button>
+    </form>
+</section>
+{/body}
