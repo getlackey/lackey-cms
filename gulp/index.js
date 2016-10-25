@@ -54,8 +54,13 @@ module.exports = (gulp, projectDIR) => {
         'lackey.img',
         'lackey.fonts',
         'lackey.assets',
-        'lackey.dust'
+        'lackey.dust',
+        'lackey.robots'
     ]);
+
+    gulp.task('lackey.robots', () => gulp
+        .src(projectDIR + '/robots.txt')
+        .pipe(gulp.dest(htDocs)));
 
     gulp.task('lackey.watch', () => {
         return gulp.watch([
