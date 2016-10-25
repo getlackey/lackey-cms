@@ -2,6 +2,11 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-18
+
+ * Fix uploads
+
+
 ## 1.0.0-beta-17
 
  * Fix media insert
