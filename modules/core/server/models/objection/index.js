@@ -623,7 +623,9 @@ module.exports = Database
                                     perPage: perPage,
                                     offset: page * perPage,
                                     filters: query,
-                                    api: self.api
+                                    api: self.api,
+                                    start: (page + 1) - 3,
+                                    finish: (page + 1) + 3
                                 };
 
                                 if (sort) {

@@ -1,6 +1,14 @@
 <tr>
     <td colspan="{@math key=table.columns.length method="add" operand=1 /}">
         <ul>
+        {@math key=table.paging.page method="subtract" operand=1}
+            {@gt value=0}
+                <li>
+                    <a href="#" data-lky-hook="table-paging" data-page="{@math key=table.paging.page method="subtract" operand=1 /}">Prev</a>
+                </li>
+            {/gt}
+        {/math}
+
         {@iterate from=1 to=table.paging.pages}
             {@eq value=$idx key=table.paging.page}
                 <li data-lky-active>
@@ -9,13 +17,22 @@
                     </a>
                 </li>
             {:else}
-                <li>
-                    <a href="#"
-                       data-lky-hook="table-paging"
-                       data-page="{$idx}">{$idx}</a>
-                </li>
+                {@gt key=$idx value=table.paging.start}
+                    {@lt key=$idx value=table.paging.finish}
+                        <li>
+                            <a href="#" data-lky-hook="table-paging" data-page="{$idx}">{$idx}</a>
+                        </li>
+                    {/lt}
+                {/gt}
             {/eq}
         {/iterate}
+            {@math key=table.paging.page method="add" operand=1 }
+                {@lte value=table.paging.pages}
+                    <li>
+                        <a href="#" data-lky-hook="table-paging" data-page="{@math key=table.paging.page method="add" operand=1 /}">Next</a>
+                    </li>
+                {/lte}
+            {/math}
         </ul>
     </td>
 </tr>
