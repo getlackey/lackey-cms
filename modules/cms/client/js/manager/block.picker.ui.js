@@ -30,7 +30,7 @@ class BlockPrickerUI extends Picker {
 
     get uri() {
 
-        return '/cms/template?type=block&q=';
+        return '/cms/template?limit=100&type=block&q=';
     }
 
     selected(hook) {
