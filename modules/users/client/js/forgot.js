@@ -32,10 +32,10 @@ lackey.bind('lky:cms.account.forgot', 'submit', function (event, hook) {
             status: 'success',
             message: 'Link has been sent to ' + data.username
         });
-    }, function (error) {
+    }, function () {
         growl({
             status: 'error',
-            message: error.toString()
+            message: 'Email not found'
         });
     });
 

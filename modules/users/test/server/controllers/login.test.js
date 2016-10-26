@@ -53,6 +53,9 @@ describe('modules/users/server/controllers/login', () => {
 
     it('index', (done) => {
         controller.index({}, {
+            js: () => {
+                return true;
+            },
             print: () => {
                 done();
             }
@@ -90,8 +93,7 @@ describe('modules/users/server/controllers/login', () => {
                 }
             },
             res = {
-                redirect: (uri) => {
-                    uri.should.be.eql('/');
+                api: () => {
                     done();
                 },
                 status: () => {
@@ -117,8 +119,7 @@ describe('modules/users/server/controllers/login', () => {
                 }
             },
             res = {
-                redirect: (uri) => {
-                    uri.should.be.eql('/');
+                api: () => {
                     done();
                 },
                 status: () => {

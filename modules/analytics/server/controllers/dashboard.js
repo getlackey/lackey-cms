@@ -77,18 +77,14 @@ class AnalititcsDashboardController {
     }
 
     static index(req, res) {
-        res.send({
-            title: 'Analytics',
-            template: 'cms/analytics/dashboard',
-            javascripts: [
+        res.js([
                 'js/cms/analytics/charts.js'
-            ],
-            stylesheets: [
+            ]);
+        res.css([
                 'css/cms/analytics/charts.css'
-            ],
-            data: {
+            ]);
+        res.print('cms/analytics/dashboard', {
                 metrics: this.metrics
-            }
         });
     }
 }

@@ -20,18 +20,19 @@
 const passport = require('passport'),
       SUtils = require(LACKEY_PATH).utils;
 
-module.exports = Promise.resolve({
+class loginClass {
 
-    index: (req, res) => {
+    static index(req, res) {
+        res.js('js/cms/users/login.js');
         res.print(['~/core/login', 'cms/users/login'], {});
-    },
+    }
 
-    logout: (req, res) => {
+    static logout(req, res) {
         req.logout();
         res.redirect('/');
-    },
+    }
 
-    login: (req, res, next) => {
+    static login(req, res, next) {
         if (req.body && req.body.remember > 0) {
             req.session.cookie.maxAge = req.body.remember * 86400000;
         }
@@ -49,11 +50,13 @@ module.exports = Promise.resolve({
                         res.status(400).error(error);
                     } else {
                         SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
-                        res.redirect('/');
+                        res.api('done');
                     }
                 });
             }
         })(req, res, next);
 
     }
-});
+}
+
+module.exports = loginClass;

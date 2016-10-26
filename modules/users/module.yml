@@ -2,3 +2,14 @@ name : 'Lackey - Users'
 
 require:
     - 'cms/core'
+
+routes:
+    /logout:
+        get:
+            controller: cms/users/server/controllers/login#logout
+
+    /login:
+        get:
+            controller: cms/users/server/controllers/login#index
+        post:
+            controller: cms/users/server/controllers/login#login

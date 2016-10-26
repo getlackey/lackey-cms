@@ -25,17 +25,9 @@ module.exports = (server) => {
 
     return SUtils
         .waitForAs('login routes',
-            require('../controllers/login'),
             require('../controllers/account')
         )
-        .then((LoginController, AccountController) => {
-
-            server.route('/login')
-                .get(policy.anonymous('/'), LoginController.index)
-                .post(policy.anonymous('/'), LoginController.login);
-
-            server.route('/logout')
-                .get(LoginController.logout);
+        .then((AccountController) => {
 
             server.route('/session').get((req, res) => {
                 res.print('cms/users/session', {});

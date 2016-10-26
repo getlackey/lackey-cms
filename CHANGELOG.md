@@ -2,6 +2,12 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-21
+
+ * Added login script.
+ * Added errors to forgot password
+ * Fix links on analytics dashboard
+
 ## 1.0.0-beta-20
 
  * Improve pagination on cms
