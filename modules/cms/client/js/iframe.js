@@ -21,12 +21,17 @@ const resolve = require('cms/client/js/iframe.resolve.js');
 let base = document.querySelector('head base'),
     loc = document.location,
     basePath = base ? base.getAttribute('href') : (loc.protocol + '//' + loc.host + (loc.port && loc.port.length ? (':' + loc.port) : '') + '/'),
-    adminPath = resolve(basePath, document.location.pathname);
+    adminPath = resolve(basePath, document.location.pathname),
+    previewPath = resolve(basePath, '/cms/preview', false, '');
 
-if (document.location.search && document.location.search.replace(/^\s+|\s+$/g, '').length) {
-    adminPath += document.location.search;
-}
+if (loc.href.replace(/\/$/, '') !== previewPath.replace(/\/$/, '')) {
 
-if (top === window || top.document.location.href.replace(/\/$/, '') !== adminPath.replace(/\/$/, '')) {
-    top.document.location.href = adminPath;
+    if (document.location.search && document.location.search.replace(/^\s+|\s+$/g, '').length) {
+        adminPath += document.location.search;
+    }
+
+    if (top === window || top.document.location.href.replace(/\/$/, '') !== adminPath.replace(/\/$/, '')) {
+        top.document.location.href = adminPath;
+    }
+
 }
