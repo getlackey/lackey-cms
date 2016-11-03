@@ -11,96 +11,71 @@
         {/stylesheets}
     </head>
         <body data-lky-hook="lackey">
-        <aside data-lky-hook="menu">
-            <section data-lky-hook="menu.logo">
-                Lackey.io
-            </section>
-            <ul data-lky-hook="menu.items">
-                <li>
-                    <a href="">Homepage</a>
-                </li>
-                {@acl perm="adminMenu" method="users"}
+        {^iframe}
+            <aside data-lky-hook="menu">
+                <section data-lky-hook="menu.logo">
+                    Lackey.io
+                </section>
+                <ul data-lky-hook="menu.items">
                     <li>
-                        <a href="cms/user">Users</a>
+                        <a href="">Homepage</a>
                     </li>
-                {/acl}
-                {@acl perm="adminMenu" method="media"}
+                    {@acl perm="adminMenu" method="users"}
+                        <li>
+                            <a href="cms/user">Users</a>
+                        </li>
+                    {/acl}
+                    {@acl perm="adminMenu" method="media"}
+                        <li>
+                            <a href="cms/media">Media</a>
+                        </li>
+                    {/acl}
+                    {@acl perm="adminMenu" method="tags"}
+                        <li>
+                            <a href="cms/taxonomy">Tags</a>
+                        </li>
+                    {/acl}
+                    {@acl perm="adminMenu" method="content"}
+                        <li>
+                            <a href="cms/content">Content</a>
+                        </li>
+                    {/acl}
+                    {@acl perm="adminMenu" method="analitycs"}
+                        <li>
+                            <a href="cms/analytics">Analytics</a>
+                        </li>
+                    {/acl}
+                    {@config}
+                        {@path root=. path="cms.items"}
+                            <li data-class="divider"></li>
+                            {#.}
+                                {@acl perm="adminMenu" method=label}
+                                    <li>
+                                        <a href="{uri|base}">{label}</a>
+                                    </li>
+                                {/acl}
+                            {/.}
+                        {/path}
+                    {/config}
+                    <li data-class="divider"></li>
                     <li>
-                        <a href="cms/media">Media</a>
+                        <a href="logout">Logout</a>
                     </li>
-                {/acl}
-                {@acl perm="adminMenu" method="tags"}
-                    <li>
-                        <a href="cms/taxonomy">Tags</a>
-                    </li>
-                {/acl}
-                {@acl perm="adminMenu" method="content"}
-                    <li>
-                        <a href="cms/content">Content</a>
-                    </li>
-                {/acl}
-                {@acl perm="adminMenu" method="analitycs"}
-                    <li>
-                        <a href="cms/analytics">Analytics</a>
-                    </li>
-                {/acl}
-                {@config}
-                    {@path root=. path="cms.items"}
-                        <li data-class="divider"></li>
-                        {#.}
-                            {@acl perm="adminMenu" method=label}
-                                <li>
-                                    <a href="{uri|base}">{label}</a>
-                                </li>
-                            {/acl}
-                        {/.}
-                    {/path}
-                {/config}
-                <li data-class="divider"></li>
-                <li>
-                    <a href="logout">Logout</a>
-                </li>
-            </ul>
-            <section data-lky-hook="menu.footer">
-            </section>
-        </aside>
+                </ul>
+                <section data-lky-hook="menu.footer">
+                </section>
+            </aside>
+        {/iframe}
         <main data-lky-hook="main-area">
             <header data-lky-hook="header">
-                <button data-lky-hook="header.hamburger" onclick="document.body.setAttribute('data-lky-open', document.body.getAttribute('data-lky-open') === 'true' ? '' : 'true')">
-                    <div class="hamburger-box">
-                      <div class="hamburger-inner"></div>
-                    </div>
-                </button>
-                <button data-lky-hook="header.settings" data-lky-ignore="
-                    {@acl perm="adminMenu" method="meta"}{:else}meta,{/acl}
-                    {@acl perm="adminMenu" method="dimensions"}{:else}dimensions,{/acl}
-                    {@acl perm="adminMenu" method="taxonomy"}{:else}taxonomy,{/acl}
-                    {@acl perm="adminMenu" method="blocks"}{:else}blocks,{/acl}
-                    {@acl perm="adminMenu" method="diff"}{:else}diff,{/acl}
-                ">Settings</button>
-
-                <button data-lky-hook="header.publish">
-                    <label data-lky-switch>
-                        <input type="checkbox" name="published"/>
-                        <span></span>
-                    </label>
-                </button>
-                <button data-lky-hook="header.taxonomy"><img src="{@base}img/cms/cms/svg/tags.svg{/base}" data-lky-tab="taxonomy"/></button>
-                <a href="{@base}/cms/content/create{/base}" data-lky-hook="header.create"><img src="{@base}img/cms/cms/svg/plus.svg{/base}"/></a>
-                <div data-lky-hook="header.user">
-                    <img src="{admin.image.source|base}"/>
-                    <a href="{@base}cms/account{/base}" data-lky-hook="header.user.name">{admin.name}</a>
-                    <span data-lky-hook="header.user.acting"><span>Acting as:</span>Admin</span>
-                </div>
-                <div data-lky-hook="header.changes">
-                    <button data-lky-hook="header.save" data-lky-btn>Save</button>
-                    <span>
-                        <span>You've made changes</span>
-                        <a data-lky-hook="header.cancel">Cancel all</a>
-                    </span>
-                </div>
-
-
+                {+header}
+                    <button data-lky-hook="header.cms" data-hamburger onclick="document.body.setAttribute('data-lky-open', document.body.getAttribute('data-lky-open') === 'true' ? '' : 'true')">
+                        <div class="hamburger-box">
+                          <div class="hamburger-inner"></div>
+                        </div>
+                    </button>
+                    {> "cms/cms/partials/user" /}
+                {/header}
             </header>
             {+body/}
         </main>

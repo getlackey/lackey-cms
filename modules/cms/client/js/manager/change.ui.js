@@ -55,6 +55,7 @@ ChangeUI.prototype.cancel = function (event) {
     event.stopPropagation();
     event.preventDefault();
     this.repository.resetAll();
+    this.uiUpdate(false);
 };
 
 ChangeUI.prototype.save = function (event) {

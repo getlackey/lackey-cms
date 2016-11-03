@@ -1,33 +1,5 @@
 {>"cms/cms/main"/}
 
 {<body}
-<div class="lackey-cms">
-    <div class="bt">
-        <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                  <div class="card-block">
-                    <h4 class="card-title">Content</h4>
-                    <a href="cms/content" class="btn btn-primary">View</a>
-                  </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                  <div class="card-block">
-                    <h4 class="card-title">Memory Usage</h4>
-                    <ul>
-                        <li>In RAM {data.memory.rss}</li>
-                        <li>Heap Total {data.memory.heapTotal}</li>
-                        <li>Heap Used {data.memory.heapUsed}</li>
-                    </ul>
-                  </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 {/body}

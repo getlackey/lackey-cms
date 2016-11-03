@@ -309,7 +309,7 @@ Manager.prototype.onStackChange = function () {};
 Manager.prototype.onViewStructure = function (event) {
 
     lackey.hook('header.settings').setAttribute('disabled', 'disabled');
-    lackey.hook('header.taxonomy').setAttribute('disabled', 'disabled');
+    lackey.hook('header.views').setAttribute('disabled', 'disabled');
 
     let
         tab = event.target.getAttribute('data-lky-tab'),
@@ -341,7 +341,7 @@ Manager.prototype.onViewStructure = function (event) {
     promise
         .then(() => {
             lackey.hook('header.settings').removeAttribute('disabled');
-            lackey.hook('header.taxonomy').removeAttribute('disabled');
+            lackey.hook('header.views').removeAttribute('disabled');
         }, error => console.error(error))
         .catch(error => {
             console.error(error);
@@ -389,7 +389,11 @@ Manager.prototype.setupUI = function () {
         .addEventListener('click', this.onViewStructure.bind(this), true);
 
     lackey
-        .hook('header.taxonomy')
+        .hook('header.views')
+        .addEventListener('click', this.onViewStructure.bind(this), true);
+
+    lackey
+        .hook('header.blocks')
         .addEventListener('click', this.onViewStructure.bind(this), true);
 
     this._changeUI = new ChangeUI(this.repository);
@@ -397,7 +401,7 @@ Manager.prototype.setupUI = function () {
         .select([
             '[data-lky-hook="header.settings"]',
             '[data-lky-hook="header.publish"]',
-            '[data-lky-hook="header.taxonomy"]'
+            '[data-lky-hook="header.views"]'
         ])
         .forEach(element => {
             element.style.display = 'block';
@@ -406,6 +410,16 @@ Manager.prototype.setupUI = function () {
     this
         .current
         .then(current => {
+
+            if (current.template && current.template.expose && current.template.expose.length) {
+                lackey
+                    .select([
+                        '[data-lky-hook="header.blocks"]',
+                    ])
+                    .forEach(element => {
+                        element.style.display = 'block';
+                    });
+            }
 
             let publishDiv = lackey.hook('header.publish'),
                 publishControl = lackey.select('input[type="checkbox"]', publishDiv)[0];

@@ -7,7 +7,8 @@
             color: inherit;
             background-color: transparent;
         }
-        > button, > a {
+        > button,
+        > a {
             border: 0;
             margin: 0;
             overflow: visible;
@@ -23,24 +24,32 @@
                 height: 40px;
             }
         }
-        [data-lky-hook="header.hamburger"],
+        [data-lky-hook="header.cms"],
         [data-lky-hook="header.settings"],
-        [data-lky-hook="header.publish"] {
+        [data-lky-hook="header.publish"],
+        [data-lky-hook="header.views"],
+        [data-lky-hook="header.create"],
+        [data-lky-hook="header.blocks"] {
             border-right: 1px solid $color-washed;
             transition: background-color $speed;
         }
         [data-lky-hook="header.settings"],
         [data-lky-hook="header.publish"],
-        [data-lky-hook="header.taxonomy"] {
+        [data-lky-hook="header.views"],
+        [data-lky-hook="header.blocks"] {
             display: none;
-            padding: 0px 30px;
-
+            padding: 0px 20px;
         }
+        [data-lky-hook="header.cms"],
         [data-lky-hook="header.create"] {
-            padding: 0px 30px;
+            padding: 0px 20px;
             > img {
-                margin-top: 1rem; /* css wtf */
+                margin-top: 1rem;
+                /* css wtf */
             }
+        }
+        [data-lky-hook="header.cms"] {
+            padding: 0px 20px;
         }
         [data-lky-hook="header.publish"] {
             [data-lky-switch] {
@@ -63,11 +72,12 @@
                 }
             }
         }
-        [data-lky-hook="header.hamburger"],
+        [data-lky-hook="header.cms"],
         [data-lky-hook="header.settings"],
         [data-lky-hook="header.publish"],
         [data-lky-hook="header.create"],
-        [data-lky-hook="header.taxonomy"] {
+        [data-lky-hook="header.views"],
+        [data-lky-hook="header.blocks"] {
             float: left;
             height: $header-height;
         }
@@ -121,7 +131,7 @@
             float: right;
             height: $header-height;
             border-left: 1px solid #5F799C;
-            width: 290px;
+            width: 200px;
             a {
                 color: white;
                 text-decoration: none;
@@ -136,15 +146,11 @@
             [data-lky-hook="header.user.name"] {
                 display: block;
                 float: right;
-                width: 210px;
-                padding: 19px 0px 5px;
+                width: 100px;
+                padding: 15px 20px 5px 0px;
                 text-transform: uppercase;
-            }
-            [data-lky-hook="header.user.acting"] {
-                font-size: 11px;
-                span {
-                    color: $color-lackey-light-blue;
-                }
+                word-wrap: break-word;
+                font-size: 10px;
             }
         }
         @import "./hamburger";

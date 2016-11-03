@@ -1,0 +1,4 @@
+<div data-lky-hook="header.user">
+    <img src="{admin.image.source|base}"/>
+    <a href="{@base}cms/account{/base}" data-lky-hook="header.user.name">{admin.name}</a>
+</div>
