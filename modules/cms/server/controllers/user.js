@@ -227,7 +227,7 @@ class UserController extends CRUD {
                                 subject: 'Account Created on ' + config.get('host'),
                                 from: config.get('mailer.from'),
                                 to: create.email,
-                                template: 'cms/cms/emails/user-created',
+                                template: ['~/core//emails/user-created', 'cms/cms/emails/user-created'],
                                 token: token,
                                 name: user._doc.name,
                                 id: user._doc.id
