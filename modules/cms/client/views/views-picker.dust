@@ -1,0 +1,48 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/structure.ui.js !}
+<aside data-lky-component="settings">
+    <section data-lky-hook="settings.breadcrumbs">
+        <img src="img/cms/cms/svg/chevron-left.svg" data-lky-hook="settings.back"/>
+        Views
+    </section>
+    <section data-lky-hook="settings.picker">
+      <ul>
+        <li>
+            <label>
+                <span>View as role</span>
+                <select data-lky-view-as>
+                {#viewAs.viewAs}
+                    <option value="{name}">{?label}{label}{:else}{name}{/label}</option>
+                {/viewAs.viewAs}
+                </select>
+            </label>
+        </li>
+        <li>
+            <label>
+                <span>View variant</span>
+                <select data-lky-variant>
+                    <option value="">Page</option>
+                    {#context.template.variants}
+                        <option value="{id}" {@eq key=variant value=id type="number"}selected{/eq}>{name}</option>
+                    {/context.template.variants}
+                </select>
+            </label>
+        </li>
+        <li>
+            <label>
+                <span>View in language</span>
+                <select data-lky-locale>
+                    {#locales}
+                        <option value="{code}"
+                            {@eq key=locale value="*"}
+                                    {?default}selected{/default}
+                                {:else}
+                                    {@eq key=locale value=code}selected{/eq}
+                            {/eq}
+                        >{name}</option>
+                    {/locales}
+                </select>
+            </label>
+        </li>
+    </ul>
+  </section>
+</aside>

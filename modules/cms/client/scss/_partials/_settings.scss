@@ -1,31 +1,17 @@
         [data-lky-component="settings"] {
             position: absolute;
-            top: $header-height;
+            top: 0px;
             left: 0px;
-            /*transform: translateX(-100%);
-            transition: transform $speed;*/
-            pointer-events: none;
             box-shadow: 3px 23px 23px -2px rgba(0, 0, 0, 0.52);
-            > [data-lky-hook="settings.back"] {
-                width: 0px;
-                background: rgba(0, 0, 0, 0.25);
-                height: 100%;
-                float: left;
-            }
-            &[data-lky-open] {
-                transform: none;
-                pointer-events: all;
-            }
-            height: calc(100% - 75px);
+            height: 100%;
             [data-lky-hook="settings.breadcrumbs"] {
-                height: 10px;
-                /* for later $settings-breadcrumb-height; */
-                line-height: $settings-breadcrumb-height;
+                cursor: pointer;
+                height: $item-height;
+                line-height: $item-height;
                 width: 100%;
                 color: $color-white;
                 text-transform: uppercase;
                 background-color: $color-background-highlight;
-                padding-left: 20px;
                 box-sizing: border-box;
             }
             [data-lky-hook="settings.pick"] {
@@ -40,7 +26,7 @@
                         display: block;
                         height: $item-height;
                         line-height: $item-height;
-                        padding-left: $item-height;
+                        padding-left: 20px;
                         text-aling: left;
                         border-bottom: 1px solid $color-washed;
                         cursor: pointer;
@@ -117,7 +103,6 @@
                             float: right;
                             height: 65px;
                             border-radius: 5px;
-
                         }
                         border-bottom: 1px solid lighten($color-lackey-light-gray, 30%);
                         div {
@@ -163,7 +148,6 @@
                 > div {
                     height: 100%;
                     width: $settings-edit-width;
-
                     > ul {
                         padding: 0px;
                         margin: 0px;
@@ -411,6 +395,13 @@
             background-color: $color-background-highlight;
             transform: transition;
             transition: transform $speed, opacity $speed;
+        }
+
+        [data-lky-hook="settings.back"] {
+            display: inline-block;
+            height: 40px;
+            margin-top: 10px;
+            float: left;
         }
 
         [data-lky-component="settings"] + [data-lky-component="settings"] {

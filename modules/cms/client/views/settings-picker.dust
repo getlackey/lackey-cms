@@ -1,0 +1,27 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/structure.ui.js !}
+<aside data-lky-component="settings">
+    <section data-lky-hook="settings.breadcrumbs">
+        <img src="img/cms/cms/svg/chevron-left.svg" data-lky-hook="settings.back"/>
+        Settings
+    </section>
+
+    <section data-lky-hook="settings.pick">
+        <ul>
+            <li data-lky-open="meta">
+                <a href="#">Meta</a>
+            </li>
+            <li data-lky-open="dimensions">
+                <a href="#">Dimensions</a>
+            </li>
+            <li data-lky-open="taxonomy">
+                <a href="#">Tags &amp; Privacy</a>
+            </li>
+            <li data-lky-open="blocks">
+                <a href="#">Blocks</a>
+            </li>
+            <li data-lky-open="diff">
+                <a href="#">Diff</a>
+            </li>
+        </ul>
+    </section>
+</aside>

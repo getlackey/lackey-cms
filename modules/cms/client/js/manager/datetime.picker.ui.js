@@ -82,10 +82,6 @@ class DateTimePicker extends Picker {
             .redraw(self.node.querySelector('[data-lky-hook="settings.picker"]'), options)
             .then(() => {
 
-                lackey.bind('[data-lky-hook="settings.back"]', 'click', () => {
-                    self.resolve(null);
-                }, self.node);
-
                 lackey.bind('[data-date]', 'click', (event, hook) => {
                     event.preventDefault();
                     event.stopPropagation();

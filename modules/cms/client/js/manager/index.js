@@ -25,6 +25,7 @@ const
     Repository = require('cms/client/js/manager/repository'),
     ChangeUI = require('cms/client/js/manager/change.ui.js'),
     StructureUI = require('cms/client/js/manager/structure.ui.js'),
+    SettingsPickerUI = require('cms/client/js/manager/settings.picker.ui.js'),
     prefix = require('cms/client/js/iframe.resolve')(xhr.base, '', true),
     Stack = require('cms/client/js/manager/stack'),
     userDrop = require('cms/client/js/manager/user.dropdown.js');
@@ -82,7 +83,6 @@ function Manager() {
     this.repository.bubble(this, 'reset');
 
     this.stack = new Stack(this.repository, this);
-    this.stack.on('transition', this.onStackChange.bind(this));
 
 
     overlay.addEventListener('mousewheel', (e) => {
@@ -134,18 +134,6 @@ Manager.prototype._loadCurrent = function () {
             return data.data[0].id;
         })
         .catch(error => console.error(error));
-};
-
-Manager.prototype.setAction = function (options) {
-
-    let li = document.createElement('li'),
-        a = document.createElement('a'),
-        i = document.createElement('i');
-    i.className = options.class;
-    a.appendChild(i);
-    li.appendChild(a);
-    this._toolsNode.appendChild(li);
-    li.addEventListener('click', options.handler, true);
 };
 
 /**
@@ -301,69 +289,53 @@ Manager.prototype.onChanged = function () {
     //
 };
 
-/**
- * Handler for stack change
- * @param {StackEvent} event
- */
-Manager.prototype.onStackChange = function () {};
+Manager.prototype.onSettings = function (event) {
+    let self = this;
 
-Manager.prototype.onViewStructure = function (event) {
+    this.onHeaderAction(current => {
+        return self.stack.inspectSettings(current);
+    });
+};
 
-    lackey.hook('header.settings').setAttribute('disabled', 'disabled');
-    lackey.hook('header.views').setAttribute('disabled', 'disabled');
+Manager.prototype.onViews = function (event) {
+    let self = this;
 
-    let
-        tab = event.target.getAttribute('data-lky-tab'),
-        self = this,
-        promise;
+    this.onHeaderAction(current => {
+        return self.stack.inspectViews(current);
+    });
+};
 
-    if (this.stack.length) {
-        promise = this.stack.clear().catch(error => {
-            console.error(error);
-        });
-    } else {
-        promise = this
-            .current
+Manager.prototype.onBlocks = function (event) {};
 
-            .then(current => {
-            let structureController = new StructureUI({
-                manager: self,
-                type: 'content',
-                id: current.id,
-                context: () => Promise.resolve(self.current),
-                stack: self.stack
-            }, this.repository);
+Manager.prototype.onHeaderAction = function (handler) {
 
-            structureController.on('changed', self.onStructureChange.bind(self));
-            return self.stack.inspectStructure(structureController, tab);
-        });
+    let promise = this.flushStack();
+
+    if (promise) {
+        return promise;
     }
 
-    promise
-        .then(() => {
-            lackey.hook('header.settings').removeAttribute('disabled');
-            lackey.hook('header.views').removeAttribute('disabled');
-        }, error => console.error(error))
-        .catch(error => {
-            console.error(error);
-        });
-
+    return this
+        .current
+        .then(handler);
 
 };
+
+
+Manager.prototype.flushStack = function () {
+    if (this.stack.length) {
+        return this.stack.clear().catch(error => {
+            console.error(error);
+        });
+    }
+    return null;
+};
+
 
 Manager.prototype.onStructureChange = function () {
     this.repository.notify();
     this.preview();
 };
-
-Manager.prototype.onPagePropertiesChanged = function (event) {
-    return this
-        .updateCurrent(content => {
-            content.props = event.data;
-        })
-        .then(this.preview.bind(this));
-};
-
 
 Manager.prototype.update = function (type, id, handler) {
     let self = this;
@@ -389,15 +361,15 @@ Manager.prototype.setupUI = function () {
 
     lackey
         .hook('header.settings')
-        .addEventListener('click', this.onViewStructure.bind(this), true);
+        .addEventListener('click', this.onSettings.bind(this), true);
 
     lackey
         .hook('header.views')
-        .addEventListener('click', this.onViewStructure.bind(this), true);
+        .addEventListener('click', this.onViews.bind(this), true);
 
     lackey
         .hook('header.blocks')
-        .addEventListener('click', this.onViewStructure.bind(this), true);
+        .addEventListener('click', this.onBlocks.bind(this), true);
 
     this._changeUI = new ChangeUI(this.repository);
     lackey
