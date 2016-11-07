@@ -142,10 +142,6 @@ class StructureUI extends Emitter {
                     self.node.removeAttribute('data-lky-edit');
                 }
 
-                lackey.bind('[data-lky-hook="settings.back"]', 'click', () => {
-                    self.options.stack.pop();
-                }, self.node);
-
                 lackey
                     .select([
                         '[data-lky-hook="settings.open.meta"]',

@@ -27,6 +27,9 @@ const
     TaxonomyPricker = require('cms/client/js/manager/taxonomy.picker.ui.js'),
     RolePicker = require('cms/client/js/manager/role.picker.ui.js'),
     SourceEditor = require('cms/client/js/manager/sources.editor.ui.js'),
+    SettingsPickerUI = require('cms/client/js/manager/settings.picker.ui.js'),
+    MetaPickerUI = require('cms/client/js/manager/meta.picker.ui.js'),
+    ViewsPickerUI = require('cms/client/js/manager/views.picker.ui.js'),
     lackey = require('core/client/js');
 /**
  * @module lackey-cms/modules/cms/client/manager
@@ -108,6 +111,10 @@ Stack.prototype.pick = function (picker, pop) {
         .buildUI()
         .then(element => {
             self.node.appendChild(element);
+            lackey.bind('[data-lky-hook="settings.breadcrumbs"]', 'click', () => {
+                picker.reject();
+            }, picker.node);
+
             return picker.fadeIn();
         });
 
@@ -122,6 +129,32 @@ Stack.prototype.pick = function (picker, pop) {
             self.pop(pop);
             return null;
         });
+};
+
+
+
+Stack.prototype.inspectSettings = function (context) {
+    return this
+        .pick(new SettingsPickerUI({
+            context: context,
+            stack: this
+        }), true);
+};
+
+Stack.prototype.inspectMeta = function (context) {
+    return this
+        .pick(new MetaPickerUI({
+            context: context,
+            stack: this
+        }), true);
+};
+
+Stack.prototype.inspectViews = function (context) {
+    return this
+        .pick(new ViewsPickerUI({
+            context: context,
+            stack: this
+        }), true);
 };
 
 Stack.prototype.pickArticle = function (route) {
