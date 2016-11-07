@@ -3,17 +3,16 @@
     <table class="table" data-lky-table="{table.paging.api}" data-lky-paging="{table.paging|js}" data-lky-columns="{table.columns|js}">
         <thead>
             <tr>
-                <th>Actions</th>
-
-                    {#table.columns}
-                        <th>{label}
-                            {?help}
-                                <div class="help-tip">
-                                    <p>{help}</p>
-                                </div>
-                            {/help}
-                        </th>
-                    {/table.columns}
+                {#table.columns}
+                    <th>{label}
+                        {?help}
+                            <div class="help-tip">
+                                <p>{help}</p>
+                            </div>
+                        {/help}
+                    </th>
+                {/table.columns}
+                {?actions}<th>Actions</th>{/actions}
             </tr>
         </thead>
         <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">

@@ -330,7 +330,6 @@ class CRUDInjectionController {
                 data.rows.forEach(row => { // remove circural
                     delete row.data;
                 });
-
                 res.send({
                     title: self.title || self.field,
                     create: model.createLink,
@@ -344,6 +343,7 @@ class CRUDInjectionController {
                         'css/cms/cms/table.css'
                     ],
                     host: config.get('host'), // this is so stupid, but fast fix
+                    actions: self.actions,
                     data: {
                         table: data
                     }

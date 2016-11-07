@@ -8,7 +8,11 @@
                 </li>
             {/gt}
         {/math}
-
+        {@gt key=table.paging.page value=3}
+            <li>
+                <a href="#" data-lky-hook="table-paging" data-page="0">1...</a>
+            </li>
+        {/gt}
         {@iterate from=1 to=table.paging.pages}
             {@eq value=$idx key=table.paging.page}
                 <li data-lky-active>
@@ -26,6 +30,13 @@
                 {/gt}
             {/eq}
         {/iterate}
+            {@math key=table.paging.pages method="subtract" operand=table.paging.page }
+                {@gt value=2}
+                    <li>
+                        <a href="#" data-lky-hook="table-paging" data-page="{table.paging.pages}">...{table.paging.pages}</a>
+                    </li>
+                {/gt}
+            {/math}
             {@math key=table.paging.page method="add" operand=1 }
                 {@lte value=table.paging.pages}
                     <li>

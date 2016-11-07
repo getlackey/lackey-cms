@@ -1,5 +1,20 @@
 {#table.rows}
 <tr>
+    {#columns}
+    <td>
+        {@is key=value type="array"}
+            {#value}
+                {>"cms/core/table-value" value=./}
+                {@math key=$idx method="add" operand=1}
+                    {@lt value=value.length},{/lt}
+                {/math}
+            {/value}
+        {:else}
+            {>"cms/core/table-value" value=value/}
+        {/is}
+    </td>
+    {/columns}
+    {?actions}
     <td>
         {#actions}
             {?href}
@@ -29,19 +44,6 @@
             {@sep}&nbsp;&nbsp;{/sep}
         {/actions}
     </td>
-    {#columns}
-    <td>
-        {@is key=value type="array"}
-            {#value}
-                {>"cms/core/table-value" value=./}
-                {@math key=$idx method="add" operand=1}
-                    {@lt value=value.length},{/lt}
-                {/math}
-            {/value}
-        {:else}
-            {>"cms/core/table-value" value=value/}
-        {/is}
-    </td>
-    {/columns}
+    {/actions}
 </tr>
 {/table.rows}
