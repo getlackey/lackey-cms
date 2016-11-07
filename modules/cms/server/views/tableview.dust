@@ -38,7 +38,7 @@
                         </button>
             {/href}
         {/tableActions}
-        <a data-lky-btn class="tableAction" href="{route|base}.xlsx">Export List</a>
+        <a data-lky-btn class="tableAction" href="{route|base}.xlsx">Export</a>
     <h2>{title}</h2>
     {>"cms/core/table" table=data.table/}
 </section>
