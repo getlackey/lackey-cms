@@ -111,6 +111,22 @@ class PickerUI extends Emitter {
         return Promise.resolve();
     }
 
+    redraw() {
+        let
+            oldNode = this.node,
+            self = this;
+        return this
+            .buildUI()
+            .then(node => {
+                oldNode.parentNode.insertBefore(node, oldNode);
+                oldNode.parentNode.removeChild(oldNode);
+                self.node = node;
+                lackey.bind('[data-lky-hook="settings.breadcrumbs"]', 'click', () => {
+                        self.reject();
+                }, self.node);
+        });
+    }
+
     /**
      * Makes fade out animation
      * @returns {Promise}
