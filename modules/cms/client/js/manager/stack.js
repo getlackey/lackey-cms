@@ -30,6 +30,7 @@ const
     SettingsPickerUI = require('cms/client/js/manager/settings.picker.ui.js'),
     MetaPickerUI = require('cms/client/js/manager/meta.picker.ui.js'),
     ViewsPickerUI = require('cms/client/js/manager/views.picker.ui.js'),
+    PrivacyPickerUI = require('cms/client/js/manager/privacy.picker.ui.js'),
     lackey = require('core/client/js');
 /**
  * @module lackey-cms/modules/cms/client/manager
@@ -152,6 +153,14 @@ Stack.prototype.inspectMeta = function (context) {
 Stack.prototype.inspectViews = function (context) {
     return this
         .pick(new ViewsPickerUI({
+            context: context,
+            stack: this
+        }), true);
+};
+
+Stack.prototype.inspectPrivacy = function (context) {
+    return this
+        .pick(new PrivacyPickerUI({
             context: context,
             stack: this
         }), true);
