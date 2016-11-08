@@ -417,7 +417,7 @@ Manager.prototype.setupUI = function () {
             if (current.template && current.template.expose && current.template.expose.length) {
                 lackey
                     .select([
-                        '[data-lky-hook="header.blocks"]',
+                        '[data-lky-hook="header.blocks"]'
                     ])
                     .forEach(element => {
                         element.style.display = 'block';
