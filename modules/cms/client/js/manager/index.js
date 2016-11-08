@@ -26,7 +26,8 @@ const
     ChangeUI = require('cms/client/js/manager/change.ui.js'),
     StructureUI = require('cms/client/js/manager/structure.ui.js'),
     prefix = require('cms/client/js/iframe.resolve')(xhr.base, '', true),
-    Stack = require('cms/client/js/manager/stack');
+    Stack = require('cms/client/js/manager/stack'),
+    userDrop = require('cms/client/js/manager/user.dropdown.js');
 
 let locale = 'en',
     defaultLocale = 'en';
@@ -383,6 +384,8 @@ Manager.prototype.updateCurrent = function (handler) {
 Manager.prototype.setupUI = function () {
 
     let self = this;
+
+    userDrop();
 
     lackey
         .hook('header.settings')

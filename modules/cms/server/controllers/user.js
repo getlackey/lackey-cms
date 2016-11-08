@@ -114,7 +114,7 @@ class UserController extends CRUD {
                 like: true
             },
             roles: {
-                label: 'Roles',
+                label: 'Access',
                 parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
             },
             taxonomies: {

@@ -132,25 +132,83 @@
             height: $header-height;
             border-left: 1px solid #5F799C;
             width: 200px;
+            cursor: pointer;
+            position: relative;
             a {
                 color: white;
                 text-decoration: none;
             }
-            img {
-                width: 38px;
-                height: 38px;
-                border-radius: 38px;
-                padding: 18px 21px;
-                float: left;
+            figure {
+                display: inline-block;
+                margin: 0;
+                height: 100%;
+                vertical-align: middle;
+                img {
+                    width: 38px;
+                    height: 38px;
+                    border-radius: 38px;
+                    padding: 18px 21px;
+                }
             }
-            [data-lky-hook="header.user.name"] {
-                display: block;
-                float: right;
+            span {
+                display: inline-block;
                 width: 100px;
-                padding: 15px 20px 5px 0px;
                 text-transform: uppercase;
                 word-wrap: break-word;
                 font-size: 10px;
+                vertical-align: middle;
+            }
+            [data-lky-hook="header.user.name"] {
+
+            }
+            nav {
+                position: absolute;
+                min-width: 100%;
+                background: #00CBFE;
+                color: #333333;
+                padding: 0;
+                cursor: initial;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.5s, visibility 0s linear 0.5s;
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                    li {
+                        a {
+
+                            display: block;
+                            padding: 0.8rem 1.875rem;
+                            color: #fff;
+                            border-left: 0 solid #fed530;
+                            font-weight: 400;
+                            text-decoration: none;
+                            transition: background-color 0.3s, color 0.3s, font-weight 0.3s, border-left-width 0.1s;
+
+                            &:hover {
+                                background-color: #00ABFC;
+                            }
+                        }
+                    }
+                }
+
+                &[data-visible] {
+                    visibility: visible;
+                    opacity: 1;
+                    transition-delay:0s;
+                }
+            }
+            &:after {
+                content: '';
+                position: absolute;
+                right: 18px;
+                top: 35px;
+                width: 0;
+                height: 0;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 5px solid #fff;
             }
         }
         @import "./hamburger";

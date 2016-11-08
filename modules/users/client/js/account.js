@@ -21,8 +21,11 @@ const
     api = require('core/client/js/api'),
     Media = require('cms/client/js/media'),
     modal = require('core/client/js/modal'),
-    MediaModalController = require('cms/client/js/manager/media');
+    MediaModalController = require('cms/client/js/manager/media'),
+    userDrop = require('cms/client/js/manager/user.dropdown.js');
 
+
+userDrop();
 
 lackey
     .select('[data-lky-media]').forEach((element) => {

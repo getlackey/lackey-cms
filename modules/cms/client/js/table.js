@@ -15,6 +15,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-var table = require('core/client/js/table');
+var table = require('core/client/js/table'),
+    userDrop = require('cms/client/js/manager/user.dropdown.js');
 
 table.init();
+userDrop();
