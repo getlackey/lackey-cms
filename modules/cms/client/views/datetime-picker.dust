@@ -1,9 +1,9 @@
 {! Used by lackey-cms/modules/cms/client/js/manager/datetime.picker.js !}
 <aside data-lky-component="settings">
     <section data-lky-hook="settings.breadcrumbs">
-        <!-- later -->
+        <img src="img/cms/cms/svg/chevron-left.svg" data-lky-hook="settings.back"/>
+        Date &amp; Time
     </section>
-    <section data-lky-hook="settings.back"></section>
     <section data-lky-hook="settings.picker" data-lky-template="cms/cms/calendar">
     </section>
 </aside>

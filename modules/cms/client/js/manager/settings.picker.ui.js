@@ -52,15 +52,15 @@ class SettingsUI extends Picker {
                         case 'meta':
                             return self.options.stack
                                 .inspectMeta(self.options.context);
-                        break;
                         case 'dimensions':
                             return self.options.stack
                                 .inspectViews(self.options.context);
-                        break;
                         case 'taxonomy':
                             return self.options.stack
                                 .inspectPrivacy(self.options.context);
-                        break;
+                        case 'blocks':
+                            return self.options.stack
+                                .inspectBlocks(self.options.context);
                     }
                     self.reject();
                 }, self.node);

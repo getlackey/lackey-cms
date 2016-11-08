@@ -117,12 +117,6 @@ class DateTimePicker extends Picker {
                     self.resolve(self.options.current);
                 }, self.node);
 
-                lackey.bind('[data-cancel]', 'click', event => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    self.reject();
-                }, self.node);
-
                 return self.node;
 
             });

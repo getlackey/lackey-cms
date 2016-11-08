@@ -20,7 +20,10 @@ const
     Picker = require('cms/client/js/manager/picker.ui.js'),
     lackey = require('core/client/js'),
     template = require('core/client/js/template'),
+    Template = require('cms/client/js/manager/template'),
     dateformat = require('dateformat');
+
+let cache = {};
 
 /**
  * @class
@@ -41,37 +44,6 @@ class MetaPickerUI extends Picker {
 
     }
 
-    /**
-     * Gets template meta data
-     * @param   {string} templatePath
-     * @param   {number} index
-     * @returns {Promise<object>}
-     */
-    static readTemplate(templatePath, index) {
-
-        if (typeof templatePath === 'object') {
-            return Promise.resolve(templatePath);
-        }
-
-        cache[templatePath] = cache[templatePath] || api
-            .read('/cms/template?path=' + encodeURI(templatePath) + '&limit=1')
-            .then(data => {
-                let ctx = {};
-                if (data && data.data && data.data.length) {
-                    ctx = data.data[0];
-                }
-                return ctx;
-
-            });
-
-        return cache[templatePath]
-            .then(ctx => {
-                let result = JSON.parse(JSON.stringify(ctx));
-                result.$idx = index;
-                return result;
-            });
-    }
-
     defaultSettings(context) {
         if (!context.props) {
             context.props = {};
@@ -81,7 +53,7 @@ class MetaPickerUI extends Picker {
 
     defaultDictionary(context) {
         if (typeof context.template === 'string') {
-            return StructureUI
+            return Template
                 .readTemplate(context.template)
                 .then(template => template.props);
         }
@@ -143,9 +115,6 @@ class MetaPickerUI extends Picker {
                     values: responses[0],
                     dictionary: responses[1]
                 };
-
-                let context = self.options;
-
 
                 let settings = responses[0];
 

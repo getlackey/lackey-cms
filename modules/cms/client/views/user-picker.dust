@@ -1,8 +1,9 @@
 {! Used by lackey-cms/modules/cms/client/js/manager/user.picker.js !}
 <aside data-lky-component="settings">
     <section data-lky-hook="settings.breadcrumbs">
+        <img src="img/cms/cms/svg/chevron-left.svg" data-lky-hook="settings.back"/>
+        User
     </section>
-    <section data-lky-hook="settings.back"></section>
     <section data-lky-hook="settings.picker">
         <input type="search" data-lky-hook="filter" placeholder="Type name or email"/>
         <ul data-lky-template="cms/cms/structure/users"></ul>

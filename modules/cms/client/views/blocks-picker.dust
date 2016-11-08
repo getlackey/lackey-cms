@@ -1,0 +1,45 @@
+{! Used by lackey-cms/modules/cms/client/js/manager/structure.ui.js !}
+<aside data-lky-component="settings">
+    <section data-lky-hook="settings.breadcrumbs">
+        <img src="img/cms/cms/svg/chevron-left.svg" data-lky-hook="settings.back"/>
+        Blocks
+    </section>
+    <section data-lky-hook="settings.picker">
+      <ul>
+        {#expose}
+            <li>
+                {@path root=context path=path exposeType=type itemPath=path allowEmpty=1}
+                    {@switch key=exposeType}
+                        {:List}
+                            <ul>
+                                <li>
+                                    <button data-lky-add-block="-1" data-lky-path="{itemPath}.items">+</button>
+                                </li>
+                            {#items}
+                                <li data-lky-component="{type}" data-lky-type="{template}">
+                                    {@templateData template=template}
+                                        <label>{name}</label>
+                                        {>"cms/cms/structure/item" thumb=thumb index=$idx label=""/}
+                                    {/templateData}
+                                </li>
+                                <li>
+                                    <button data-lky-add-block={$idx} data-lky-path="{itemPath}.items">+</button>
+                                </li>
+                            {/items}
+                            </ul>
+                        {:Block}
+                                {@templateData template=template}
+                                        {>"cms/cms/structure/item" thumb=thumb locked="1"/}
+                                {/templateData}
+                        {:text}
+                                {>"cms/cms/structure/item" thumb="img/cms/cms/svg/copy.svg" locked="1"/}
+                        {:media}
+                                {>"cms/cms/structure/item" thumb="img/cms/cms/svg/image.svg" locked="1"/}
+                    {/switch}
+                {/path}
+            </li>
+        {/expose}
+        <li></li>
+    </ul>
+  </section>
+</aside>

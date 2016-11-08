@@ -1,9 +1,9 @@
 {! Used by lackey-cms/modules/cms/client/js/manager/gallery.ui.js !}
 <aside data-lky-component="settings" data-lky-has-media="false">
     <section data-lky-hook="settings.breadcrumbs">
-        <!-- later -->
+        <img src="img/cms/cms/svg/chevron-left.svg" data-lky-hook="settings.back"/>
+        Media
     </section>
-    <section data-lky-hook="settings.back"></section>
     <section data-lky-hook="settings.pick">
         <div data-lky-hook="settings.presentation"></div>
         <ul>

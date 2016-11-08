@@ -80,9 +80,6 @@ class StructureUI extends Emitter {
     constructor(options, repository) {
         super();
         this.options = options;
-        this.options.settings = options.settings || this.defaultSettings;
-        this.options.settingsDictionary = options.settingsDictionary || this.defaultDictionary;
-        this.options.expose = options.expose || this.defaultExpose;
 
         this._onRepositoryChanged = this.onRepositoryChanged.bind(this);
         this.repository = repository;
@@ -98,28 +95,6 @@ class StructureUI extends Emitter {
         return lackey.select('[data-lky-template="cms/cms/structure/taxonomies"]', this.node)[0];
     }
 
-    defaultExpose(context) {
-        return StructureUI
-            .readTemplate(context.template)
-            .then(template => template.expose || []);
-
-    }
-
-    defaultSettings(context) {
-        if (!context.props) {
-            context.props = {};
-        }
-        return Promise.resolve(context.props);
-    }
-
-    defaultDictionary(context) {
-        if (typeof context.template === 'string') {
-            return StructureUI
-                .readTemplate(context.template)
-                .then(template => template.props);
-        }
-        return context.template.props;
-    }
 
     /**
      * Builds UI
@@ -190,80 +165,7 @@ class StructureUI extends Emitter {
             });
     }
 
-    drawSections() {
 
-        let
-            context,
-            self = this;
-
-        return this
-            .options
-            .context()
-            .then(ctx => {
-                context = ctx;
-                return self.options.expose(ctx);
-            })
-            .then(expose => {
-                return Template
-                    .redraw('sections', {
-                        context: context,
-                        expose: expose
-                    }, self.node);
-            })
-            .then(root => {
-                lackey.bind('[data-lky-cog]', 'click', self.inspect.bind(self), root[0]);
-                lackey.bind('[data-lky-bin]', 'click', self.removeBlock.bind(self), root[0]);
-                lackey.bind('[data-lky-add-block]', 'click', self.addBlock.bind(self), root[0]);
-            });
-    }
-
-    addBlock(event, hook) {
-
-        this.collapse();
-
-        let
-            idx = hook.getAttribute('data-lky-add-block'),
-            self = this,
-            path = hook.getAttribute('data-lky-path'),
-            context;
-
-        return this
-            .options
-            .context()
-            .then(ctx => {
-                context = ctx;
-                return this.options.stack.pickBlock();
-            })
-            .then(rt => {
-                if (rt !== null) {
-                    treeParser.insertAfter(context, path + '.' + idx, {
-                        type: 'Block',
-                        template: rt,
-                        layout: {},
-                        props: {}
-                    });
-                    self.emit('changed');
-                    return self.drawSections();
-                }
-
-            });
-    }
-
-    removeBlock(event, hook) {
-
-        let
-            path = hook.getAttribute('data-lky-path'),
-            self = this;
-
-        return this
-            .options
-            .context()
-            .then(context => {
-                treeParser.remove(context, path);
-                self.emit('changed');
-                return self.drawSections();
-            });
-    }
 
     drawDimensions() {
 

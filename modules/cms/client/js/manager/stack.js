@@ -31,6 +31,7 @@ const
     MetaPickerUI = require('cms/client/js/manager/meta.picker.ui.js'),
     ViewsPickerUI = require('cms/client/js/manager/views.picker.ui.js'),
     PrivacyPickerUI = require('cms/client/js/manager/privacy.picker.ui.js'),
+    BlocksPickerUI = require('cms/client/js/manager/blocks.picker.ui.js'),
     lackey = require('core/client/js');
 /**
  * @module lackey-cms/modules/cms/client/manager
@@ -166,6 +167,14 @@ Stack.prototype.inspectPrivacy = function (context) {
         }), true);
 };
 
+Stack.prototype.inspectBlocks = function (context) {
+    return this
+        .pick(new BlocksPickerUI({
+            context: context,
+            stack: this
+        }), true);
+};
+
 Stack.prototype.pickArticle = function (route) {
     return this
         .pick(new ArticlePicker({
@@ -254,11 +263,6 @@ Stack.prototype.pop = function (clearing) {
     return item
         .remove()
         .then(() => {
-            if (self._stack.length && !clearing) {
-                if (self._stack[self._stack.length - 1] instanceof StructureUI) {
-                    self._stack[self._stack.length - 1].node.setAttribute('data-lky-edit', 'blocks');
-                }
-            }
             if (!self._stack.length) {
                 lackey.hook('main-area').removeAttribute('data-lky-settings-open');
             }

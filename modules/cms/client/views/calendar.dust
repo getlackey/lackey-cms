@@ -47,4 +47,3 @@
 </ul>
 <small>Time is relative to <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time" target="_blank">Coordinated Univestal Time UTC</a>.</small>
 <button data-lky-btn data-ok>OK</button>
-<button data-lky-btn data-cancel>Cancel</button>
