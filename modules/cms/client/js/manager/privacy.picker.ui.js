@@ -23,11 +23,11 @@ const
 /**
  * @class
  */
-class SettingsUI extends Picker {
+class PrivacyUI extends Picker {
 
     get template() {
 
-        return 'cms/cms/settings-picker';
+        return 'cms/cms/privacy-picker';
     }
 
 
@@ -57,10 +57,6 @@ class SettingsUI extends Picker {
                             return self.options.stack
                                 .inspectViews(self.options.context);
                         break;
-                        case 'taxonomy':
-                            return self.options.stack
-                                .inspectPrivacy(self.options.context);
-                        break;
                     }
                     self.reject();
                 }, self.node);
@@ -73,4 +69,4 @@ class SettingsUI extends Picker {
     }
 }
 
-module.exports = SettingsUI;
+module.exports = PrivacyUI;
