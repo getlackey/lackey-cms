@@ -10,7 +10,7 @@
         {/math}
         {@gt key=table.paging.page value=3}
             <li>
-                <a href="#" data-lky-hook="table-paging" data-page="0">1...</a>
+                <a href="#" data-lky-hook="table-paging" data-page="1">1...</a>
             </li>
         {/gt}
         {@iterate from=1 to=table.paging.pages}
