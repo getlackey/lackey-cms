@@ -26,10 +26,19 @@
         }
         [data-lky-bin] {
             opacity: 0.15;
+            pointer-events: none;
+            cursor: not-allowed;
         }
         [data-lky-bin],
         [data-lky-cog] {
             border-color: transparentize($color-lackey-light-gray, 0.5);
+        }
+    }
+    &[data-lky-noEdit] {
+        [data-lky-cog] {
+            opacity: 0.15;
+            pointer-events: none;
+            cursor: not-allowed;
         }
     }
 }

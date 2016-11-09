@@ -70,8 +70,7 @@
                 transition: width $speed;
                 overflow-x: hidden;
                 overflow-y: auto;
-                width: $settings-edit-width;
-                padding: 25px;
+                width: $settings-pick-width;
             }
             [data-lky-hook="settings.picker"],
             [data-lky-hook="settings.gallery"] {
@@ -86,7 +85,7 @@
             [data-lky-hook="settings.picker"] {
                 ul {
                     list-style: none;
-                    padding: 15px 0px;
+                    padding: 15px 25px;
                     margin: 0px;
                     li {
                         img {
@@ -126,7 +125,7 @@
                 overflow-y: hidden;
                 > div {
                     height: 100%;
-                    width: $settings-edit-width;
+                    width: $settings-pick-width;
                     > ul {
                         padding: 0px;
                         margin: 0px;
@@ -136,13 +135,13 @@
             &[data-lky-has-media="true"] {
                 [data-lky-hook="settings.meta"] {
                     > div {
-                        width: #{$settings-edit-width*2};
+                        width: #{$settings-pick-width*2};
                     }
                 }
             }
             [data-lky-hook="settings.dimensions"] {
                 > div {
-                    width: #{$settings-edit-width * 2};
+                    width: #{$settings-pick-width * 2};
                     > ul {
                         padding: 50px;
                         list-style: none;
@@ -225,7 +224,7 @@
             }
             [data-lky-hook="settings.gallery"] {
                 > div {
-                    width: #{$settings-edit-width*2};
+                    width: #{$settings-pick-width*2};
                     padding: 25px;
                     table {
                         width: 100%;
@@ -261,7 +260,7 @@
             [data-lky-hook="settings.taxonomy"] {
                 > div {
                     padding: 50px;
-                    width: #{$settings-edit-width - 100px};
+                    width: #{$settings-pick-width - 100px};
                     small {
                         font-size: 10px;
                         color: $color-washed;
@@ -288,12 +287,12 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.meta"] {
-                    width: $settings-edit-width;
+                    width: $settings-pick-width;
                     overflow-y: auto;
                 }
                 &[data-lky-has-media="true"] {
                     [data-lky-hook="settings.meta"] {
-                        width: #{$settings-edit-width * 2};
+                        width: #{$settings-pick-width * 2};
                         overflow-y: auto;
                     }
                 }
@@ -303,7 +302,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.dimensions"] {
-                    width: #{$settings-edit-width * 2};
+                    width: #{$settings-pick-width * 2};
                     overflow-y: auto;
                 }
             }
@@ -312,7 +311,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.taxonomy"] {
-                    width: $settings-edit-width;
+                    width: $settings-pick-width;
                     overflow-y: auto;
                 }
             }
@@ -321,7 +320,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.blocks"] {
-                    width: $settings-edit-width;
+                    width: $settings-pick-width;
                     overflow-y: auto;
                 }
             }
@@ -330,7 +329,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.diff"] {
-                    width: #{$settings-edit-width*2};
+                    width: #{$settings-pick-width*2};
                     overflow-y: auto;
                 }
             }
@@ -339,7 +338,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.url"] {
-                    width: #{$settings-edit-width};
+                    width: #{$settings-pick-width};
                     overflow-y: auto;
                 }
             }
@@ -348,7 +347,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.upload"] {
-                    width: #{$settings-edit-width};
+                    width: #{$settings-pick-width};
                     overflow-y: auto;
                 }
             }
@@ -357,7 +356,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.gallery"] {
-                    width: #{$settings-edit-width*2};
+                    width: #{$settings-pick-width*2};
                     overflow-y: auto;
                 }
             }

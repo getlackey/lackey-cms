@@ -1,6 +1,6 @@
 {! Used by lackey-cms/modules/cms/client/views/structure/sections.dust !}
 <span>{label}</span>
-<div data-lky-block {?locked}data-lky-locked{/locked}>
+<div data-lky-block {?locked}data-lky-locked{/locked} {?noEdit}data-lky-noedit{/noEdit}>
     <div>
         <img data-lky-bin data-lky-path="{itemPath}{?index}.items.{index}{/index}" data-lky-template="{template}" src="img/cms/cms/svg/bin.svg"/>
         <img data-lky-cog data-lky-path="{itemPath}{?index}.items.{index}{/index}" data-lky-template="{template}" src="img/cms/cms/svg/cog.svg"/>
