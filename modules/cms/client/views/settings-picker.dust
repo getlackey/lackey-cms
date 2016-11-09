@@ -19,9 +19,6 @@
             <li data-lky-open="blocks">
                 <a href="#">Blocks</a>
             </li>
-            <li data-lky-open="diff">
-                <a href="#">Diff</a>
-            </li>
         </ul>
     </section>
 </aside>

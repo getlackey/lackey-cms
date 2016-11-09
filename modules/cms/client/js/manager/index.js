@@ -426,13 +426,4 @@ Manager.init = function () {
     top.LackeyManager = new Manager();
 };
 
-Manager.prototype.diff = function () {
-    let self = this;
-    lackey
-        .select(['[data-lky-component="visual-diff"]'])
-        .forEach(hook => {
-            hook.innerHTML = self.repository.visualDiff();
-        });
-};
-
 module.exports = Manager;

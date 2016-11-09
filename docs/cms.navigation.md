@@ -16,7 +16,6 @@
        * \[Tag Group\] -> number of selected on side, picker with checkboxes and create
        * Overview - shows all including inhreited from template
    * Blocks (to kill later)
-   * Diff
   * Layout / Content toggle
   * Publish
     * Published / Draft toggle

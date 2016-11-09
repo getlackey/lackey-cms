@@ -21,7 +21,6 @@ const
     lackey = require('core/client/js'),
     Template = require('core/client/js/template'),
     api = require('core/client/js/api'),
-    formatters = require('jsondiffpatch/src/formatters'),
     dateformat = require('dateformat'),
     treeParser = require('cms/shared/treeparser');
 
@@ -122,8 +121,7 @@ class StructureUI extends Emitter {
                         '[data-lky-hook="settings.open.meta"]',
                         '[data-lky-hook="settings.open.dimensions"]',
                         '[data-lky-hook="settings.open.taxonomy"]',
-                        '[data-lky-hook="settings.open.blocks"]',
-                        '[data-lky-hook="settings.open.diff"]'
+                        '[data-lky-hook="settings.open.blocks"]'
                     ], self.node)
                     .forEach(element => {
                         if (ignore.indexOf(element.getAttribute('data-lky-open')) !== -1) {

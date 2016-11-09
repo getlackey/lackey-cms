@@ -20,10 +20,6 @@ const api = require('core/client/js/api'),
     diff = require('jsondiffpatch'),
     emit = require('cms/client/js/emit');
 
-diff.formatters = require('jsondiffpatch/src/formatters');
-diff.formatters.console = require('jsondiffpatch/src/formatters/console');
-diff.formatters.html.hideUnchanged();
-
 function deepClone(object) {
     return JSON.parse(JSON.stringify(object));
 }
@@ -102,7 +98,6 @@ Repository.prototype.load = function (type, id) {
 Repository.prototype.set = function (type, id, value) {
     let contentId = type + '-' + id;
     this._copy[contentId] = value;
-    this._manager.diff();
     this.emit('changed', {
         type: type,
         id: id
@@ -201,12 +196,6 @@ Repository.prototype.resetAll = function () {
 Repository.prototype.diff = function () {
     let left = deepClone(this._cache);
     return diff.diff(left, deepClone(this._copy));
-};
-
-Repository.prototype.visualDiff = function () {
-    let left = deepClone(this._cache),
-        delta = diff.diff(left, deepClone(this._copy));
-    return diff.formatters.html.format(delta, left);
 };
 
 module.exports = Repository;
