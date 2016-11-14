@@ -47,7 +47,11 @@ module.exports = (dust) => {
                         path: (path ? (path + '.') : '') + 'items.' + idx,
                         parent: path
                     });
-                    return block.block(item, injectedChunk, context, bodies, innerParams, dust, params.content.id);
+                    return block.block(item, injectedChunk, context, bodies, innerParams, dust, params.content.id).then(() => {
+                        if (bodies.sep && idx < container.items.length - 1) {
+                            injectedChunk.render(bodies.sep, context);
+                        }
+                    });
                 });
             } else {
                 promise = Promise.resolve();
