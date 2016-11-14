@@ -127,6 +127,7 @@ module.exports.viewAs = (req, res, next) => {
                 res.viewingAs = viewingAs;
                 req.user = req.admin.as(viewingAs);
             }
+            res.clearCookie(viewAsCookie);
             return next();
 
         });
