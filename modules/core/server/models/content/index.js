@@ -24,6 +24,7 @@ const SUtils = require(LACKEY_PATH).utils,
     objection = require('objection'),
     Model = objection.Model,
     languageTags = require('language-tags'),
+    _ = require('lodash'),
     __MODULE_NAME = 'lackey-cms/modules/core/server/models/content';
 
 SCli.debug(__MODULE_NAME, 'REQUIRED');
@@ -285,21 +286,24 @@ module.exports = SUtils
             }
 
             toJSON() {
-                return {
-                    id: this.id,
-                    $uri: this.uri,
-                    type: this.type,
-                    name: this.name,
-                    route: this._doc.route,
-                    createdAt: this._doc.createdAt,
-                    publishAt: this._doc.publishAt,
-                    props: this.props,
-                    author: this.author,
-                    template: this._template ? this._template.toJSON() : null,
-                    state: this._doc.state,
-                    layout: this._doc.layout,
-                    taxonomies: this.taxonomies
-                };
+                return _.merge(
+                    this._doc.layout, {
+                        _meta: {
+                            id: this.id,
+                            $uri: this.uri,
+                            uri: this._doc.route,
+                            created: this._doc.createdAt,
+                            publish: this._doc.publishAt,
+                            author: this.author,
+                            template: this._template ? this._template.toJSON() : null,
+                            state: this._doc.state,
+
+                        },
+                        _type: this.type,
+                        title: this.name,
+                        _props: this.props,
+                        _taxonomies: this.taxonomies
+                    });
             }
 
             toYAML() {

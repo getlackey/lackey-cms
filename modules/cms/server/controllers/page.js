@@ -81,14 +81,16 @@ module.exports = SUtils
                     stylesheets,
                     pageJson = page.toJSON(),
                     isAllowed,
-                    data = {
-                        route: fullPath,
-                        content: pageJson
-                    },
+                    data = pageJson,
                     javascripts,
                     self = this,
                     pagePermissions,
                     promise = (user ? user.isAllowed('/admin*', 'get') : Promise.resolve(false));
+
+                if(data) {
+                    data._meta = data._meta || {};
+                    data._meta.connonical = fullPath;
+                }
 
                 promise = promise
                     .then(allowed => {
@@ -145,16 +147,16 @@ module.exports = SUtils
                             return Promise.reject('403 - not published yet' + page.publishedAt);
                         }
 
-                        if (pageJson.template) {
-                            if (pageJson.template.javascripts) {
-                                javascripts = javascripts.concat(pageJson.template.javascripts);
+                        if (pageJson._meta.template) {
+                            if (pageJson._meta.template.javascripts) {
+                                javascripts = javascripts.concat(pageJson._meta.template.javascripts);
                             }
-                            if (pageJson.template.stylesheets) {
-                                stylesheets = stylesheets.concat(pageJson.template.stylesheets);
+                            if (pageJson._meta.template.stylesheets) {
+                                stylesheets = stylesheets.concat(pageJson._meta.template.stylesheets);
                             }
 
-                            if (pageJson.template.populate && pageJson.template.populate.length) {
-                                return PageController.populate(data, pageJson.template.populate, req, page);
+                            if (pageJson._meta.template.populate && pageJson._meta.template.populate.length) {
+                                return PageController.populate(data, pageJson._meta.template.populate, req, page);
                             }
                         }
 
