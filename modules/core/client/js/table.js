@@ -1,6 +1,5 @@
 /* jslint node:true, esnext:true, es6:true, browser:true */
 /* eslint default-case:0 no-alert:0 */
-/* global top */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -37,24 +36,19 @@ class Table {
         var
             self = this;
         this._search = lackey.select('[data-lky-hook="table.filter"]')[0];
-        this._sort = lackey.select('[data-lky-hook="table.sort"]')[0];
         this._root = element;
         this._paging = JSON.parse(element.getAttribute('data-lky-paging'));
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
+        this.sorting();
         this.paging();
         this.pageNumber = 0;
+        this.data = {};
+        this.perPage = 10;
+        this.filter = '';
 
         let waiting = null;
-
-        if (this._sort) {
-            this._sort
-                .addEventListener('change', () => {
-                    self.query({
-                        q: this._search.value
-                    });
-                });
-        }
+        this.getData();
 
         this._search
             .addEventListener('keyup', () => {
@@ -63,12 +57,12 @@ class Table {
                     clearTimeout(waiting);
                 }
 
+                self.filter = this._search.value;
+
                 waiting = setTimeout(() => {
                     clearTimeout(waiting);
                     waiting = null;
-                    self.query({
-                        q: this._search.value
-                    });
+                    self.pageq();
                 }, 500);
             });
 
@@ -77,7 +71,6 @@ class Table {
         } else {
             this.api();
         }
-
         window.addEventListener('popstate', () => {
             self.query(qs.parse(document.location.search), true);
             return true;
@@ -112,89 +105,142 @@ class Table {
     page(pageNumber) {
         let self = this;
         this
-            .query(lackey.merge({
-                q: this._search.value
-            }, {
+            .pageq({
                 page: pageNumber
-            }))
+            })
             .then(() => {
                 self.pageNumber = pageNumber;
             });
     }
 
-    query(options, dontPushState) {
-
+    getData() {
         let self = this,
-            path = this._apiEndpoint,
-            query = options || {},
-            href = options || {},
-            context,
-            handler,
-            sort = options.sort ? options.sort : (this._sort ? (this._sort.value || null) : null);
+            path = this._apiEndpoint;
 
-        if (self.locked) {
-            return;
+        api
+            .read(path + '?limit=*&format=table')
+            .then((response) => {
+                self.data = response;
+                self.pageq();
+            });
+    }
+
+    pageq(options) {
+        var self = this,
+            page = this.pageNumber,
+            cloneData = this.data.rows.slice(),
+            pages,
+            response,
+            context;
+
+        if (options) {
+            if (options.page || options.page === 0) {
+                page = options.page;
+            }
         }
 
-        if (sort) {
-            query.sort = sort;
-            href.sort = sort;
+        console.log('PAGEQ!');
+
+        if(self.filter && self.filter.length > 2) {
+            cloneData = cloneData.filter(function (item) {
+                var found = false;
+                item.columns.forEach(function (col) {
+                    if (col.value && col.value.date) {
+//                        console.log(col.value.date);
+                    } else {
+                        if (col.value && col.value.toLowerCase().indexOf(self.filter.toLowerCase()) > -1 ) {
+                            found = true;
+                        }
+                    }
+                });
+                return found;
+            });
+
         }
 
-        query.format = 'table';
+        this.data.paging.total = cloneData.length;
+        this.data.paging.pages = Math.ceil((cloneData.length / this.data.paging.perPage));
+        if (page > this.data.paging.pages) {
+            page = 0;
+        }
+        pages = cloneData.splice(page * this.perPage, this.perPage);
+        page += 1;
+        this.data.paging.start = page - 3;
+        this.data.paging.finish = page + 3;
+        this.data.paging.page = page;
+        response = {
+            paging: this.data.paging,
+            columns: this.data.columns,
+            rows: pages
+        };
+        context = {
+            table: response,
+            host: xhr.base
+        };
+        response.rows.forEach(row =>
+            row.columns.forEach((cell) => {
+                if (cell.value && cell.value.date) {
+                    cell.value.date = new Date(cell.value.date);
+                }
+            }));
 
-        path += '?' + qs.stringify(query);
+        return this.drawRows(context)
+            .then(() => {
+                self.api();
+            })
+            .then(() => {
+                self.drawPaging(context);
+            });
+//            .then(() => {
+//                self.locked = true;
+//                self._search.value = href.q || '';
+//                if (self._sort) {
+//                    self._sort.value = href.sort || null;
+//                }
+//                self.locked = false;
+//                if (dontPushState) {
+//                    return;
+//                }
+//                pushState(href);
+//
+//            });
+    }
 
-        return new Promise((resolve, reject) => {
+    sortData(field, dir) {
+        var direction = dir || 'desc';
 
-            handler = () => {
-                self._root.removeEventListener('transitionend', handler, false);
-                api
-                    .read(path)
-                    .then((response) => {
-                        context = {
-                            table: response,
-                            host: xhr.base
-                        };
-                        response.rows.forEach(row =>
-                            row.columns.forEach((cell) => {
-                                if (cell.value && cell.value.date) {
-                                    cell.value.date = new Date(cell.value.date);
-                                }
-                            }));
-                        return self.drawRows(context);
-                    })
-                    .then(() => {
-                        self.api();
-                    })
-                    .then(() => {
-                        self.drawPaging(context);
-                    })
-                    .then(() => {
-                        self._root.removeAttribute('data-lky-busy');
-                    })
-                    .then(() => {
-                        self.locked = true;
-                        self._search.value = href.q || '';
-                        if (self._sort) {
-                            self._sort.value = href.sort || null;
-                        }
-                        self.locked = false;
-                        if (dontPushState) {
-                            return;
-                        }
-                        pushState(href);
-
-                    })
-                    .then(resolve, reject);
-            };
-
-            self._root.addEventListener('transitionend', handler, false);
-            self._root.setAttribute('data-lky-busy', '');
-
+        this.data.rows.sort(function(a, b) {
+            if (direction == 'desc') {
+                if (!a.columns[field].value) {
+                    return -1;
+                }
+                if (!b.columns[field].value) {
+                    return 1;
+                }
+                if (a.columns[field].value < b.columns[field].value) {
+                    return -1;
+                }
+                if (a.columns[field].value > b.columns[field].value) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (!b.columns[field].value) {
+                    return -1;
+                }
+                if (!a.columns[field].value) {
+                    return 1;
+                }
+                if (b.columns[field].value < a.columns[field].value) {
+                    return -1;
+                }
+                if (b.columns[field].value > a.columns[field].value) {
+                    return 1;
+                }
+                return 0;
+            }
         });
-
-
+        this.pageq();
     }
 
     drawPaging(context) {
@@ -206,7 +252,6 @@ class Table {
             rows.forEach((row) => {
                 body.appendChild(row);
                 self.paging(row);
-
             });
         });
     }
@@ -234,6 +279,26 @@ class Table {
             self.page(hook.getAttribute('data-page') - 1);
             return false;
         }, area || this.pagingArea);
+    }
+
+    sorting() {
+        let self = this;
+        lackey.bind('th[data-sort]', 'click', (event, hook) => {
+            event.stopPropagation();
+            event.preventDefault();
+
+            var direction = hook.getAttribute('data-direction');
+
+            if (!direction || direction === "asc") {
+                direction = 'desc';
+            } else {
+                direction = 'asc';
+            }
+
+            hook.setAttribute('data-direction', direction);
+            self.sortData(hook.getAttribute('data-sort'), direction);
+            return false;
+        });
     }
 
     static init() {

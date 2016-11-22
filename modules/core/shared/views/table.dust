@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 {#table.columns}
-                    <th>{label}
+                    <th data-sort="{$idx}" data-direction="">{label}
                         {?help}
                             <div class="help-tip">
                                 <p>{help}</p>

@@ -4,12 +4,14 @@
 <section data-lky-component="table">
     <input data-lky-hook="table.filter" type="search" placeholder="Search"/>
     {?tableOptions.sorts}
+<!--
     <select data-lky-hook="table.sort">
         {#tableOptions.sorts}
             <option value="{field}">Sort by {label} ascending{?ascSuffix} {ascSuffix}{/ascSuffix}</option>
             <option value="-{field}">Sort by {label} descending{?descSuffix} {descSuffix}{/descSuffix}</option>
         {/tableOptions.sorts}
     </select>
+-->
     {/tableOptions.sorts}
     {?create}<a  data-lky-btn data-lky-hook="table.add" href="{create}">Create</a>{/create}
     {#tableActions}
