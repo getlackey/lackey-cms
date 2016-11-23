@@ -16,7 +16,7 @@
         {@iterate from=1 to=table.paging.pages}
             {@eq value=$idx key=table.paging.page}
                 <li data-lky-active>
-                    <a class="page-link" href="#">
+                    <a class="page-link" href="#" data-lky-hook="table-paging" data-page="{$idx}">
                         {$idx}
                     </a>
                 </li>
