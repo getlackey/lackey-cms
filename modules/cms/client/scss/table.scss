@@ -1,4 +1,5 @@
 @import "_vars";
+@import "_content-gallery";
 .table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -82,6 +83,19 @@
                 display: inline-block;
                 background: transparent;
                 margin-left: 5px;
+            }
+
+            &[data-direction="desc"] {
+                &:after {
+                    content: "\2193";
+                    margin-left: 15px;
+                }
+            }
+            &[data-direction="asc"] {
+                &:after {
+                    content: "\2191";
+                    margin-left: 15px;
+                }
             }
         }
         td {
