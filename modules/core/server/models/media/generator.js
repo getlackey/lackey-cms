@@ -42,14 +42,14 @@ module.exports = (data) => {
                 .lookupMime(sourceResult.source, sourceResult.mime)
                 .then((mime) => {
                     return Media.findByPathAndType(sourceResult.source, mime);
-                }).then((media) => {
+                }).then(media => {
                     if (!media) {
                         SCli.debug('lackey/modules/media/server/models/media/generator', 'Creating media ' + sourceResult.source);
                         return Media.create(_.merge({
-                                attributes: data.attributes || {},
-                                name: data.name || sourceResult.source
-                            },
-                            sourceResult));
+                                    attributes: data.attributes || {},
+                                    name: data.name || sourceResult.source
+                                },
+                                sourceResult));
                     }
 
                     if (Generator.override('Media') && media.diff(data)) {

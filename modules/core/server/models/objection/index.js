@@ -68,6 +68,7 @@ module.exports = Database
                         SCli.debug(__MODULE_NAME, 'ERROR', outerError.stack);
                         console.error(error);
                         console.error(outerError.stack);
+                        console.error(outerError.stack);
                         if (instance) {
                             console.error(instance);
                         }
@@ -106,6 +107,7 @@ module.exports = Database
                         SCli.debug(__MODULE_NAME, 'save', this.constructor.model.tableName);
                         let self = this,
                             hook = new Error(),
+                            hook2 = new Error(),
                             cached = _.cloneDeep(this._doc);
 
                         return this
@@ -124,9 +126,10 @@ module.exports = Database
                                             SCli.debug(__MODULE_NAME, 'created', self.constructor.model.tableName);
                                             return result;
 
-                                        }, handleError(new Error(), self));
+                                        }, handleError(hook2, self));
                                 }
                                 self._doc.updatedAt = new Date();
+
                                 return SCli
                                     .sql(self.constructor.model
                                         .query()

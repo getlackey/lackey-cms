@@ -311,17 +311,20 @@ module.exports = Schema
                 return knex.schema
                     .hasColumn('content', 'plaintext')
                     .then(exists => {
-                        //if (!exists) {
-                        return require(__dirname + '/content/upgrade')(knex)
-                            .then(() => {
-                                if (!exists) {
-                                    return Schema.addColumn(knex, 'content', 'plaintext', table => {
-                                        table.text('plaintext');
-                                    });
-                                }
-                            });
-                        //}
+                        if (!exists) {
+                            return require(__dirname + '/content/upgrade')(knex)
+                                .then(() => {
+                                    if (!exists) {
+                                        return Schema.addColumn(knex, 'content', 'plaintext', table => {
+                                            table.text('plaintext');
+                                        });
+                                    }
+                                });
+                        }
                     });
+            })
+            .then(() => {
+                return require(__dirname + '/content/upgrade2')(knex);
             })
             //
             // TABLE redirect

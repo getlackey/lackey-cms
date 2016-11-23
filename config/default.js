@@ -24,7 +24,7 @@ module.exports = {
     datasources: {
         pg: {
             'default': {
-                dsn: 'postgres://localhost/lackey-cms'
+                dsn: 'postgres://localhost/lackey-cms-prod'
             }
         }
     },
