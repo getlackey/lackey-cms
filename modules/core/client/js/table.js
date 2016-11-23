@@ -320,7 +320,9 @@ class Table {
             } else {
                 direction = 'asc';
             }
-
+            Array.prototype.forEach.call(document.querySelectorAll('th[data-sort]'), function (th) {
+                th.setAttribute('data-direction', "")
+            });
             hook.setAttribute('data-direction', direction);
             self.sortData(hook.getAttribute('data-sort'), direction);
             return false;
