@@ -115,14 +115,38 @@ class Table {
 
     getData() {
         let self = this,
-            path = this._apiEndpoint;
+            path = this._apiEndpoint,
+            total = this._paging.total,
+            limit = 1000,
+            calls = Math.ceil(total / limit),
+            promises = [],
+            data = false;
 
-        api
-            .read(path + '?limit=*&format=table')
+        for (var i = 0; i < calls; i+= 1) {
+            promises.push(self.getDataPart(limit, i * limit));
+        }
+        Promise.all(promises)
+            .then(values => {
+                values.forEach(function(stuff) {
+                    if(!data) {
+                        data = stuff;
+                    } else {
+                        data.rows = data.rows.concat(stuff.rows);
+                    }
+                });
+                return data;
+            })
             .then((response) => {
                 self.data = response;
                 self.pageq();
             });
+    }
+
+    getDataPart(limit, offset) {
+        var self = this,
+            path = this._apiEndpoint;
+        return api
+            .read(path + '?limit=' + limit + '&offset=' + offset + '&format=table');
     }
 
     pageq(options) {
@@ -159,6 +183,7 @@ class Table {
         }
 
         this.data.paging.total = cloneData.length;
+        this.data.paging.perPage = self.perPage;
         this.data.paging.pages = Math.ceil((cloneData.length / this.data.paging.perPage));
         if (page > this.data.paging.pages) {
             page = 0;
@@ -168,6 +193,7 @@ class Table {
         this.data.paging.start = page - 3;
         this.data.paging.finish = page + 3;
         this.data.paging.page = page;
+
         response = {
             paging: this.data.paging,
             columns: this.data.columns,
@@ -247,7 +273,7 @@ class Table {
         let body = lackey.hook('table-footer', this._root),
             self = this;
         body.innerHTML = '';
-
+        console.log(context);
         return template.render(body.getAttribute('data-lky-template'), context).then((rows) => {
             rows.forEach((row) => {
                 body.appendChild(row);
