@@ -74,11 +74,14 @@
         }
         [data-lky-hook="header.cms"],
         [data-lky-hook="header.settings"],
-        [data-lky-hook="header.publish"],
         [data-lky-hook="header.create"],
         [data-lky-hook="header.views"],
         [data-lky-hook="header.blocks"] {
             float: left;
+            height: $header-height;
+        }
+        [data-lky-hook="header.publish"] {
+            float: right;
             height: $header-height;
         }
         [data-lky-hook="header.save"] {

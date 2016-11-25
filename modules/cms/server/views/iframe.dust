@@ -21,16 +21,16 @@
         </div>
     </button>
 
+    <button data-lky-hook="header.views"><img src="{@base}img/cms/cms/svg/eye.svg{/base}" data-lky-tab="dimensions"/></button>
+    <button data-lky-hook="header.blocks"><img src="{@base}img/cms/cms/svg/view-thumb.svg{/base}" data-lky-tab="blocks"/></button>
+    <a href="{@base}/cms/content/create{/base}" data-lky-hook="header.create"><img src="{@base}img/cms/cms/svg/plus.svg{/base}"/></a>
+    {> "cms/cms/partials/user" /}
     <button data-lky-hook="header.publish">
         <label data-lky-switch>
             <input type="checkbox" name="published"/>
             <span></span>
         </label>
     </button>
-    <button data-lky-hook="header.views"><img src="{@base}img/cms/cms/svg/eye.svg{/base}" data-lky-tab="dimensions"/></button>
-    <button data-lky-hook="header.blocks"><img src="{@base}img/cms/cms/svg/view-thumb.svg{/base}" data-lky-tab="blocks"/></button>
-    <a href="{@base}/cms/content/create{/base}" data-lky-hook="header.create"><img src="{@base}img/cms/cms/svg/plus.svg{/base}"/></a>
-    {> "cms/cms/partials/user" /}
     <div data-lky-hook="header.changes">
         <button data-lky-hook="header.save" data-lky-btn>Save</button>
         <span>
