@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+
+## 1.0.0-beta-33
+ * Reworked admin cms tables + sorting/searching
+
 ## 1.0.0-beta-26
  * made user tab a dropdown menu
  * various admin amends
