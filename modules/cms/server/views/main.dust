@@ -69,11 +69,6 @@
         <main data-lky-hook="main-area">
             <header data-lky-hook="header">
                 {+header}
-                    <button data-lky-hook="header.cms" data-hamburger onclick="document.body.setAttribute('data-lky-open', document.body.getAttribute('data-lky-open') === 'true' ? '' : 'true')">
-                        <div class="hamburger-box">
-                          <div class="hamburger-inner"></div>
-                        </div>
-                    </button>
                     {> "cms/cms/partials/user" /}
                 {/header}
             </header>

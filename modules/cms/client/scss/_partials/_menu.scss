@@ -1,8 +1,4 @@
 [data-lky-hook="menu"] {
-    position: fixed;
-    transform: translateX(-100%);
-    transition: transform $speed;
-    top: 0px;
     width: $sidebar-width;
     height: 100%;
     color: $color-white;

@@ -64,8 +64,10 @@
         transition: opacity $speed;
         border-spacing: 0px;
         border-collapse: collapse;
-        width: 100%;
+        width: 98%;
+        border: 1px solid #00CBFE;
         font-size: $table-font-size;
+        margin: 0 auto;
         > thead {
             background-color: $color-background-highlight;
             color: white;
@@ -114,12 +116,12 @@
             //padding: 0px;
         }
         th {
-            padding: 25px 8px 20px;
+            padding: 25px 15px 20px;
             font-weight: normal;
             text-transform: capitalize;
         }
         td {
-            padding: 10px 8px 8px;
+            padding: 10px 15px 8px;
             color: $color-washed;
         }
         > tbody {
