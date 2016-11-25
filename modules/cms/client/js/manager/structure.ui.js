@@ -153,7 +153,8 @@ class StructureUI extends Emitter {
                         '[data-lky-hook="settings.open.taxonomy"]',
                         '[data-lky-hook="settings.open.blocks"]',
                         '[data-lky-hook="settings.open.diff"]',
-                        '[data-lky-hook="settings.open.cms"]'
+                        '[data-lky-hook="settings.open.cms"]',
+                        '[data-lky-hook="settings.open.cms.create"]'
                     ], self.node)
                     .forEach(element => {
                         var elementAnchor = element.querySelector('a');

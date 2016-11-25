@@ -23,6 +23,11 @@
                 <a href="#">Diff</a>
             </li>
 
+            <li data-class="divider"></li>
+
+            <li data-lky-hook="settings.open.cms.create">
+                <a href="cms/content/create">Create Content</a>
+            </li>
             <li data-lky-hook="settings.open.cms">
                 <a href="cms/content">Site Settings</a>
             </li>

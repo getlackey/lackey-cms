@@ -42,13 +42,20 @@
                         line-height: $item-height;
                         padding-left: $item-height;
                         text-aling: left;
-                        border-bottom: 1px solid $color-washed;
                         cursor: pointer;
+
+                        border-bottom: 1px solid $color-washed;
+
                         > a {
                             color: $color-white;
                             pointer-events: none;
                             text-transform: uppercase;
                             text-decoration: none;
+                        }
+
+                        &[data-class=divider] {
+                            height: $item-height * 1.5;
+                            cursor: initial;
                         }
                     }
                 }
