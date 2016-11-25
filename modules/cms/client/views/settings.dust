@@ -22,6 +22,10 @@
             <li data-lky-hook="settings.open.diff" data-lky-open="diff">
                 <a href="#">Diff</a>
             </li>
+
+            <li data-lky-hook="settings.open.cms">
+                <a href="cms/content">Site Settings</a>
+            </li>
         </ul>
     </section>
     <section data-lky-hook="settings.meta">

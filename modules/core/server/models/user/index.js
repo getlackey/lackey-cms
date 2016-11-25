@@ -902,6 +902,7 @@ module.exports = SUtils
                     return {
                         id: this.id,
                         name: this.name,
+                        route: this.route,
                         image: this.image ? this.image.toJSON() : null
                     };
                 }
