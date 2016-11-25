@@ -24,10 +24,10 @@ const
     growl = require('cms/client/js/growl'),
     api = require('core/client/js/api');
 
-function pushState(href) {
+function replaceState(href) {
     let loc = document.location,
         url = loc.protocol + '//' + loc.host + loc.pathname + '?' + qs.stringify(href);
-    window.history.pushState({}, document.title, url);
+    window.history.replaceState({}, document.title, url);
 }
 
 class Table {
@@ -233,7 +233,7 @@ class Table {
                 if (self.filter && self.filter.length > 2) {
                     push.q = self.filter;
                 }
-                pushState(push);
+                replaceState(push);
             });
     }
 
