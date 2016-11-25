@@ -54,7 +54,10 @@
                         }
 
                         &[data-class=divider] {
-                            height: $item-height * 1.5;
+                            height: 10px;
+
+                            background-color: $color-background-highlight;
+                            border: none;
                             cursor: initial;
                         }
                     }
