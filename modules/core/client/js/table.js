@@ -368,6 +368,7 @@ class Table {
                 self.pageNumber = parseInt(options[property]) - 1;
             } else if (property === 'q') {
                 self.filter = options[property];
+                self._search.value = options[property];
             }
         });
     }
