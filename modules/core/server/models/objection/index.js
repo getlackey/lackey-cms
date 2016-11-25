@@ -577,7 +577,7 @@ module.exports = Database
                                 return 0;
                             }) : null,
                             perPage = (options ? options.perPage : false) || 10,
-                            page = (options ? options.page : false) || 0,
+                            page = (options ? options.page - 1 : false) || 0,
                             sort = (options ? options.sort : null),
                             populate = null,
                             table = {};
@@ -603,7 +603,7 @@ module.exports = Database
                             ._preQuery(inputQuery, options)
                             .then(q => {
                                 query = q;
-                                return this.count(query);
+                                return this.count(inputQuery);
                             })
                             .then(count => {
                                 let opt = options || {};
@@ -648,6 +648,7 @@ module.exports = Database
                                 if (opt.textSearch) {
                                     queryOptions.textSearch = options.textSearch;
                                 }
+
                                 return self.query(query, populate, queryOptions);
                             })
                             .then((data) => {

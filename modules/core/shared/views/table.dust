@@ -1,6 +1,6 @@
 {!}http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api{!}
 <div class="table-wrapper">
-    <table class="table" data-lky-table="{table.paging.api}" data-lky-paging="{table.paging|js}" data-lky-columns="{table.columns|js}">
+    <table class="table" data-lky-table="{table.paging.api}" data-lky-paging="{table.paging|js}" data-lky-columns="{table.columns|js}" data-lky-init="{table|js}">
         <thead>
             <tr>
                 {#table.columns}
@@ -16,10 +16,18 @@
             </tr>
         </thead>
         <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
-            {>"cms/core/table-body"/}
+
         </tbody>
         <tfoot data-lky-hook="table-footer" data-lky-template="cms/core/table-footer">
-            {>"cms/core/table-footer"/}
+            <tr>
+                <td colspan="{@math key=table.columns.length method="add" operand=1 /}">
+                    <ul>
+                        <li>
+                            <img src="img/cms/core/ring.svg" width="50"/>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
         </tfoot>
     </table>
 

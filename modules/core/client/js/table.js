@@ -37,43 +37,55 @@ class Table {
             self = this;
         this._search = lackey.select('[data-lky-hook="table.filter"]')[0];
         this._root = element;
+        this._initial = JSON.parse(element.getAttribute('data-lky-init'));
         this._paging = JSON.parse(element.getAttribute('data-lky-paging'));
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
-        this.sorting();
-        this.paging();
         this.pageNumber = 0;
+        this.sorting();
         this.data = {};
         this.perPage = 10;
         this.filter = '';
+        this.ready = false;
 
         let waiting = null;
-        this.getData();
 
-        this._search
-            .addEventListener('keyup', () => {
-                /* istanbul ignore next */
-                if (waiting) {
-                    clearTimeout(waiting);
+        this.initialDraw()
+            .then(function () {
+                self._search
+                    .addEventListener('keyup', () => {
+                        /* istanbul ignore next */
+                        if (waiting) {
+                            clearTimeout(waiting);
+                        }
+
+                        self.filter = self._search.value;
+
+                        waiting = setTimeout(() => {
+                            clearTimeout(waiting);
+                            waiting = null;
+                            self.pageq();
+                        }, 500);
+                    });
+
+                if (document.location.search && document.location.search.length) {
+                    self.setProps(qs.parse(document.location.search));
                 }
-
-                self.filter = this._search.value;
-
-                waiting = setTimeout(() => {
-                    clearTimeout(waiting);
-                    waiting = null;
-                    self.pageq();
-                }, 500);
+                self.getData()
+                    .then(() => {
+                        self.ready = true;
+                    });
+                window.addEventListener('popstate', () => {
+                    self.query(qs.parse(document.location.search), true);
+                    return true;
+                });
             });
+    }
 
-        if (document.location.search && document.location.search.length) {
-            self.query(qs.parse(document.location.search), true);
-        } else {
-            this.api();
-        }
-        window.addEventListener('popstate', () => {
-            self.query(qs.parse(document.location.search), true);
-            return true;
+    initialDraw() {
+        return this.drawRows({
+            host: xhr.base,
+            table: this._initial
         });
     }
 
@@ -115,20 +127,20 @@ class Table {
 
     getData() {
         let self = this,
-            path = this._apiEndpoint,
-            total = this._paging.total,
+            total = this._initial.paging.total,
             limit = 1000,
             calls = Math.ceil(total / limit),
             promises = [],
             data = false;
 
-        for (var i = 0; i < calls; i+= 1) {
+        for (var i = 0; i < calls; i += 1) {
             promises.push(self.getDataPart(limit, i * limit));
         }
-        Promise.all(promises)
+
+        return Promise.all(promises)
             .then(values => {
-                values.forEach(function(stuff) {
-                    if(!data) {
+                values.forEach(function (stuff) {
+                    if (!data) {
                         data = stuff;
                     } else {
                         data.rows = data.rows.concat(stuff.rows);
@@ -143,8 +155,8 @@ class Table {
     }
 
     getDataPart(limit, offset) {
-        var self = this,
-            path = this._apiEndpoint;
+        var path = this._apiEndpoint;
+
         return api
             .read(path + '?limit=' + limit + '&offset=' + offset + '&format=table');
     }
@@ -163,29 +175,27 @@ class Table {
             }
         }
 
-        console.log('PAGEQ!');
-
         if(self.filter && self.filter.length > 2) {
             cloneData = cloneData.filter(function (item) {
                 var found = false;
                 item.columns.forEach(function (col) {
                     if (col.value && col.value.date) {
-//                        console.log(col.value.date);
-                    } else {
-                        if (col.value && col.value.toLowerCase().indexOf(self.filter.toLowerCase()) > -1 ) {
+                        var test = col.value.date.toString();
+                        if (test && test.toLowerCase().indexOf(self.filter.toLowerCase()) > -1) {
                             found = true;
                         }
+                    } else if (col.value && col.value.toLowerCase().indexOf(self.filter.toLowerCase()) > -1) {
+                        found = true;
                     }
                 });
                 return found;
             });
-
         }
 
         this.data.paging.total = cloneData.length;
         this.data.paging.perPage = self.perPage;
         this.data.paging.pages = Math.ceil((cloneData.length / this.data.paging.perPage));
-        if (page > this.data.paging.pages) {
+        if ((page + 1) > this.data.paging.pages) {
             page = 0;
         }
         pages = cloneData.splice(page * this.perPage, this.perPage);
@@ -216,51 +226,60 @@ class Table {
             })
             .then(() => {
                 self.drawPaging(context);
+            })
+            .then(() => {
+                var push = {};
+                push.page = page;
+                if (self.filter && self.filter.length > 2) {
+                    push.q = self.filter;
+                }
+                pushState(push);
             });
-//            .then(() => {
-//                self.locked = true;
-//                self._search.value = href.q || '';
-//                if (self._sort) {
-//                    self._sort.value = href.sort || null;
-//                }
-//                self.locked = false;
-//                if (dontPushState) {
-//                    return;
-//                }
-//                pushState(href);
-//
-//            });
     }
 
     sortData(field, dir) {
         var direction = dir || 'desc';
 
-        this.data.rows.sort(function(a, b) {
-            if (direction == 'desc') {
-                if (!a.columns[field].value) {
+        this.data.rows.sort(function (a, b) {
+            var fieldA,
+                fieldB;
+
+            if (a.columns[field].value && a.columns[field].value.date) {
+                fieldA = a.columns[field].value.date;
+            } else if (a.columns[field].value) {
+                fieldA = a.columns[field].value.toLocaleLowerCase();
+            }
+
+            if (b.columns[field].value && b.columns[field].value.date) {
+                fieldB = b.columns[field].value.date;
+            } else if (b.columns[field].value) {
+                fieldB = b.columns[field].value.toLocaleLowerCase();
+            }
+            if (direction === 'desc') {
+                if (!fieldA) {
                     return -1;
                 }
-                if (!b.columns[field].value) {
+                if (!fieldB) {
                     return 1;
                 }
-                if (a.columns[field].value < b.columns[field].value) {
+                if (fieldA < fieldB) {
                     return -1;
                 }
-                if (a.columns[field].value > b.columns[field].value) {
+                if (fieldA > fieldB) {
                     return 1;
                 }
                 return 0;
             } else {
-                if (!b.columns[field].value) {
+                if (!fieldB) {
                     return -1;
                 }
-                if (!a.columns[field].value) {
+                if (!fieldA) {
                     return 1;
                 }
-                if (b.columns[field].value < a.columns[field].value) {
+                if (fieldB < fieldA) {
                     return -1;
                 }
-                if (b.columns[field].value > a.columns[field].value) {
+                if (fieldB > fieldA) {
                     return 1;
                 }
                 return 0;
@@ -273,7 +292,7 @@ class Table {
         let body = lackey.hook('table-footer', this._root),
             self = this;
         body.innerHTML = '';
-        console.log(context);
+
         return template.render(body.getAttribute('data-lky-template'), context).then((rows) => {
             rows.forEach((row) => {
                 body.appendChild(row);
@@ -312,20 +331,32 @@ class Table {
         lackey.bind('th[data-sort]', 'click', (event, hook) => {
             event.stopPropagation();
             event.preventDefault();
+            if (self.ready) {
+                var direction = hook.getAttribute('data-direction');
 
-            var direction = hook.getAttribute('data-direction');
-
-            if (!direction || direction === "asc") {
-                direction = 'desc';
-            } else {
-                direction = 'asc';
+                if (!direction || direction === 'asc') {
+                    direction = 'desc';
+                } else {
+                    direction = 'asc';
+                }
+                Array.prototype.forEach.call(document.querySelectorAll('th[data-sort]'), function (th) {
+                    th.setAttribute('data-direction', '');
+                });
+                hook.setAttribute('data-direction', direction);
+                self.sortData(hook.getAttribute('data-sort'), direction);
             }
-            Array.prototype.forEach.call(document.querySelectorAll('th[data-sort]'), function (th) {
-                th.setAttribute('data-direction', "")
-            });
-            hook.setAttribute('data-direction', direction);
-            self.sortData(hook.getAttribute('data-sort'), direction);
             return false;
+        });
+    }
+
+    setProps(options) {
+        var self = this;
+        Object.keys(options).forEach(function (property) {
+            if (property === 'page') {
+                self.pageNumber = parseInt(options[property]) - 1;
+            } else if (property === 'q') {
+                self.filter = options[property];
+            }
         });
     }
 
