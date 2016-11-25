@@ -152,11 +152,16 @@ class StructureUI extends Emitter {
                         '[data-lky-hook="settings.open.dimensions"]',
                         '[data-lky-hook="settings.open.taxonomy"]',
                         '[data-lky-hook="settings.open.blocks"]',
-                        '[data-lky-hook="settings.open.diff"]'
+                        '[data-lky-hook="settings.open.diff"]',
+                        '[data-lky-hook="settings.open.cms"]'
                     ], self.node)
                     .forEach(element => {
+                        var elementAnchor = element.querySelector('a');
+
                         if (ignore.indexOf(element.getAttribute('data-lky-open')) !== -1) {
                             element.parentNode.removeChild(element);
+                        } else if (elementAnchor && elementAnchor.getAttribute('href') !== '#') {
+                            element.addEventListener('click', self.openLink.bind(self), true);
                         } else {
                             element.addEventListener('click', self.toggle.bind(self), true);
                         }
@@ -600,7 +605,6 @@ class StructureUI extends Emitter {
 
 
     toggle(event) {
-
         event.preventDefault();
         event.stopPropagation();
 
@@ -612,6 +616,15 @@ class StructureUI extends Emitter {
         } else {
             this.node.setAttribute('data-lky-edit', toOpen);
         }
+    }
+
+    openLink(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let anchor = event.target.querySelector('a');
+
+        document.location = anchor.getAttribute('href');
     }
 
     collapse() {

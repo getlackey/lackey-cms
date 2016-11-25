@@ -6,9 +6,6 @@
 {/body}
 
 {<header}
-    <a data-lky-hook="header.cms" href="cms/content">
-        <img src="{@base}img/cms/core/lackey-logo.png{/base}">
-    </a>
     <button data-lky-hook="header.settings" data-hamburger data-lky-ignore="
         {@acl perm="adminMenu" method="meta"}{:else}meta,{/acl}
         {@acl perm="adminMenu" method="dimensions"}{:else}dimensions,{/acl}
