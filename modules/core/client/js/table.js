@@ -93,7 +93,9 @@ class Table {
         let self = this;
         lackey.bind('[data-lky-api]', 'click', (event, hook) => {
             event.preventDefault();
-            let apiAction = hook.getAttribute('data-lky-api').split(':');
+            let apiAction = hook.getAttribute('data-lky-api').split(':'),
+                itemId = apiAction[1].split('/').pop();
+
             switch (apiAction[0]) {
             case 'DELETE':
                 {
@@ -101,7 +103,7 @@ class Table {
                         api
                             .delete(apiAction[1])
                             .then(() => {
-                                self.page(self.pageNumber);
+                                self.removeItem(parseInt(itemId));
                             }, error => {
                                 growl({
                                     status: 'error',
@@ -112,6 +114,16 @@ class Table {
                 }
             }
         });
+    }
+
+    removeItem(id) {
+        var self = this,
+            rows = this.data.rows;
+
+        self.data.rows = rows.filter(function (row) {
+            return row.id !== id;
+        });
+        self.pageq();
     }
 
     page(pageNumber) {
