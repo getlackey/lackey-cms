@@ -40,8 +40,8 @@ module.exports = (data) => {
 
             return Media
                 .lookupMime(sourceResult.source, sourceResult.mime)
-                .then((mime) => {
-                    return Media.findByPathAndType(sourceResult.source, mime);
+                .then(() => {
+                    return Media.findByType(sourceResult.source);
                 }).then((media) => {
                     if (!media) {
                         SCli.debug('lackey/modules/media/server/models/media/generator', 'Creating media ' + sourceResult.source);

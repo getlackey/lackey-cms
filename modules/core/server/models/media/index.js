@@ -376,12 +376,11 @@ module.exports = SUtils
                 return '/api/media/' + this._doc.id.toString();
             }
 
-            static findByPathAndType(path, mime) {
-                SCli.debug('lackey-cms/modules/media/server/models/media', 'findByPathAndType ' + path);
+            static findByType(path) {
+                SCli.debug('lackey-cms/modules/media/server/models/media', 'findByType ' + path);
                 return SCli.sql(MediaModel
                     .query()
                     .where('source', path)
-                    .where('mime', mime)
                 ).then((result) => {
                     if (!result || !result.length) {
                         return null;
