@@ -140,7 +140,7 @@ class Table {
     getData() {
         let self = this,
             total = this._initial.paging.total,
-            limit = 1000,
+            limit = 50,
             calls = Math.ceil(total / limit),
             promises = [],
             data = false;
