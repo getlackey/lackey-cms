@@ -2,6 +2,8 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-37
+ * Fix duplicating media issue, added script to remove existing duplicates
 
 ## 1.0.0-beta-33
  * Reworked admin cms tables + sorting/searching

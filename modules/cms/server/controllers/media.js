@@ -18,6 +18,37 @@
 
 const SUtils = require(LACKEY_PATH).utils;
 
+function isObject(obj) {
+    return obj === Object(obj);
+}
+
+function flatten(arr) {
+    return arr.reduce(function (flat, toFlatten) {
+    return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+    }, []);
+}
+
+function crawl(thing) {
+    var p = [];
+    if (isObject(thing)) {
+        if (thing.type && thing.type === 'Media') {
+            return Promise.resolve(thing.id);
+        } else {
+            Object.keys(thing).forEach(function (key) {
+                p.push(crawl(thing[key]));
+            });
+            return Promise.all(p);
+        }
+    } else if (Array.isArray(thing)) {
+        thing.forEach(function (key) {
+            p.push(crawl(thing[key]));
+        });
+        return Promise.all(p);
+    } else {
+        return Promise.resolve(0);
+    }
+}
+
 module.exports = SUtils
     .waitForAs('mediaCtrl',
         SUtils.cmsMod('core').model('media'),
@@ -76,6 +107,38 @@ module.exports = SUtils
                 } else {
                     res.error(new Error('You are nasty'));
                 }
+            }
+
+            static ensureUnique(req, res) {
+                let Content;
+                SUtils.cmsMod('core').model('content')
+                .then((content) => {
+                    Content = content;
+
+                    return Content.find();
+                })
+                .then((contents) => {
+                    var promises = [];
+
+                    contents.forEach((content) => {
+                        promises.push(crawl(content.layout));
+                    });
+                    return Promise.all(promises);
+                })
+                .then((items) => {
+                    return flatten(items).filter(Boolean);
+                }).then((existingMedia) => {
+                    Model.find().then((models) => {
+                        models.forEach((model) => {
+                            if (existingMedia.indexOf(model.id) > -1) {
+                                console.log(model.id);
+                            } else {
+                                model.remove();
+                            }
+                        });
+                        res.api('done');
+                    });
+                });
             }
         }
 
