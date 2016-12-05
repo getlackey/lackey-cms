@@ -35,6 +35,8 @@ class loginClass {
     static login(req, res, next) {
         if (req.body && req.body.remember > 0) {
             req.session.cookie.maxAge = req.body.remember * 86400000;
+        } else {
+            req.session.cookie.maxAge = 14400000;
         }
         passport.authenticate('local', (err, user) => {
             if (err) {
