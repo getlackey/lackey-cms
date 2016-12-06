@@ -129,7 +129,7 @@ module.exports = SUtils
                     return Promise.resolve('video/youtube');
                 }
 
-                if (path.match(/^https:\/\/www.vimeo.com\//)) {
+                if (path.match(/^https:\/\/www.vimeo.com\//) || path.match(/^https:\/\/vimeo.com\//)) {
                     return Promise.resolve('video/vimeo');
                 }
 
