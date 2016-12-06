@@ -87,8 +87,11 @@ function print(chunk, data, type, editMode, dust, log, config) {
       if (type === 'hook') {
         return;
       }
-
-      if (data.content.type === 'video') {
+      if (data.content.mime === 'video/youtube') {
+        chunk.write('<iframe type="text/html" src="https://www.youtube.com/embed/' + isYoutube(data.content.source) + '" frameborder="0"></iframe>');
+      } else if (data.content.mime === 'video/vimeo') {
+        chunk.write('<iframe src="https://player.vimeo.com/video/' + isVimeo(data.content.source) + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
+      } else if (data.content.type === 'video') {
         chunk.write('<video');
         Object.keys(data.attrs).forEach((key) => {
           chunk.write(' ' + key + '="' + data.attrs[key].replace(/"/g, '&quot;') + '"');
@@ -127,10 +130,6 @@ function print(chunk, data, type, editMode, dust, log, config) {
           });
         }
         chunk.write('/>');
-      } else if (isYoutube(data.content.source)) {
-        chunk.write('<iframe type="text/html" src="https://www.youtube.com/embed/' + isYoutube(data.content.source) + '" frameborder="0"></iframe>');
-      } else if (isVimeo(data.content.source)) {
-        chunk.write('<iframe src="https://player.vimeo.com/video/' + isVimeo(data.content.source) + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
       } else if (isYoutube(data.content.source)) {
         chunk.write('<iframe type="text/html" src="https://www.youtube.com/embed/' + isYoutube(data.content.source) + '" frameborder="0"></iframe>');
       } else if (isVimeo(data.content.source)) {
