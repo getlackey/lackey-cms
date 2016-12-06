@@ -129,6 +129,10 @@ module.exports = SUtils
                     return Promise.resolve('video/youtube');
                 }
 
+                if (path.match(/^https:\/\/www.vimeo.com\//)) {
+                    return Promise.resolve('video/vimeo');
+                }
+
                 SCli.debug('lackey-cms/modules/media/server/models/media', 'lookupMime', path);
                 let mime = mimeLib.lookup(path),
                     isWeb = path.match(/^(http|https|)\:\/\/.+$/) !== null;
