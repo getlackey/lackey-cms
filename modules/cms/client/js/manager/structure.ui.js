@@ -280,7 +280,8 @@ class StructureUI extends Emitter {
         let
             self = this,
             locales,
-            viewAs;
+            viewAs,
+            ignore = lackey.select('[data-lky-hook="header.settings"]')[0].getAttribute('data-lky-dimensionignore').split(',');
 
         return api
             .read('/cms/language?enabled=true')
@@ -310,6 +311,21 @@ class StructureUI extends Emitter {
                     .bind('[data-lky-locale]', 'change', self.viewInLocale.bind(self), root[0]);
                 lackey
                     .bind('[data-lky-view-as]', 'change', self.viewAs.bind(self), root[0]);
+
+                lackey
+                    .select([
+                        '[data-lky-dimension="viewRole"]',
+                        '[data-lky-dimension="viewVariant"]',
+                        '[data-lky-dimension="viewLanguage"]',
+                        '[data-lky-dimension="usedDimensions"]'
+                    ], self.node)
+                    .forEach(element => {
+
+                        if (ignore.indexOf(element.getAttribute('data-lky-dimension')) !== -1) {
+                            element.parentNode.removeChild(element);
+                        }
+                    });
+
             });
     }
 
@@ -410,6 +426,11 @@ class StructureUI extends Emitter {
             })
             .then(ctx => Template.redraw(self.taxonomyNode, ctx))
             .then(() => {
+               if (context.template.allowTaxonomies.length < 1) {
+                   lackey.select('[data-lky-hook="settings.open.taxonomy"]', self.node).forEach(element => {
+                       element.parentNode.removeChild(element);
+                   });
+               }
                 lackey
                     .bind('[data-lky-hook="action:pick-taxonomy"]', 'click', self.pickTaxonomy.bind(self, context), self.node);
                 lackey

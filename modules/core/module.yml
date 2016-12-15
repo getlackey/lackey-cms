@@ -49,6 +49,7 @@ init:
                 debug: '*'
                 viewas: '*'
                 adminMenu: '*'
+                dimensionView: '*'
         -
             name: admin
             acl:

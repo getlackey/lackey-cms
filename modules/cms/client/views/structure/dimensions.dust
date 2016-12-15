@@ -1,6 +1,6 @@
 {! Used by lackey-cms/modules/cms/client/views/structure.dust !}
 <ul>
-    <li>
+    <li data-lky-dimension="viewRole">
         <label>
             <span>View as role</span>
             <select data-lky-view-as>
@@ -10,7 +10,7 @@
             </select>
         </label>
     </li>
-    <li>
+    <li data-lky-dimension="viewVariant">
         <label>
             <span>View variant</span>
             <select data-lky-variant>
@@ -21,7 +21,7 @@
             </select>
         </label>
     </li>
-    <li>
+    <li data-lky-dimension="viewLanguage">
         <label>
             <span>View in language</span>
             <select data-lky-locale>
@@ -37,7 +37,7 @@
             </select>
         </label>
     </li>
-    <li>
+    <li data-lky-dimension="usedDimensions">
         <label>Used dimensions</label>
         <table>
             <thead>

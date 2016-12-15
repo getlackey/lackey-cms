@@ -10,8 +10,13 @@
         {@acl perm="adminMenu" method="meta"}{:else}meta,{/acl}
         {@acl perm="adminMenu" method="dimensions"}{:else}dimensions,{/acl}
         {@acl perm="adminMenu" method="taxonomy"}{:else}taxonomy,{/acl}
-        {@acl perm="adminMenu" method="blocks"}{:else}blocks,{/acl}
         {@acl perm="adminMenu" method="diff"}{:else}diff,{/acl}
+        {@acl perm="adminMenu" method="blocks"}{:else}blocks,{/acl}
+    " data-lky-dimensionIgnore="
+        {@acl perm="dimensionView" method="viewRole"}{:else}viewRole,{/acl}
+        {@acl perm="dimensionView" method="viewVariant"}{:else}viewVariant,{/acl}
+        {@acl perm="dimensionView" method="viewLanguage"}{:else}viewLanguage,{/acl}
+        {@acl perm="dimensionView" method="usedDimensions"}{:else}usedDimensions,{/acl}
     ">
         <img src="{@base}img/cms/cms/svg/cog-white.svg{/base}"/>
     </button>
