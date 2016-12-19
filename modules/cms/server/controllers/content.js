@@ -44,6 +44,10 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         label: 'Created Date',
                         date: true
                     },
+                    updatedAt: {
+                        label: 'Updated At',
+                        date: true
+                    },
                     author: {
                         label: 'Author',
                         parse: 'return arguments[0] ? arguments[0].name : \'\''

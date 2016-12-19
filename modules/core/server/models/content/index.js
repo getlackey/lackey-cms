@@ -293,6 +293,7 @@ module.exports = SUtils
                     route: this._doc.route,
                     createdAt: this._doc.createdAt,
                     publishAt: this._doc.publishAt,
+                    updatedAt: this._doc.updatedAt,
                     props: this.props,
                     author: this.author,
                     template: this._template ? this._template.toJSON() : null,
