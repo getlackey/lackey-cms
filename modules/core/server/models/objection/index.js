@@ -603,7 +603,7 @@ module.exports = Database
                             ._preQuery(inputQuery, options)
                             .then(q => {
                                 query = q;
-                                return this.count(inputQuery);
+                                return this.count(q);
                             })
                             .then(count => {
                                 let opt = options || {};
