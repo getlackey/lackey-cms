@@ -26,7 +26,7 @@
             <li data-class="divider"></li>
 
             <li data-lky-hook="settings.open.cms.create">
-                <a href="cms/content/create">Create Content</a>
+                <a href="cms/content/create">New Page</a>
             </li>
             <li data-lky-hook="settings.open.cms">
                 <a href="cms/content">Site Settings</a>
