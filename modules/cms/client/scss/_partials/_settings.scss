@@ -68,11 +68,11 @@
                 display: block;
                 color: $color-background-highlight;
                 font-size: 12px;
-                text-transform: uppercase;
                 font-weight: 500;
                 > span {
                     display: block;
                     padding: 0px 0px 5px;
+                    text-transform: uppercase;
                 }
                 > input,
                 select {
