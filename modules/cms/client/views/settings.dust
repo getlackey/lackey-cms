@@ -11,7 +11,7 @@
                 <a href="#">Meta</a>
             </li>
             <li data-lky-hook="settings.open.dimensions" data-lky-open="dimensions">
-                <a href="#">Dimensions</a>
+                <a href="#">Views</a>
             </li>
             <li data-lky-hook="settings.open.taxonomy" data-lky-open="taxonomy">
                 <a href="#">Tags &amp; Privacy</a>
