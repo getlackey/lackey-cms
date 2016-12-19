@@ -16,14 +16,14 @@
 
 [data-lky-btn],
 [data-lky-btn-inverted] {
-    border-radius: 30px;
+    border-radius: 5px;
     font-size: 13px;
     padding: 8px 10px;
     text-decoration: none;
 }
 
 [data-lky-btn] {
-    border: 1px solid white;
+    border: none;
     background: $color-lackey-light-blue;
     color: white;
 }

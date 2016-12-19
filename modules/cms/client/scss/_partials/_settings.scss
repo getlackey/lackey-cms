@@ -64,26 +64,40 @@
                 }
             }
             label {
-                margin: 5px 0px 15px;
+                margin: 5px 0px 28px;
                 display: block;
-                color: $color-background-highlight;
-                font-size: 12px;
+                color: $color-background-accent;
+                font-size: 14px;
                 font-weight: 500;
                 > span {
                     display: block;
-                    padding: 0px 0px 5px;
-                    text-transform: uppercase;
+                    padding: 0px 0px 8px;
                 }
                 > input,
-                select {
+                > select {
+                    background: white;
                     border: 1px solid $color-background-highlight;
-                    border-radius: 3px;
                     display: block;
                     width: 100%;
                     text-transform: none;
+                    font-size: 13px;
                     font-weight: normal;
-                    padding: 5px;
+                    padding: 7px 8px;
                     color: $color-light-gray;
+
+                    &:last-child { border-radius: 5px; }
+                    &:not(:last-child) { border-radius: 5px 5px 0 0; }
+                }
+
+                > select {
+                    appearance: none;
+
+                    padding-right: 38px;
+
+                    background-image: url(../../../img/cms/cms/svg/down-arrow.svg);
+                    background-position: calc(100% - 1em) center;
+                    background-repeat: no-repeat;
+                    background-size: auto 25%;
                 }
             }
             [data-lky-hook="settings.picker"] {
@@ -230,8 +244,8 @@
                     display: block;
                     cursor: pointer;
                     width: 100%;
-                    margin-top: 5px;
-                    padding: 3px 10px;
+                    padding: 0.6em 3em;
+                    border-radius: 0 0 5px 5px;
                 }
             }
             [data-lky-hook="settings.taxonomy"] {
