@@ -20,7 +20,7 @@
                 <a href="#">Blocks</a>
             </li>
             <li data-lky-hook="settings.open.diff" data-lky-open="diff">
-                <a href="#">Diff</a>
+                <a href="#">Pending Changes</a>
             </li>
 
             <li data-class="divider"></li>
