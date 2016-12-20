@@ -320,9 +320,10 @@ class Gallery extends Emitter {
                     self.node.removeEventListener('transitionend', handler, false);
                     resolve();
                 };
+
             setTimeout(() => {
                 self.node.addEventListener('transitionend', handler, false);
-                self.node.setAttribute('data-lky-open', '');
+                setTimeout(() => self.node.setAttribute('data-lky-open', ''), 1);
             }, 50);
         });
     }
@@ -332,8 +333,18 @@ class Gallery extends Emitter {
      * @returns {Promise}
      */
     remove() {
-        this.node.parentNode.removeChild(this.node);
-        return Promise.resolve();
+        return new Promise(resolve => {
+            let self = this,
+                handler = () => {
+                    self.node.removeEventListener('transitionend', handler, false);
+                    self.node.parentNode.removeChild(self.node);
+
+                    resolve();
+                };
+
+            self.node.addEventListener('transitionend', handler, false);
+            self.node.removeAttribute('data-lky-open', '');
+        });
     }
 
     toggle(event) {

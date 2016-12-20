@@ -107,8 +107,15 @@ class PickerUI extends Emitter {
      * @returns {Promise}
      */
     fadeIn() {
-        this.node.setAttribute('data-lky-open', '');
-        return Promise.resolve();
+        return new Promise(resolve => {
+            let self = this;
+
+            setTimeout(() => {
+                self.node.setAttribute('data-lky-open', '');
+
+                resolve();
+            }, 10);
+        });
     }
 
     /**
@@ -116,9 +123,18 @@ class PickerUI extends Emitter {
      * @returns {Promise}
      */
     remove() {
-        this.node.parentNode.removeChild(this.node);
-        this.node.removeAttribute('data-lky-open');
-        return Promise.resolve();
+        return new Promise(resolve => {
+            let self = this,
+                handler = () => {
+                    self.node.removeEventListener('transitionend', handler, false);
+                    self.node.parentNode.removeChild(self.node);
+
+                    resolve();
+                };
+
+            self.node.addEventListener('transitionend', handler, false);
+            self.node.removeAttribute('data-lky-open', '');
+        });
     }
 
     /**

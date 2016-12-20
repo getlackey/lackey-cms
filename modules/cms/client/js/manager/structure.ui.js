@@ -659,8 +659,15 @@ class StructureUI extends Emitter {
      * @returns {Promise}
      */
     fadeIn() {
-        this.node.setAttribute('data-lky-open', '');
-        return Promise.resolve();
+        return new Promise(resolve => {
+            let self = this;
+
+            setTimeout(() => {
+                self.node.setAttribute('data-lky-open', '');
+
+                resolve();
+            }, 10);
+        });
     }
 
     /**
@@ -668,10 +675,21 @@ class StructureUI extends Emitter {
      * @returns {Promise}
      */
     remove() {
-        this.repository.off('changed', this._onRepositoryChanged);
-        this.repository = null;
-        this.node.parentNode.removeChild(this.node);
-        return Promise.resolve();
+        return new Promise(resolve => {
+            let self = this,
+                handler = () => {
+                    self.node.removeEventListener('transitionend', handler, false);
+                    self.node.parentNode.removeChild(self.node);
+
+                    resolve();
+                };
+
+            self.node.addEventListener('transitionend', handler, false);
+            self.node.removeAttribute('data-lky-open', '');
+
+            self.repository.off('changed', self._onRepositoryChanged);
+            self.repository = null;
+        });
     }
 
     mapDictionary(data) {
