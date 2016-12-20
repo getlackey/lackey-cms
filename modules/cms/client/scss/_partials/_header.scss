@@ -144,6 +144,7 @@
                 height: 100%;
                 vertical-align: middle;
                 img {
+                    box-sizing: content-box;
                     width: 38px;
                     height: 38px;
                     border-radius: 38px;
