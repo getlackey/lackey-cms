@@ -59,6 +59,7 @@ ChangeUI.prototype.cancel = function (event) {
 };
 
 ChangeUI.prototype.save = function (event) {
+    var self = this;
     event.stopPropagation();
     event.preventDefault();
     this
@@ -69,6 +70,7 @@ ChangeUI.prototype.save = function (event) {
                 status: 'success',
                 message: 'Change have been saved!'
             });
+            self.uiUpdate(false);
         });
 };
 
