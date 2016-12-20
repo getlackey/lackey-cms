@@ -22,8 +22,8 @@
         @import "./_header";
         @import "./_settings";
         [data-lky-hook="iframe"] {
-            width: 100%;
-            height: 100%;
+            flex: 1 1 100%;
+            z-index: 0;
             border: none;
         }
         &[data-lky-settings-open="true"] {

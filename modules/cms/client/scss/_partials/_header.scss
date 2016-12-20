@@ -1,7 +1,9 @@
     [data-lky-hook="header"] {
+        z-index: 1;
         height: $header-height;
         background-color: $color-background;
         color: $color-white;
+
         > * {
             font: inherit;
             color: inherit;
