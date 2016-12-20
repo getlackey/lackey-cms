@@ -119,6 +119,12 @@
                     padding: 15px 0px;
                     margin: 0px;
                     li {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+
+                        border-bottom: 1px solid lighten($color-lackey-light-gray, 30%);
+
                         img {
                             display: block;
                             margin: auto;
@@ -135,26 +141,21 @@
                             border-radius: 5px;
 
                         }
-                        border-bottom: 1px solid lighten($color-lackey-light-gray, 30%);
                         div {
-                            display: table-cell;
                             padding: 5px;
-                            vertical-align: middle;
-                            overflow: hidden;
-                        }
-                        div + img {
-                            text-align: right;
-                        }
-                        div:first-child {
-                            width: 250px;
-                            span,
-                            pre {
-                                overflow-x: auto;
-                                width: 250px;
-                            }
-                            pre {
-                                font-size: 10px;
-                                color: $color-lackey-light-gray;
+
+                            & + img { text-align: right; }
+                            &:first-child {
+                                flex: 1 0 auto;
+
+                                span, pre {
+                                    overflow-x: auto;
+                                    width: 100%
+                                }
+                                pre {
+                                    font-size: 10px;
+                                    color: $color-lackey-light-gray;
+                                }
                             }
                         }
                     }
@@ -314,7 +315,12 @@
             [data-lky-hook="settings.taxonomy"] {
                 > div {
                     padding: 50px;
-                    small {
+
+                    > label {
+                        margin-bottom: 0;
+                    }
+
+                    > small {
                         font-size: 10px;
                         color: $color-washed;
                         padding: 10px;
@@ -322,6 +328,10 @@
                         line-height: 150%;
                         letter-spacing: 0px;
                     }
+
+                    [data-tag] + button { margin-top: 14px; }
+
+                    > button { margin-bottom: 28px; }
                 }
             }
             &[data-lky-has-media="false"] {

@@ -1,6 +1,7 @@
 {#template.allowTaxonomies}
     <label>{label}</label>
     <small>{description}</small>
+
     {#. taxtype=name}
     {#taxonomies}
         {@eq key=type.name value=taxtype}
@@ -11,8 +12,8 @@
         {/eq}
     {/taxonomies}
     {/.}
-    <button data-lky-btn="" data-lky-hook="action:pick-taxonomy" data-type="{name}" data-addable="{?allowCreation}true{/allowCreation}">Add</button>
 
+    <button data-lky-btn="" data-lky-hook="action:pick-taxonomy" data-type="{name}" data-addable="{?allowCreation}true{/allowCreation}">Add</button>
 {/template.allowTaxonomies}
 <br/>
 <h5>Taxonomies Inherited from the template</h5>
