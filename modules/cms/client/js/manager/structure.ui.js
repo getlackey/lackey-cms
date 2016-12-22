@@ -426,7 +426,8 @@ class StructureUI extends Emitter {
             })
             .then(ctx => Template.redraw(self.taxonomyNode, ctx))
             .then(() => {
-                if (context.template && (context.template.allowTaxonomies && context.template.allowTaxonomies.length < 1) || !context.template.allowTaxonomies) {
+                console.log(context);
+                if ((context.template && (context.template.allowTaxonomies && context.template.allowTaxonomies.length < 1)) || !context.template) {
                    lackey.select('[data-lky-hook="settings.open.taxonomy"]', self.node).forEach(element => {
                        element.parentNode.removeChild(element);
                    });
