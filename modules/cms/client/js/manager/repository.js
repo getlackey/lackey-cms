@@ -72,7 +72,7 @@ Repository.prototype.get = function () {
         this._resources[contentId] = this.load(type, id);
     }
     return this._resources[contentId].then(() => {
-        return deepClone(self._copy[contentId]);
+        return self._copy[contentId];
     });
 };
 
