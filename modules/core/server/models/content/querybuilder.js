@@ -212,7 +212,7 @@ module.exports = require(LACKEY_PATH)
 
                 let
                     taxes = '',
-                    value = text.replace(/[^a-zA-Z0-9\s+]/g, '');
+                    value = text.replace(/[^a-zA-Z0-9\s+-]/g, '');
 
                 if (freeTextTax && freeTextTax.length) {
                     freeTextTax
