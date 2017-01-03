@@ -107,7 +107,7 @@ const
                     FROM "contentToTaxonomy" c
                     JOIN "taxonomy" t ON
                         t.id = c."taxonomyId"
-                        AND (t.name LIKE '%$1%' OR t.label LIKE '%$1%')
+                        AND (LOWER(t.name) LIKE LOWER('%$1%') OR LOWER(t.label) LIKE LOWER('%$1%'))
                     JOIN "taxonomyType" tt ON
                         tt.id = t."taxonomyTypeId"
                         AND tt.name = '$2'
@@ -118,7 +118,7 @@ const
                     FROM "templateToTaxonomy" c
                     JOIN "taxonomy" t ON
                         t.id = c."taxonomyId"
-                        AND (t.name LIKE '%$1%' OR t.label LIKE '%$1%')
+                        AND (LOWER(t.name) LIKE LOWER('%$1%') OR LOWER(t.label) LIKE LOWER('%$1%'))
                     JOIN "taxonomyType" tt ON
                         tt.id = t."taxonomyTypeId"
                         AND tt.name = '$2'
