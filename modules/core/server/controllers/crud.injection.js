@@ -312,7 +312,7 @@ class CRUDInjectionController {
                                 return {
                                     caption: column.label,
                                     beforeCellWrite: (row, cellData) => {
-                                        return column.date && cellData ? cellData.date : cellData;
+                                        return column.date && cellData ? new Date(cellData.date) : cellData;
                                     }
                                 };
                             }),
