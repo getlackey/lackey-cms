@@ -25,10 +25,13 @@
         {/data.media.alternatives}
         <h3>Created At</h3>
         <p>{data.media.createdAt}</p>
+
+        <button data-lky-btn data-lky-api="DELETE:/cms/media/{data.media.id}" style="margin-top:10px;">Delete item</button>
     </main>
     <aside>
         <div class="mediaContainer">{data.media|media|s}</div>
     </aside>
+
     <hr/>
 
 

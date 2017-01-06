@@ -88,10 +88,6 @@ module.exports = SUtils
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
                     href: '/cms/media/{id}'
-                }, {
-                    label: 'Remove',
-                    icon: 'img/cms/cms/svg/close.svg',
-                    api: 'DELETE:/cms/media/{id}'
                 }]);
             }
 
@@ -113,10 +109,15 @@ module.exports = SUtils
                 Model
                     .findById(req.params.media_id)
                     .then(media => {
-                        res.css('css/cms/cms/media.css');
-                        res.print('cms/cms/media', {
-                            media: media.toJSON(false)
-                        });
+                        if (media) {
+                            res.css('css/cms/cms/media.css');
+                            res.js('js/cms/cms/context.js');
+                            res.print('cms/cms/media', {
+                                media: media.toJSON(false)
+                            });
+                        } else {
+                            res.redirect('cms/media');
+                        }
                     });
             }
 

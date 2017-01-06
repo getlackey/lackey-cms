@@ -21,14 +21,14 @@
 
         <h3>Updated At</h3>
         {data.content.updatedAt}
-        <hr/>
+
 
         <h3>Taxonomies</h3>
         {#data.content.taxonomies}
             <p>{?label}{label}{:else}{name}{/label}</p>
         {/data.content.taxonomies}
 
-        <p style="margin-top: 25px;"><a data-lky-btn="" class="" href="admin{data.content.route}">Go to page</a></p>
+        <p style="margin-top: 25px;"><a data-lky-btn="" class="" href="admin{data.content.route}">Go to page</a> <button data-lky-btn data-lky-api="DELETE:/cms/content/{data.content.id}" style="margin-top:10px;">Delete item</button></p>
     </main>
     <aside>
         <div class="mediaContainer"><img src="{data.content.template.thumb}"/></div>

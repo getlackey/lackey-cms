@@ -106,10 +106,15 @@ module.exports = SUtils.waitForAs('contentCtrl',
                 Model
                     .findById(req.params.content_id)
                     .then(content => {
-                        res.css('css/cms/cms/media.css');
-                        res.print('cms/cms/content', {
-                            content: content.toJSON(false)
-                        });
+                        if (content) {
+                            res.css('css/cms/cms/media.css');
+                            res.js('js/cms/cms/context.js');
+                            res.print('cms/cms/content', {
+                                content: content.toJSON(false)
+                            });
+                        } else {
+                            res.redirect('cms/content');
+                        }
                     });
             }
 
@@ -147,10 +152,6 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
                     href: 'cms/content/{id}'
-                }, {
-                    label: 'Remove',
-                    icon: 'img/cms/cms/svg/close.svg',
-                    api: 'DELETE:/cms/content/{id}'
                 }]);
             }
 

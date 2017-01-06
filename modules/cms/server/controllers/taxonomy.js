@@ -52,6 +52,14 @@ module.exports = SUtils
                 });
             }
 
+             static get actions() {
+                return this._overriden('actions', [{
+                    label: 'View',
+                    icon: 'img/cms/cms/svg/preview.svg',
+                    href: 'cms/content/{id}'
+                }]);
+            }
+
         }
 
         return Promise.resolve(Controller);
