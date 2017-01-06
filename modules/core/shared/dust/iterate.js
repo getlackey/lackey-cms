@@ -37,4 +37,11 @@ module.exports = (dust) => {
 
     };
 
+    dust.helpers.iter = function (chunk, context, bodies, params) {
+        var obj = params.context;
+        Object.keys(obj).forEach(function (key) {
+           chunk.render(bodies.block, context.push({key: key, value: obj[key]}));
+        });
+    };
+
 };

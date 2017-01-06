@@ -1,0 +1,40 @@
+{>"cms/cms/main"/}
+
+{<body}
+<section data-lky-component="page-item">
+    <main>
+        <h2>Page - {data.content.route}</h2>
+        <h3>Template: </h3>
+        {data.content.template.name}
+
+        <h3>Type</h3>
+        {data.content.type}
+
+        <h3>Author</h3>
+        {?data.content.author.name}{data.content.author.name}{:else}N/A{/data.content.author.name}
+
+        <h3>State</h3>
+        {data.content.state}
+
+        <h3>Created At</h3>
+        {data.content.createdAt}
+
+        <h3>Updated At</h3>
+        {data.content.updatedAt}
+        <hr/>
+
+        <h3>Taxonomies</h3>
+        {#data.content.taxonomies}
+            <p>{?label}{label}{:else}{name}{/label}</p>
+        {/data.content.taxonomies}
+
+        <p style="margin-top: 25px;"><a data-lky-btn="" class="" href="admin{data.content.route}">Go to page</a></p>
+    </main>
+    <aside>
+        <div class="mediaContainer"><img src="{data.content.template.thumb}"/></div>
+    </aside>
+
+    <hr/>
+</section>
+<div data-lky-hook="settings.overlay"></div>
+{/body}

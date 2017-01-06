@@ -2,6 +2,9 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-54
+ * added context screen for media + pages
+
 ## 1.0.0-beta-37
  * Fix duplicating media issue, added script to remove existing duplicates
 

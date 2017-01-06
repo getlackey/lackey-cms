@@ -87,7 +87,7 @@ module.exports = SUtils
                 return this._overriden('actions', [{
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
-                    href: '{source}'
+                    href: '/cms/media/{id}'
                 }, {
                     label: 'Remove',
                     icon: 'img/cms/cms/svg/close.svg',
@@ -108,6 +108,18 @@ module.exports = SUtils
                     res.error(new Error('You are nasty'));
                 }
             }
+
+            static details(req, res) {
+                Model
+                    .findById(req.params.media_id)
+                    .then(media => {
+                        res.css('css/cms/cms/media.css');
+                        res.print('cms/cms/media', {
+                            media: media.toJSON(false)
+                        });
+                    });
+            }
+
 
             static ensureUnique(req, res) {
                 let Content;

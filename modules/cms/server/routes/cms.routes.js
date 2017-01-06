@@ -79,6 +79,12 @@ module.exports = (server) => {
             server.route('/cms/removedupemedia')
                 .get( server.aclAdmin, MediaController.ensureUnique);
 
+            server.route('/cms/media/:media_id')
+                .get( server.aclAdmin, MediaController.details);
+
+            server.route('/cms/content/:content_id')
+                .get( server.aclAdmin, ContentController.details);
+
             server.route('/api/cms/session')
                 .delete(server.aclAdmin, SessionController.method('removeAll'));
 

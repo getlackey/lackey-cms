@@ -355,6 +355,7 @@ module.exports = SUtils
                     mime: this.mime,
                     type: this.type,
                     createdAt: this._doc.createdAt,
+                    updatedAt: this._doc.updatedAt,
                     author: this._doc._userId,
                     attributes: this._doc.attributes,
                     taxonomies: this.taxonomies

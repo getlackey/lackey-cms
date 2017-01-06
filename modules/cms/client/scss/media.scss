@@ -1,0 +1,33 @@
+@import "_vars";
+
+
+[data-lky-component="media"], [data-lky-component="page-item"] {
+    margin: 100px auto 0;
+
+    > * {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    > aside {
+        margin-left: 50px;
+    }
+
+    section {
+
+    }
+
+    h3 {
+        margin-top: 15px;
+    }
+
+
+    div.mediaContainer {
+        width: 275px;
+
+        img, video {
+            width: 100%;
+        }
+
+    }
+}

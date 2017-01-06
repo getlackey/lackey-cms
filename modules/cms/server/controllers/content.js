@@ -102,6 +102,17 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     .then(instance => instance ? self.unique(originalRoute + '-' + shortid.generate(), originalRoute) : route);
             }
 
+            static details(req, res) {
+                Model
+                    .findById(req.params.content_id)
+                    .then(content => {
+                        res.css('css/cms/cms/media.css');
+                        res.print('cms/cms/content', {
+                            content: content.toJSON(false)
+                        });
+                    });
+            }
+
             static create(req, res) {
 
                 if (!req.body) return res.error(req, new Error('No input'));
@@ -135,7 +146,7 @@ module.exports = SUtils.waitForAs('contentCtrl',
                 return this._overriden('actions', [{
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
-                    href: 'admin{route}'
+                    href: 'cms/content/{id}'
                 }, {
                     label: 'Remove',
                     icon: 'img/cms/cms/svg/close.svg',
