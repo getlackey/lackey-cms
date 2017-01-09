@@ -56,8 +56,24 @@ module.exports = SUtils
                 return this._overriden('actions', [{
                     label: 'View',
                     icon: 'img/cms/cms/svg/preview.svg',
-                    href: 'cms/content/{id}'
+                    href: 'cms/taxonomy/{id}'
                 }]);
+            }
+
+            static details(req, res) {
+                Model
+                    .findById(req.params.taxonomy_id)
+                    .then(taxonomy => {
+                        if (taxonomy) {
+                            res.css('css/cms/cms/media.css');
+                            res.js('js/cms/cms/context.js');
+                            res.print('cms/cms/taxonomy', {
+                                taxonomy: taxonomy.toJSON(false)
+                            });
+                        } else {
+                            res.redirect('cms/taxonomy');
+                        }
+                    });
             }
 
         }

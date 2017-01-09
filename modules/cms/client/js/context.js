@@ -23,7 +23,7 @@ const
 
 
 lackey.bind('[data-lky-api]', 'click', (event, hook) => {
-    let apiAction = hook.getAttribute('data-lky-api').split(':')
+    let apiAction = hook.getAttribute('data-lky-api').split(':');
 
     switch (apiAction[0]) {
     case 'DELETE':

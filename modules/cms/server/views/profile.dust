@@ -74,6 +74,7 @@
             {/taxonomies.length}
         {/taxonomies}
     {/data.profile.roles}
+     <button data-lky-btn data-lky-api="DELETE:/cms/user/{data.profile.id}" style="margin-top:10px;">Delete user</button>
 </section>
 <div data-lky-hook="settings.overlay"></div>
 {/body}

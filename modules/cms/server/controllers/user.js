@@ -54,10 +54,6 @@ class UserController extends CRUD {
             label: 'Edit',
             icon: 'img/cms/cms/svg/preview.svg',
             href: '/cms/user/{id}'
-        }, {
-            label: 'Remove',
-            icon: 'img/cms/cms/svg/close.svg',
-            api: 'DELETE:/cms/user/{id}'
         }]);
     }
 
@@ -141,7 +137,7 @@ class UserController extends CRUD {
             .findBy('restrictive', true)
             .then(restrictive => {
                 res.css('css/cms/cms/profile.css');
-                res.js('js/cms/cms/profile.js');
+                res.js(['js/cms/cms/profile.js', 'js/cms/cms/context.js']);
                 res.print('cms/cms/profile', {
                     profile: req.profile.toJSON(false),
                     restrictive: restrictive

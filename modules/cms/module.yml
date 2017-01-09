@@ -62,7 +62,7 @@ routes:
             inject:
                 - cms/core/server/models/role
         post:
-            controller: cms/cms/server/controllers/user#create
+            controller: cms/cms/server/controllers/#create
             ACLHelper: admin
             inject:
                 - cms/core/server/models/user
@@ -85,6 +85,9 @@ routes:
             ACLHelper: admin
             inject:
                     - cms/core/server/models/taxonomy-type
+        delete:
+            controller: cms/cms/server/controllers/#delete
+            ACLHelper: admin
 
     /api/cms/user/:profileId/taxonomy:
         post:

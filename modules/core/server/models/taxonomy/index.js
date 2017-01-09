@@ -109,6 +109,7 @@ module.exports = SUtils
                     id: this.id,
                     name: this._doc.name,
                     label: this._doc.label,
+                    createdAt: this._doc.createdAt,
                     type: this.type ? this.type.toJSON() : null
                 };
             }

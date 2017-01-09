@@ -85,6 +85,9 @@ module.exports = (server) => {
             server.route('/cms/content/:content_id')
                 .get( server.aclAdmin, ContentController.details);
 
+            server.route('/cms/taxonomy/:taxonomy_id')
+                .get( server.aclAdmin, TaxonomyController.details);
+
             server.route('/api/cms/session')
                 .delete(server.aclAdmin, SessionController.method('removeAll'));
 
