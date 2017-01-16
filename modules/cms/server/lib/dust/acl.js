@@ -33,10 +33,10 @@ module.exports = (dust) => {
                 return userModel.isAllowed(perm, method);
             })
             .then((isAllowed) => {
-                console.log(perm, method, isAllowed);
                 if (isAllowed) {
                     return chunk;
                 }
+                return false;
             }, (error) => {
                  /* istanbul ignore next */
                 console.error(error);

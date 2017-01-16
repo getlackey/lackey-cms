@@ -96,12 +96,12 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
             forgot: (req, res) => {
                 let userId;
                 if (!req.body.username.length) { //TODO improve
-                    return res.status(400).error(new Error('Email not found'));
+                    throw(new Error('Email not found'));
                 }
                 User.getByProvider(User.EMAIL, req.body.username)
                     .then((user) => {
                         if (!user) {
-                            return res.status(400).api(new Error('Email not found'));
+                            throw new Error('Email not found');
                         }
                         userId = user.id;
                         return user.loginToken(req.body.username);
@@ -117,6 +117,8 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                     })
                     .then(() => {
                         return res.api('ok');
+                    }, (error) => {
+                        return res.status(400).api(error);
                     });
             },
             forgotValidate: (req, res) => {
