@@ -2,6 +2,10 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-58
+ * Added share button to draft pages.
+ * tidied up the tabled + pagination in backend
+
 ## 1.0.0-beta-54
  * added context screen for media + pages
 

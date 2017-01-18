@@ -40,41 +40,27 @@ module.exports = SUtils.waitForAs('contentCtrl',
 
             static get tableConfig() {
                 return this._overriden('tableConfig', {
-                    createdAt: {
-                        label: 'Created Date',
-                        date: true
-                    },
-                    updatedAt: {
-                        label: 'Updated At',
-                        date: true
-                    },
-                    author: {
-                        label: 'Author',
-                        parse: 'return arguments[0] ? arguments[0].name : \'\''
-                    },
-                    route: {
-                        label: 'URL'
-                    },
                     template: {
                         name: 'Template',
                         parse: 'return arguments[0] ? arguments[0].name : \'\''
                     },
-                    type: {
-                        name: 'Type'
+                    name: {
+                        label: 'Name'
+                    },
+                    route: {
+                        label: 'URL Slug'
                     },
                     state: {
                         name: 'Status',
                         label: 'Status'
                     },
-                    restrictiveTaxonomies: {
-                        label: 'Restrictions',
-                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive === true;}).map(function(r) { return r.label || r.name;}) : \'\'',
-                        help: 'Tags used to restrict user access'
+                    createdAt: {
+                        label: 'Date Created',
+                        date: true
                     },
-                    nonRestrictiveTaxonomies: {
-                        label: 'Search Tags',
-                        parse: 'return arguments[1].taxonomies ? arguments[1].taxonomies.filter(function(r){return r.type.restrictive !== true;}).map(function(r) { return r.label || r.name;}) : \'\'',
-                        help: 'Tags used to assist search results'
+                    updatedAt: {
+                        label: 'Last Modified',
+                        date: true
                     }
                 });
             }
@@ -92,6 +78,12 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         ascSuffix: 'to Title - A-Z',
                         descSuffix: 'to Title - Z-A'
                     }]
+                });
+            }
+
+            static get filterOptions() {
+                return this._overriden('filterOptions', {
+                    template: 'content-filter'
                 });
             }
 
@@ -153,6 +145,12 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     icon: 'img/cms/cms/svg/preview.svg',
                     href: 'cms/content/{id}'
                 }]);
+            }
+
+            static get tableRowAction() {
+                return this._overriden('tableRowAction', {
+                    href: 'cms/content/{id}'
+                });
             }
 
             static cmsList(req, res) {

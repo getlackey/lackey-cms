@@ -381,6 +381,39 @@ Manager.prototype.updateCurrent = function (handler) {
         .then(current => this.update('content', current.id, handler));
 };
 
+function showShareUrl(shareBox, urlInput, base, preview) {
+    shareBox.style.display = 'block';
+    urlInput.value = base + '?preview=' + preview.shareString;
+    urlInput.select();
+
+    var unbind, hide, mouseEnter, mouseLeave, timeout;
+
+    unbind = function () {
+        shareBox.removeEventListener('mouseleave', mouseLeave);
+        shareBox.removeEventListener('mouseenter', mouseEnter);
+    };
+
+    hide = function () {
+        unbind();
+        shareBox.style.display = 'none';
+    };
+
+    mouseLeave = function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(hide, 500);
+    };
+
+    mouseEnter = function () {
+        clearTimeout(timeout);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(hide, 3000);
+
+    shareBox.addEventListener('mouseleave', mouseLeave);
+    shareBox.addEventListener('mouseenter', mouseEnter);
+}
+
 Manager.prototype.setupUI = function () {
 
     let self = this;
@@ -425,7 +458,8 @@ Manager.prototype.setupUI = function () {
             }
 
             let publishDiv = lackey.hook('header.publish'),
-                publishControl = lackey.select('input[type="checkbox"]', publishDiv)[0];
+                publishControl = lackey.select('input[type="checkbox"]', publishDiv)[0],
+                shareDiv = lackey.hook('header.share');
 
             publishControl.checked = current.state === 'published';
 
@@ -436,12 +470,42 @@ Manager.prototype.setupUI = function () {
                 self.updateCurrent(cur => {
                     cur.state = publishControl.checked ? 'published' : null;
                 });
+
+                if (publishControl.checked) {
+                    shareDiv.style.display = 'none';
+                } else {
+                    shareDiv.style.display = 'block';
+                }
             }, true);
 
             publishControl.addEventListener('click', () => {
                 self.updateCurrent(cur => {
                     cur.state = publishControl.checked ? 'published' : null;
                 });
+            }, true);
+
+            if (current.state === 'published') {
+                shareDiv.style.display = 'none';
+            } else {
+                shareDiv.style.display = 'block';
+            }
+
+            shareDiv.addEventListener('click', function () {
+                var base = xhr.base.replace(/\/$/, '') + current.route,
+                    shareBox = document.querySelector('.shareBox'),
+                    urlInput = shareBox.querySelector('input');
+
+                api.read('/cms/preview/' + current.id)
+                    .then((preview) => {
+                        if (preview.shareString) {
+                            showShareUrl(shareBox, urlInput, base, preview);
+                        } else {
+                            api.create('/cms/preview', {contentId: current.id})
+                                .then((prev) => {
+                                    showShareUrl(shareBox, urlInput, base, prev);
+                                });
+                        }
+                    });
             }, true);
         });
 };

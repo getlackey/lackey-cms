@@ -1,5 +1,5 @@
 {#table.rows}
-<tr>
+<tr {?rowAction.href}data-lky-hook="tableRowLink" data-lky-href="{rowAction.href}"{/rowAction.href}>
     {#columns}
     <td>
         {@is key=value type="array"}
@@ -34,7 +34,7 @@
                             data-lky-id="{id}"
                             >
                 {/api}
-                        {?icon}
+                    {?icon}
                         <img src="{icon}"/>
                     {:else}
                         {label}

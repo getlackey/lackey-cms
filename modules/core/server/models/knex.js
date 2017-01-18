@@ -600,6 +600,14 @@ module.exports = Schema
                 });
             })
             .then(() => {
+                return Schema.table(knex, 'previews', table => {
+                    table.increments();
+                    table.bigInteger('contentId').notNullable();
+                    table.string('shareString').defaultTo(1).notNullable();
+                    table.timestamp('createdAt').notNullable().defaultTo(knex.raw('now()'));
+                });
+            })
+            .then(() => {
                 return Schema.addColumn(knex, 'analytics', 'map', table => {
                     table.json('map');
                 });

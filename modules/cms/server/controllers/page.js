@@ -27,9 +27,10 @@ module.exports = SUtils
         SUtils.cmsMod('core').model('taxonomy'),
         SUtils.cmsMod('core').model('taxonomy-type'),
         SUtils.cmsMod('core').model('template'),
-        SUtils.cmsMod('core').model('user')
+        SUtils.cmsMod('core').model('user'),
+        SUtils.cmsMod('core').model('preview')
     )
-    .then((ContentModel, Taxonomy, TaxonomyType, Template, User) => {
+    .then((ContentModel, Taxonomy, TaxonomyType, Template, User, Preview) => {
 
         class PageController {
 
@@ -138,6 +139,15 @@ module.exports = SUtils
                         stylesheets = isAllowed ? ['css/cms/cms/wysiwyg.css'] : [];
 
                         if (page.state !== 'published' && !isAllowed) {
+                            if (req.query.preview) {
+                                return Preview.findOneBy('contentId', page.id)
+                                        .then((prev) => {
+                                            if (prev && prev._doc.shareString === req.query.preview) {
+                                                return data;
+                                            }
+                                            return Promise.reject('403');
+                                        });
+                            }
                             return Promise.reject('403');
                         }
 
@@ -145,6 +155,9 @@ module.exports = SUtils
                             return Promise.reject('403 - not published yet' + page.publishedAt);
                         }
 
+                        return data;
+                    })
+                    .then((datap) => {
                         if (pageJson.template) {
                             if (pageJson.template.javascripts) {
                                 javascripts = javascripts.concat(pageJson.template.javascripts);
@@ -154,11 +167,10 @@ module.exports = SUtils
                             }
 
                             if (pageJson.template.populate && pageJson.template.populate.length) {
-                                return PageController.populate(data, pageJson.template.populate, req, page);
+                                return PageController.populate(datap, pageJson.template.populate, req, page);
                             }
                         }
-
-                        return data;
+                        return datap;
                     })
                     .then((result) => {
 

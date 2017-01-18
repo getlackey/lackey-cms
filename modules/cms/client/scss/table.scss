@@ -9,7 +9,7 @@
     overflow-y: auto;
     height: calc(100% - #{$header-height});
     > h2 {
-        padding: 40px 150px 20px;
+        padding: 68px 3% 20px;
         text-transform: capitalize;
     }
     > [data-lky-hook="table.add"],
@@ -64,13 +64,13 @@
         transition: opacity $speed;
         border-spacing: 0px;
         border-collapse: collapse;
-        width: 98%;
-        border: 1px solid #00CBFE;
+        width: 95%;
+        //border: 1px solid #00CBFE;
         font-size: $table-font-size;
-        margin: 0 auto;
+        margin: 20px auto;
         > thead {
-            background-color: $color-background-highlight;
-            color: white;
+            //background-color: $color-background-highlight;
+            //color: white;
         }
         td,
         th {
@@ -107,6 +107,20 @@
             button {
                 border: none;
             }
+
+            &.pagination {
+                color: #6c6c6c;
+                text-align: right;
+                select {
+
+                }
+
+                a {
+                    font-size:24px;
+                    text-decoration: none;
+                    color: #6c6c6c
+                }
+            }
         }
         td:first-child,
         th:first-child,
@@ -116,42 +130,41 @@
             //padding: 0px;
         }
         th {
-            padding: 25px 15px 20px;
+            padding: 10px 15px 8px;
+            color: #6c6c6c;
             font-weight: normal;
             text-transform: capitalize;
         }
         td {
             padding: 10px 15px 8px;
-            color: $color-washed;
+            color: #6c6c6c;
+            font-weight: normal;
         }
         > tbody {
             > tr:nth-child(even) {
-                background-color: $color-lightest-gray;
+                background-color: $color-lighter-yet-gray;
             }
-            > tr {}
+            > tr {
+                border-bottom: 1px solid #e1e1e1;
+            }
         }
         > tfoot {
             text-align: left;
             td {
-                padding: 50px;
+                //padding: 50px;
+                padding-top: 20px;
                 text-align: left;
             }
             ul {
                 list-style: none;
                 li {
                     display: inline-block;
-                    float: left;
+                    margin-left: 30px;
+                    vertical-align: middle;
                     a {
-                        text-decoration: none;
-                        display: inline-block;
-                        border-radius: 20px;
-                        padding: 10px;
-                        height: 40px;
-                        margin-right: 20px;
-                        width: 40px;
-                        line-height: 20px;
-                        text-align: center;
-                        color: $color-lackey-light-blue;
+                        img {
+                            width: 30px;
+                        }
                     }
                     &[data-lky-active] {
                         a {

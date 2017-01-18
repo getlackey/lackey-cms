@@ -36,6 +36,10 @@ class CRUDInjectionController {
         return this._overriden('actions', undefined);
     }
 
+    static get tableRowAction() {
+        return this._overriden('tableRowAction', undefined);
+    }
+
     static get tableActions() {
         return this._overriden('tableActions', undefined);
     }
@@ -47,6 +51,10 @@ class CRUDInjectionController {
 
     static get tableOptions() {
         return this._overriden('tableOptions', null);
+    }
+
+    static get filterOptions() {
+        return this._overriden('filterOptions', null);
     }
 
     static get exportConfig() {
@@ -121,6 +129,7 @@ class CRUDInjectionController {
     }
 
     static alterQuery(req, query) {
+        delete query.perPage;
         return query;
     }
 
@@ -205,7 +214,7 @@ class CRUDInjectionController {
             .table(self.alterQuery(req, options.query), this.tableConfig, self.alterQueryOptions(req, options.options))
             .then(data => {
                 if (options.options.format === 'table') {
-                    self.mapActions(this.actions, data.columns, data.rows);
+                    self.mapActions(this.actions, data.columns, data.rows, this.tableRowAction || {});
                 } else if (data.data) {
                     data
                         .data
@@ -255,7 +264,7 @@ class CRUDInjectionController {
         return output;
     }
 
-    static mapActions(actions, columns, rows) {
+    static mapActions(actions, columns, rows, rowAction) {
         let
             self = this;
         if (actions && rows) {
@@ -274,7 +283,14 @@ class CRUDInjectionController {
                     }
                     return action;
                 });
+                let _rowAction = JSON.parse(JSON.stringify(rowAction));
 
+                if (_rowAction.href) {
+                    _rowAction.href = self.populateAction(_rowAction.href, row, columns);
+                } else if (_rowAction.api) {
+                    _rowAction.api = self.populateAction(_rowAction.api, row, columns);
+                }
+                row.rowAction = _rowAction;
             });
         }
         if (rows) {
@@ -291,12 +307,14 @@ class CRUDInjectionController {
             self = this,
             config,
             tableConfig = isExport && self.exportConfig ? self.exportConfig : self.tableConfig,
-            tableOptions = self.tableOptions || {};
+            tableOptions = self.tableOptions || {},
+            filterOptions = self.filterOptions || false;
 
         require(LACKEY_PATH)
             .configuration()
             .then(_config => {
                 config = _config;
+                console.log(restParams.query);
                 return model
                     .table(self.alterQuery(req, restParams.query), tableConfig, self.alterQueryOptions(req, _.merge({
                         format: 'table',
@@ -322,7 +340,7 @@ class CRUDInjectionController {
                     return;
                 }
                 try {
-                    self.mapActions(self.actions, data.columns, data.rows);
+                    self.mapActions(self.actions, data.columns, data.rows, self.tableRowAction || {});
                 } catch (e) {
                     res.error(e);
                 }
@@ -335,6 +353,7 @@ class CRUDInjectionController {
                     create: model.createLink,
                     tableActions: self.tableActions,
                     tableOptions: tableOptions,
+                    filterOptions: filterOptions,
                     template: 'cms/cms/tableview',
                     javascripts: [
                         'js/cms/cms/table.js'

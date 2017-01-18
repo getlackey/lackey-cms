@@ -206,6 +206,7 @@ class Table {
 
         this.data.paging.total = cloneData.length;
         this.data.paging.perPage = self.perPage;
+        this.data.paging.startNo = (page * self.perPage) + 1;
         this.data.paging.pages = Math.ceil((cloneData.length / this.data.paging.perPage));
         if ((page + 1) > this.data.paging.pages) {
             page = 0;
@@ -217,6 +218,7 @@ class Table {
         this.data.paging.page = page;
 
         response = {
+            perPage: this.data.perPage,
             paging: this.data.paging,
             columns: this.data.columns,
             rows: pages
@@ -242,6 +244,7 @@ class Table {
             .then(() => {
                 var push = {};
                 push.page = page;
+                push.perPage = this.data.paging.perPage;
                 if (self.filter && self.filter.length > 2) {
                     push.q = self.filter;
                 }
@@ -309,6 +312,7 @@ class Table {
             rows.forEach((row) => {
                 body.appendChild(row);
                 self.paging(row);
+
             });
         });
     }
@@ -335,6 +339,14 @@ class Table {
             event.preventDefault();
             self.page(hook.getAttribute('data-page') - 1);
             return false;
+        }, area || this.pagingArea);
+
+         lackey.bind('lky:table-perPage', 'change', (event, hook) => {
+            event.stopPropagation();
+            event.preventDefault();
+            console.log('t2');
+            self.perPage = hook.value;
+            self.pageq();
         }, area || this.pagingArea);
     }
 
@@ -369,6 +381,8 @@ class Table {
             } else if (property === 'q') {
                 self.filter = options[property];
                 self._search.value = options[property];
+            } else if (property === 'perPage') {
+                self.perPage = options[property];
             }
         });
     }

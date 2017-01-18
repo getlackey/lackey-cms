@@ -114,6 +114,23 @@ routes:
                     - cms/core/server/models/user
                 ACLHelper: admin
 
+
+    /api/cms/preview/:contentId:
+        get:
+            controller: cms/cms/server/controllers/preview#getByContentId
+            inject:
+                - cms/core/server/models/preview
+            ACLHelper: admin
+
+    /api/cms/preview:
+        crud:
+            controller: cms/cms/server/controllers/preview
+            field: preview
+            options:
+                inject:
+                    - cms/core/server/models/preview
+                ACLHelper: admin
+
     /api/cms/user/:profileId/name:
         put:
             controller: cms/cms/server/controllers/user#updateName

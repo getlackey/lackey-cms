@@ -581,7 +581,7 @@ module.exports = Database
                             sort = (options ? options.sort : null),
                             populate = null,
                             table = {};
-
+                        console.log(inputQuery);
                         if (!sort) {
                             sort = {
                                 id: 1
@@ -615,7 +615,7 @@ module.exports = Database
                                 if (opt.offset && !opt.nolimit) {
                                     page = Math.floor(opt.offset / perPage) - 1;
                                 }
-
+                                console.log(page, perPage);
                                 table.paging = {
                                     total: count,
                                     pages: Math.ceil(count / perPage),
@@ -625,7 +625,8 @@ module.exports = Database
                                     filters: query,
                                     api: self.api,
                                     start: (page + 1) - 3,
-                                    finish: (page + 1) + 3
+                                    finish: (page + 1) + 3,
+                                    startNo: (page * perPage) + 1
                                 };
 
                                 if (sort) {

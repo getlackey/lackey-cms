@@ -1,49 +1,39 @@
 <tr>
-    <td colspan="{@math key=table.columns.length method="add" operand=1 /}">
+    <td align="right" class="pagination" colspan="{@math key=table.columns.length method="add" operand=1 /}"">
         <ul>
+        <li>Rows per page:  </li>
+        <li>
+        <select data-lky-hook="table-perPage">
+            <option {@eq value=10 key=table.paging.perPage}selected{/eq}>10</option>
+            <option {@eq value="25" key=table.paging.perPage}selected{/eq}>25</option>
+            <option {@eq value="50" key=table.paging.perPage}selected{/eq}>50</option>
+            <option {@eq value="100" key=table.paging.perPage}selected{/eq}>100</option>
+            </select>
+        </li>
+        <li>
+        {table.paging.startNo}-
+        {@math key=table.paging.page method="multiply" operand=table.paging.perPage}
+            {@lte value=table.paging.total}
+                {@math key=table.paging.page method="multiply" operand=table.paging.perPage/}
+            {:else}
+                {table.paging.total}
+            {/lte}
+        {/math} of {table.paging.total}
+        </li>
+        <li>
         {@math key=table.paging.page method="subtract" operand=1}
             {@gt value=0}
-                <li>
-                    <a href="#" data-lky-hook="table-paging" data-page="{@math key=table.paging.page method="subtract" operand=1 /}">Prev</a>
-                </li>
+                <a href="#" data-lky-hook="table-paging" data-page="{@math key=table.paging.page method="subtract" operand=1 /}"><img src="img/cms/cms/svg/arrow-right.svg"/></a>
             {/gt}
         {/math}
-        {@gt key=table.paging.page value=3}
-            <li>
-                <a href="#" data-lky-hook="table-paging" data-page="1">1...</a>
-            </li>
-        {/gt}
-        {@iterate from=1 to=table.paging.pages}
-            {@eq value=$idx key=table.paging.page}
-                <li data-lky-active>
-                    <a class="page-link" href="#" data-lky-hook="table-paging" data-page="{$idx}">
-                        {$idx}
-                    </a>
-                </li>
-            {:else}
-                {@gt key=$idx value=table.paging.start}
-                    {@lt key=$idx value=table.paging.finish}
-                        <li>
-                            <a href="#" data-lky-hook="table-paging" data-page="{$idx}">{$idx}</a>
-                        </li>
-                    {/lt}
-                {/gt}
-            {/eq}
-        {/iterate}
-            {@math key=table.paging.pages method="subtract" operand=table.paging.page }
-                {@gt value=2}
-                    <li>
-                        <a href="#" data-lky-hook="table-paging" data-page="{table.paging.pages}">...{table.paging.pages}</a>
-                    </li>
-                {/gt}
-            {/math}
-            {@math key=table.paging.page method="add" operand=1 }
+        </li>
+        <li>
+        {@math key=table.paging.page method="add" operand=1 }
                 {@lte value=table.paging.pages}
-                    <li>
-                        <a href="#" data-lky-hook="table-paging" data-page="{@math key=table.paging.page method="add" operand=1 /}">Next</a>
-                    </li>
+                    <a href="#" data-lky-hook="table-paging" data-page="{@math key=table.paging.page method="add" operand=1 /}"><img src="img/cms/cms/svg/arrow-left.svg"/></a>
                 {/lte}
-            {/math}
+        {/math}
+        </li>
         </ul>
     </td>
 </tr>
