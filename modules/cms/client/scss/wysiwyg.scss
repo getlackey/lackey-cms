@@ -51,3 +51,24 @@
 .medium-toolbar-arrow-under:after {
     border-color: $color-background transparent transparent transparent;
 }
+
+img[src=""] {
+    content: url(data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==);;
+
+    min-width: 5em;
+    min-height: 5em;
+    margin: 0.5em;
+
+    background-image: url(data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iI0ZGRiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGRlZnM+PHBhdGggaWQ9ImEiIGQ9Ik0yNCAyNEgwVjBoMjR2MjR6Ii8+PC9kZWZzPjxjbGlwUGF0aCBpZD0iYiI+PHVzZSBvdmVyZmxvdz0idmlzaWJsZSIgeGxpbms6aHJlZj0iI2EiLz48L2NsaXBQYXRoPjxwYXRoIGQ9Ik0zIDRWMWgydjNoM3YySDV2M0gzVjZIMFY0aDN6bTMgNlY3aDNWNGg3bDEuODMgMkgyMWMxLjEgMCAyIC45IDIgMnYxMmMwIDEuMS0uOSAyLTIgMkg1Yy0xLjEgMC0yLS45LTItMlYxMGgzem03IDljMi43NiAwIDUtMi4yNCA1LTVzLTIuMjQtNS01LTUtNSAyLjI0LTUgNSAyLjI0IDUgNSA1em0tMy4yLTVjMCAxLjc3IDEuNDMgMy4yIDMuMiAzLjJzMy4yLTEuNDMgMy4yLTMuMi0xLjQzLTMuMi0zLjItMy4yLTMuMiAxLjQzLTMuMiAzLjJ6IiBjbGlwLXBhdGg9InVybCgjYikiLz48L3N2Zz4=),
+        repeating-linear-gradient(
+        45deg,
+        #9c5f5f,
+        #9c5f5f 5px,
+        #733849 5px,
+        #733849 10px);
+    background-size: 40% auto, auto;
+    background-repeat: no-repeat, repeat;
+    background-position: center, center;
+
+    border-radius: 0.5em;
+}
