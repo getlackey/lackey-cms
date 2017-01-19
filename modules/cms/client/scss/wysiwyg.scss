@@ -3,13 +3,20 @@
 @import "medium-editor/src/sass/themes/bootstrap.scss";
 @import "medium-editor-tables/src/sass/medium-editor-tables.scss";
 
-
-.medium-editor-toolbar {
+.medium-editor-toolbar,
+.medium-editor-toolbar-form,
+.medium-editor-toolbar-anchor-preview {
     border: none;
     border-radius: 0;
     background-color: $color-background;
-    box-shadow: 3px 5px 23px -3px rgba(0, 0, 0, 0.3);
+}
 
+.medium-editor-toolbar,
+.medium-editor-toolbar-anchor-preview {
+    box-shadow: 3px 5px 23px -3px rgba(0, 0, 0, 0.3);
+}
+
+.medium-editor-toolbar {
     li {
         button {
             text-align: center;
@@ -23,6 +30,24 @@
     }
 }
 
+.medium-editor-anchor-preview {
+    a {
+        margin: 1em;
+
+        text-decoration: none;
+    }
+}
+
+.medium-editor-toolbar-form{
+    .medium-editor-toolbar-input {
+        background-color: $color-background;
+    }
+}
+
+
+.medium-toolbar-arrow-over:before {
+    border-color: transparent transparent $color-background transparent;
+}
 .medium-toolbar-arrow-under:after {
-    border-color: $color-background transparent transparent transparent
+    border-color: $color-background transparent transparent transparent;
 }
