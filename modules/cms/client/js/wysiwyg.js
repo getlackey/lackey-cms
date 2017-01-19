@@ -40,7 +40,13 @@ const
         'unorderedlist',
         'h2',
         'h3'
-    ]);
+    ]),
+    buttonDefinitions = {
+        anchor: {
+            name: 'anchor',
+            contentDefault: 'Link'
+        }
+    };
 
 let pool = [];
 
@@ -140,6 +146,16 @@ class Wysiwyg {
             options.insert = {
                 buttons: ['image']
             };
+        }
+
+        if (options.toolbar && Array.isArray(options.toolbar.buttons)) {
+            options.toolbar.buttons.forEach((button, i) => {
+                if (typeof(button) !== 'string') { return; }
+
+                if (buttonDefinitions[button]) {
+                    options.toolbar.buttons[i] = buttonDefinitions[button];
+                }
+            });
         }
 
         var InsertMedia = MediumEditor.Extension.extend({
