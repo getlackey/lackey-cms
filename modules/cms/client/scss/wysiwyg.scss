@@ -1,9 +1,28 @@
+@import "vars";
 @import "medium-editor/src/sass/medium-editor.scss";
 @import "medium-editor/src/sass/themes/bootstrap.scss";
 @import "medium-editor-tables/src/sass/medium-editor-tables.scss";
 
-.medium-editor-toolbar li button {
-    text-align: center;
 
-    img { vertical-align: middle; }
+.medium-editor-toolbar {
+    border: none;
+    border-radius: 0;
+    background-color: $color-background;
+    box-shadow: 3px 5px 23px -3px rgba(0, 0, 0, 0.3);
+
+    li {
+        button {
+            text-align: center;
+            border-right: 1px solid $color-washed;
+
+            img { vertical-align: middle; }
+        }
+        button:hover, .medium-editor-button-active {
+            background-color: $color-background-accent;
+        }
+    }
+}
+
+.medium-toolbar-arrow-under:after {
+    border-color: $color-background transparent transparent transparent
 }
