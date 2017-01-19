@@ -35,7 +35,6 @@ const
     buttons = inlineButtons.concat([
         'anchor',
         'quote',
-        'pre',
         'orderedlist',
         'unorderedlist',
         'h2',
