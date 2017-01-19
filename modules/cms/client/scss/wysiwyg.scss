@@ -1,3 +1,7 @@
 @import "medium-editor/src/sass/medium-editor.scss";
 @import "medium-editor/src/sass/themes/bootstrap.scss";
 @import "medium-editor-tables/src/sass/medium-editor-tables.scss";
+
+.medium-editor-toolbar li button {
+    text-align: center;
+}
