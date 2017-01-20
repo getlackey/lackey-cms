@@ -5,7 +5,7 @@
         <div data-lky-hook="settings.presentation"></div>
         <ul>
             <li data-lky-hook="settings.open.meta" data-lky-open="meta">
-                <a href="#">Settings</a>
+                <a href="#">Page Settings</a>
             </li>
             <li data-lky-hook="settings.open.dimensions" data-lky-open="dimensions">
                 <a href="#">Views</a>
