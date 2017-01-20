@@ -21,6 +21,7 @@
             </thead>
             <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
                 {#data.templates}
+                    {@acl perm="allowedTemplate" method=name}
                     <tr>
                         <td></td>
                         <td>
@@ -37,6 +38,9 @@
                         </td>
                         <td></td>
                     </tr>
+                    {:else}
+                        nahhh
+                    {/acl}
                 {/data.templates}
             </tbody>
             <tfoot>

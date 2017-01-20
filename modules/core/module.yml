@@ -50,6 +50,7 @@ init:
                 viewas: '*'
                 adminMenu: '*'
                 dimensionView: '*'
+                allowedTemplate: '*'
         -
             name: admin
             acl:
@@ -73,6 +74,8 @@ init:
                 debug: '*'
                 viewas: '*'
                 adminMenu: '*'
+                dimensionView: '*'
+                allowedTemplate: '*'
     # Users
     User:
         -   email : test@example.com

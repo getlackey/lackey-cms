@@ -2,6 +2,9 @@
 
 Going forward we should add hash of issue next to change
 
+## 1.0.0-beta-62
+ * Added ACL for templates on page creation
+
 ## 1.0.0-beta-58
  * Added share button to draft pages.
  * tidied up the tabled + pagination in backend
