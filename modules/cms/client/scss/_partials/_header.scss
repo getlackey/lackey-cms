@@ -29,14 +29,12 @@
         [data-lky-hook="header.cms"],
         [data-lky-hook="header.settings"],
         [data-lky-hook="header.publish"],
-        [data-lky-hook="header.views"],
         [data-lky-hook="header.blocks"] {
             border-right: 1px solid $color-washed;
             transition: background-color $speed;
         }
         [data-lky-hook="header.settings"],
         [data-lky-hook="header.publish"],
-        [data-lky-hook="header.views"],
         [data-lky-hook="header.blocks"] {
             display: none;
             padding: 0px 20px;
@@ -118,7 +116,6 @@
 
         [data-lky-hook="header.cms"],
         [data-lky-hook="header.settings"],
-        [data-lky-hook="header.views"],
         [data-lky-hook="header.blocks"] {
             float: left;
             height: $header-height;

@@ -21,9 +21,6 @@
         <img src="{@base}img/cms/cms/svg/cog-white.svg{/base}"/>
     </button>
 
-    <button data-lky-hook="header.views" data-lky-tab="dimensions">
-        Views
-    </button>
     <button data-lky-hook="header.blocks" data-lky-tab="blocks">
         Blocks
     </button>

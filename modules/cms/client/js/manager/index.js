@@ -310,7 +310,6 @@ Manager.prototype.onStackChange = function () {};
 Manager.prototype.onViewStructure = function (event) {
 
     lackey.hook('header.settings').setAttribute('disabled', 'disabled');
-    lackey.hook('header.views').setAttribute('disabled', 'disabled');
 
     let
         tab = event.target.getAttribute('data-lky-tab'),
@@ -342,7 +341,6 @@ Manager.prototype.onViewStructure = function (event) {
     promise
         .then(() => {
             lackey.hook('header.settings').removeAttribute('disabled');
-            lackey.hook('header.views').removeAttribute('disabled');
         }, error => console.error(error))
         .catch(error => {
             console.error(error);
@@ -425,10 +423,6 @@ Manager.prototype.setupUI = function () {
         .addEventListener('click', this.onViewStructure.bind(this), true);
 
     lackey
-        .hook('header.views')
-        .addEventListener('click', this.onViewStructure.bind(this), true);
-
-    lackey
         .hook('header.blocks')
         .addEventListener('click', this.onViewStructure.bind(this), true);
 
@@ -436,8 +430,7 @@ Manager.prototype.setupUI = function () {
     lackey
         .select([
             '[data-lky-hook="header.settings"]',
-            '[data-lky-hook="header.publish"]',
-            '[data-lky-hook="header.views"]'
+            '[data-lky-hook="header.publish"]'
         ])
         .forEach(element => {
             element.style.display = 'block';
