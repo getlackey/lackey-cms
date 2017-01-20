@@ -38,8 +38,6 @@
                         </td>
                         <td></td>
                     </tr>
-                    {:else}
-                        nahhh
                     {/acl}
                 {/data.templates}
             </tbody>
