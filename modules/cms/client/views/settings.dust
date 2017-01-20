@@ -4,6 +4,12 @@
     <section data-lky-hook="settings.pick">
         <div data-lky-hook="settings.presentation"></div>
         <ul>
+            <li data-lky-hook="settings.open.cms">
+                <a href="cms/content">Dashboard</a>
+            </li>
+
+            <li data-class="divider"></li>
+
             <li data-lky-hook="settings.open.meta" data-lky-open="meta">
                 <a href="#">Page Settings</a>
             </li>
@@ -20,13 +26,8 @@
                 <a href="#">Pending Changes</a>
             </li>
 
-            <li data-class="divider"></li>
-
             <li data-lky-hook="settings.open.cms.create">
                 <a href="cms/content/create">New Page</a>
-            </li>
-            <li data-lky-hook="settings.open.cms">
-                <a href="cms/content">Site Settings</a>
             </li>
         </ul>
     </section>
