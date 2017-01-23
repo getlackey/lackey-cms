@@ -31,8 +31,7 @@
     </section>
     <section data-lky-hook="settings.meta">
         <div>
-            <small>This meta settings are properties of currently selected asset. Changes applied here, will affect
-            all other places where asset is being used. </small>
+            <small>This meta settings are properties of currently selected asset. Changes applied here, will affect all other places where asset is being used. </small>
             <ul>
                 <li>
                     <label>
@@ -40,6 +39,7 @@
                         <input data-lky-hook="alt" type="text" value="{media.attributes.alt}" name="alt"/>
                     </label>
                 </li>
+<!--
                 <li>
                     <label>
                         <span>Treat as</span>
@@ -52,6 +52,7 @@
                         </select>
                     </label>
                 </li>
+-->
                 {@eq key=media.type value="video"}
                     <li>
                         <label>
@@ -72,7 +73,7 @@
                         </label>
                     </li>
                 {/eq}
-                <li>
+                <li style="display:none;">
                     <label>
                         <span>Access Control</span>
                         <div data-lky-hook="restricitons"></div>
