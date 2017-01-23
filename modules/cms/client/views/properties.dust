@@ -37,7 +37,7 @@
           <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-article" data-value="{@path root=values path=name/}">Change Referred Page</button>
         {:media}
           <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
-          <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-media" data-value="{@path root=values path=name/}">Change Image</button>
+          <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-media" data-value="{@path root=values path=name/}">Change Media</button>
         {:date}
           <input type="text" class="form-control" readonly value="{@path root=values path=name filter="dateTimeFormat"/}"/>
           <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-date-time" data-value="{@path root=values path=name/}" >Pick date</button>
