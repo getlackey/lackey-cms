@@ -54,17 +54,11 @@
         }
     }
     table {
-        &[data-lky-table-hover] {
-            tbody {
-                tr:hover {
-                    background-color: $color-lackey-ligher-blue;
-                }
-            }
-        }
         transition: opacity $speed;
         border-spacing: 0px;
         border-collapse: collapse;
         width: 95%;
+        table-layout: fixed;
         //border: 1px solid #00CBFE;
         font-size: $table-font-size;
         margin: 20px auto;
@@ -126,8 +120,11 @@
         th:first-child,
         td:last-child,
         th:last-child {
-            width: 150px;
+            //width: 150px;
             //padding: 0px;
+        }
+        th.actions {
+            width: 150px;
         }
         th {
             padding: 10px 15px 8px;
@@ -146,6 +143,9 @@
             }
             > tr {
                 border-bottom: 1px solid #e1e1e1;
+            }
+            tr:hover {
+                background-color: $color-lackey-ligher-blue;
             }
         }
         > tfoot {

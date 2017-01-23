@@ -173,7 +173,7 @@ class Wysiwyg {
 
         if (options.toolbar && Array.isArray(options.toolbar.buttons)) {
             options.toolbar.buttons.forEach((button, i) => {
-                if (typeof(button) !== 'string') { return; }
+                if (typeof (button) !== 'string') { return; }
 
                 if (buttonDefinitions[button]) {
                     options.toolbar.buttons[i] = buttonDefinitions[button];

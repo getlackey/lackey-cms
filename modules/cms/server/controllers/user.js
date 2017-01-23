@@ -45,16 +45,10 @@ class UserController extends CRUD {
         return this._overriden('title', 'Users');
     }
 
-    /**
-     * @override
-     * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#actions
-     */
-    static get actions() {
-        return this._overriden('actions', [{
-            label: 'Edit',
-            icon: 'img/cms/cms/svg/preview.svg',
-            href: '/cms/user/{id}'
-        }]);
+    static get tableRowAction() {
+        return this._overriden('tableRowAction', {
+            href: 'cms/user/{id}'
+        });
     }
 
     /**

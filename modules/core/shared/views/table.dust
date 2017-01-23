@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 {#table.columns}
-                    <th data-sort="{$idx}" data-direction="">{label}
+                <th {?width}width="{width}"{/width} data-sort="{$idx}" data-direction="">{label}
                         {?help}
                             <div class="help-tip">
                                 <p>{help}</p>
@@ -12,7 +12,7 @@
                         {/help}
                     </th>
                 {/table.columns}
-                {?actions}<th>Actions</th>{/actions}
+                {?actions}<th class="actions">Actions</th>{/actions}
             </tr>
         </thead>
         <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
@@ -20,7 +20,7 @@
         </tbody>
         <tfoot data-lky-hook="table-footer" data-lky-template="cms/core/table-footer">
             <tr>
-                <td colspan="{@math key=table.columns.length method="add" operand=1 /}">
+                <td class="pagination" colspan="{?actions}{@math key=table.columns.length method="add" operand=1 /}{:else}{table.columns.length}{/actions}">
                     <ul>
                         <li>
                             <img src="img/cms/core/ring.svg" width="50"/>

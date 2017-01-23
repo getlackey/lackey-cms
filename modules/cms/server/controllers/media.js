@@ -83,12 +83,10 @@ module.exports = SUtils
                 });
             }
 
-            static get actions() {
-                return this._overriden('actions', [{
-                    label: 'View',
-                    icon: 'img/cms/cms/svg/preview.svg',
-                    href: '/cms/media/{id}'
-                }]);
+            static get tableRowAction() {
+                return this._overriden('tableRowAction', {
+                    href: 'cms/media/{id}'
+                });
             }
 
             static create(req, res) {

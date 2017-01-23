@@ -52,12 +52,10 @@ module.exports = SUtils
                 });
             }
 
-             static get actions() {
-                return this._overriden('actions', [{
-                    label: 'View',
-                    icon: 'img/cms/cms/svg/preview.svg',
+            static get tableRowAction() {
+                return this._overriden('tableRowAction', {
                     href: 'cms/taxonomy/{id}'
-                }]);
+                });
             }
 
             static details(req, res) {

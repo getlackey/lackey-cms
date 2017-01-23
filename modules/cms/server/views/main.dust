@@ -37,7 +37,7 @@
                     {/acl}
                     {@acl perm="adminMenu" method="content"}
                         <li>
-                            <a href="cms/content">Pages</a>
+                            <a href="cms/content">Content</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="analitycs"}

@@ -45,10 +45,12 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         parse: 'return arguments[0] ? arguments[0].name : \'\''
                     },
                     name: {
-                        label: 'Name'
+                        label: 'Name',
+                        width: '20%'
                     },
                     route: {
-                        label: 'URL Slug'
+                        label: 'URL Slug',
+                        width: '20%'
                     },
                     state: {
                         name: 'Status',
@@ -137,14 +139,6 @@ module.exports = SUtils.waitForAs('contentCtrl',
                         console.error(error);
                         res.error(req, error);
                     });
-            }
-
-            static get actions() {
-                return this._overriden('actions', [{
-                    label: 'View',
-                    icon: 'img/cms/cms/svg/preview.svg',
-                    href: 'cms/content/{id}'
-                }]);
             }
 
             static get tableRowAction() {

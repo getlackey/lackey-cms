@@ -1,5 +1,5 @@
 <tr>
-    <td align="right" class="pagination" colspan="{@math key=table.columns.length method="add" operand=1 /}"">
+    <td align="right" class="pagination" colspan="{?table.paging.actions}{@math key=table.columns.length method="add" operand=1 /}{:else}{table.columns.length}{/table.paging.actions}">
         <ul>
         <li>Rows per page:  </li>
         <li>

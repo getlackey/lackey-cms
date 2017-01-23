@@ -267,30 +267,34 @@ class CRUDInjectionController {
     static mapActions(actions, columns, rows, rowAction) {
         let
             self = this;
-        if (actions && rows) {
+        if (rows) {
             rows.forEach((row) => {
-                row.actions = actions.map(_action => {
-                    let action = JSON.parse(JSON.stringify(_action));
+                if (actions) {
+                    row.actions = actions.map(_action => {
+                        let action = JSON.parse(JSON.stringify(_action));
 
-                    if (!_action.condition || _action.condition(row.___origial)) {
-                        if (action.href) {
-                            action.href = self.populateAction(action.href, row, columns);
-                        } else if (action.api) {
-                            action.api = self.populateAction(action.api, row, columns);
+                        if (!_action.condition || _action.condition(row.___origial)) {
+                            if (action.href) {
+                                action.href = self.populateAction(action.href, row, columns);
+                            } else if (action.api) {
+                                action.api = self.populateAction(action.api, row, columns);
+                            }
+                        } else {
+                            action = {};
                         }
-                    } else {
-                        action = {};
-                    }
-                    return action;
-                });
-                let _rowAction = JSON.parse(JSON.stringify(rowAction));
-
-                if (_rowAction.href) {
-                    _rowAction.href = self.populateAction(_rowAction.href, row, columns);
-                } else if (_rowAction.api) {
-                    _rowAction.api = self.populateAction(_rowAction.api, row, columns);
+                        return action;
+                    });
                 }
-                row.rowAction = _rowAction;
+                if (rowAction) {
+                    let _rowAction = JSON.parse(JSON.stringify(rowAction));
+
+                    if (_rowAction.href) {
+                        _rowAction.href = self.populateAction(_rowAction.href, row, columns);
+                    } else if (_rowAction.api) {
+                        _rowAction.api = self.populateAction(_rowAction.api, row, columns);
+                    }
+                    row.rowAction = _rowAction;
+                }
             });
         }
         if (rows) {
@@ -314,7 +318,6 @@ class CRUDInjectionController {
             .configuration()
             .then(_config => {
                 config = _config;
-                console.log(restParams.query);
                 return model
                     .table(self.alterQuery(req, restParams.query), tableConfig, self.alterQueryOptions(req, _.merge({
                         format: 'table',
@@ -348,6 +351,8 @@ class CRUDInjectionController {
                 data.rows.forEach(row => { // remove circural
                     delete row.data;
                 });
+
+                data.paging.actions = self.actions;
                 res.send({
                     title: self.title || self.field,
                     create: model.createLink,

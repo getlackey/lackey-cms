@@ -116,6 +116,16 @@ class Table {
         });
     }
 
+    rowActions() {
+        var rows = lackey.select('[data-lky-hook="tableRowLink"]');
+
+        rows.forEach(function (row) {
+            row.addEventListener('click', () => {
+                window.location = row.dataset.lkyHref;
+            });
+        });
+    }
+
     removeItem(id) {
         var self = this,
             rows = this.data.rows;
@@ -205,6 +215,7 @@ class Table {
         }
 
         this.data.paging.total = cloneData.length;
+        this.data.paging.actions = self._paging.actions;
         this.data.paging.perPage = self.perPage;
         this.data.paging.startNo = (page * self.perPage) + 1;
         this.data.paging.pages = Math.ceil((cloneData.length / this.data.paging.perPage));
@@ -237,6 +248,7 @@ class Table {
         return this.drawRows(context)
             .then(() => {
                 self.api();
+                self.rowActions();
             })
             .then(() => {
                 self.drawPaging(context);
@@ -344,7 +356,6 @@ class Table {
          lackey.bind('lky:table-perPage', 'change', (event, hook) => {
             event.stopPropagation();
             event.preventDefault();
-            console.log('t2');
             self.perPage = hook.value;
             self.pageq();
         }, area || this.pagingArea);
