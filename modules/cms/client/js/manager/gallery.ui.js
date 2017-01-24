@@ -372,7 +372,7 @@ class Gallery extends Emitter {
         api
             .read('/cms/media?q=' + encodeURI(input.value))
             .then(list => {
-                return template.redraw(lackey.select('[data-lky-hook="settings.gallery"] tbody', self.node)[0], list);
+                return template.redraw(lackey.select('[data-lky-hook="settings.gallery"] [data-lky-template]', self.node)[0], list);
             })
             .then(nodes => {
                 lackey.bind('[data-lky-btn]', 'click', (event, hook) => {

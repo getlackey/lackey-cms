@@ -85,17 +85,7 @@
     <section data-lky-hook="settings.gallery">
         <div>
             <input type="search" data-lky-hook="filter" placeholder="Type title or path"/>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Thumbnail</th>
-                        <th>Alt</th>
-                        <th>Type</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody data-lky-template="cms/cms/imagelist"></tbody>
-            </table>
+            <ul data-lky-template="cms/cms/imagelist"></ul>
         </div>
     </section>
 </aside>

@@ -1,7 +1,7 @@
 {! Used by lackey-cms/modules/cms/client/views/gallery.dust !}
 {#data}
-    <tr>
-        <td>
+    <li data-lky-btn data-lky-hook="image" data-lky-media="{.|js}">
+        <figure title="{mime}">
             {@eq key=type value="video"}
                 <video><source src="{source}"/></video>
             {:else}
@@ -15,11 +15,11 @@
                     <img src="img/cms/cms/svg/file.svg"/>
                 {/eq}
             {/eq}
-        </td>
-        <td>{alt}</td>
-        <td>{type}</td>
-        <td>
-            <button data-lky-btn data-lky-hook="image" data-lky-media="{.|js}">Choose</button>
-        </td>
-    </tr>
+        </figure>
+
+        <section>
+            <h2 title="{source}">{name}</h2>
+            <time datetime="{updatedAt}">{updatedAt|dateTimeFormat}</time>
+        </section>
+    </li>
 {/data}
