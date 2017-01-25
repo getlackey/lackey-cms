@@ -366,15 +366,21 @@ class Gallery extends Emitter {
      * Updates list of pages
      * @returns {Promise}
      */
-    query() {
+    query(page) {
         let self = this,
-            input = lackey.select('input[type="search"]', this.node)[0];
+            input = lackey.select('input[type="search"]', this.node)[0],
+            currentPage = page || 1;
         api
-            .read('/cms/media?q=' + encodeURI(input.value))
+            .read('/cms/media?page=' + currentPage + '&q=' + encodeURI(input.value))
             .then(list => {
                 return template.redraw(lackey.select('[data-lky-hook="settings.gallery"] [data-lky-template]', self.node)[0], list);
             })
             .then(nodes => {
+                lackey.bind('[data-lky-hook=table-paging]', 'click', (event, hook) => {
+                    event.preventDefault();
+                    var thisPage = hook.dataset.page;
+                    self.query(thisPage);
+                }, nodes[0]);
                 lackey.bind('[data-lky-btn]', 'click', (event, hook) => {
                     self.resolve(JSON.parse(hook.getAttribute('data-lky-media')));
                 }, nodes[0]);

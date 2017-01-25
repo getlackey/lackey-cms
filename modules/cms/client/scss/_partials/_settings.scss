@@ -184,6 +184,23 @@
                     > ul {
                         padding: 0px;
                         margin: 0px;
+
+                        li.pagination {
+                            text-align: right;
+                            display: block;
+
+                            > ul > li {
+                                display: inline-block;
+                                margin-left: 30px;
+                                vertical-align: middle;
+                            }
+
+                            &:hover {
+                                background: initial;
+                                color: initial;
+                                cursor: initial;
+                            }
+                        }
                     }
                 }
             }
