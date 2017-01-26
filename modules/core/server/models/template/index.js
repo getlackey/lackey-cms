@@ -230,7 +230,8 @@ module.exports = SUtils
                     variants: this.variants || [],
                     require: this._doc.require || [],
                     taxonomies: this.taxonomies || [],
-                    allowTaxonomies: this.allowTaxonomies || []
+                    allowTaxonomies: this.allowTaxonomies || [],
+                    editable: this._doc.editable
                 };
             }
 
