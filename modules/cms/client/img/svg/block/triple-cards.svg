@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="179.16667" height="69.127388" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="106 153 179.16667 69.127388">
+  <defs>
+    <rect id="a" width="38.634998" height="42.382812" x=".32872954" y=".69669175" rx="2"/>
+    <mask id="d" width="38.6349994" height="42.3828125" x="0" y="0" fill="#fff">
+      <use width="100%" height="100%" xlink:href="#a"/>
+    </mask>
+    <rect id="b" width="38.634998" height="42.382812" x="70.328728" y="13.696692" rx="2"/>
+    <mask id="e" width="38.6349994" height="42.3828125" x="0" y="0" fill="#fff">
+      <use width="100%" height="100%" xlink:href="#b"/>
+    </mask>
+    <rect id="c" width="38.634998" height="42.382812" x=".32872954" y=".69669175" rx="2"/>
+    <mask id="f" width="38.6349994" height="42.3828125" x="0" y="0" fill="#fff">
+      <use width="100%" height="100%" xlink:href="#c"/>
+    </mask>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <g transform="translate(129.083 166.94)">
+      <use width="100%" height="100%" stroke="#0cf" stroke-width="4" xlink:href="#a" mask="url(#d)"/>
+      <path fill="#acefff" d="M8 18h22.938477v2.8100564H8zm0 6h22.938477v2.8100564H8zm0 6h22.938477v2.8100564H8z"/>
+      <path fill="#0cf" d="M8 10h22.938477v2.8100564H8z"/>
+    </g>
+    <g transform="translate(106.083 153.94)">
+      <use width="100%" height="100%" stroke="#0cf" stroke-width="4" xlink:href="#b" mask="url(#e)"/>
+      <path fill="#acefff" d="M78 31h22.938477v2.8100564H78zm0 6h22.938477v2.8100564H78zm0 6h22.938477v2.8100564H78z"/>
+      <path fill="#0cf" d="M78 23h22.938477v2.8100564H78z"/>
+    </g>
+    <g transform="translate(223.083 166.94)">
+      <use width="100%" height="100%" stroke="#0cf" stroke-width="4" xlink:href="#c" mask="url(#f)"/>
+      <path fill="#acefff" d="M8 18h22.938477v2.8100564H8zm0 6h22.938477v2.8100564H8zm0 6h22.938477v2.8100564H8z"/>
+      <path fill="#0cf" d="M8 10h22.938477v2.8100564H8z"/>
+    </g>
+  </g>
+</svg>

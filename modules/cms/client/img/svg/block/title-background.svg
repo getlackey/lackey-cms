@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="179.16667" height="69.127388" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="106 153 179.16667 69.127388">
+  <g fill="none" fill-rule="evenodd" transform="translate(106 125.94)">
+    <path fill="#fff" d="M118.85726 28.789215h58.456219v67.990196H118.85726z"/>
+    <path fill="#acefff" fill-opacity=".3" d="M1 28h176.97223v69.127388H1z"/>
+    <use width="100%" height="100%" stroke="#0cf" stroke-width="4" xlink:href="#path-1" mask="url(#mask-2)"/>
+    <path fill="#0cf" d="M42.318619 53h96.882812v8.1369457H42.318619zm13.727089 13h68.755547v8.1369457H56.045708z"/>
+  </g>
+</svg>
