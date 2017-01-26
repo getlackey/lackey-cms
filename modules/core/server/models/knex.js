@@ -264,6 +264,11 @@ module.exports = Schema
                     table.json('allowTaxonomies');
                 });
             })
+            .then(() => {
+                return Schema.addColumn(knex, 'template', 'editable', table => {
+                    table.boolean('editable').defaultTo(true);
+                });
+            })
             //
             // TABLE content
             // .userId -> users.id
@@ -509,6 +514,7 @@ module.exports = Schema
                 });
 
             })
+
             //
             // TABLE contentToTaxonomy
             // taxonomyUserId -> taxonomy.id
