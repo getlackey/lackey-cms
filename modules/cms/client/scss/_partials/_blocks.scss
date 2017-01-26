@@ -45,22 +45,64 @@
 }
 
 [data-lky-add-block] {
-    border-radius: 25px;
-    display: inline-block;
-    width: 25px;
-    line-height: 21px;
-    height: 25px;
-    color: white;
     border: none;
-    background-color: $color-lackey-blue;
+
+    display: inline-block;
+    padding: 3px 6px;
+    margin: 20px 0;
+
+    font-size: 12px;
     font-weight: normal;
-    font-size: 16px;
-    margin-bottom: 10px;
+
+    border-radius: 7px;
+    background-color: $color-lackey-blue;
+    cursor: pointer;
+
+    color: transparent;
+    opacity: 0.05;
+
+    transition:
+        opacity 0.2s,
+        color 0.2s;
+
+    li:hover > & {
+        opacity: 1;
+        color: white;
+    }
 }
 
 [data-lky-hook="settings.blocks"] {
-    ul > li {
-        text-align: center;
-        width: 225px;
+    div {
+        > ul > li {
+            margin: 0 auto;
+            text-align: center;
+            width: 225px;
+
+            &[data-lky-component][data-lky-type] > label {
+                margin-bottom: 3px;
+            }
+
+            &[data-lky-editable]:not([data-lky-editable=true]) {
+                > [data-lky-block] {
+                    position: relative;
+
+                    &:after {
+                        content: "";
+
+                        position: absolute;
+                        left: 0; right: 0;
+                        top: 0; bottom: 0;
+
+                        background-image: url(../../../img/cms/cms/svg/block/lock.svg);
+                        background-position: left top;
+                        background-repeat: no-repeat;
+
+                        pointer-events: none;
+                    }
+
+                    > img { opacity: 0.65; }
+                }
+            }
+        }
     }
 }

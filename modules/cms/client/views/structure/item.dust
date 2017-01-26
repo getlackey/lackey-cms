@@ -1,5 +1,5 @@
 {! Used by lackey-cms/modules/cms/client/views/structure/sections.dust !}
-<span>{label}</span>
+{?label}<span>{label}</span>{/label}
 <div data-lky-block {?locked}data-lky-locked{/locked}>
 
     <img data-lky-icon src="{thumb}"/>
