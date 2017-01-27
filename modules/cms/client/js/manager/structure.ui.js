@@ -513,6 +513,23 @@ class StructureUI extends Emitter {
                 }, true);
             });
 
+        lackey
+            .select(['input[type=url]'], self.metaNode)
+            .forEach(input => {
+                console.log(input.nextElementSibling);
+
+                var urlPreview = input.nextElementSibling.querySelector('a');
+
+                if (!urlPreview) { return; }
+
+                urlPreview.href = input.value;
+                urlPreview.textContent = urlPreview.href;
+
+                input.addEventListener('keyup', () => {
+                    urlPreview.href = input.value;
+                    urlPreview.textContent = urlPreview.href;
+                }, true);
+            });
     }
 
     pickArticle(settings, event, hook) {

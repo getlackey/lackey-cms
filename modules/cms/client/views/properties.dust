@@ -32,6 +32,9 @@
       <span>{label}</span>
       {@switch key=type}
           <input type="{type}" class="form-control" value="{@path root=values path=name/}" name="{name}"/>
+        {:url}
+          <input type="url" class="form-control" value="{@path root=values path=name/}" name="{name}" />
+          <figure>Links to: <a target="_blank"></a></figure>
         {:article}
           <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
           <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-article" data-value="{@path root=values path=name/}">Change Referred Page</button>

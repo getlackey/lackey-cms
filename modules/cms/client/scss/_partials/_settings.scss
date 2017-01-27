@@ -81,6 +81,23 @@
                     &:not(:last-child) { border-radius: 5px 5px 0 0; }
                 }
 
+                > input[type=url] {
+
+                    & + figure {
+                        padding: 6px 0 6px 6px;
+
+                        font-size: 0.9em;
+                        font-weight: 400;
+
+                        > a {
+                            display: block;
+
+                            color: inherit;
+                            text-decoration: none;
+                        }
+                    }
+                }
+
                 > select {
                     appearance: none;
 
