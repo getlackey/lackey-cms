@@ -37,6 +37,8 @@ Growl.prototype.createElement = function () {
     element.setAttribute('data-lky-growl', self.status);
     element.textContent = self.message;
 
+    top.document.body.appendChild(element);
+
     return element;
 };
 
@@ -46,8 +48,6 @@ Growl.prototype.show = function () {
     if (self.isShown) { return; }
     self.isShown = true;
 
-    top.document.body.appendChild(self.element);
-
     setTimeout(function () {
         self.element.setAttribute('data-visible', '');
     }, 1);
@@ -55,9 +55,6 @@ Growl.prototype.show = function () {
 
 Growl.prototype.hide = function () {
     var self = this;
-
-    if (!self.isShown) { return; }
-    self.isShown = false;
 
     self.element.removeAttribute('data-visible');
 
