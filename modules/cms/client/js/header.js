@@ -20,5 +20,3 @@ const
     Manager = require('cms/client/js/manager/index.js');
 
 Manager.init();
-
-window.growl = require('cms/client/js/growl');
