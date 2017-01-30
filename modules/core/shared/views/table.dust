@@ -25,7 +25,11 @@
                 <td class="pagination" colspan="{?actions}{@math key=table.columns.length method="add" operand=1 /}{:else}{table.columns.length}{/actions}">
                     <ul>
                         <li>
-                            <img src="img/cms/core/ring.svg" width="50"/>
+                            <div class="loader">
+                                <svg class="circular" viewBox="25 25 50 50">
+                                    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                                </svg>
+                            </div>
                         </li>
                     </ul>
                 </td>
