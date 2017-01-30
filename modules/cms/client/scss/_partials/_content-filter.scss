@@ -1,1 +1,103 @@
-/* FOR STV */
+.content-filter {
+    margin: 0 2rem;
+    background: lighten($color-background-highlight, 35%);
+    padding: 2rem;
+    display: flex;
+    position: relative;
+
+    button.reset {
+        appearance: none;
+        background: lighten($color-background-highlight, 35%);
+        color: $color-background-highlight;
+        border: 0;
+        font-size: 0.8rem;
+        position: absolute;
+        bottom: 0.1rem;
+        right: 0.1rem;
+    }
+
+    div.left, div.right {
+        display: inline;
+
+        > div {
+            margin-bottom: 0.5rem;
+
+            &:last-of-type { margin: 0; }
+        }
+    }
+
+    div.left {
+       width: 50%;
+    }
+
+    div.right {
+       width: 50%;
+    }
+
+    label {
+        display: inline-block;
+        width: 7rem;
+        color: #6c6c6c;
+
+        &.small {
+            font-size: 0.5rem;
+            width: auto;
+            margin-right: 0.2rem;
+        }
+    }
+
+    select {
+        appearance: none;
+        width: 11rem;
+        border-radius: 1px;
+        border: 1px solid #b9b9b9;
+        padding: 0.2rem 0.5rem;
+        color: #555454;
+    }
+
+    button {
+        appearance: none;
+        background: $color-background-highlight;
+        border: 0;
+        border-radius: 3px;
+        color: #ffffff;
+        padding: 0.2rem 0.5rem;
+        margin-left: 0.5rem;
+        cursor: pointer;
+        font-size: 0.6rem;
+
+        &:focus { outline:0; }
+
+        &:first-of-type {
+            margin-left: 1rem;
+        }
+
+        span {
+            margin-left: 1rem;
+        }
+    }
+
+    input[type=date] {
+        width: 5rem;
+        appearance: none;
+        border-radius: 1px;
+        border: 1px solid #b9b9b9;
+        font-family: 'Roboto';
+        padding: 0.1rem;
+
+        &:first-of-type {
+            margin-right: 0.3rem;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
