@@ -16,25 +16,90 @@
     limitations under the License.
 */
 
-module.exports = function (config) {
+var hideLength = 500,
+    showTime = 3000;
 
-    var text = typeof config === 'string' ? config : config.message,
-        status = config.status || 'info',
-        div = document.createElement('div'),
-        h;
+function Growl(message, status) {
+    var self = this;
 
-    div.setAttribute('data-lky-growl', status);
-    div.innerText = text;
-    top.document.body.appendChild(div);
-    div.style.top = h = (-div.clientHeight) + 'px';
+    self.message = message || '';
+    self.status = status || 'info';
+
+    self.isShown = false;
+
+    self.element = self.createElement();
+}
+
+Growl.prototype.createElement = function () {
+    var self = this,
+        element = document.createElement('figure');
+
+    element.setAttribute('data-lky-growl', self.status);
+    element.textContent = self.message;
+
+    return element;
+};
+
+Growl.prototype.show = function () {
+    var self = this;
+
+    if (self.isShown) { return; }
+    self.isShown = true;
+
+    top.document.body.appendChild(self.element);
 
     setTimeout(function () {
-        div.style.top = '0px';
-        setTimeout(function () {
-            div.style.top = h;
-            setTimeout(function () {
-                top.document.body.removeChild(div);
-            }, 500);
-        }, 1500);
-    }, 0);
+        self.element.setAttribute('data-visible', '');
+    }, 1);
+};
+
+Growl.prototype.hide = function () {
+    var self = this;
+
+    if (!self.isShown) { return; }
+    self.isShown = false;
+
+    self.element.removeAttribute('data-visible');
+
+    setTimeout(function () {
+        self.element.parentNode.removeChild(self.element);
+    }, hideLength);
+};
+
+
+var growlTimeout = null;
+var currentGrowl = null;
+function showGrowl(message, status) {
+    var showDelay = 0;
+
+    if (growlTimeout) {
+        clearTimeout(growlTimeout);
+        growlTimeout = null;
+
+        currentGrowl.hide();
+        currentGrowl = null;
+
+        showDelay = hideLength;
+    }
+
+    currentGrowl = new Growl(message, status);
+
+    growlTimeout = setTimeout(function () {
+        currentGrowl.show();
+
+        growlTimeout = setTimeout(function () {
+            currentGrowl.hide();
+
+            growlTimeout = null;
+            currentGrowl = null;
+        }, showTime);
+    }, showDelay);
+}
+
+
+module.exports = function (config) {
+    showGrowl(
+        config.message || config || '',
+        config.status
+    );
 };
