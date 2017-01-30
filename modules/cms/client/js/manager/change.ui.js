@@ -68,7 +68,7 @@ ChangeUI.prototype.save = function (event) {
         .then(() => {
             growl({
                 status: 'success',
-                message: 'Change have been saved!'
+                message: 'Changes saved!'
             });
             self.uiUpdate(false);
         });
