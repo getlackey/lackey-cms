@@ -30,12 +30,12 @@ lackey.bind('lky:cms.account.forgot', 'submit', function (event, hook) {
     api.create('/account/forgot-password', data).then(function () {
         growl({
             status: 'success',
-            message: 'Link has been sent to ' + data.username
+            message: 'Your reset link has been sent to: ' + data.username
         });
     }, function () {
         growl({
             status: 'error',
-            message: 'Email not found'
+            message: 'Sorry, that user wasn\'t found!'
         });
     });
 
