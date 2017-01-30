@@ -18,32 +18,32 @@
                 </section>
                 <ul data-lky-hook="menu.items">
                     <li>
-                        <a href="">Homepage</a>
+                        <a href=""><img src="{@base}img/cms/cms/svg/ui/dashboard/homepage.svg{/base}">Homepage</a>
                     </li>
                     <li data-class="divider"></li>
                     {@acl perm="adminMenu" method="content"}
                         <li>
-                            <a href="cms/content">Content</a>
+                            <a href="cms/content"><img src="{@base}img/cms/cms/svg/ui/dashboard/content.svg{/base}">Content</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="media"}
                         <li>
-                            <a href="cms/media">Media</a>
+                            <a href="cms/media"><img src="{@base}img/cms/cms/svg/ui/dashboard/media.svg{/base}">Media</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="tags"}
                         <li>
-                            <a href="cms/taxonomy">Tags</a>
+                            <a href="cms/taxonomy"><img src="{@base}img/cms/cms/svg/ui/dashboard/tags.svg{/base}">Tags</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="users"}
                         <li>
-                            <a href="cms/user">Users</a>
+                            <a href="cms/user"><img src="{@base}img/cms/cms/svg/ui/dashboard/users.svg{/base}">Users</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="analytics"}
                         <li>
-                            <a href="cms/analytics">Analytics</a>
+                            <a href="cms/analytics"><img src="{@base}img/cms/cms/svg/ui/dashboard/analytics.svg{/base}">Analytics</a>
                         </li>
                     {/acl}
                     {@config}

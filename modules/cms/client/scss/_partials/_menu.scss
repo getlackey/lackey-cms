@@ -21,12 +21,19 @@
             display: block;
             height: $item-height;
             line-height: $item-height;
-            padding-left: $item-height;
-            text-aling: left;
+            padding-left: $item-height * 0.6;
+
             > a {
+                display: inline-block;
                 color: $color-white;
                 text-transform: uppercase;
                 text-decoration: none;
+                vertical-align: middle;
+
+                > img {
+                    margin-right: 0.75em;
+                    vertical-align: middle;
+                }
             }
             &[data-class="divider"] {
                 height: 1px;
