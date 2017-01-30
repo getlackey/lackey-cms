@@ -20,9 +20,10 @@
                     <li>
                         <a href="">Homepage</a>
                     </li>
-                    {@acl perm="adminMenu" method="users"}
+                    <li data-class="divider"></li>
+                    {@acl perm="adminMenu" method="content"}
                         <li>
-                            <a href="cms/user">Users</a>
+                            <a href="cms/content">Content</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="media"}
@@ -35,9 +36,9 @@
                             <a href="cms/taxonomy">Tags</a>
                         </li>
                     {/acl}
-                    {@acl perm="adminMenu" method="content"}
+                    {@acl perm="adminMenu" method="users"}
                         <li>
-                            <a href="cms/content">Content</a>
+                            <a href="cms/user">Users</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="analitycs"}
@@ -57,10 +58,6 @@
                             {/.}
                         {/path}
                     {/config}
-                    <li data-class="divider"></li>
-                    <li>
-                        <a href="logout">Logout</a>
-                    </li>
                 </ul>
                 <section data-lky-hook="menu.footer">
                 </section>
