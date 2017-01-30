@@ -41,7 +41,7 @@
                             <a href="cms/user">Users</a>
                         </li>
                     {/acl}
-                    {@acl perm="adminMenu" method="analitycs"}
+                    {@acl perm="adminMenu" method="analytics"}
                         <li>
                             <a href="cms/analytics">Analytics</a>
                         </li>
