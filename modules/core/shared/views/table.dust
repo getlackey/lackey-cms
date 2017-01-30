@@ -4,13 +4,15 @@
         <thead>
             <tr>
                 {#table.columns}
-                <th {?width}width="{width}"{/width} data-sort="{$idx}" data-direction="">{label}
+                {^hide}
+                    <th {?width}width="{width}"{/width} data-sort="{$idx}" data-col="{name}" data-direction="">{label}
                         {?help}
                             <div class="help-tip">
                                 <p>{help}</p>
                             </div>
                         {/help}
                     </th>
+                {/hide}
                 {/table.columns}
                 {?actions}<th class="actions">Actions</th>{/actions}
             </tr>

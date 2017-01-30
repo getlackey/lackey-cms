@@ -1,6 +1,7 @@
 {#table.rows}
 <tr {?rowAction.href}data-lky-hook="tableRowLink" data-lky-href="{rowAction.href}"{/rowAction.href}>
     {#columns}
+    {^hide}
     <td title="{>"cms/core/table-value" value=value/}">
         {@is key=value type="array"}
             {#value}
@@ -13,6 +14,7 @@
             {>"cms/core/table-value" value=value/}
         {/is}
     </td>
+    {/hide}
     {/columns}
     {?actions}
     <td>

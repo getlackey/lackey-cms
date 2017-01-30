@@ -615,7 +615,6 @@ module.exports = Database
                                 if (opt.offset && !opt.nolimit) {
                                     page = Math.floor(opt.offset / perPage) - 1;
                                 }
-                                console.log(page, perPage);
                                 table.paging = {
                                     total: count,
                                     pages: Math.ceil(count / perPage),
@@ -733,7 +732,8 @@ module.exports = Database
                                                 }
 
                                                 formatted.columns.push({
-                                                    value: value
+                                                    value: value,
+                                                    hide: columns[column].hide || false
                                                 });
                                             } else {
                                                 formatted.columns.push({});

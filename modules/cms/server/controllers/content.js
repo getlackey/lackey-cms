@@ -63,6 +63,11 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     updatedAt: {
                         label: 'Last Modified',
                         date: true
+                    },
+                    author: {
+                        label: 'Author',
+                        hide: true,
+                        parse: 'return arguments[0] ? arguments[0].name : \'\''
                     }
                 });
             }

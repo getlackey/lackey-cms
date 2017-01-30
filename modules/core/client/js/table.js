@@ -1,5 +1,5 @@
-/* jslint node:true, esnext:true, es6:true, browser:true */
-/* eslint default-case:0 no-alert:0 */
+/* jslint node:true, esnext:true, es6:true, browser:true, loopfunc:true*/
+/* eslint default-case:0 no-alert:0*/
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -41,17 +41,80 @@ class Table {
         this._paging = JSON.parse(element.getAttribute('data-lky-paging'));
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
+        this._advFilters = document.querySelectorAll('[data-filter]');
+        this._selectFills = document.querySelectorAll('[data-selectfill]');
         this.pageNumber = 0;
         this.sorting();
         this.data = {};
         this.perPage = 10;
         this.filter = '';
         this.ready = false;
+        this.advFilters = [];
+        this.colCount = element.querySelectorAll('th').length;
+        this.advFilters.add = function (filter) {
+            var added = false;
+            this.forEach((advFilter) => {
+                if (advFilter.key === filter.key && filter.operator === 'equal') {
+                    advFilter.value.push(filter.value);
+                    added = true;
+                } else if (advFilter.key === filter.key && advFilter.operator === filter.operator) {
+                    advFilter.value = filter.value;
+                    added = true;
+                }
+            });
+            if (!added) {
+                this.push({
+                    key: filter.key,
+                    operator: filter.operator,
+                    value: (filter.operator === 'equal') ? [filter.value] : filter.value
+                });
+            }
+        };
+        this.advFilters.remove = function (filter) {
+            this.forEach((advFilter, index, object) => {
+                if (advFilter.key === filter.key && filter.operator === 'equal' && advFilter.value.length > 1) {
+                    advFilter.value.splice(advFilter.value.indexOf(filter.value), 1);
+                } else if (advFilter.key === filter.key && advFilter.operator === filter.operator) {
+                    object.splice(index, 1);
+                }
+            });
+            self.pageq();
+        };
+        this.cols = {};
+        this.operators = {
+            equal: (a, b) => {
+                if (Array.isArray(b)) {
+                    return b.indexOf(a) > -1;
+                }
+                return a === b;
+            },
+            greater: (a, b) => {
+                return a > b;
+            },
+            lower: (a, b) => {
+                return a < b;
+            },
+            like: (a, b) => {
+                return a.toLowerCase().indexOf(b.toLowerCase()) > -1;
+            }
+        };
 
+        for(var i = 0; i < self._selectFills.length; i += 1) {
+            self._selectFills[i].addOption = function (option, val) {
+                var opt = document.createElement('option');
+                opt.value = val || option;
+                opt.innerHTML = option;
+                this.appendChild(opt);
+            };
+            self._selectFills[i]._original = self._selectFills[i].innerHTML;
+        }
+
+        this.setupFilters();
         let waiting = null;
 
+        this.footerWidth();
         this.initialDraw()
-            .then(function () {
+            .then(() => {
                 self._search
                     .addEventListener('keyup', () => {
                         /* istanbul ignore next */
@@ -116,10 +179,57 @@ class Table {
         });
     }
 
+    footerWidth() {
+        document.querySelector('td.pagination').setAttribute('colspan', this.colCount);
+    }
+
+    setupFilters() {
+        var self = this;
+        for(var i = 0; i < self._advFilters.length; i += 1) {
+            self._advFilters[i].addEventListener('change', function () {
+                var actions = this.dataset.filter.split(':');
+                self.advFilters.add({
+                    key: actions[0],
+                    operator: actions[1],
+                    value: this.value
+                });
+                if (this.nodeName === 'SELECT') {
+                    self.filterRemoveBtn(this, {
+                        key: actions[0],
+                        operator: actions[1],
+                        value: this.value
+                    });
+                    this.querySelector('[value="' + this.value + '"]').disabled = true;
+                    this.value = '';
+                }
+                self.pageq();
+            });
+        }
+    }
+
+    filterRemoveBtn(select, filter) {
+        var self = this,
+            rmBtn = document.createElement('button');
+        rmBtn.dataset.removefilter = filter.key + ':' + filter.operator + ':' + filter.value;
+        rmBtn.innerHTML = filter.value + ' <span>x</span>';
+        rmBtn.addEventListener('click', function () {
+            var filterParts = this.dataset.removefilter.split(':');
+
+            self.advFilters.remove({
+                key: filterParts[0],
+                operator: filterParts[1],
+                value: filterParts[2]
+            });
+            this.parentElement.removeChild(this);
+            select.querySelector('[value="' + filterParts[2] + '"]').disabled = false;
+        });
+        select.parentElement.appendChild(rmBtn);
+    }
+
     rowActions() {
         var rows = lackey.select('[data-lky-hook="tableRowLink"]');
 
-        rows.forEach(function (row) {
+        rows.forEach((row) => {
             row.addEventListener('click', () => {
                 window.location = row.dataset.lkyHref;
             });
@@ -130,7 +240,7 @@ class Table {
         var self = this,
             rows = this.data.rows;
 
-        self.data.rows = rows.filter(function (row) {
+        self.data.rows = rows.filter((row) => {
             return row.id !== id;
         });
         self.pageq();
@@ -172,6 +282,7 @@ class Table {
             })
             .then((response) => {
                 self.data = response;
+                self.getColumns();
                 self.pageq();
             });
     }
@@ -197,7 +308,7 @@ class Table {
             }
         }
 
-        if(self.filter && self.filter.length > 2) {
+        if (self.filter && self.filter.length > 2) {
             cloneData = cloneData.filter(function (item) {
                 var found = false;
                 item.columns.forEach(function (col) {
@@ -214,6 +325,17 @@ class Table {
             });
         }
 
+        if (this.advFilters.length > 0) {
+            this.advFilters.forEach((filter) => {
+                cloneData = cloneData.filter((item) => {
+                    if (item.columns[self.cols[filter.key]].value && item.columns[self.cols[filter.key]].value.date) {
+                        return self.operators[filter.operator](new Date(item.columns[self.cols[filter.key]].value.date), new Date(filter.value));
+                    } else if (item.columns[self.cols[filter.key]].value){
+                        return self.operators[filter.operator](item.columns[self.cols[filter.key]].value, filter.value);
+                    }
+                });
+            });
+        }
         this.data.paging.total = cloneData.length;
         this.data.paging.actions = self._paging.actions;
         this.data.paging.perPage = self.perPage;
@@ -324,7 +446,7 @@ class Table {
             rows.forEach((row) => {
                 body.appendChild(row);
                 self.paging(row);
-
+                self.footerWidth();
             });
         });
     }
@@ -386,7 +508,7 @@ class Table {
 
     setProps(options) {
         var self = this;
-        Object.keys(options).forEach(function (property) {
+        Object.keys(options).forEach((property) => {
             if (property === 'page') {
                 self.pageNumber = parseInt(options[property]) - 1;
             } else if (property === 'q') {
@@ -396,6 +518,51 @@ class Table {
                 self.perPage = options[property];
             }
         });
+    }
+
+    selectFiller(data) {
+        var self = this,
+            i,
+            getOptions = (options, column) => {
+                data.forEach((row) => {
+                    if (row.columns[self.cols[column]].value && row.columns[self.cols[column]].value.date) {
+                        var date = new Date(row.columns[self.cols[column]].value.date).toDateString();
+                        if (options.indexOf(date) < 0) {
+                            options.push(date);
+                        }
+                    } else if (row.columns[self.cols[column]].value && options.indexOf(row.columns[self.cols[column]].value) < 0) {
+                        options.push(row.columns[self.cols[column]].value);
+                    }
+                });
+                return options;
+            },
+            addOptions = (options, element) => {
+                options.sort().forEach((option) => {
+                    element.addOption(option);
+                });
+            };
+
+        for(i = 0; i < self._selectFills.length; i += 1) {
+            var element = self._selectFills[i],
+                column = element.dataset.selectfill,
+                options = [];
+
+            element.innerHTML = element._original;
+            options = getOptions(options, column);
+            addOptions(options.sort(), element);
+        }
+    }
+
+    getColumns() {
+        var self = this,
+            columns = {},
+            i = 0;
+        self.data.columns.forEach((column) => {
+            columns[column.name] = i;
+            i += 1;
+        });
+        self.cols = columns;
+        self.selectFiller(self.data.rows.slice());
     }
 
     static init() {
