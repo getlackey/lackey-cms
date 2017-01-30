@@ -66,8 +66,7 @@ class Gallery extends Emitter {
                 lackey.bind('[data-lky-hook="settings.back"]', 'click', () => {
                     self.resolve(null);
                 }, self.node);
-
-                if (!self.options.media || !self.options.media.id) {
+                if (!self.options.media) {
                     self.node.setAttribute('data-lky-edit', 'gallery');
                     self.node.setAttribute('data-lky-has-media', 'false');
                 } else {

@@ -631,12 +631,11 @@ class StructureUI extends Emitter {
         this.collapse();
         let self = this,
             route = hook.getAttribute('data-value');
-
         return this.options.stack
             .inspectMedia(route)
             .then(rt => {
                 if (rt !== null) {
-                    settings[hook.getAttribute('data-name')] = rt.source;
+                    settings[hook.getAttribute('data-name')] = rt.source || '';
                     self.emit('changed', settings);
                     self.drawMeta();
                 }
