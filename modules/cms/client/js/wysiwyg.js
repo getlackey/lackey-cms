@@ -274,6 +274,10 @@ class Wysiwyg {
 
         self._lock = true;
         let editor = new MediumEditor(this._element, options);
+
+        // allows use of section for editing to function properly
+        MediumEditor.util.blockContainerElementNames.splice(MediumEditor.util.blockContainerElementNames.indexOf('section'), 1);
+
         editor.subscribe('editableKeydownEnter', function (event) {
             if (event.shiftKey) {
                 //var node = MediumEditor.selection.getSelectionStart(editor.options.ownerDocument);
