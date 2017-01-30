@@ -11,7 +11,7 @@
             <li data-class="divider"></li>
 
             <li data-lky-hook="settings.open.meta" data-lky-open="meta">
-                <a href="#">Page Settings</a>
+                <a href="#">Settings</a>
             </li>
             <li data-lky-hook="settings.open.dimensions" data-lky-open="dimensions">
                 <a href="#">Views</a>
