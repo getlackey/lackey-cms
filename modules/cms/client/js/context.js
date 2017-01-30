@@ -28,7 +28,7 @@ lackey.bind('[data-lky-api]', 'click', (event, hook) => {
     switch (apiAction[0]) {
     case 'DELETE':
         {
-            if (confirm('Are you sure? There is no undo')) {
+            if (confirm('Are you sure? This action cannot be undone.')) {
                 api
                     .delete(apiAction[1])
                     .then(() => {
