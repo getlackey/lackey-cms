@@ -1,5 +1,11 @@
 <div data-lky-hook="header.user">
-    <figure><img src="{admin.image.source|base}"/></figure>
+    <figure>
+        {?admin.image.source}
+            <img src="{admin.image.source|base}"/>
+        {:else}
+            <img src="{@base}img/cms/cms/svg/ui/account.svg{/base}"/>
+        {/admin.image.source}
+    </figure>
     <span>{admin.name}</span>
     <nav>
         <ul>
