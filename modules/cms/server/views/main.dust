@@ -14,7 +14,7 @@
         {^iframe}
             <aside data-lky-hook="menu">
                 <section data-lky-hook="menu.logo">
-                    Lackey.io
+                    Dashboard
                 </section>
                 <ul data-lky-hook="menu.items">
                     <li>
