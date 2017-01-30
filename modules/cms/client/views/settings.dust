@@ -25,10 +25,6 @@
             <li data-lky-hook="settings.open.diff" data-lky-open="diff">
                 <a href="#">Pending Changes</a>
             </li>
-
-            <li data-lky-hook="settings.open.cms.create">
-                <a href="cms/content/create">New Page</a>
-            </li>
         </ul>
     </section>
     <section data-lky-hook="settings.meta">
