@@ -1,20 +1,21 @@
-<!--
-
-<select data-selectfill="template" data-filter="template:equal">
-    <option value="">-- Select --</option>
-</select>
-
-<select data-selectfill="state" data-filter="state:equal">
-    <option value="">-- Select --</option>
-</select>
-
-<select data-selectfill="author" data-filter="author:equal">
-    <option value="">-- Select --</option>
-</select>
+<div>
+    <select data-selectfill="template" data-filter="template:equal">
+        <option value="">-- Select --</option>
+    </select>
+</div>
+<div>
+    <select data-selectfill="state" data-filter="state:equal">
+        <option value="">-- Select --</option>
+    </select>
+</div>
+<div>
+    <select data-selectfill="author" data-filter="author:equal">
+        <option value="">-- Select --</option>
+    </select>
+</div>
 
 <input type="date" data-filter="createdAt:greater"/>
 <input type="date" data-filter="createdAt:lower"/>
 
 <input type="date" data-filter="updatedAt:greater"/>
 <input type="date" data-filter="updatedAt:lower"/>
--->
