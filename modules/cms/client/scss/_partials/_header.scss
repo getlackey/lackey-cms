@@ -23,6 +23,15 @@
                 color: $color-washed;
             }
             > img {
+                margin-right: 0.75em;
+
+                vertical-align: middle;
+            }
+        }
+        [data-lky-hook="header.settings"] {
+            > img {
+                margin: 0;
+
                 height: 40px;
             }
         }
