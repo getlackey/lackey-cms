@@ -32,7 +32,7 @@
                         display: block;
                         height: $item-height;
                         line-height: $item-height;
-                        padding-left: $item-height;
+                        padding-left: $item-height * 0.6;
                         text-aling: left;
                         cursor: pointer;
 
@@ -43,6 +43,12 @@
                             pointer-events: none;
                             text-transform: uppercase;
                             text-decoration: none;
+                            vertical-align: middle;
+
+                            > img {
+                                margin-right: 0.75em;
+                                vertical-align: middle;
+                            }
                         }
 
                         &[data-class=divider] {

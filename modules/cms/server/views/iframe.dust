@@ -18,7 +18,7 @@
         {@acl perm="dimensionView" method="viewLanguage"}{:else}viewLanguage,{/acl}
         {@acl perm="dimensionView" method="usedDimensions"}{:else}usedDimensions,{/acl}
     ">
-        <img src="{@base}img/cms/cms/svg/cog-white.svg{/base}"/>
+        <img src="{@base}img/cms/cms/svg/ui/settings/settings.svg{/base}"/>
     </button>
 
     <a href="{@base}/cms/content/create{/base}" data-lky-hook="header.create"><span>New</span></a>

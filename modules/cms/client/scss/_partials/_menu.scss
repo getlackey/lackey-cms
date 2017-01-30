@@ -6,10 +6,16 @@
     [data-lky-hook="menu.logo"] {
         height: $header-height;
         line-height: $header-height;
+        padding-left: $item-height * 0.6;
         width: 100%;
         background-color: $color-background-highlight;
         vertical-align: middle;
-        text-align: center;
+        text-transform: uppercase;
+
+        > img {
+            margin-right: 0.75em;
+            vertical-align: middle;
+        }
     }
     [data-lky-hook="menu.items"] {
         width: 100%;

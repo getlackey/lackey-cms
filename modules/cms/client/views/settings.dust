@@ -5,25 +5,25 @@
         <div data-lky-hook="settings.presentation"></div>
         <ul>
             <li data-lky-hook="settings.open.cms">
-                <a href="cms/content">Dashboard</a>
+                <a href="cms/content"><img src="/img/cms/cms/svg/ui/settings/dashboard.svg">Dashboard</a>
             </li>
 
             <li data-class="divider"></li>
 
             <li data-lky-hook="settings.open.meta" data-lky-open="meta">
-                <a href="#">Settings</a>
+                <a href="#"><img src="/img/cms/cms/svg/ui/settings/settings.svg">Settings</a>
             </li>
             <li data-lky-hook="settings.open.dimensions" data-lky-open="dimensions">
-                <a href="#">Views</a>
+                <a href="#"><img src="/img/cms/cms/svg/ui/settings/views.svg">Views &amp; Language</a>
             </li>
             <li data-lky-hook="settings.open.taxonomy" data-lky-open="taxonomy">
-                <a href="#">Tags &amp; Privacy</a>
+                <a href="#"><img src="/img/cms/cms/svg/ui/settings/tags.svg">Tags &amp; Privacy</a>
             </li>
             <li data-lky-hook="settings.open.blocks" data-lky-open="blocks">
-                <a href="#">Blocks</a>
+                <a href="#"><img src="/img/cms/cms/svg/ui/settings/blocks.svg">Blocks</a>
             </li>
             <li data-lky-hook="settings.open.diff" data-lky-open="diff">
-                <a href="#">Pending Changes</a>
+                <a href="#"><img src="/img/cms/cms/svg/ui/settings/changes.svg">Pending Changes</a>
             </li>
         </ul>
     </section>
