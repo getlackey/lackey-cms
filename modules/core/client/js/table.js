@@ -211,7 +211,7 @@ class Table {
         var self = this,
             rmBtn = document.createElement('button');
         rmBtn.dataset.removefilter = filter.key + ':' + filter.operator + ':' + filter.value;
-        rmBtn.innerHTML = filter.value + ' <span>x</span>';
+        rmBtn.innerHTML = filter.value;
         rmBtn.addEventListener('click', function () {
             var filterParts = this.dataset.removefilter.split(':');
 
