@@ -30,8 +30,8 @@
         </div>
     </div>
 
-    <div class="col">
-        <div>
+    <div class="col date">
+        <div class="row">
             <label>Date Created</label>
             <label class="small" for="create-from">From:</label>
             <input type="date" name="create-from" data-filter="createdAt:greater"/>
@@ -39,7 +39,7 @@
             <input type="date" name="create-to" data-filter="createdAt:lower"/>
         </div>
 
-        <div>
+        <div class="row">
             <label>Last Modified</label>
             <label class="small" for="modif-from">From:</label>
             <input type="date" name="modif-from" data-filter="updatedAt:greater"/>

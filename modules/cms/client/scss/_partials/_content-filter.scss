@@ -29,6 +29,14 @@
 
     div.col {
        width: 50%;
+
+        &.date {
+            .row {
+                margin-bottom: 0.8rem;
+
+                &:last-of-type { margin:0; }
+            }
+        }
     }
 
     div.tag-container {
@@ -43,7 +51,7 @@
         align-self: center;
 
         &.small {
-            font-size: 0.5rem;
+            font-size: 0.6rem;
             width: auto;
             margin-right: 0.2rem;
         }
@@ -56,7 +64,7 @@
     select {
         appearance: none;
         width: 11rem;
-        height: 2rem;
+        height: 1.6rem;
         border-radius: 1px;
         border: 1px solid #b9b9b9;
         padding: 0.2rem 0.5rem;
@@ -99,13 +107,13 @@
     }
 
     input[type=date] {
-        width: 5rem;
+        width: 7rem;
         appearance: none;
         border-radius: 1px;
         border: 1px solid #b9b9b9;
         font-family: 'Roboto';
         font-size: 0.6rem;
-        padding: 0.1rem;
+        padding: 0.1rem 0.1rem 0.1rem 0.2rem;
 
         &:first-of-type {
             margin-right: 0.3rem;
