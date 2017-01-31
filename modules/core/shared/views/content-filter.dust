@@ -1,7 +1,7 @@
 <section class="content-filter">
     <button class="reset">Reset</button>
-    <div class="left">
-        <div>
+    <div class="col">
+        <div class="row">
             <label for="state">Status</label>
             <select name="state" data-selectfill="state" data-filter="state:equal">
                 <option value="">-- Select --</option>
@@ -10,7 +10,7 @@
 
             </div>
         </div>
-        <div>
+        <div class="row">
             <label for="template">Template</label>
             <select name="template" data-selectfill="template" data-filter="template:equal">
                 <option value="">-- Select --</option>
@@ -19,7 +19,7 @@
 
             </div>
         </div>
-        <div>
+        <div class="row">
             <label for="author">Created By</label>
             <select name="author" data-selectfill="author" data-filter="author:equal">
                 <option value="">-- Select --</option>
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="right">
+    <div class="col">
         <div>
             <label>Date Created</label>
             <label class="small" for="create-from">From:</label>

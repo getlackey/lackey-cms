@@ -16,28 +16,31 @@
         right: 0.1rem;
     }
 
-    div.left, div.right {
+    div.col {
         display: inline;
 
-        > div {
+        > div.row {
             margin-bottom: 0.5rem;
+            display: flex;
 
             &:last-of-type { margin: 0; }
         }
     }
 
-    div.left {
+    div.col {
        width: 50%;
     }
 
-    div.right {
-       width: 50%;
+    div.tag-container {
+        button {
+            display: block;
+        }
     }
 
     label {
-        display: inline-block;
         width: 7rem;
         color: #6c6c6c;
+        align-self: center;
 
         &.small {
             font-size: 0.5rem;
@@ -53,6 +56,7 @@
     select {
         appearance: none;
         width: 11rem;
+        height: 2rem;
         border-radius: 1px;
         border: 1px solid #b9b9b9;
         padding: 0.2rem 0.5rem;
@@ -61,6 +65,7 @@
         background-color: #ffffff;
         background-repeat: no-repeat;
         background-position: center right;
+        align-self: center;
     }
 
     button {
@@ -70,15 +75,11 @@
         border-radius: 3px;
         color: #ffffff;
         padding: 0.2rem 0.5rem;
-        margin-left: 0.5rem;
+        margin: 0 0 0.5rem 0.5rem;
         cursor: pointer;
         font-size: 0.6rem;
 
         &:focus { outline:0; }
-
-        &:first-of-type {
-            margin-left: 1rem;
-        }
 
         &::after {
             font-family: Arial;
