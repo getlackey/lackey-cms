@@ -19,6 +19,7 @@
 const
     lackey = require('core/client/js'),
     api = require('core/client/js/api'),
+    growl = require('cms/client/js/growl'),
     Media = require('cms/client/js/media'),
     modal = require('core/client/js/modal'),
     MediaModalController = require('cms/client/js/manager/media'),
@@ -29,6 +30,7 @@ userDrop();
 
 lackey
     .select('[data-lky-media]').forEach((element) => {
+        console.log(element);
         let media = new Media(element);
         media.selected((mediaObject) => {
             return modal
@@ -104,15 +106,26 @@ lackey.bind('lky:password', 'submit', (event, hook) => {
     event.cancelBubble = true;
     let data = lackey.form(hook);
     if (data.newPassword !== data.newPassword2 && data.newPassword2 !== undefined) {
-        alert('Passwords doesn\'t match');
+        growl({
+            status: 'error',
+            message: 'Passwords don\'t match'
+        });
         return false;
     }
     if (!validPass(data.newPassword)) {
-        alert('Password has to be minimum 6 characters long, contain at least one letter, one digit and one special character');
+        growl({
+            status: 'error',
+            message: 'Password has to be minimum 6 characters long, contain at least one letter, one digit and one special character'
+        });
         return false;
     }
     api.create('/account/password', {
         password: data.newPassword
+    }).then(() => {
+        growl({
+            status: 'success',
+            message: 'Password changed successfully'
+        });
     });
     return false;
 });

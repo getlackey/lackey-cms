@@ -63,7 +63,7 @@ class Media {
                   }
                   this.attributes = JSON.parse(HTMLElement.getAttribute('data-lky-attributes') || '{}');
                   if (HTMLElement.hasAttribute('data-lky-media')) {
-                        this.set(JSON.parse(HTMLElement.getAttribute('data-lky-media')));
+                        this.set(JSON.parse(HTMLElement.getAttribute('data-lky-media') || '{}'));
                   }
 
                   if (HTMLElement.hasAttribute('markdown-type')) {

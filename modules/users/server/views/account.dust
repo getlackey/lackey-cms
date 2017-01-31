@@ -18,9 +18,7 @@
                 </label>
                 <label>
                     <span>Image</span>
-                    <img src="{user.image.source}"
-                         data-lky-hook="avatar"
-                         data-lky-media="{admin.image|js}"
+                    <img src="{user.image.source}" data-lky-hook="avatar" data-lky-media="{admin.image|js}"
                          />
                 </label>
                 <button class="btn btn-block btn-primary">
