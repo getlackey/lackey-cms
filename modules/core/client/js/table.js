@@ -223,7 +223,7 @@ class Table {
             this.parentElement.removeChild(this);
             select.querySelector('[value="' + filterParts[2] + '"]').disabled = false;
         });
-        select.parentElement.appendChild(rmBtn);
+        select.parentElement.querySelector('.tag-container').appendChild(rmBtn);
     }
 
     rowActions() {
