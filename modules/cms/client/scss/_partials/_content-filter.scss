@@ -86,6 +86,13 @@
             font-size: 0.8rem;
             margin-left: 1rem;
         }
+
+        &.reset {
+            &::after {
+                content: '';
+                margin: 0;
+            }
+        }
     }
 
     input[type=date] {
