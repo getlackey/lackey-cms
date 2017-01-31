@@ -108,7 +108,19 @@
             &.pagination {
                 color: #6c6c6c;
                 text-align: right;
-                select {}
+                select {
+                    width: 3rem;
+                    appearance: none;
+                    height: 1.6rem;
+                    border-radius: 1px;
+                    border: none;
+                    padding: 0.2rem 0.5rem;
+                    color: #555454;
+                    background-image: url(../../../img/cms/cms/blocks/select-arrow.png);
+                    background-color: #ffffff;
+                    background-repeat: no-repeat;
+                    background-position: center right;
+                }
                 a {
                     font-size: 24px;
                     text-decoration: none;
