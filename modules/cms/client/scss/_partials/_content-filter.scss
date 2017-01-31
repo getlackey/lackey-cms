@@ -91,7 +91,8 @@
 
         &::after {
             font-family: Arial;
-            content: "✖";
+            content: "×";
+            font-weight: bold;
             font-size: 0.8rem;
             margin-left: 1rem;
         }

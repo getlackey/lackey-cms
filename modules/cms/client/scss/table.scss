@@ -85,12 +85,14 @@
             }
             &[data-direction="desc"] {
                 &:after {
+                    font-family: 'sans-serif';
                     content: "\2193";
                     margin-left: 15px;
                 }
             }
             &[data-direction="asc"] {
                 &:after {
+                    font-family: 'sans-serif';
                     content: "\2191";
                     margin-left: 15px;
                 }
