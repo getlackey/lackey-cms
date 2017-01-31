@@ -64,6 +64,12 @@ class UserController extends CRUD {
         });
     }
 
+    static get filterOptions() {
+        return this._overriden('filterOptions', {
+            template: 'user-filter'
+        });
+    }
+
     /**
      * @override
      * @see lackey-cms/modules/core/server/controllers/CrudInjectionController#delete

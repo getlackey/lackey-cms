@@ -89,6 +89,12 @@ module.exports = SUtils
                 });
             }
 
+            static get filterOptions() {
+                return this._overriden('filterOptions', {
+                    template: 'media-filter'
+                });
+            }
+
             static create(req, res) {
                 if (req.body.source) {
                     return Model

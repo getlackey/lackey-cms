@@ -1,0 +1,17 @@
+<section class="content-filter">
+    <button class="reset">Reset</button>
+    <div class="col">
+        <div class="row">
+            <label for="state">Type</label>
+            <select name="state" data-selectfill="type" data-filter="type:equal">
+                <option value="">-- Select --</option>
+            </select>
+            <div class="tag-container">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col date">
+    </div>
+</section>

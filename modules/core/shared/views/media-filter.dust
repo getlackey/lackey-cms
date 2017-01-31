@@ -1,0 +1,24 @@
+<section class="content-filter">
+    <button class="reset">Reset</button>
+    <div class="col">
+        <div class="row">
+            <label for="state">Type</label>
+            <select name="state" data-selectfill="mime" data-filter="mime:equal">
+                <option value="">-- Select --</option>
+            </select>
+            <div class="tag-container">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col date">
+        <div class="row">
+            <label>Date Created</label>
+            <label class="small" for="create-from">From:</label>
+            <input type="date" name="create-from" data-filter="createdAt:greater"/>
+            <label class="small" for="create-to">To:</label>
+            <input type="date" name="create-to" data-filter="createdAt:lower"/>
+        </div>
+    </div>
+</section>

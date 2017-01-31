@@ -58,6 +58,12 @@ module.exports = SUtils
                 });
             }
 
+            static get filterOptions() {
+                return this._overriden('filterOptions', {
+                    template: 'tag-filter'
+                });
+            }
+
             static details(req, res) {
                 Model
                     .findById(req.params.taxonomy_id)
