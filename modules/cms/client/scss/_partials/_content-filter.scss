@@ -57,6 +57,10 @@
         border: 1px solid #b9b9b9;
         padding: 0.2rem 0.5rem;
         color: #555454;
+        background-image: url(../../../img/cms/cms/blocks/select-arrow.png);
+        background-color: #ffffff;
+        background-repeat: no-repeat;
+        background-position: right center;
     }
 
     button {
@@ -76,7 +80,10 @@
             margin-left: 1rem;
         }
 
-        span {
+        &::after {
+            font-family: Arial;
+            content: "✖";
+            font-size: 0.8rem;
             margin-left: 1rem;
         }
     }
@@ -87,6 +94,7 @@
         border-radius: 1px;
         border: 1px solid #b9b9b9;
         font-family: 'Roboto';
+        font-size: 0.6rem;
         padding: 0.1rem;
 
         &:first-of-type {
