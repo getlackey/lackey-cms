@@ -2,7 +2,7 @@
 @import "_content-gallery";
 @import "_partials/_content-filter";
 .table-wrapper {
-    width: 100%;
+    margin: 0 2rem;
     overflow-x: auto;
 }
 
@@ -10,7 +10,7 @@
     overflow-y: auto;
     height: calc(100% - #{$header-height});
     > h2 {
-        padding: 68px 3% 20px;
+        padding: 68px 2rem 20px;
         text-transform: capitalize;
     }
     > [data-lky-hook="table.add"],
@@ -58,7 +58,7 @@
         transition: opacity $speed;
         border-spacing: 0px;
         border-collapse: collapse;
-        width: 95%;
+        width: 100%;
         table-layout: fixed;
         //border: 1px solid #00CBFE;
         font-size: $table-font-size;
