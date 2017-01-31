@@ -89,6 +89,8 @@
         }
 
         &.reset {
+            margin:0;
+
             &::after {
                 content: '';
                 margin: 0;
