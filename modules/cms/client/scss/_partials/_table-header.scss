@@ -1,1 +1,13 @@
-/* FOR STV */
+section.table-header {
+    display: flex;
+    flex-flow: wrap;
+    flex-wrap: wrap;
+
+    section.content-filter {
+        flex: 1 1 100%;
+    }
+
+    .table-header {
+        flex: 1 1 100%;
+    }
+}

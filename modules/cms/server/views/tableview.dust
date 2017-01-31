@@ -1,9 +1,9 @@
 {>"cms/cms/main"/}
 
 {<body}
-<section data-lky-component="table">
-    <input data-lky-hook="table.filter" type="search" placeholder="Search"/>
-    {?create}<a  data-lky-btn data-lky-hook="table.add" href="{create}">Create</a>{/create}
+<section data-lky-component="table" class="table-header">
+    <h2>{title}</h2>
+    {?create}<a data-lky-btn data-lky-hook="table.add" href="{create}">Create</a>{/create}
     {#tableActions}
         {?href}
             <a data-lky-btn class="tableAction" href="{href}">
@@ -27,7 +27,7 @@
             </button>
         {/href}
     {/tableActions}
-    <h2>{title}</h2>
+    <input data-lky-hook="table.filter" type="search" placeholder="Search"/>
     <a href="#" class="overflow"><img src="img/cms/cms/svg/overflow.svg" /></a>
 
     {! FILTER OPTIONS !}
