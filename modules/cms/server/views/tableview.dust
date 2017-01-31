@@ -14,23 +14,28 @@
                 {/icon}
             </a>
         {:else}
-            {?api}
-                <button data-lky-api="{api}">
+        {?api}
+            <button data-lky-api="{api}">
+        {:else}
+            <button data-lky-hook="{hook}" data-lky-id="{id}">
+        {/api}
+            {?icon}
+                <img src="{icon}"/>
             {:else}
-                <button data-lky-hook="{hook}" data-lky-id="{id}">
-            {/api}
-                {?icon}
-                    <img src="{icon}"/>
-                {:else}
-                    {label}
-                {/icon}
-                    </button>
+                {label}
+            {/icon}
+            </button>
         {/href}
     {/tableActions}
     <h2>{title}</h2>
+    <a href="#" class="overflow"><img src="img/cms/cms/svg/overflow.svg" /></a>
+
+    {! FILTER OPTIONS !}
     {?filterOptions}
         {>"cms/core/{filterOptions.template}"/}
     {/filterOptions}
+
+    {! CONTENT TABLE !}
     {>"cms/core/table" table=data.table/}
 </section>
 {/body}
