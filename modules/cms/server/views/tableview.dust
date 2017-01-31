@@ -27,7 +27,6 @@
                     </button>
         {/href}
     {/tableActions}
-    <!--<a class="tableAction" href="{route|base}.xlsx">Export</a>-->
     <h2>{title}</h2>
     {?filterOptions}
         {>"cms/core/{filterOptions.template}"/}
