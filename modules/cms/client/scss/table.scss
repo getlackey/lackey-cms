@@ -2,6 +2,7 @@
 @import "_content-gallery";
 @import "_partials/_content-filter";
 @import "_partials/_table-header";
+
 .table-wrapper {
     margin: 0 2rem;
     overflow-x: auto;
@@ -9,28 +10,13 @@
 
 [data-lky-component="table"] {
     overflow-y: auto;
-    height: calc(100% - #{$header-height});
+
     > h2 {
-        padding: 68px 2rem 20px;
+        padding: 0 0 0 2rem;
         text-transform: capitalize;
     }
-    > [data-lky-hook="table.add"],
-    .tableAction {
-        float: right;
-        margin: 68px 5px 0px 0px;
-    }
-    > input[type="search"] {
-        float: right;
-        margin: 68px 150px 0px 0px;
-        border: 1px solid $color-background-highlight;
-        color: $color-light-gray;
-        border-radius: 30px;
-        padding: 8px 10px;
-        width: 250px;
-    }
+
     > select {
-        float: right;
-        margin: 68px 20px 0px 0px;
         border: 1px solid $color-background-highlight;
         color: $color-light-gray;
         border-radius: 30px;
@@ -38,6 +24,7 @@
         width: 250px;
         height: 30px;
     }
+
     form > label {
         margin: 0px 150px 15px;
         display: block;
@@ -55,19 +42,32 @@
             width: auto;
         }
     }
+
+    > input[type="search"] {
+        border: 1px solid $color-background-highlight;
+        color: $color-light-gray;
+        border-radius: 30px;
+        padding: 8px 10px;
+        width: 250px;
+    }
+
+    .overflow {
+        margin: 0 2rem 0 0;
+        padding-top: 0.4rem
+    }
+
+
+    // TABLE STYLES //
+
     table {
         transition: opacity $speed;
         border-spacing: 0px;
         border-collapse: collapse;
         width: 100%;
         table-layout: fixed;
-        //border: 1px solid #00CBFE;
         font-size: $table-font-size;
         margin: 20px auto;
-        > thead {
-            //background-color: $color-background-highlight;
-            //color: white;
-        }
+
         td,
         th {
             border: none;
@@ -98,13 +98,16 @@
                 }
             }
         }
+
         td {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+
             button {
                 border: none;
             }
+
             &.pagination {
                 color: #6c6c6c;
                 text-align: right;
@@ -121,6 +124,7 @@
                     background-repeat: no-repeat;
                     background-position: center right;
                 }
+
                 a {
                     font-size: 24px;
                     text-decoration: none;
@@ -128,27 +132,24 @@
                 }
             }
         }
-        td:first-child,
-        th:first-child,
-        td:last-child,
-        th:last-child {
-            //width: 150px;
-            //padding: 0px;
-        }
+
         th.actions {
             width: 150px;
         }
+
         th {
             padding: 10px 15px 8px;
             color: #6c6c6c;
             font-weight: normal;
             text-transform: capitalize;
         }
+
         td {
             padding: 10px 15px 8px;
             color: #6c6c6c;
             font-weight: normal;
         }
+
         > tbody {
             > tr:nth-child(even) {
                 background-color: $color-lighter-yet-gray;
@@ -192,11 +193,13 @@
                     }
                 }
             }
-            $green: #00ABFC;
-            $blue: #00ABFC;
-            $red: #00ABFC;
-            $yellow: #00ABFC;
+
+            $green: $color-lackey-blue;
+            $blue: $color-lackey-blue;
+            $red: $color-lackey-blue;
+            $yellow: $color-lackey-blue;
             $white: #ffffff;
+
             // scaling... any units
             $width: 30px;
             .loader {

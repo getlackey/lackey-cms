@@ -2,6 +2,8 @@ section.table-header {
     display: flex;
     flex-flow: wrap;
     flex-wrap: wrap;
+    justify-content: space-between;
+    padding-top: 4rem;
 
     section.content-filter {
         flex: 1 1 100%;
