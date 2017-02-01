@@ -43,31 +43,31 @@ const
     buttonDefinitions = {
         anchor: {
             name: 'anchor',
-            contentDefault: '<img src="/img/cms/cms/svg/ui/editor/insert-link.svg" alt="Link" />'
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/insert-link.svg" alt="Link" />'
         },
         bold: {
             name: 'bold',
-            contentDefault: '<img src="/img/cms/cms/svg/ui/editor/format-bold.svg" alt="Bold" />'
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/format-bold.svg" alt="Bold" />'
         },
         italic: {
             name: 'italic',
-            contentDefault: '<img src="/img/cms/cms/svg/ui/editor/format-italic.svg" alt="Italic" />'
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/format-italic.svg" alt="Italic" />'
         },
         underline: {
             name: 'underline',
-            contentDefault: '<img src="/img/cms/cms/svg/ui/editor/format-underline.svg" alt="Underline" />'
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/format-underline.svg" alt="Underline" />'
         },
         quote: {
             name: 'quote',
-            contentDefault: '<img src="/img/cms/cms/svg/ui/editor/format-quote.svg" alt="Quote" />'
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/format-quote.svg" alt="Quote" />'
         },
         orderedlist: {
             name: 'orderedlist',
-            contentDefault: '<img src="/img/cms/cms/svg/ui/editor/format-list-numbered.svg" alt="Ordered List" />'
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/format-list-numbered.svg" alt="Ordered List" />'
         },
         unorderedlist: {
             name: 'unorderedlist',
-            contentDefault: '<img src="/img/cms/cms/svg/ui/editor/format-list-bulleted.svg" alt="Unordered List" />'
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/format-list-bulleted.svg" alt="Unordered List" />'
         }
     };
 
@@ -215,7 +215,7 @@ class Wysiwyg {
 
         options.extensions = {
 
-            plain: new Plain({ label: '<img src="/img/cms/cms/svg/ui/editor/format-clear.svg" alt="Remove Formatting" />' }),
+            plain: new Plain({ label: '<img src="img/cms/cms/svg/ui/editor/format-clear.svg" alt="Remove Formatting" />' }),
             markdown: new MeMarkdown({
                 toMarkdownOptions: {
                     converters: [

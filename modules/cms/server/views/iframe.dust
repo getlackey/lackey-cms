@@ -22,11 +22,11 @@
     </button>
 
     <a href="{@base}/cms/content/create{/base}" data-lky-hook="header.create">
-        <img src="/img/cms/cms/svg/ui/settings/add.svg">
+        <img src="img/cms/cms/svg/ui/settings/add.svg">
         <span>New</span>
     </a>
     <button data-lky-hook="header.blocks" data-lky-tab="blocks">
-        <img src="/img/cms/cms/svg/ui/settings/blocks.svg">
+        <img src="img/cms/cms/svg/ui/settings/blocks.svg">
         Blocks
     </button>
     {> "cms/cms/partials/user" /}
