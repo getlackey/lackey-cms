@@ -44,11 +44,39 @@
         width: 250px;
     }
 
+    .overflow-wrap {
+        position: relative;
+    }
+
     .overflow {
         margin: 0 2rem 0 0;
         padding-top: 0.5rem;
         width: 2rem;
         text-align: center;
+        display: block;
+        cursor: pointer;
+    }
+
+    .overflow-menu {
+        position: absolute;
+        top: 2.4rem ;
+        right: 2.5rem;
+        background: #ffffff;
+        z-index: 1;
+        padding: 0.5rem 0;
+        width: 10rem;
+        box-shadow: 0 7px 8px -4px rgba(0,0,0,0.2), 0 13px 19px 2px rgba(0,0,0,0.14), 0 5px 24px 4px rgba(0,0,0,0.12);
+
+        a {
+            padding: 0.8rem 1.4rem;
+            display: block;
+            color: #454545;
+            text-decoration: none;
+
+            &:hover {
+                background: #e8e8e8;
+            }
+        }
     }
 
 

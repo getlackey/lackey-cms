@@ -32,7 +32,13 @@
     </div>
     <div class="right">
         <input data-lky-hook="table.filter" type="search" placeholder="Search"/>
-        <a href="#" class="overflow"><img src="img/cms/cms/svg/overflow.svg" /></a>
+        <div class="overflow-wrap">
+            <a class="overflow"><img src="img/cms/cms/svg/overflow.svg" /></a>
+
+            <div class="overflow-menu">
+                <a class="tableAction" href="{route|base}.xlsx">Export XSLX</a>
+            </div>
+        </div>
     </div>
 
     {! FILTER OPTIONS !}
