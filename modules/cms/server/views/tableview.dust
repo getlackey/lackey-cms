@@ -36,7 +36,7 @@
             <a class="overflow"><img src="img/cms/cms/svg/overflow.svg" /></a>
 
             <div class="overflow-menu">
-                <a class="tableAction" href="{route|base}.xlsx">Export XSLX</a>
+                <a class="tableAction" href="{route|base}.xlsx">Export XLSX</a>
             </div>
         </div>
     </div>
