@@ -293,6 +293,42 @@ Manager.prototype.preview = function (variant, language) {
         });
 };
 
+Manager.prototype.showTab = function (tab) {
+    lackey.hook('header.settings').setAttribute('disabled', 'disabled');
+
+    let self = this,
+        promise;
+
+    if (self.stack.length) {
+        promise = self.stack.clear().catch(error => {
+            console.error(error);
+        });
+    } else {
+        promise = self
+            .current
+            .then(current => {
+                let structureController = new StructureUI({
+                    manager: self,
+                    type: 'content',
+                    id: current.id,
+                    context: () => Promise.resolve(self.current),
+                    stack: self.stack
+                }, self.repository);
+
+                structureController.on('changed', self.onStructureChange.bind(self));
+                return self.stack.inspectStructure(structureController, tab);
+            });
+    }
+
+    promise
+        .then(() => {
+            lackey.hook('header.settings').removeAttribute('disabled');
+        }, error => console.error(error))
+        .catch(error => {
+            console.error(error);
+        });
+}
+
 /**
  * Handler for repository changes
  * @param {RepositoryEvent} event
@@ -308,45 +344,7 @@ Manager.prototype.onChanged = function () {
 Manager.prototype.onStackChange = function () {};
 
 Manager.prototype.onViewStructure = function (event) {
-
-    lackey.hook('header.settings').setAttribute('disabled', 'disabled');
-
-    let
-        tab = event.target.getAttribute('data-lky-tab'),
-        self = this,
-        promise;
-
-    if (this.stack.length) {
-        promise = this.stack.clear().catch(error => {
-            console.error(error);
-        });
-    } else {
-        promise = this
-            .current
-
-            .then(current => {
-            let structureController = new StructureUI({
-                manager: self,
-                type: 'content',
-                id: current.id,
-                context: () => Promise.resolve(self.current),
-                stack: self.stack
-            }, this.repository);
-
-            structureController.on('changed', self.onStructureChange.bind(self));
-            return self.stack.inspectStructure(structureController, tab);
-        });
-    }
-
-    promise
-        .then(() => {
-            lackey.hook('header.settings').removeAttribute('disabled');
-        }, error => console.error(error))
-        .catch(error => {
-            console.error(error);
-        });
-
-
+    this.showTab(event.target.getAttribute('data-lky-tab'));
 };
 
 Manager.prototype.onStructureChange = function () {
