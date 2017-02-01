@@ -523,6 +523,14 @@
             transition: transform $speed, opacity $speed;
         }
 
+        [data-lky-component="settings"] ~ [data-lky-component="settings"] {
+            [data-lky-hook="settings.open.cms"],
+            [data-lky-hook="settings.open.diff"],
+            [data-lky-hook="settings.open.dimensions"] {
+                display: none;
+            }
+        }
+
         [data-lky-component="settings"] + [data-lky-component="settings"] {
             > [data-lky-hook="settings.back"] {
                 width: 50px;

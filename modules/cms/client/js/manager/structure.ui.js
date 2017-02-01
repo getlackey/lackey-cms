@@ -167,21 +167,6 @@ class StructureUI extends Emitter {
                         }
                     });
 
-                self.options.context()
-                    .then(context => {
-                        if (context.type !== 'page') {
-                            lackey.select([
-                                '[data-lky-hook="settings.open.cms"]',
-                                '[data-lky-hook="settings.open.diff"]'
-                            ], self.node)
-                            .forEach(element => {
-                               element.parentNode.removeChild(element);
-                            });
-
-                            return;
-                        }
-                    });
-
                 return self.drawMeta();
             })
             .then(() => {
@@ -322,15 +307,6 @@ class StructureUI extends Emitter {
                     }, self.node);
             })
             .then(root => {
-                if (context.type !== 'page') {
-                    lackey.select('[data-lky-hook="settings.open.dimensions"]', self.node)
-                        .forEach(element => {
-                           element.parentNode.removeChild(element);
-                        });
-
-                    return;
-                }
-
                 lackey
                     .bind('[data-lky-variant]', 'change', self.viewInVariant.bind(self), root[0]);
                 lackey
