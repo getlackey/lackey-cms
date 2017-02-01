@@ -39,12 +39,13 @@ class Media {
                   this.input.style.marginLeft = '-1000px';
             }
 
-            this.onClick = (function () {
+            this.onClick = (function (ev) {
                   let self = this;
                   this._listeners
                         .forEach(listener => {
                               listener(self);
                         });
+                  ev.stopPropagation();
             }).bind(this);
 
             if (this.node) {
