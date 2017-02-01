@@ -8,8 +8,6 @@
                 <a href="cms/content"><img src="img/cms/cms/svg/ui/settings/dashboard.svg">Dashboard</a>
             </li>
 
-            <li data-class="divider"></li>
-
             <li data-lky-hook="settings.open.meta" data-lky-open="meta">
                 <a href="#"><img src="img/cms/cms/svg/ui/settings/settings.svg">Settings</a>
             </li>

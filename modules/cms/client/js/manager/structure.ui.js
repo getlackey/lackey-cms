@@ -166,6 +166,22 @@ class StructureUI extends Emitter {
                             element.addEventListener('click', self.toggle.bind(self), true);
                         }
                     });
+
+                self.options.context()
+                    .then(context => {
+                        if (context.type !== 'page') {
+                            lackey.select([
+                                '[data-lky-hook="settings.open.cms"]',
+                                '[data-lky-hook="settings.open.diff"]'
+                            ], self.node)
+                            .forEach(element => {
+                               element.parentNode.removeChild(element);
+                            });
+
+                            return;
+                        }
+                    });
+
                 return self.drawMeta();
             })
             .then(() => {
@@ -278,6 +294,7 @@ class StructureUI extends Emitter {
 
         let
             self = this,
+            context,
             locales,
             viewAs,
             ignore = lackey.select('[data-lky-hook="header.settings"]')[0].getAttribute('data-lky-dimensionignore').split(',');
@@ -292,11 +309,12 @@ class StructureUI extends Emitter {
                 viewAs = response;
                 return self.options.context();
             })
-            .then(context => {
+            .then(ctx => {
+                context = ctx;
 
                 return Template
                     .redraw('dimensions', {
-                        context: context,
+                        context: ctx,
                         locale: self.options.manager.locale,
                         variant: self.options.manager.variant,
                         locales: locales,
@@ -304,6 +322,15 @@ class StructureUI extends Emitter {
                     }, self.node);
             })
             .then(root => {
+                if (context.type !== 'page') {
+                    lackey.select('[data-lky-hook="settings.open.dimensions"]', self.node)
+                        .forEach(element => {
+                           element.parentNode.removeChild(element);
+                        });
+
+                    return;
+                }
+
                 lackey
                     .bind('[data-lky-variant]', 'change', self.viewInVariant.bind(self), root[0]);
                 lackey
@@ -428,7 +455,6 @@ class StructureUI extends Emitter {
             })
             .then(ctx => Template.redraw(self.taxonomyNode, ctx))
             .then(() => {
-                console.log(context);
                 if ((context.template && (context.template.allowTaxonomies && context.template.allowTaxonomies.length < 1)) || !context.template) {
                    lackey.select('[data-lky-hook="settings.open.taxonomy"]', self.node).forEach(element => {
                        element.parentNode.removeChild(element);
