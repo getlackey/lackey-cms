@@ -293,11 +293,14 @@ Manager.prototype.preview = function (variant, language) {
         });
 };
 
-Manager.prototype.showTab = function (tab) {
+Manager.prototype.showTab = function (tab, callback) {
     lackey.hook('header.settings').setAttribute('disabled', 'disabled');
 
     let self = this,
+        structureController,
         promise;
+
+    callback = callback || function () {};
 
     if (self.stack.length) {
         promise = self.stack.clear().catch(error => {
@@ -307,7 +310,7 @@ Manager.prototype.showTab = function (tab) {
         promise = self
             .current
             .then(current => {
-                let structureController = new StructureUI({
+                structureController = new StructureUI({
                     manager: self,
                     type: 'content',
                     id: current.id,
@@ -316,6 +319,7 @@ Manager.prototype.showTab = function (tab) {
                 }, self.repository);
 
                 structureController.on('changed', self.onStructureChange.bind(self));
+
                 return self.stack.inspectStructure(structureController, tab);
             });
     }
@@ -323,11 +327,12 @@ Manager.prototype.showTab = function (tab) {
     promise
         .then(() => {
             lackey.hook('header.settings').removeAttribute('disabled');
+            callback(structureController);
         }, error => console.error(error))
         .catch(error => {
             console.error(error);
         });
-}
+};
 
 /**
  * Handler for repository changes
