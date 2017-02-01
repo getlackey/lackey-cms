@@ -221,7 +221,7 @@ class StructureUI extends Emitter {
                     }, self.node);
             })
             .then(root => {
-                lackey.bind('[data-lky-cog]', 'click', self.inspect.bind(self), root[0]);
+                lackey.bind('[data-lky-cog]', 'click', self.inspectEvent.bind(self), root[0]);
                 lackey.bind('[data-lky-bin]', 'click', self.removeBlock.bind(self), root[0]);
                 lackey.bind('[data-lky-add-block]', 'click', self.addBlock.bind(self), root[0]);
             });
@@ -351,11 +351,8 @@ class StructureUI extends Emitter {
         return;
     }
 
-    inspect(event, hook) {
-
+    inspect(path, templatePath) {
         let
-            path = hook.getAttribute('data-lky-path'),
-            templatePath = hook.getAttribute('data-lky-template'),
             structureController,
             context,
             data,
@@ -404,6 +401,12 @@ class StructureUI extends Emitter {
                 return this.options.stack.inspectStructure(structureController);
             });
 
+    }
+    inspectEvent(event, hook) {
+        return this.inspect(
+            hook.getAttribute('data-lky-path'),
+            hook.getAttribute('data-lky-template')
+        );
     }
 
     onRepositoryChanged() {
