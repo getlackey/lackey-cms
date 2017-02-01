@@ -1,12 +1,10 @@
 {>"cms/core/main"/}
 
 {<body}
-<div data-lky-hook="lackey" data-theme="anonymous">
-    <header>
-        <img src="img/cms/core/lackey-logo.png"/>
-        <h2>Login</h2>
-    </header>
-    <main>
+<div data-lky-hook="lackey" data-theme="anonymous" class="login">
+    <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo" />
+
+    <div class="form-wrap">
         <form method="post">
             <label for="username">
                 <span>{@translate ref="login.username" }Username{/translate}</span>
@@ -18,8 +16,11 @@
             </label>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
+    </div>
 
-        <a href="{@base}cms/account/forgot-password{/base}">Forgot Password</a>
-    </main>
+    <a class="forgot" href="{@base}cms/account/forgot-password{/base}">Forgot Password</a>
+    <span class="powered">
+        Powered by <a href="https://www.enigma-marketing.co.uk" target="_blank">Enigma Marketing Services</a>.
+    </span>
 </div>
 {/body}

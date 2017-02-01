@@ -1,1 +1,58 @@
 /* HERE STV */
+
+div.login {
+    background: $color-background-accent;
+    text-align: center;
+    padding: 16rem 0;
+    position: relative;
+
+    img.logo {
+        margin-bottom: 3rem;
+    }
+
+    .form-wrap {
+        width: 21.5625rem;
+        margin: 0 auto;
+
+        form {
+            button[type=submit] {
+                display: block;
+                margin: 0 auto;
+                appearance: none;
+                background: $color-background-highlight;
+                border: 0;
+                text-transform: uppercase;
+                color: #ffffff;
+                width: 100%;
+                padding: 1.5rem 0;
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .forgot {
+        color: $color-washed;
+        text-decoration: none;
+        margin-top: 2rem;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .powered {
+        color: $color-washed;
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+
+        a {
+            color: $color-washed;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
