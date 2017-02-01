@@ -14,10 +14,12 @@ section.table-header {
 
     .left {
         justify-content: flex-start;
+        align-items: center;
     }
 
     .right {
         justify-content: flex-end;
+        align-items: center;
     }
 
     section.content-filter {

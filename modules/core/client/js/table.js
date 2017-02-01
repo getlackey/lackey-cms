@@ -109,6 +109,41 @@ class Table {
             self._selectFills[i]._original = self._selectFills[i].innerHTML;
         }
 
+        lackey
+            .hook('table.actions')
+            .addEventListener('click', function () {
+                var nav = document.querySelector('.overflow-menu');
+
+                var unbind, hide, mouseEnter, mouseLeave, timeout;
+
+                nav.setAttribute('data-visible', '');
+
+                unbind = function () {
+                    nav.removeEventListener('mouseleave', mouseLeave);
+                    nav.removeEventListener('mouseenter', mouseEnter);
+                };
+
+                hide = function () {
+                    unbind();
+                    nav.removeAttribute('data-visible');
+                };
+
+                mouseLeave = function () {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(hide, 500);
+                };
+
+                mouseEnter = function () {
+                    clearTimeout(timeout);
+                };
+
+                clearTimeout(timeout);
+                timeout = setTimeout(hide, 2000);
+
+                nav.addEventListener('mouseleave', mouseLeave);
+                nav.addEventListener('mouseenter', mouseEnter);
+            });
+
         this.setupFilters();
         let waiting = null;
 
