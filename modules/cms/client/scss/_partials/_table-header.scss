@@ -1,9 +1,23 @@
 section.table-header {
+    padding-top: 4rem;
     display: flex;
     flex-flow: wrap;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding-top: 4rem;
+
+    .left, .right {
+        display: flex;
+        flex-flow: wrap;
+        flex-wrap: wrap;
+    }
+
+    .left {
+        justify-content: flex-start;
+    }
+
+    .right {
+        justify-content: flex-end;
+    }
 
     section.content-filter {
         flex: 1 1 100%;
