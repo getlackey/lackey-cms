@@ -18,15 +18,6 @@
         align-self: center;
     }
 
-    select {
-        border: 1px solid $color-background-highlight;
-        color: $color-light-gray;
-        border-radius: 30px;
-        padding: 8px 10px;
-        width: 250px;
-        height: 30px;
-    }
-
     form > label {
         margin: 0px 150px 15px;
         display: block;
