@@ -53,8 +53,6 @@ module.exports = (dust) => {
       ).then(() => {
         injectedChunk.end();
       }, (error) => {
-
-
         if (bodies.error) {
           try {
             console.log('render');
@@ -99,9 +97,9 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
       data = context,
       route = config.route,
       document,
-      template = params.template || config.template;
-
-    //data = data.push(params);
+      template = params.template || config.template,
+      isEdit = context.resolve(params.editMode) || context.get('edit'),
+      editData;
 
     if (config.props) {
       SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'has props');
@@ -165,6 +163,12 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
       });
     }
 
+    editData = {
+      route: route,
+      path: params.path,
+      template: template
+    };
+
     promise.then(() => {
         SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'last steps');
         if (!template) {
@@ -178,7 +182,17 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
             console.error(err);
             reject(err);
           }
+
+          if (isEdit) {
+            injectedChunk.write('<!--BLOCK:start ' + JSON.stringify(editData) + ' -->');
+          }
+
           injectedChunk.write(out);
+
+          if (isEdit) {
+            injectedChunk.write('<!--BLOCK:end ' + JSON.stringify(editData) + ' -->');
+          }
+
           SCli.debug('lackey-cms/modules/cms/server/lib/dust/block', 'Rendered ');
           resolve(injectedChunk);
         });

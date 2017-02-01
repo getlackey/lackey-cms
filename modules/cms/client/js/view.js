@@ -17,3 +17,4 @@
     limitations under the License.
 */
 require('cms/client/js/wysiwyg').init();
+require('cms/client/js/block-editor').init();

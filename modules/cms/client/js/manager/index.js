@@ -245,6 +245,19 @@ Manager.prototype.setMedia = function (contentId, content) {
         .set('media', contentId, content);
 };
 
+/**
+ * Opens a dialog to edit a block.
+ * @param   {String} path      [[Description]]
+ * @param   {String} template  [[Description]]
+ */
+Manager.prototype.editBlock = function (path, template) {
+    this.showTab('blocks', structureUi => {
+        structureUi.inspect(path, template);
+
+        console.log('Request to edit', path, template);
+    });
+};
+
 Manager.prototype.preview = function (variant, language) {
     let self = this;
     this
