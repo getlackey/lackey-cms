@@ -122,6 +122,10 @@ div.login {
         text-decoration: none;
         margin-top: 2rem;
 
+        span {
+            font-family: Arial;
+        }
+
         &:hover {
             text-decoration: underline;
         }
