@@ -2,11 +2,32 @@
 
 {<body}
 <div data-lky-hook="lackey" data-theme="anonymous" class="login">
-    <aside class="dialog">
+    <aside class="dialog" style="display: none">
         This CMS is only compatible with Google Chrome
         <a class="button" href="https://www.google.com/chrome/browser/desktop/" target="_blank">Download Chrome</a>
         <a class="close" href="#">✖</a>
     </aside>
+    <script>
+        function supportsES6() {
+            'use strict';
+
+            if (typeof Symbol == 'undefined') return false;
+            try {
+                eval('class Foo {}');
+                eval('var bar = (x) => x+1');
+            } catch (e) { return false; }
+
+            return true;
+        }
+
+        var nagDialog = document.querySelector('[data-lky-hook="lackey"].login aside.dialog');
+        if (
+            !supportsES6() ||
+            !(/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor))
+           ) {
+            nagDialog.style.display = '';
+        }
+    </script>
 
     <header>
         <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo" />
