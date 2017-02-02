@@ -251,11 +251,7 @@ Manager.prototype.setMedia = function (contentId, content) {
  * @param   {String} template  [[Description]]
  */
 Manager.prototype.editBlock = function (path, template) {
-    this.showTab('blocks', structureUi => {
-        structureUi.inspect(path, template);
-
-        console.log('Request to edit', path, template);
-    });
+    this.showTab('blocks', structureUi => structureUi.inspect(path, template));
 };
 
 Manager.prototype.preview = function (variant, language) {
