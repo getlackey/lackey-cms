@@ -4,6 +4,6 @@
     <header>
         <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo"/>
         <h1>404 Page Not Found</h1>
-        <p>The page `{data.path}` does not exist exist</p>
+        <p>The page `{data.path}` does not exist.</p>
     </header>
 </div>
