@@ -112,7 +112,7 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                             template: ['~/core//emails/forgot-password', 'cms/users/emails/forgot-password'],
                             token: token,
                             id: userId,
-                            subject: 'Remind me my pass'
+                            subject: 'CMS Forgotten Password'
                         });
                     })
                     .then(() => {
