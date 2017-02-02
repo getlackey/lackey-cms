@@ -6,15 +6,15 @@
 
     <div class="form-wrap">
         <form method="post">
-            <label for="username">
-                <span>{@translate ref="login.username" }Username{/translate}</span>
-                <input type="text" name="username" id="username" class="form-control"/>
-            </label>
-            <label for="password">
-                <span>{@translate ref="login.password" }Password{/translate}</span>
-                    <input type="password" name="password" id="password" class="form-control"/>
-            </label>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <div class="username">
+                <label for="username"><img src="img/cms/cms/svg/envelope.svg" height="35" alt="{@translate ref="login.username" }Username{/translate}" /></label>
+                <input type="text" name="username" id="username" placeholder="Email Address" class="form-control"/>
+            </div>
+            <div class="password">
+                <label for="password"><img src="img/cms/cms/svg/lock.svg" height="35" alt="{@translate ref="login.password" }Password{/translate}" /></label>
+                <input type="password" name="password" id="password" placeholder="Password" class="form-control"/>
+            </div>
+            <button type="submit" class="btn btn-primary"><img src="img/cms/cms/svg/ui/settings/dashboard.svg" height="25" /> Login</button>
         </form>
     </div>
 

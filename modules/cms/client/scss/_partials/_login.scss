@@ -15,6 +15,37 @@ div.login {
         margin: 0 auto;
 
         form {
+
+            .username, .password {
+                margin-bottom: 2rem;
+                border-bottom: 1px solid $color-washed;
+                padding-bottom: 0.5rem;
+                display: flex;
+            }
+
+            label {
+                display: inline-block;
+                width: 15%;
+                color: #ffffff;
+                text-align: left;
+            }
+
+            input {
+                appearance: none;
+                display: inline;
+                background: $color-background-accent;
+                border: 0;
+                width: 85%;
+                font-size: 1rem;
+                color: #ffffff;
+                outline: none;
+                padding: 0.5rem 0;
+
+                &::-webkit-input-placeholder {
+                    color: $color-washed!important;
+                }
+            }
+
             button[type=submit] {
                 display: block;
                 margin: 0 auto;
@@ -24,8 +55,13 @@ div.login {
                 text-transform: uppercase;
                 color: #ffffff;
                 width: 100%;
-                padding: 1.5rem 0;
+                padding: 1rem 0;
                 font-size: 1rem;
+
+                img {
+                    vertical-align: middle;
+                    margin-right: 0.3rem;
+                }
             }
         }
     }
