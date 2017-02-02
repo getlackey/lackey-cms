@@ -1,13 +1,9 @@
 {>"cms/core/main"/}
 
-<div data-lky-hook="lackey" data-theme="anonymous">
+<div data-lky-hook="lackey" data-theme="anonymous" class="login">
     <header>
-        <img src="img/cms/core/lackey-logo.png"/>
-        <h2>Blimey!</h2>
+        <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo"/>
+        <h1>404 Page Not Found</h1>
+        <p>The page `{data.path}` does not exist exist</p>
     </header>
-    <main>
-        <p>
-            Path `{data.path}` doesn't exist
-        </p>
-    </main>
 </div>

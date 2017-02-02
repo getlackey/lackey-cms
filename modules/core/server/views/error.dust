@@ -1,17 +1,14 @@
 {>"cms/core/main"/}
 
-<div data-lky-hook="lackey" data-theme="anonymous">
+<div data-lky-hook="lackey" data-theme="anonymous"class="login">
     <header>
-        <img src="img/cms/core/lackey-logo.png"/>
-        <h2>Blimey!</h2>
-    </header>
-    <main>
-        <p>
-            {?data.message}
+        <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo"/>
+        <h1>Server Error</h1>
+        <p>{?data.message}
                 {data.message}
             {:else}
                 {data}
             {/data.message}
         </p>
-    </main>
+    </header>
 </div>
