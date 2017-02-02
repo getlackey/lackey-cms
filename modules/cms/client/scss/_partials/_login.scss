@@ -21,13 +21,15 @@ div.login {
                 border-bottom: 1px solid $color-washed;
                 padding-bottom: 0.5rem;
                 display: flex;
+                justify-content: flex-start
             }
 
             label {
                 display: inline-block;
-                width: 15%;
                 color: #ffffff;
                 text-align: left;
+                flex: 0 0 10%;
+                margin-right: 0.5rem;
             }
 
             input {
@@ -35,11 +37,11 @@ div.login {
                 display: inline;
                 background: $color-background-accent;
                 border: 0;
-                width: 85%;
                 font-size: 1rem;
                 color: #ffffff;
                 outline: none;
-                padding: 0.5rem 0;
+                padding: 0.5rem;
+                flex: 1 1 90%;
 
                 &::-webkit-input-placeholder {
                     color: $color-washed!important;
