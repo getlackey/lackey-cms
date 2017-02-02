@@ -21,34 +21,47 @@ const
     api = require('core/client/js/api'),
     growl = require('cms/client/js/growl'),
     Media = require('cms/client/js/media'),
-    modal = require('core/client/js/modal'),
-    MediaModalController = require('cms/client/js/manager/media'),
     userDrop = require('cms/client/js/manager/user.dropdown.js');
 
+var media;
 
 userDrop();
 
 lackey
     .select('[data-lky-media]').forEach((element) => {
-        console.log(element);
-        let media = new Media(element);
-        media.selected((mediaObject) => {
-            return modal
-                .open('cms/cms/image', {
-                    node: mediaObject.node,
-                    media: mediaObject.media
-                }, MediaModalController)
-                .then((result) => {
-                    if (!result && result !== -1) {
-                        return;
-                    }
-                    mediaObject.set(result !== -1 ? result : null);
-                    api.update('/me', {
-                        avatar: result !== -1 ? result.id : null
-                    });
-                });
+        media = new Media(element);
+        let src = media.node.getAttribute('src');
+        if (!src) {
+            media.node.setAttribute('src', 'img/cms/cms/svg/ui/account.svg');
+        }
+
+        media.input.addEventListener('change', function (event) {
+            media.upload.choice(event);
         });
     });
+
+lackey.bind('lky:basic-info', 'submit', (event, hook) => {
+    event.preventDefault();
+    event.cancelBubble = true;
+
+    let data = lackey.form(hook),
+        update = {};
+
+    if (data.name) {
+        update.name = data.name;
+    }
+    if (media.media.id) {
+        update.avatar = media.media.id;
+    }
+
+    api.update('/me', update).then(() => {
+        growl({
+            status: 'success',
+            message: 'Basic info successfully updated'
+        });
+    });
+    return false;
+});
 
 lackey.bind('lky:confirm-email', 'click', (event, hook) => {
     event.preventDefault();
