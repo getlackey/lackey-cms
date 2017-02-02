@@ -93,6 +93,10 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                 res.js('js/cms/users/forgot.js');
                 res.print(['~/core//forgot-password', 'cms/users/forgot-password']);
             },
+            resetIndex: (req, res) => {
+                res.js('js/cms/users/reset.js');
+                res.print(['~/core/reset-password', 'cms/users/reset-password']);
+            },
             forgot: (req, res) => {
                 let userId;
                 if (!req.body.username.length) { //TODO improve
