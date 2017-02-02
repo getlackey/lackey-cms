@@ -51,7 +51,11 @@ module.exports = (server) => {
                 .get(policy.anonymous('/'), AccountController.resetIndex);
 
             server.route('/api/account/identity')
-                .post(policy.loggedIn, AccountController.createIdentity);
+                .post(policy.loggedIn, AccountController.createIdentity)
+                .delete(policy.loggedIn, AccountController.removeIdentity);
+
+            server.route('/api/account/rm-identity')
+                .post(policy.loggedIn, AccountController.removeIdentity)
 
             server.param('forgotPasswordToken', (req, res, next, id) => {
                 SCli.debug(__MODULE_NAME, 'forgotPasswordToken', id);

@@ -166,10 +166,39 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
             },
             createIdentity: (req, res) => {
                 req.admin.setIdentity('email', req.body.email, null, null, null, false, true)
-                    .then((data) => {
-                        res.api(data);
+                    .then(() => {
+                        let data = {};
+                        req.admin
+                            .getIdentities('email')
+                            .then((emails) => {
+                                data.emails = emails.map((email) => {
+                                    return {
+                                        email: email.accountId,
+                                        confirmed: email.confirmed
+                                    };
+                                });
+                                res.api(data);
+                            });
                     }, (error) => {
-                        console.log(error, 'error');
+                        return res.status(400).api(error);
+                    });
+            },
+            removeIdentity: (req, res) => {
+                req.admin.removeIdentity('email', req.body.email)
+                    .then(() => {
+                        let data = {};
+                        req.admin
+                            .getIdentities('email')
+                            .then((emails) => {
+                                data.emails = emails.map((email) => {
+                                    return {
+                                        email: email.accountId,
+                                        confirmed: email.confirmed
+                                    };
+                                });
+                                res.api(data);
+                            });
+                    }, (error) => {
                         return res.status(400).api(error);
                     });
             }

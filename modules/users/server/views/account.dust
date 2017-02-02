@@ -42,38 +42,9 @@
                     Change Password
                 </button>
             </form>
-            <h3>Identities</h3>
-
-            {#data.emails}
-            <label>
-                <input type="email"
-                       readonly="readonly"
-                       value="{email|h}"
-                       class="form-control"/>
-
-                <button class="btn btn-secondary" type="button">
-                    <i class="fa fa-trash"></i>&nbsp;
-                </button>
-
-                {@ne key=confirmed value=true}
-                    <small>This email is not confirmed</small>
-                    <button class="btn btn-sm btn-warning" data-lky-hook="confirm-email" data-lky-email="{email|h}">
-                        <i class="fa fa-envelope"></i> Resend Email
-                    </button>
-                {/ne}
-            </label>
-            {/data.emails}
-            <form data-lky-hook="identities">
-                <label>
-                    <input required type="email"
-                           name="email"
-                           class="form-control"/>
-
-                    <button class="btn btn-primary">
-                        <i class="fa fa-plus"></i>&nbsp;
-                    </button>
-                 </label>
-            </form>
+            <div id="identity-parent" data-lky-template="cms/users/identities" data-emails="{data.emails|js}">
+                {>"cms/users/identities"/}
+            </div>
             <h3>Sessions</h3>
             {#data.sessions}
             <label class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">

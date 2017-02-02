@@ -1,0 +1,31 @@
+<h3>Identities</h3>
+{#data.emails}
+<label>
+    <input name="email" type="email"
+           readonly="readonly"
+           value="{email|h}"
+           class="form-control"/>
+    {@gt key=data.emails.length value="1"}
+    <button class="btn btn-secondary" type="button" data-lky-hook="delete-identity">
+        <i class="fa fa-trash"></i>&nbsp;
+    </button>
+    {/gt}
+    {@ne key=confirmed value=true}
+        <small>This email is not confirmed</small>
+        <button class="btn btn-sm btn-warning" data-lky-hook="confirm-email" data-lky-email="{email|h}">
+            <i class="fa fa-envelope"></i> Resend Email
+        </button>
+    {/ne}
+</label>
+{/data.emails}
+<form data-lky-hook="identities">
+    <label>
+        <input required type="email"
+               name="email"
+               class="form-control"/>
+
+        <button class="btn btn-primary">
+            <i class="fa fa-plus"></i>&nbsp;
+        </button>
+     </label>
+</form>
