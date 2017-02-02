@@ -1,1 +1,9 @@
-Sia la la la la
+{>"cms/core/email"/}
+
+{<body}
+
+    To confirm your email address please visit the following URL:
+    <br /><br />
+    <a href=""></a>
+        
+{/body}
