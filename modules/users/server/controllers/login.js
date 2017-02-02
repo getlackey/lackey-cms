@@ -47,16 +47,25 @@ class loginClass {
             } else if (!user) {
                 res.status(400).error(new Error('Invalid credentials'));
             } else {
+//                return user.getIdentity('email', req.body.username)
+//                    .then((identity) => {
+//                        if(!identity.confirmed) {
+//                            res.status(400).error(new Error('Email not confirmed'));
+//                        } else {
+                            req.login(user, (error) => {
+                                if (error) {
+                                    /* istanbul ignore next */
+                                    res.status(400).error(error);
+                                } else {
+                                    SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
+                                    res.api('done');
+                                }
+
+                            });
+//                        }
+//                    });
                 // Remove sensitive data before login
-                req.login(user, (error) => {
-                    if (error) {
-                        /* istanbul ignore next */
-                        res.status(400).error(error);
-                    } else {
-                        SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
-                        res.api('done');
-                    }
-                });
+
             }
         })(req, res, next);
 

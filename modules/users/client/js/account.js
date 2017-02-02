@@ -21,9 +21,7 @@ const
     api = require('core/client/js/api'),
     growl = require('cms/client/js/growl'),
     Media = require('cms/client/js/media'),
-    userDrop = require('cms/client/js/manager/user.dropdown.js'),
-    template = require('core/client/js/template');
-
+    userDrop = require('cms/client/js/manager/user.dropdown.js');
 var media;
 
 userDrop();
@@ -64,59 +62,63 @@ lackey.bind('lky:basic-info', 'submit', (event, hook) => {
     return false;
 });
 
-function buildIdentities(parent, context) {
-    parent.innerHTML = '';
-    template.render('cms/users/identities', {data: context})
-        .then((things)=> {
-            things.forEach(function (thing) {
-                console.log(thing.innerHTML);
-                parent.appendChild(thing);
-            });
-            lackey.bind('lky:delete-identity', 'click', (event, hook) => {
-                event.preventDefault();
-                event.cancelBubble = true;
+//function buildIdentities(parent, context) {
+//    parent.innerHTML = '';
+//    template.render('cms/users/identities', {data: context})
+//        .then((things)=> {
+//            things.forEach(function (thing) {
+//                parent.appendChild(thing);
+//            });
+//            lackey.bind('lky:delete-identity', 'click', (event, hook) => {
+//                event.preventDefault();
+//                event.cancelBubble = true;
+//
+//                let email = hook.parentElement.querySelector('input[name=email]').value;
+//
+//                api.create('/account/rm-identity', {
+//                    email: email
+//                })
+//                .then((ret) => {
+//                     growl({
+//                        status: 'success',
+//                        message: 'Identity removed successfully'
+//                    });
+//                    buildIdentities(parent, ret);
+//                }, (err) => {
+//                    growl({
+//                        status: 'error',
+//                        message: err
+//                    });
+//                });
+//                return false;
+//            });
+//
+//            lackey.bind('lky:identities', 'submit', (event, hook) => {
+//                event.preventDefault();
+//                event.cancelBubble = true;
+//
+//                let data = lackey.form(hook);
+//
+//                api.create('/account/identity', {
+//                    email: data.email
+//                }).then((ret) => {
+//                    growl({
+//                        status: 'success',
+//                        message: 'Identity added successfully'
+//                    });
+//                   buildIdentities(parent, ret);
+//                }, () => {
+//                    growl({
+//                        status: 'error',
+//                        message: 'Identity already exists'
+//                    });
+//                });
+//                return false;
+//            });
+//        });
+//}
 
-                let email = hook.parentElement.querySelector('input[name=email]').value;
-
-                api.create('/account/rm-identity', {
-                    email: email
-                })
-                .then((ret) => {
-                     growl({
-                        status: 'success',
-                        message: 'Identity removed successfully'
-                    });
-                    buildIdentities(parent, ret);
-                });
-                return false;
-            });
-
-            lackey.bind('lky:identities', 'submit', (event, hook) => {
-                event.preventDefault();
-                event.cancelBubble = true;
-
-                let data = lackey.form(hook);
-
-                api.create('/account/identity', {
-                    email: data.email
-                }).then((ret) => {
-                    growl({
-                        status: 'success',
-                        message: 'Identity added successfully'
-                    });
-                   buildIdentities(parent, ret);
-                }, () => {
-                    growl({
-                        status: 'error',
-                        message: 'Identity already exists'
-                    });
-                });
-                return false;
-            });
-        });
-}
-
-buildIdentities(document.querySelector('#identity-parent'), { emails: JSON.parse(document.querySelector('#identity-parent').getAttribute('data-emails'))});
+//buildIdentities(document.querySelector('#identity-parent'), { emails: JSON.parse(document.querySelector('#identity-parent').getAttribute('data-emails'))});
 
 lackey.bind('lky:confirm-email', 'click', (event, hook) => {
     event.preventDefault();

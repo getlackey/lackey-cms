@@ -184,23 +184,42 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                     });
             },
             removeIdentity: (req, res) => {
-                req.admin.removeIdentity('email', req.body.email)
-                    .then(() => {
-                        let data = {};
-                        req.admin
-                            .getIdentities('email')
-                            .then((emails) => {
-                                data.emails = emails.map((email) => {
-                                    return {
-                                        email: email.accountId,
-                                        confirmed: email.confirmed
-                                    };
-                                });
-                                res.api(data);
+                req.admin.getIdentities('email')
+                    .then((identities) => {
+                        let confCount = 0,
+                            confirmed = false;
+                            identities.forEach(function (identity) {
+                                if (identity.confirmed) {
+                                    confCount += 1;
+                                }
+                                if (identity.accountId === req.body.email && identity.confirmed) {
+                                    confirmed = true;
+                                }
                             });
-                    }, (error) => {
-                        return res.status(400).api(error);
+
+                        if (confirmed && confCount < 2) {
+                            return res.status(400).api({data: 'Can not delete last confirmed email'});
+                        } else {
+                            req.admin.removeIdentity('email', req.body.email)
+                                .then(() => {
+                                    let data = {};
+                                    req.admin
+                                        .getIdentities('email')
+                                        .then((emails) => {
+                                            data.emails = emails.map((email) => {
+                                                return {
+                                                    email: email.accountId,
+                                                    confirmed: email.confirmed
+                                                };
+                                            });
+                                            res.api(data);
+                                        });
+                                }, (error) => {
+                                    return res.status(400).api(error);
+                                });
+                        }
                     });
+
             }
         };
     });
