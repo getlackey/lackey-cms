@@ -3,8 +3,9 @@
 div.login {
     background: $color-background-accent;
     text-align: center;
-    padding: 16rem 0;
     position: relative;
+    display: flex;
+    justify-content: center;
 
     img.logo {
         margin-bottom: 3rem;
