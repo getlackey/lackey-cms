@@ -50,6 +50,9 @@ module.exports = (server) => {
             server.route('/cms/account/reset-password')
                 .get(policy.anonymous('/'), AccountController.resetIndex);
 
+            server.route('/api/account/identity')
+                .post(policy.loggedIn, AccountController.createIdentity);
+
             server.param('forgotPasswordToken', (req, res, next, id) => {
                 SCli.debug(__MODULE_NAME, 'forgotPasswordToken', id);
                 req.forgotPasswordToken = id;

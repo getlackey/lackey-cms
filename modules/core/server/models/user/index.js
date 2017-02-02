@@ -947,7 +947,7 @@ module.exports = SUtils
                     .then(this.bind(this.setIdentity, args));
             }
 
-            setIdentity(provider, id, accessToken, refreshToken, providerData, confirmed) {
+            setIdentity(provider, id, accessToken, refreshToken, providerData, confirmed, isNew) {
 
                 SCli.debug(__MODULE_NAME, 'setIdentity', this.id, provider, id, accessToken, refreshToken, providerData, confirmed);
 
@@ -957,40 +957,47 @@ module.exports = SUtils
 
                 let self = this;
 
-                return objection.transaction(Identities, function (BoundIdentities) {
-                        return SCli
-                            .sql(BoundIdentities
-                                .query()
-                                .where('userId', self.id)
-                                .andWhere('provider', provider)
-                                .andWhere('accountId', id)
-                                .update({
-                                    accessToken: accessToken || null,
-                                    refreshToken: refreshToken || null,
-                                    providerData: providerData || null,
-                                    confirmed: confirmed || false
-                                })
-                            )
-                            .then((count) => {
-                                if (count > 0) return Promise.resolve(self);
-                                SCli.debug(__MODULE_NAME, 'setIdentity', 'insert');
-                                return SCli.sql(BoundIdentities
-                                    .query()
-                                    .insertAndFetch({
-                                        accessToken: accessToken || null,
-                                        refreshToken: refreshToken || null,
-                                        providerData: providerData || null,
-                                        userId: self.id,
-                                        provider: provider,
-                                        accountId: id,
-                                        confirmed: confirmed || false
-                                    }));
+                return self.getIdentities(provider, id)
+                    .then((ret) => {
+                        if (isNew && ret.length > 0) {
+                            throw(new Error('Identity already exists'));
+                        } else {
+                            return objection.transaction(Identities, function (BoundIdentities) {
+                                return SCli
+                                    .sql(BoundIdentities
+                                        .query()
+                                        .where('userId', self.id)
+                                        .andWhere('provider', provider)
+                                        .andWhere('accountId', id)
+                                        .update({
+                                            accessToken: accessToken || null,
+                                            refreshToken: refreshToken || null,
+                                            providerData: providerData || null,
+                                            confirmed: confirmed || false
+                                        })
+                                    )
+                                    .then((count) => {
+                                        if (count > 0) return Promise.resolve(self);
+                                        SCli.debug(__MODULE_NAME, 'setIdentity', 'insert');
+                                        return SCli.sql(BoundIdentities
+                                            .query()
+                                            .insertAndFetch({
+                                                accessToken: accessToken || null,
+                                                refreshToken: refreshToken || null,
+                                                providerData: providerData || null,
+                                                userId: self.id,
+                                                provider: provider,
+                                                accountId: id,
+                                                confirmed: confirmed || false
+                                            }));
+                                    });
+                            })
+                            .then(() => self._loadIdentities())
+                            .then(() => {
+                                SCli.debug(__MODULE_NAME, 'setIdentity', 'done');
+                                return self;
                             });
-                    })
-                    .then(() => self._loadIdentities())
-                    .then(() => {
-                        SCli.debug(__MODULE_NAME, 'setIdentity', 'done');
-                        return self;
+                        }
                     });
             }
 

@@ -63,15 +63,17 @@
                 {/ne}
             </label>
             {/data.emails}
-            <label>
-                <input type="email"
-                       name="email"
-                       class="form-control"/>
+            <form data-lky-hook="identities">
+                <label>
+                    <input required type="email"
+                           name="email"
+                           class="form-control"/>
 
-                <button data-lky-hook="add-email" class="btn btn-secondary" type="button">
-                    <i class="fa fa-plus"></i>&nbsp;
-                </button>
-             </label>
+                    <button class="btn btn-primary">
+                        <i class="fa fa-plus"></i>&nbsp;
+                    </button>
+                 </label>
+            </form>
             <h3>Sessions</h3>
             {#data.sessions}
             <label class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">

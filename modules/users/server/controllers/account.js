@@ -163,7 +163,15 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                     }, (error) => {
                         res.error(error);
                     });
+            },
+            createIdentity: (req, res) => {
+                req.admin.setIdentity('email', req.body.email, null, null, null, false, true)
+                    .then((data) => {
+                        res.api(data);
+                    }, (error) => {
+                        console.log(error, 'error');
+                        return res.status(400).api(error);
+                    });
             }
-
         };
     });

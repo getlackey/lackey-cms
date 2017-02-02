@@ -63,6 +63,28 @@ lackey.bind('lky:basic-info', 'submit', (event, hook) => {
     return false;
 });
 
+lackey.bind('lky:identities', 'submit', (event, hook) => {
+    event.preventDefault();
+    event.cancelBubble = true;
+
+    let data = lackey.form(hook);
+
+    api.create('/account/identity', {
+        email: data.email
+    }).then(() => {
+       growl({
+            status: 'success',
+            message: 'Identity added successfully'
+        });
+    }, () => {
+        growl({
+            status: 'error',
+            message: 'Identity already exists'
+        });
+    });
+    return false;
+});
+
 lackey.bind('lky:confirm-email', 'click', (event, hook) => {
     event.preventDefault();
     event.cancelBubble = true;
