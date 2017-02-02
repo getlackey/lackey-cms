@@ -5,6 +5,35 @@ div.login {
     display: flex;
     justify-content: center;
 
+    aside.dialog {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        background: #cb523f;
+        width: 100%;
+        text-align: center;
+        color: #ffffff;
+        padding: 1.5rem;
+        font-size: 1rem;
+
+        a.button {
+            margin-left: 1rem;
+            background: #ffffff;
+            border-radius: 0.1rem;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+        }
+
+        a.close {
+            font-family: Arial;
+            font-size: 1.3rem;
+            float: right;
+            color: #ffffff;
+            text-decoration: none;
+        }
+    }
+
     img.logo {
         margin-bottom: 3rem;
     }

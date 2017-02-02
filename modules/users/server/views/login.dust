@@ -2,6 +2,13 @@
 
 {<body}
 <div data-lky-hook="lackey" data-theme="anonymous" class="login">
+    <aside class="dialog">
+        This CMS is only compatible with Google Chrome
+        <a class="button" href="https://www.google.com/chrome/browser/desktop/" target="_blank">Download Chrome</a>
+        <a class="close" href="#">✖</a>
+    </aside>
+
+
     <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo" />
 
     <div class="form-wrap">
