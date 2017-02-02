@@ -35,16 +35,29 @@ div.login {
         }
     }
 
-    h1 {
-        color: #ffffff;
-        font-size: 1.2rem;
-        font-weight: bold;
-        font-family: 'Roboto';
-        margin-bottom: 2.5rem;
-    }
+    header {
+        background: none;
+        margin: 0 0 2rem 0;
+        padding: 0;
 
-    img.logo {
-        margin-bottom: 3rem;
+        h1 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Roboto';
+
+            &+p {
+                margin-top: 1rem;
+            }
+        }
+
+        p {
+            color: #ffffff;
+        }
+
+        img.logo {
+            margin-bottom: 3rem;
+        }
     }
 
     .form-wrap {

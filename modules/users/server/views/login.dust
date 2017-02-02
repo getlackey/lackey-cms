@@ -8,7 +8,9 @@
         <a class="close" href="#">✖</a>
     </aside>
 
-    <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo" />
+    <header>
+        <img src="img/cms/cms/svg/swirl.svg" height="88" class="logo" />
+    </header>
 
     <div class="form-wrap">
         <form method="post">
