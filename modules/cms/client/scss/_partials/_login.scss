@@ -95,6 +95,13 @@ div.login {
                 &::-webkit-input-placeholder {
                     color: $color-washed!important;
                 }
+
+                &:-webkit-autofill,
+                &:-webkit-autofill:hover,
+                &:-webkit-autofill:focus {
+                    -webkit-text-fill-color: #fff;
+                    -webkit-box-shadow: 0 0 0px 1000px $color-background-accent inset;
+                }
             }
 
             button[type=submit] {
