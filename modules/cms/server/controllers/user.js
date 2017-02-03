@@ -223,7 +223,7 @@ class UserController extends CRUD {
                                 subject: 'Account Created on ' + config.get('host'),
                                 from: config.get('mailer.from'),
                                 to: create.email,
-                                template: ['~/core//emails/user-created', 'cms/cms/emails/user-created'],
+                                template: 'cms/users/emails/create-password',
                                 token: token,
                                 name: user._doc.name,
                                 id: user._doc.id
@@ -254,9 +254,10 @@ class UserController extends CRUD {
                 return user.validateToken(req.params.passwordToken, 'password');
             })
             .then(() => {
+                user.setType = 'Create';
                 res.css('css/cms/cms/table.css');
-                res.js('js/cms/cms/new-user-password.js');
-                res.print('cms/cms/user-set-password', user);
+                res.js('js/cms/users/reset-password.js');
+                res.print('cms/users/set-password', user);
             }, (error) => {
                 res.error(error);
             });

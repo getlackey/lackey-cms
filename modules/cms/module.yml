@@ -62,7 +62,7 @@ routes:
             inject:
                 - cms/core/server/models/role
         post:
-            controller: cms/cms/server/controllers/#create
+            controller: cms/cms/server/controllers/user#create
             ACLHelper: admin
             inject:
                 - cms/core/server/models/user

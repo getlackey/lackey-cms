@@ -108,7 +108,7 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                             throw new Error('Email not found');
                         }
                         userId = user.id;
-                        return user.loginToken(req.body.username);
+                        return user.passwordToken(req.body.username);
                     })
                     .then((token) => {
                         return mailer({
@@ -130,17 +130,45 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                 User.findById(req.forgotPasswordUid)
                     .then((usr) => {
                         user = usr;
-                        return user.invalidateToken(req.forgotPasswordToken);
+                        return user.validateToken(req.forgotPasswordToken, 'password');
                     })
                     .then(() => {
-                        req.login(user, function (error) {
-                            if (error) {
-                                /* istanbul ignore next */
-                                res.status(400).error(error);
-                            } else {
-                                SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
-                                res.redirect('cms/account');
-                            }
+//                        req.login(user, function (error) {
+//                            if (error) {
+//                                /* istanbul ignore next */
+//                                res.status(400).error(error);
+//                            } else {
+//                                SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
+//                                res.redirect('cms/account');
+//                            }
+//                        });
+                        user.setType = 'Reset';
+                        res.css('css/cms/cms/table.css');
+                        res.js('js/cms/users/reset-password.js');
+                        res.print('cms/users/set-password', user);
+                    }, (error) => {
+                        res.error(error);
+                    });
+            },
+            forgotSet: (req, res) => {
+                let user;
+                User.findById(req.forgotPasswordUid)
+                    .then((usr) => {
+                        user = usr;
+                        return user.invalidatePasswordToken(req.forgotPasswordToken, 'password');
+                    })
+                    .then(() => {
+                        user.password = req.body.password;
+                        user.save().then(() => {
+                            req.login(user, function (error) {
+                                if (error) {
+                                    /* istanbul ignore next */
+                                    res.status(400).error(error);
+                                } else {
+                                    SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
+                                    res.api('ok');
+                                }
+                            });
                         });
                     }, (error) => {
                         res.error(error);

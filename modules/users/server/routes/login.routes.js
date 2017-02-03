@@ -73,7 +73,8 @@ module.exports = (server) => {
                 .get(policy.loggedIn, AccountController.me)
                 .put(policy.loggedIn, AccountController.update);
 
-            server.get('/cms/account/token/:forgotPasswordToken/:forgotPasswordUid', policy.anonymous('/'), AccountController.forgotValidate);
-
+            server.route('/cms/account/token/:forgotPasswordToken/:forgotPasswordUid')
+                .get(policy.anonymous('/'), AccountController.forgotValidate)
+                .post(policy.anonymous('/'), AccountController.forgotSet);
         });
 };
