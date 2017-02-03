@@ -154,22 +154,25 @@ div.account-details {
         flex-flow: wrap;
         flex-wrap: wrap;
         justify-content: space-between;
+        margin-bottom: 1rem;
 
         label {
             flex: 1 1 80%;
             font-weight: bold;
             line-height: 2rem;
         }
+    }
 
-        button {
-            flex: 0 1 20%;
-            appearance: none;
-            background: $color-background-highlight;
-            border: 0;
-            padding: 0.5rem 0;
-            color: #ffffff;
-            font-size: 0.8rem;
-        }
+    button, .button {
+        flex: 0 1 20%;
+        text-align: center;
+        appearance: none;
+        background: $color-background-highlight;
+        border: 0;
+        padding: 0.5rem 1rem;
+        color: #ffffff;
+        font-size: 0.8rem;
+        text-decoration: none;
     }
 }
 

@@ -45,20 +45,34 @@
 
     <h2>Sessions</h2>
     <form data-lky-hook="sessions">
+
+        {#data.sessions}
         <div class="session">
-            {#data.sessions}
             <label class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">
                 {_doc.ipAddress} - {_doc.browser} - {_doc.os} &nbsp;
                 {@eq key="{_doc.sid}" value="{data.currentSession}"}
                     (current session)
                 {:else}
-                    <a data-id="{_doc.sid}" class="sess-rm" href="#">delete</a> - last active: {_doc.humanLastActive}
-                {/eq}
+                    - last active: {_doc.humanLastActive} &nbsp;
+
             </label>
-            {/data.sessions}
-            <button class="btn btn-sm btn-warning sess-rmAll">Delete Session</button>
+
+            <a data-id="{_doc.sid}" class="sess-rm button" href="#">Delete Session</a>
+                {/eq}
         </div>
+        {/data.sessions}
+
+
+        <button class="btn btn-sm btn-warning sess-rmAll">Delete all sessions</button>
     </form>
 
 
 {/body}
+
+
+
+
+
+
+
+
