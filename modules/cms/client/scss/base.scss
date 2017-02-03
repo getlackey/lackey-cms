@@ -15,7 +15,9 @@
 @import "_partials/_toolTip";
 @import "_partials/_anonymous";
 @import "_partials/_login";
+@import "_partials/_account-details";
 @import "_calendar";
+
 [data-lky-busy] {
     opacity: 0;
     pointer-events: none;
