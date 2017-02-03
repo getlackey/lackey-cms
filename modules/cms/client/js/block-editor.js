@@ -21,7 +21,8 @@ const
 
 const commentPrefix = 'BLOCK:';
 
-var _editButton;
+var _editButton,
+    _overlay;
 
 class BlockEditor {
     constructor(block) {
@@ -62,8 +63,6 @@ class BlockEditor {
     edit() {
         var self = this;
 
-        console.log(self.block);
-
         top.LackeyManager.editBlock('layout.' + self.block.path, self.block.template);
     }
 
@@ -101,15 +100,22 @@ class BlockEditor {
         return self.elements.some(element => element.isMouseOver);
     }
 
+    checkMouseState(ev) {
+        var self = this;
+
+        if (self.isMouseOver) {
+            if (ev) { ev.stopPropagation(); }
+
+            BlockEditor.setEditTarget(self, self.getAbsoluteBoundingRect());
+        }
+    }
+
     onBlockOver(ev) {
         var self = this;
 
         ev.currentTarget.isMouseOver = true;
 
-        if (self.isMouseOver) {
-            ev.stopPropagation();
-            BlockEditor.setEditTarget(self);
-        }
+        self.checkMouseState(ev);
     }
 
     onBlockLeave(ev) {
@@ -117,10 +123,7 @@ class BlockEditor {
 
         ev.currentTarget.isMouseOver = false;
 
-        if (self.isMouseOver) {
-            ev.stopPropagation();
-            BlockEditor.setEditTarget(self);
-        }
+        self.checkMouseState(ev);
     }
 
 
@@ -194,6 +197,17 @@ class BlockEditor {
         return foundComments;
     }
 
+
+    static setEditTarget(block, bounds) {
+        BlockEditor.updateEditButton(block, bounds);
+        BlockEditor.updateOverlay(block, bounds);
+
+        BlockEditor.activeBlock = block;
+
+        return true;
+    }
+
+
     static get editButton() {
         if (!_editButton) {
             _editButton = document.createElement('button');
@@ -208,32 +222,52 @@ class BlockEditor {
         return _editButton;
     }
 
+    static updateEditButton(block, bounds) {
+        BlockEditor.editButton.style.right = (document.body.clientWidth - bounds.right) + 'px';
+        BlockEditor.editButton.style.top = bounds.top + 'px';
+
+        if (BlockEditor.activeBlock !== block) {
+            BlockEditor.editButton.setAttribute('data-target-change', '');
+            reflow(BlockEditor.editButton);
+            BlockEditor.editButton.removeAttribute('data-target-change');
+        }
+    }
+
     static _onEditButtonClick(ev) {
         ev.stopPropagation();
 
-        if (BlockEditor.editButton.block) {
-            BlockEditor.editButton.block.edit();
+        if (BlockEditor.activeBlock) {
+            BlockEditor.activeBlock.edit();
         }
     }
 
-    static setEditTarget(block) {
-        var blockBounds = block.getAbsoluteBoundingRect();
 
-        BlockEditor.editButton.style.right = (document.body.clientWidth - blockBounds.right) + 'px';
-        BlockEditor.editButton.style.top = blockBounds.top + 'px';
+    static get overlay() {
+        if (!_overlay) {
+            _overlay = document.createElement('figure');
 
-        BlockEditor.editButton.setAttribute('data-visible', '');
+            _overlay.setAttribute('class', 'lky-block-overlay');
 
-        if (BlockEditor.editButton.block !== block) {
-            BlockEditor.editButton.setAttribute('data-target-change', '');
-            setTimeout(() => BlockEditor.editButton.removeAttribute('data-target-change'), 1);
+            document.body.appendChild(_overlay);
         }
 
-        BlockEditor.editButton.block = block;
+        return _overlay;
+    }
 
-        return true;
+    static updateOverlay(block, bounds) {
+        BlockEditor.overlay.style.left = bounds.left + 'px';
+        BlockEditor.overlay.style.top = bounds.top + 'px';
+        BlockEditor.overlay.style.width = bounds.width + 'px';
+        BlockEditor.overlay.style.height = bounds.height + 'px';
+
+        if (BlockEditor.activeBlock !== block) {
+            BlockEditor.overlay.setAttribute('data-target-change', '');
+            reflow(BlockEditor.overlay);
+            BlockEditor.overlay.removeAttribute('data-target-change');
+        }
     }
 }
+BlockEditor.activeBlock = null;
 
 module.exports = BlockEditor;
 
@@ -260,4 +294,8 @@ function getAbsoluteBoundingRect(element) {
         top: rect.top + offsetY,
         width: rect.width
     };
+}
+
+function reflow(element) {
+    void element.offsetWidth;
 }

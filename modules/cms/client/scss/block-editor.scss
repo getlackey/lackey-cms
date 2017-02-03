@@ -5,26 +5,46 @@ button.lky-edit-block {
     width: 1em; height: 1em;
     z-index: 100000;
 
-    font-size: 2.5rem;
-    background-color: $color-background;
-    background-image: url(../../../img/cms/cms/svg/ui/settings/settings.svg);
-    background-size: 60%;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    transform: translate(-0.5rem, 0.5rem);
+    font-size: 3rem;
+    background: {
+        color: $color-background;
+        image: url(../../../img/cms/cms/svg/ui/settings/settings.svg);
+        size: 60%;
+        position: center;
+        repeat: no-repeat;
+    }
 
     transition: background-color 0.5s $timing-material-decelerate;
+
+    animation: target-change 0.5s $timing-material-standard 1;
+    @keyframes target-change {
+        from { background-color: $color-background-highlight; }
+        to { background-color: $color-background; }
+    }
+    &[data-target-change] { animation: none; }
 
     &:hover {
         background-color: $color-background-accent;
 
         transition: background-color 0.2s $timing-material-standard;
     }
+}
 
-    &[data-target-change] {
-        background-color: $color-background-highlight;
+figure.lky-block-overlay {
+    position: absolute;
+    z-index: 99999;
 
-        transition: none;
+    pointer-events: none;
+    user-select: none;
+
+    background-color: transparent;
+    border: 2px dashed transparentize($color-background-highlight, 0.2);
+
+    animation: target-change-overlay 0.7s $timing-material-sharp 1;
+    @keyframes target-change-overlay {
+        0% { background-color: transparent; }
+        50% { background-color: transparentize($color-background-highlight, 0.8); }
+        100% { background-color: transparent; }
     }
+    &[data-target-change] { animation: none; }
 }
