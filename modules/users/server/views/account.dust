@@ -42,11 +42,7 @@
                     Change Password
                 </button>
             </form>
-<!--
-            <div id="identity-parent" data-lky-template="cms/users/identities" data-emails="{data.emails|js}">
-                {>"cms/users/identities"/}
-            </div>
--->
+
             <h3>Sessions</h3>
             {#data.sessions}
             <label class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">
