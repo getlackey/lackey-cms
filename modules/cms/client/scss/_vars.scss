@@ -45,3 +45,12 @@ $timing-material-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
 $timing-material-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
 $timing-material-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
 $timing-material-sharp: cubic-bezier(0.4, 0.0, 0.6, 1);
+
+
+@mixin width-proportional-height($percentage: 100%) {
+    &:before {
+        content: "";
+        display: block;
+        padding-top: $percentage;
+    }
+}

@@ -69,14 +69,14 @@ div.account-details {
         justify-content: space-between;
 
         .upload {
-            flex: 0 1 60%;
+            flex: 1 1 auto;
 
             .dropzone {
                 border: 5px dashed #c8c8c8;
                 padding: 3rem;
                 text-align: center;
                 margin-top: 0.5rem;
-
+                margin-right: 3rem;
 
                 span {
                     display: block;
@@ -98,7 +98,7 @@ div.account-details {
         }
 
         .preview {
-            flex: 0 1 30%;
+            flex: 0 0 auto;
 
             figure {
                 border: 1px solid #c8c8c8;
@@ -107,7 +107,7 @@ div.account-details {
                 margin-top: 0.5rem;
 
                 img {
-                    height: 110px;
+                    width: 110px;
                     display: inline-block;
                 }
             }
