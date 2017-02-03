@@ -67,13 +67,14 @@ div.account-details {
     .profile-photo {
         display: flex;
         justify-content: space-between;
+        align-items: stretch;
 
         .upload {
             flex: 1 1 auto;
 
             [data-dropzone] {
                 border: 5px dashed #c8c8c8;
-                padding: 3rem;
+                padding: 3.2rem;
                 text-align: center;
                 margin-top: 0.5rem;
                 margin-right: 3rem;
@@ -110,7 +111,6 @@ div.account-details {
                 text-align: center;
                 padding: 3rem;
                 margin-top: 0.5rem;
-
                 img {
                     width: 110px;
                     display: inline-block;
