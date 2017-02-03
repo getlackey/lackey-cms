@@ -75,6 +75,10 @@ class BlockEditor {
         self.elements.forEach(element => {
             let elementBounds = getAbsoluteBoundingRect(element);
 
+            if (elementBounds.width === 0 && elementBounds.height === 0) {
+                return;
+            }
+
             left = Math.min(left, elementBounds.left);
             top = Math.min(top, elementBounds.top);
             right = Math.max(right, elementBounds.right);
