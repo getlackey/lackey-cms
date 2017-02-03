@@ -1,39 +1,51 @@
 {>"cms/cms/main"/}
 
 {<body}
-<div data-lky-hook="lackey" data-theme="anonymous">
-    <header>
-        <h2>Account Details</h2>
-    </header>
-    <main>
-        <section>
-            <h3>Basic Info</h3>
-            <form data-lky-hook="basic-info">
-                <label>
-                    <span>Name</span>
-                    <input type="text" name="name" class="form-control" value="{user.name|h}"/>
-                </label>
-                <label>
-                    <span>Image</span>
-                    <img style="max-width: 250px;" src="{user.image.source}" data-lky-hook="avatar" data-lky-media="{admin.image|js}" />
-                </label>
-                <button class="btn btn-block btn-primary">
-                    Update Basic Info
-                </button>
-            </form>
-            <h3>Credentials</h3>
-            <form data-lky-hook="password">
-                <label>
-                    <span>Password</span>
-                <input type="password" name="newPassword" class="form-control" placeholder="New password" />
-                <input type="password" name="newPassword2" class="form-control" placeholder="Repeat new password" />
-                </label>
-                <button class="btn btn-block btn-primary">
-                    Change Password
-                </button>
-            </form>
+<div data-lky-hook="lackey" data-theme="anonymous" class="account-details">
+    <h1>Account Details</h1>
+    <h2>Basic Info</h2>
+    <form data-lky-hook="basic-info">
+        <div class="name">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" value="{user.name|h}"/>
+            <button class="btn btn-block btn-primary">Update</button>
+        </div>
 
-            <h3>Sessions</h3>
+        <div class="profile-photo">
+            <div class="upload">
+                <label>Profile Photo</label>
+                <div class="dropzone">
+                    <span>Drop files here</span>
+                    <button class="btn btn-block btn-primary">Choose file</button>
+                </div>
+            </div>
+
+            <div class="preview">
+                <label>Preview</label>
+                <figure>
+                    <img style="max-width: 250px;" src="{user.image.source}" data-lky-hook="avatar" data-lky-media="{admin.image|js}" />
+                </figure>
+            </div>
+        </div>
+    </form>
+
+    <hr />
+
+    <h2>Credentials</h2>
+    <form data-lky-hook="password">
+        <div class="password">
+            <label for="newPassword">Change Password</label>
+            <input type="password" name="newPassword" class="form-control" placeholder="New password" />
+            <input type="password" name="newPassword2" class="form-control" placeholder="Repeat" />
+            <button class="btn btn-block btn-primary">Change</button>
+        </div>
+    </form>
+
+    <hr />
+
+    <h2>Sessions</h2>
+    <form data-lky-hook="sessions">
+        <div class="session">
             {#data.sessions}
             <label class="sessionItem {@eq key="{_doc.sid}" value="{data.currentSession}"}current{/eq}">
                 {_doc.ipAddress} - {_doc.browser} - {_doc.os} &nbsp;
@@ -44,10 +56,9 @@
                 {/eq}
             </label>
             {/data.sessions}
-
-            <button class="btn btn-sm btn-warning sess-rmAll">Delete All Sesssions</button>
-
-</section>
+            <button class="btn btn-sm btn-warning sess-rmAll">Delete Session</button>
+        </div>
+    </form>
 
 
 {/body}

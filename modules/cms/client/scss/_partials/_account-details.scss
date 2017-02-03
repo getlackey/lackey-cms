@@ -1,0 +1,185 @@
+div.account-details {
+    background: #ffffff;
+    margin: 1rem 2rem 0 2rem;
+    padding: 2rem 10rem;
+    display: flex;
+    position: relative;
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    h2 {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
+        margin-bottom: 2rem;
+    }
+
+    label {
+        color: #6c6c6c;
+    }
+
+    input, button {
+        &:focus {outline:0;}
+    }
+
+    hr {
+        border-bottom: 1px solid lighten($color-washed, 20%);
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        margin: 5rem 0 3rem 0;
+    }
+
+    .name {
+        display: flex;
+        flex-flow: wrap;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+
+        label {
+            flex: 1 1 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            flex: 1 1 75%;
+            border: 1px solid #c8c8c8;
+            font-size: 0.8rem;
+            padding: 0.5rem 0.7rem;
+            margin-right: 1rem;
+        }
+
+        button {
+            flex: 0 1 20%;
+            appearance: none;
+            background: $color-background-highlight;
+            border: 0;
+            padding: 0.5rem 0;
+            color: #ffffff;
+            font-size: 0.8rem;
+        }
+    }
+
+    .profile-photo {
+        display: flex;
+        justify-content: space-between;
+
+        .upload {
+            flex: 0 1 60%;
+
+            .dropzone {
+                border: 5px dashed #c8c8c8;
+                padding: 3rem;
+                text-align: center;
+                margin-top: 0.5rem;
+
+
+                span {
+                    display: block;
+                    margin-bottom: 2rem;
+                    font-size: 1.5rem;
+                    color: #6c6c6c;
+                }
+
+                button {
+                    flex: 0 1 20%;
+                    appearance: none;
+                    background: $color-background-highlight;
+                    border: 0;
+                    padding: 0.5rem 1rem;
+                    color: #ffffff;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+
+        .preview {
+            flex: 0 1 30%;
+
+            figure {
+                border: 1px solid #c8c8c8;
+                text-align: center;
+                padding: 3rem;
+                margin-top: 0.5rem;
+
+                img {
+                    height: 110px;
+                    display: inline-block;
+                }
+            }
+        }
+
+    }
+
+    .password {
+        display: flex;
+        flex-flow: wrap;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        label {
+            flex: 1 1 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            flex: 1 1 75%;
+            border: 1px solid #c8c8c8;
+            font-size: 0.8rem;
+            padding: 0.5rem 0.7rem;
+            margin-right: 1rem;
+
+            &:first-of-type {
+                margin: 0 0 1rem 0;
+            }
+        }
+
+        button {
+            flex: 0 1 20%;
+            appearance: none;
+            background: $color-background-highlight;
+            border: 0;
+            padding: 0.5rem 0;
+            color: #ffffff;
+            font-size: 0.8rem;
+        }
+    }
+
+    .session {
+        display: flex;
+        flex-flow: wrap;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        label {
+            flex: 1 1 80%;
+            font-weight: bold;
+            line-height: 2rem;
+        }
+
+        button {
+            flex: 0 1 20%;
+            appearance: none;
+            background: $color-background-highlight;
+            border: 0;
+            padding: 0.5rem 0;
+            color: #ffffff;
+            font-size: 0.8rem;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
