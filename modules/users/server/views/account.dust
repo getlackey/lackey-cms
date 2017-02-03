@@ -11,10 +11,7 @@
             <form data-lky-hook="basic-info">
                 <label>
                     <span>Name</span>
-                    <input type="text"
-                           name="name"
-                           class="form-control"
-                           value="{user.name|h}"/>
+                    <input type="text" name="name" class="form-control" value="{user.name|h}"/>
                 </label>
                 <label>
                     <span>Image</span>
@@ -28,15 +25,8 @@
             <form data-lky-hook="password">
                 <label>
                     <span>Password</span>
-                <input type="password"
-                            name="newPassword"
-                            class="form-control"
-                            placeholder="New password"
-                           />
-                <input type="password"
-                        name="newPassword2"
-                        class="form-control"
-                        placeholder="Repeat new password"/>
+                <input type="password" name="newPassword" class="form-control" placeholder="New password" />
+                <input type="password" name="newPassword2" class="form-control" placeholder="Repeat new password" />
                 </label>
                 <button class="btn btn-block btn-primary">
                     Change Password
@@ -54,7 +44,6 @@
                 {/eq}
             </label>
             {/data.sessions}
-
 
             <button class="btn btn-sm btn-warning sess-rmAll">Delete All Sesssions</button>
 
