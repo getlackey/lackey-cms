@@ -71,12 +71,17 @@ div.account-details {
         .upload {
             flex: 1 1 auto;
 
-            .dropzone {
+            [data-dropzone] {
                 border: 5px dashed #c8c8c8;
                 padding: 3rem;
                 text-align: center;
                 margin-top: 0.5rem;
                 margin-right: 3rem;
+
+                &.hover {
+                    border-color: $color-background-highlight;
+                    //background-color: #f1f1f1;
+                }
 
                 span {
                     display: block;

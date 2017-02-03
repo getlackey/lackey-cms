@@ -21,10 +21,24 @@ const
     api = require('core/client/js/api'),
     growl = require('cms/client/js/growl'),
     Media = require('cms/client/js/media'),
-    userDrop = require('cms/client/js/manager/user.dropdown.js');
-var media;
+    userDrop = require('cms/client/js/manager/user.dropdown.js'),
+    Upload = require('core/client/js/upload');
+
+
+var media,
+    dragdrop,
+    userHead = lackey.select('[data-lky-hook="header.user"]')[0];
 
 userDrop();
+
+function updateHead(name, src) {
+    if (name) {
+        userHead.querySelector('span').innerHTML = name;
+    }
+    if (src) {
+        userHead.querySelector('figure img').src = src;
+    }
+}
 
 lackey
     .select('[data-lky-media]').forEach((element) => {
@@ -37,7 +51,41 @@ lackey
         media.input.addEventListener('change', function (event) {
             media.upload.choice(event);
         });
+
+        document.querySelector('#fileIn').addEventListener('click', function () {
+            media.input.click();
+        });
+
+        media.upload.on('done', function (uploader, data) {
+            if (data && data.length && data[0].data) {
+                media.set(data[0].data);
+                media.notify();
+                api.update('/me', {avatar: media.media.id}).then(() => {
+                    growl({
+                        status: 'success',
+                        message: 'Profile photo successfully updated'
+                    });
+                    updateHead(null, media.node.src);
+                });
+            }
+        });
     });
+
+dragdrop = new Upload(document.querySelector('#imageDrop'));
+dragdrop.on('done', function (uploader, data) {
+      if (data && data.length && data[0].data) {
+            media.set(data[0].data);
+            media.notify();
+            api.update('/me', {avatar: media.media.id}).then(() => {
+                growl({
+                    status: 'success',
+                    message: 'Profile photo successfully updated'
+                });
+                updateHead(null, media.node.src);
+            });
+      }
+});
+window.dragdrop = dragdrop;
 
 lackey.bind('lky:basic-info', 'submit', (event, hook) => {
     event.preventDefault();
@@ -49,76 +97,16 @@ lackey.bind('lky:basic-info', 'submit', (event, hook) => {
     if (data.name) {
         update.name = data.name;
     }
-    if (media.media.id) {
-        update.avatar = media.media.id;
-    }
 
     api.update('/me', update).then(() => {
         growl({
             status: 'success',
             message: 'Basic info successfully updated'
         });
+        updateHead(data.name);
     });
     return false;
 });
-
-//function buildIdentities(parent, context) {
-//    parent.innerHTML = '';
-//    template.render('cms/users/identities', {data: context})
-//        .then((things)=> {
-//            things.forEach(function (thing) {
-//                parent.appendChild(thing);
-//            });
-//            lackey.bind('lky:delete-identity', 'click', (event, hook) => {
-//                event.preventDefault();
-//                event.cancelBubble = true;
-//
-//                let email = hook.parentElement.querySelector('input[name=email]').value;
-//
-//                api.create('/account/rm-identity', {
-//                    email: email
-//                })
-//                .then((ret) => {
-//                     growl({
-//                        status: 'success',
-//                        message: 'Identity removed successfully'
-//                    });
-//                    buildIdentities(parent, ret);
-//                }, (err) => {
-//                    growl({
-//                        status: 'error',
-//                        message: err
-//                    });
-//                });
-//                return false;
-//            });
-//
-//            lackey.bind('lky:identities', 'submit', (event, hook) => {
-//                event.preventDefault();
-//                event.cancelBubble = true;
-//
-//                let data = lackey.form(hook);
-//
-//                api.create('/account/identity', {
-//                    email: data.email
-//                }).then((ret) => {
-//                    growl({
-//                        status: 'success',
-//                        message: 'Identity added successfully'
-//                    });
-//                   buildIdentities(parent, ret);
-//                }, () => {
-//                    growl({
-//                        status: 'error',
-//                        message: 'Identity already exists'
-//                    });
-//                });
-//                return false;
-//            });
-//        });
-//}
-
-//buildIdentities(document.querySelector('#identity-parent'), { emails: JSON.parse(document.querySelector('#identity-parent').getAttribute('data-emails'))});
 
 lackey.bind('lky:confirm-email', 'click', (event, hook) => {
     event.preventDefault();
