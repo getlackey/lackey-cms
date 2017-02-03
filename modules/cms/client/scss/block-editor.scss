@@ -1,0 +1,30 @@
+@import "vars";
+
+button.lky-edit-block {
+    position: absolute;
+    width: 1em; height: 1em;
+    z-index: 100000;
+
+    font-size: 2.5rem;
+    background-color: $color-background;
+    background-image: url(../../../img/cms/cms/svg/ui/settings/settings.svg);
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transform: translate(-0.5rem, 0.5rem);
+
+    transition: background-color 0.5s $timing-material-decelerate;
+
+    &:hover {
+        background-color: $color-background-accent;
+
+        transition: background-color 0.2s $timing-material-standard;
+    }
+
+    &[data-target-change] {
+        background-color: $color-background-highlight;
+
+        transition: none;
+    }
+}

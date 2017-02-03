@@ -21,6 +21,8 @@ const
 
 const commentPrefix = 'BLOCK:';
 
+var _editButton;
+
 class BlockEditor {
     constructor(block) {
         debug('Constructor', block);
@@ -51,20 +53,70 @@ class BlockEditor {
         self.block.start.parentNode.removeChild(self.block.start);
         self.block.end.parentNode.removeChild(self.block.end);
 
-        self.elements.forEach(element => element.addEventListener('click', (ev) => {
-            if (ev.target.hasAttribute('data-lky-pm')) {
-                return;
-            }
-
-            ev.stopPropagation();
-            self.edit();
-        }));
+        self.elements.forEach(element => {
+            element.addEventListener('mouseover', ev => self.onBlockOver(ev));
+            element.addEventListener('mouseleave', ev => self.onBlockLeave(ev));
+        });
     }
 
     edit() {
         var self = this;
 
+        console.log(self.block);
+
         top.LackeyManager.editBlock('layout.' + self.block.path, self.block.template);
+    }
+
+    getAbsoluteBoundingRect() {
+        var self = this,
+            left = Infinity, top = Infinity,
+            right = -Infinity, bottom = -Infinity;
+
+        self.elements.forEach(element => {
+            let elementBounds = getAbsoluteBoundingRect(element);
+
+            left = Math.min(left, elementBounds.left);
+            top = Math.min(top, elementBounds.top);
+            right = Math.max(right, elementBounds.right);
+            bottom = Math.max(bottom, elementBounds.bottom);
+        });
+
+        return {
+            left: left,
+            top: top,
+            right: right,
+            bottom: bottom,
+            width: right - left,
+            height: bottom - top
+        };
+    }
+
+    get isMouseOver() {
+        var self = this;
+
+        return self.elements.some(element => element.isMouseOver);
+    }
+
+    onBlockOver(ev) {
+        var self = this;
+
+        ev.currentTarget.isMouseOver = true;
+
+        if (self.isMouseOver) {
+            ev.stopPropagation();
+            BlockEditor.setEditTarget(self);
+        }
+    }
+
+    onBlockLeave(ev) {
+        var self = this;
+
+        ev.currentTarget.isMouseOver = false;
+
+        if (self.isMouseOver) {
+            ev.stopPropagation();
+            BlockEditor.setEditTarget(self);
+        }
     }
 
 
@@ -105,13 +157,15 @@ class BlockEditor {
                 parsedData = {}, block;
 
             parsedData = JSON.parse(data.substring(dataKind.length));
-            parsedData.kind = dataKind;
-
             comment.lackeyBlockData = parsedData;
 
-            block = blocks[parsedData.path] || parsedData;
-            block[dataKind] = comment;
-            blocks[parsedData.path] = block;
+            if (parsedData.path) {
+                block = blocks[parsedData.path] || parsedData;
+                block[dataKind] = comment;
+                blocks[parsedData.path] = block;
+            } else {
+                comment.parentNode.removeChild(comment);
+            }
         });
 
         return blocks;
@@ -135,6 +189,71 @@ class BlockEditor {
 
         return foundComments;
     }
+
+    static get editButton() {
+        if (!_editButton) {
+            _editButton = document.createElement('button');
+
+            _editButton.setAttribute('class', 'lky-edit-block');
+
+            _editButton.addEventListener('click', (ev) => BlockEditor._onEditButtonClick(ev));
+
+            document.body.appendChild(_editButton);
+        }
+
+        return _editButton;
+    }
+
+    static _onEditButtonClick(ev) {
+        ev.stopPropagation();
+
+        if (BlockEditor.editButton.block) {
+            BlockEditor.editButton.block.edit();
+        }
+    }
+
+    static setEditTarget(block) {
+        var blockBounds = block.getAbsoluteBoundingRect();
+
+        BlockEditor.editButton.style.right = (document.body.clientWidth - blockBounds.right) + 'px';
+        BlockEditor.editButton.style.top = blockBounds.top + 'px';
+
+        BlockEditor.editButton.setAttribute('data-visible', '');
+
+        if (BlockEditor.editButton.block !== block) {
+            BlockEditor.editButton.setAttribute('data-target-change', '');
+            setTimeout(() => BlockEditor.editButton.removeAttribute('data-target-change'), 1);
+        }
+
+        BlockEditor.editButton.block = block;
+
+        return true;
+    }
 }
 
 module.exports = BlockEditor;
+
+function getAbsoluteBoundingRect(element) {
+    var offsetX = window.pageXOffset,
+        offsetY = window.pageYOffset,
+        rect = element.getBoundingClientRect();
+
+    if (element !== document.body) {
+        var parent = element.parentNode;
+
+        while (parent !== document.body) {
+            offsetX += parent.scrollLeft;
+            offsetY += parent.scrollTop;
+            parent = parent.parentNode;
+        }
+    }
+
+    return {
+        bottom: rect.bottom + offsetY,
+        height: rect.height,
+        left: rect.left + offsetX,
+        right: rect.right + offsetX,
+        top: rect.top + offsetY,
+        width: rect.width
+    };
+}

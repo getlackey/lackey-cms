@@ -136,7 +136,7 @@ module.exports = SUtils
                             preview ? 'js/cms/cms/preview.js' : 'js/cms/cms/page.js'
                         ] : [];
 
-                        stylesheets = isAllowed ? ['css/cms/cms/wysiwyg.css'] : [];
+                        stylesheets = isAllowed ? ['css/cms/cms/wysiwyg.css', 'css/cms/cms/block-editor.css'] : [];
 
                         if (page.state !== 'published' && !isAllowed) {
                             if (req.query.preview) {

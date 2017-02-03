@@ -40,3 +40,8 @@ $default-header-font-family: "Geomanist", sans-serif;
 $header-1-font-size: 65px;
 $header-2-font-size: 34px;
 $header-3-font-size: 18px;
+
+$timing-material-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+$timing-material-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+$timing-material-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+$timing-material-sharp: cubic-bezier(0.4, 0.0, 0.6, 1);
