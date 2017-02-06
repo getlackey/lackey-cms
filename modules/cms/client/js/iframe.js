@@ -33,5 +33,33 @@ if (loc.href.replace(/\/$/, '') !== previewPath.replace(/\/$/, '')) {
     if (top === window || top.document.location.href.replace(/\/$/, '') !== adminPath.replace(/\/$/, '')) {
         top.document.location.href = adminPath;
     }
-
 }
+
+function handleLinkClick(ev) {
+    var location = document.location,
+        anchor = ev.target;
+
+    if (anchor.host === location.host &&
+        !anchor.pathname.match(/\.\w+/) &&
+        !anchor.pathname.match(/\/admin/)) {
+
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        console.info('Overriding anchor navigation to admin page:', anchor.href);
+
+        top.document.location.href = location.origin + '/admin' + anchor.pathname;
+
+        return false;
+    }
+}
+
+window.addEventListener('load', () => {
+    let links = document.querySelectorAll('a[href]');
+
+    for (let i = 0; i < links.length; i += 1) {
+        let link = links[i];
+
+        link.addEventListener('click', handleLinkClick);
+    }
+});
