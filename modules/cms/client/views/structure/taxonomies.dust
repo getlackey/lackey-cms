@@ -1,29 +1,38 @@
-{#template.allowTaxonomies}
-    <label>{label}</label>
-    <small>{description}</small>
+<section>
+    {#template.allowTaxonomies}
+        <label>{label}</label>
+        <small>{description}</small>
 
-    {#. taxtype=name}
-    {#taxonomies}
-        {@eq key=type.name value=taxtype}
-        <span data-tag>
-            {?label}{label}{:else}{name}{/label}
-            <a data-lky-hook="taxonomy-remove" data-type="{type.name}" data-name="{name}">&times;</a>
-        </span>
-        {/eq}
-    {/taxonomies}
-    {/.}
+        <ul>
+        {#. taxtype=name}
+        {#taxonomies}
+            {@eq key=type.name value=taxtype}
+            <li data-tag>
+                {?label}{label}{:else}{name}{/label}
+                <a data-lky-hook="taxonomy-remove" data-type="{type.name}" data-name="{name}">&times;</a>
+            </li>
+            {/eq}
+        {/taxonomies}
+        {/.}
+        </ul>
 
-    <button data-lky-btn="" data-lky-hook="action:pick-taxonomy" data-type="{name}" data-addable="{?allowCreation}true{/allowCreation}">Add</button>
-{:else}
-    <p>Tagging isn't enabled for this element!</p>
-{/template.allowTaxonomies}
+        <button data-lky-btn="" data-lky-hook="action:pick-taxonomy" data-type="{name}" data-addable="{?allowCreation}true{/allowCreation}">Add Another Tag</button>
+    {:else}
+        <p>Tagging isn't enabled for this element!</p>
+    {/template.allowTaxonomies}
+</section>
 
 {?template.taxonomies}
-    <br/>
-    <h5>Inherited Tags (from template)</h5>
-    {#template.taxonomies}
-        <span data-tag disabled>
-            {type.label} : {label}
-        </span>
-    {/template.taxonomies}
+    <section>
+        <label>Inherited Tags (from template)</label>
+
+        <ul>
+        {#template.taxonomies}
+            <li data-tag disabled>
+                {?type.label}{type.label}{:else}{type.name}{/type.label}:
+                {?label} {label}{:else} {name}{/label}
+            </li>
+        {/template.taxonomies}
+        </ul>
+    </section>
 {/template.taxonomies}

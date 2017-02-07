@@ -409,22 +409,30 @@
                 > div {
                     padding: 50px;
 
-                    > label {
-                        margin-bottom: 0;
+                    > section {
+                        & + section { margin-top: 28px; }
+
+                        > label {
+                            margin-bottom: 5px;
+                        }
+
+                        > small {
+                            font-size: 10px;
+                            color: $color-washed;
+                            padding: 10px;
+                            display: block;
+                            line-height: 150%;
+                            letter-spacing: 0px;
+
+                            &:empty { display: none; }
+                        }
+
+                        > ul {
+                            margin-top: 1em;
+                        }
+
+                        [data-tag] + button { margin-top: 14px; }
                     }
-
-                    > small {
-                        font-size: 10px;
-                        color: $color-washed;
-                        padding: 10px;
-                        display: block;
-                        line-height: 150%;
-                        letter-spacing: 0px;
-                    }
-
-                    [data-tag] + button { margin-top: 14px; }
-
-                    > button { margin-bottom: 28px; }
                 }
             }
             &[data-lky-has-media="false"] {
