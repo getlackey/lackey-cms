@@ -316,6 +316,10 @@
                     > ul {
                         padding: 50px;
                         list-style: none;
+
+                        &:empty:after {
+                            content: "This element has no configurable settings!";
+                        }
                     }
                 }
             }
