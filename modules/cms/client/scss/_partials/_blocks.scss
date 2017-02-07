@@ -107,6 +107,11 @@
                     > img { opacity: 0.65; }
                 }
             }
+
+            &:first-child:last-child > [data-lky-add-block] {
+                opacity: 1;
+                color: white;
+            }
         }
     }
 }
