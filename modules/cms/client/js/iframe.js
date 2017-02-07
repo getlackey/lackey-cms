@@ -48,7 +48,7 @@ function handleLinkClick(ev) {
 
         console.info('Overriding anchor navigation to admin page:', anchor.href);
 
-        top.document.location.href = location.origin + '/admin' + anchor.pathname;
+        top.document.location.href = location.origin + '/admin' + anchor.pathname + anchor.hash;
 
         return false;
     }
