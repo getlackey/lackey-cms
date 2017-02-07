@@ -298,6 +298,10 @@
                 }
             }
             [data-lky-hook="settings.blocks"] {
+                > div {
+                    padding: 50px;
+                }
+
                 ul {
                     list-style: none;
                 }

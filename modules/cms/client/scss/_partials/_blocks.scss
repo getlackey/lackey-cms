@@ -33,6 +33,10 @@
 }
 
 [data-lky-hook="sections"] {
+    &:empty:after {
+        content: "Blocks cannot be added to this element.";
+    }
+
     > ul {
         > li {
             > span {

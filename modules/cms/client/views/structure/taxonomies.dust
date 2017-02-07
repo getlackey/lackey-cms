@@ -14,12 +14,16 @@
     {/.}
 
     <button data-lky-btn="" data-lky-hook="action:pick-taxonomy" data-type="{name}" data-addable="{?allowCreation}true{/allowCreation}">Add</button>
+{:else}
+    <p>Tagging isn't enabled for this element!</p>
 {/template.allowTaxonomies}
-<br/>
-<h5>Taxonomies Inherited from the template</h5>
-<small>Can be used as filter in search or restrict access</small>
-{#template.taxonomies}
-<span data-tag disabled>
-    {type.label} : {label}
-</span>
+
+{?template.taxonomies}
+    <br/>
+    <h5>Inherited Tags (from template)</h5>
+    {#template.taxonomies}
+        <span data-tag disabled>
+            {type.label} : {label}
+        </span>
+    {/template.taxonomies}
 {/template.taxonomies}
