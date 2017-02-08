@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="174" height="67" viewBox="262 1187 174 67" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <rect id="b" width="38.6349994" height="47.2466676" x=".32872954" y=".69669178" rx="2"/>
+    <mask id="f" width="38.6349994" height="47.2466676" x="0" y="0" fill="#fff">
+      <use xlink:href="#b"/>
+    </mask>
+    <rect id="c" width="38.6349994" height="47.2466676" x=".32872954" y=".69669178" rx="2"/>
+    <mask id="g" width="38.6349994" height="47.2466676" x="0" y="0" fill="#fff">
+      <use xlink:href="#c"/>
+    </mask>
+    <rect id="d" width="38.6349994" height="47.2466676" x=".32872954" y=".69669178" rx="2"/>
+    <mask id="h" width="38.6349994" height="47.2466676" x="0" y="0" fill="#fff">
+      <use xlink:href="#d"/>
+    </mask>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(259 1158)">
+    <g transform="translate(24 40)">
+      <use stroke="#0CF" stroke-width="4" mask="url(#f)" xlink:href="#b"/>
+      <path fill="#ACEFFF" d="M8 18h22.9384766v2.81005636H8zm0 6h22.9384766v2.81005636H8z"/>
+      <path fill="#0CF" d="M8 10h22.9384766v2.81005636H8z"/>
+    </g>
+    <g transform="translate(71 40)">
+      <use stroke="#0CF" stroke-width="4" mask="url(#g)" xlink:href="#c"/>
+      <path fill="#ACEFFF" d="M8 18h22.9384766v2.81005636H8zm0 6h22.9384766v2.81005636H8z"/>
+      <path fill="#0CF" d="M8 10h22.9384766v2.81005636H8z"/>
+    </g>
+    <g transform="translate(118 40)">
+      <use stroke="#0CF" stroke-width="4" mask="url(#h)" xlink:href="#d"/>
+      <path fill="#ACEFFF" d="M8 18h22.9384766v2.81005636H8zm0 6h22.9384766v2.81005636H8z"/>
+      <path fill="#0CF" d="M8 10h22.9384766v2.81005636H8z"/>
+    </g>
+    <rect width="23" height="8.99218036" x="32" y="73" fill="#ACEFFF" rx="4.49609018"/>
+    <rect width="23" height="8.99218036" x="79" y="73" fill="#ACEFFF" rx="4.49609018"/>
+    <rect width="23" height="8.99218036" x="126" y="73" fill="#ACEFFF" rx="4.49609018"/>
+  </g>
+</svg>
