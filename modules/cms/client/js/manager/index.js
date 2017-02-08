@@ -79,6 +79,9 @@ function Manager() {
 
     this.repository = new Repository(this);
     this.repository.on('changed', this.onChanged.bind(this));
+    this.repository.on('apply', event => {
+        self.structureChanges = false;
+    });
     this.repository.bubble(this, 'reset');
 
     this.stack = new Stack(this.repository, this);
