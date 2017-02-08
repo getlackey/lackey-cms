@@ -39,6 +39,10 @@ function handleLinkClick(ev) {
     var location = document.location,
         anchor = ev.target;
 
+    if (ev.defaultPrevented) {
+        return;
+    }
+
     if (anchor.host === location.host &&
         !anchor.pathname.match(/\.\w+/) &&
         !anchor.pathname.match(/\/admin/)) {
