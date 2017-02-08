@@ -128,14 +128,18 @@ class Wysiwyg {
 
     reset() {
         let self = this;
-        top.LackeyManager
-            .get(self.id, self.path, self.variant)
-            .then(src => {
-                self._source = src;
-                self._lock = true;
-                self._element.innerHTML = markdown.toHTML(self._source, self._element.tagName);
-                self._lock = false;
-            });
+        if (top) {
+            top.LackeyManager
+                .get(self.id, self.path, self.variant)
+                .then(src => {
+                    if (src) {
+                        self._source = src;
+                        self._lock = true;
+                        self._element.innerHTML = markdown.toHTML(self._source, self._element.tagName);
+                        self._lock = false;
+                    }
+                });
+        }
     }
 
     render() {
