@@ -97,7 +97,7 @@ const
             OR
             LOWER(name) like LOWER('%$1%')
             OR
-            LOWER(route) like ('%$1%')
+            LOWER(route) like LOWER('%$1%')
             $2
         )`,
     TAXONIMIES_FREE_TEXT_SEARCH = `
@@ -212,7 +212,7 @@ module.exports = require(LACKEY_PATH)
 
                 let
                     taxes = '',
-                    value = text.replace(/[^a-zA-Z0-9\s+-]/g, '');
+                    value = text.replace(/[\p{L}0-9\s+-]/g, '');
 
                 if (freeTextTax && freeTextTax.length) {
                     freeTextTax
@@ -257,6 +257,7 @@ module.exports = require(LACKEY_PATH)
 
                 query += ' LIMIT ' + num_limit;
 
+                console.log(query);
                 return Promise
                     .all([
                             SCli.sql(knex.raw(countQuery)).then((r) => r.rows),
