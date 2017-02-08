@@ -148,12 +148,19 @@
                     list-style: none;
                     padding: 15px 0px;
                     margin: 0px;
+
                     li {
                         display: flex;
                         flex-wrap: wrap;
                         align-items: center;
+                        justify-content: space-around;
 
-                        border-bottom: 1px solid lighten($color-lackey-light-gray, 30%);
+                        & + li {
+                            padding-top: 20px;
+                            margin-top: 22px;
+
+                            border-top: 1px solid lighten($color-lackey-light-gray, 30%);
+                        }
 
                         img {
                             display: block;
@@ -165,14 +172,26 @@
                             display: block;
                             text-align: center;
                         }
+                        > label {
+                            display: block;
+                            width: 100%;
+                            margin: 0 0 5px;
+
+                            text-align: center;
+                        }
                         > button {
                             float: right;
                             height: 65px;
                             border-radius: 5px;
-
+                            cursor: pointer;
                         }
                         div {
                             padding: 5px;
+
+                            &[data-lky-block] {
+                                padding: 0;
+                                margin: 0;
+                            }
 
                             & + img { text-align: right; }
                             &:first-child {

@@ -1,5 +1,6 @@
 [data-lky-block] {
     display: flex;
+    padding: 0;
 
     border: 2px solid $color-lackey-light-blue;
     margin-bottom: 10px;
@@ -29,6 +30,26 @@
 
         [data-lky-icon], [data-lky-bin] { opacity: 0.2; }
         > div { border-left-color: transparentize($color-lackey-light-gray, 0.5); }
+    }
+
+    li[data-lky-editable]:not([data-lky-editable=true]) > & {
+        position: relative;
+
+        &:after {
+            content: "";
+
+            position: absolute;
+            left: 0; right: 0;
+            top: 0; bottom: 0;
+
+            background-image: url(../../../img/cms/cms/svg/block/lock.svg);
+            background-position: left top;
+            background-repeat: no-repeat;
+
+            pointer-events: none;
+        }
+
+        > img { opacity: 0.65; }
     }
 }
 
@@ -84,28 +105,6 @@
 
             &[data-lky-component][data-lky-type] > label {
                 margin-bottom: 3px;
-            }
-
-            &[data-lky-editable]:not([data-lky-editable=true]) {
-                > [data-lky-block] {
-                    position: relative;
-
-                    &:after {
-                        content: "";
-
-                        position: absolute;
-                        left: 0; right: 0;
-                        top: 0; bottom: 0;
-
-                        background-image: url(../../../img/cms/cms/svg/block/lock.svg);
-                        background-position: left top;
-                        background-repeat: no-repeat;
-
-                        pointer-events: none;
-                    }
-
-                    > img { opacity: 0.65; }
-                }
             }
 
             &:first-child:last-child > [data-lky-add-block] {

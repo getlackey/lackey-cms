@@ -1,8 +1,10 @@
 {! Used by lackey-cms/modules/cms/client/views/block-picker.dust !}
 {#data}
-    <li>
-        <span>{name}</span>
+    <li {?locked}data-lky-locked{/locked} data-lky-editable="{editable}">
+        <label>{name}</label>
+        <div data-lky-block {?locked}data-lky-locked{/locked}>
+            <img data-lky-icon src="{thumb}"/>
+        </div>
         <button data-lky-btn data-lky-path="{path}">Choose</button>
-        <img src="{thumb}"/>
     </li>
 {/data}
