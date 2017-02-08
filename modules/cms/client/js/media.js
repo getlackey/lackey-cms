@@ -80,10 +80,11 @@ class Media {
       render() {
             if (this.update) {
                   this.node.addEventListener('click', this.onClick, true);
-                  if (this.media.source) {
+                  console.log(this);
+                  if (this.media && this.media.source) {
                       return this.field(this.node, this.update, this.updatePattern.replace('$1', Media.clearSource(this.media.source)));
                   }
-                  return;
+                  return this.field(this.node, this.update, '');
             }
             if (this.media && this.media.mime && this.media.mime.match(/^video\//)) {
                   return this.renderVideo();
