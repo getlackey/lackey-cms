@@ -80,7 +80,6 @@ class Media {
       render() {
             if (this.update) {
                   this.node.addEventListener('click', this.onClick, true);
-                  console.log(this);
                   if (this.media && this.media.source) {
                       return this.field(this.node, this.update, this.updatePattern.replace('$1', Media.clearSource(this.media.source)));
                   }

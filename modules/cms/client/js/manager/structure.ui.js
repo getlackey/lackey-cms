@@ -520,7 +520,6 @@ class StructureUI extends Emitter {
         lackey
             .select(['input[type=url]'], self.metaNode)
             .forEach(input => {
-                console.log(input.nextElementSibling);
 
                 var urlPreview = input.nextElementSibling.querySelector('a');
 

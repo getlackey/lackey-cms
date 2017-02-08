@@ -581,7 +581,6 @@ module.exports = Database
                             sort = (options ? options.sort : null),
                             populate = null,
                             table = {};
-                        console.log(inputQuery);
                         if (!sort) {
                             sort = {
                                 id: 1

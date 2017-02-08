@@ -257,7 +257,6 @@ module.exports = require(LACKEY_PATH)
 
                 query += ' LIMIT ' + num_limit;
 
-                console.log(query);
                 return Promise
                     .all([
                             SCli.sql(knex.raw(countQuery)).then((r) => r.rows),
