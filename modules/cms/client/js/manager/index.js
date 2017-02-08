@@ -83,6 +83,7 @@ function Manager() {
 
     this.stack = new Stack(this.repository, this);
     this.stack.on('transition', this.onStackChange.bind(this));
+    this.structureChanges = false;
 
 
     overlay.addEventListener('mousewheel', (e) => {
@@ -364,6 +365,7 @@ Manager.prototype.onViewStructure = function (event) {
 Manager.prototype.onStructureChange = function () {
     this.repository.notify();
     this.preview();
+    this.structureChanges = true;
 };
 
 Manager.prototype.onPagePropertiesChanged = function (event) {

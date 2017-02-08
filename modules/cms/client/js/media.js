@@ -47,9 +47,7 @@ class Media {
                         });
                   ev.stopPropagation();
             }).bind(this);
-
             if (this.node) {
-
                   this.content = HTMLElement.getAttribute('data-lky-content') || false;
                   this.path = HTMLElement.getAttribute('data-lky-path') || null;
                   this.variant = HTMLElement.getAttribute('data-lky-variant');
@@ -75,7 +73,23 @@ class Media {
 
                   }
             }
+            this.setup();
+      }
+      setup() {
+            var self = this,
+                _original = JSON.parse(JSON.stringify(this.media));
 
+            top.LackeyManager
+                  .on('reset', event => {
+                        if (_original) {
+                              this.media = _original;
+                              this.render();
+                        }
+                  });
+            top.LackeyManager.repository
+                  .on('apply', event => {
+                        _original = JSON.parse(JSON.stringify(this.media));
+                  });
       }
       render() {
             if (this.update) {

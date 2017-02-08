@@ -142,7 +142,9 @@ Repository.prototype.reset = function () {
         type: type,
         id: id
     });
-    this._manager.onStructureChange();
+    if (this._manager.structureChanges) {
+        this._manager.onStructureChange();
+    }
 };
 
 /**
