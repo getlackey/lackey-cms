@@ -1,0 +1,55 @@
+.context-content {
+    background: #ffffff;
+    margin: 4rem!important;
+    flex: 1 1 100%;
+    display: flex;
+    justify-content: flex-start;
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    h2 {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
+        margin-top: 1rem;
+    }
+
+    .left {
+        flex: 1 1 50%;
+
+        .profile {
+            border-radius: 100%;
+            border: 1px solid #c8c8c8;
+            box-shadow: 0 0 10px 10px #ffffff;
+        }
+    }
+
+    .right {
+        flex: 1 1 40%;
+
+        .mediaContainer {
+            margin: 0 auto;
+
+            img {
+                margin: 5rem auto 0 auto;
+                border: 1px solid #c8c8c8;
+            }
+
+            img[src=""] {
+                display: none;
+            }
+        }
+    }
+
+    .buttons {
+        display: block;
+        margin-top: 2rem;
+
+        input, button {
+            &:focus {outline:0;}
+        }
+    }
+}
