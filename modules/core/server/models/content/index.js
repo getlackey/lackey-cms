@@ -136,7 +136,7 @@ module.exports = SUtils
                     props.og_title = this._doc.name;
                 }
                 if (!props.og_url) {
-                    props.og_url = configuration.get('host') + this._doc.route;
+                    props.og_url = configuration.get('host').replace(/\/$/, "") + this._doc.route;
                 }
                 return props;
             }
