@@ -2,43 +2,46 @@
 
 {<body}
 <section data-lky-component="page-item" class="context-content">
-    <div class="left">
+    <div class="flex">
         <h1>Content</h1>
-
-        <h2>Path</h2>
-        {data.content.route}
-
-        <h2>Template: </h2>
-        {data.content.template.name}
-
-        <h2>Type</h2>
-        {data.content.type}
-
-        <h2>Author</h2>
-        {?data.content.author.name}{data.content.author.name}{:else}N/A{/data.content.author.name}
-
-        <h2>State</h2>
-        {data.content.state}
-
-        <h2>Created At</h2>
-        {data.content.createdAt}
-
-        <h2>Updated At</h2>
-        {data.content.updatedAt}
-
-        <h2>Tags</h2>
-        {#data.content.taxonomies}
-            <p>{?label}{label}{:else}{name}{/label}</p>
-            {:else}N/A
-        {/data.content.taxonomies}
-
-        <div class="buttons">
-            <a data-lky-btn href="admin{data.content.route}">Go to page</a>
-            <button data-lky-btn data-lky-api="DELETE:/cms/content/{data.content.id}">Delete item</button>
-        </div>
+        <button class="trash" data-lky-btn data-lky-api="DELETE:/cms/content/{data.content.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>
     </div>
-    <div class="right">
-        <div class="mediaContainer"><img src="{data.content.template.thumb}"/></div>
+    <div class="flex">
+        <div class="left">
+            <h2>Path</h2>
+            {data.content.route} <a class="preview" href="admin{data.content.route}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
+
+            <h2>Template: </h2>
+            {data.content.template.name}
+
+            <h2>Type</h2>
+            {data.content.type}
+
+            <h2>Author</h2>
+            {?data.content.author.name}{data.content.author.name}{:else}N/A{/data.content.author.name}
+
+            <h2>State</h2>
+            {data.content.state}
+
+            <h2>Created At</h2>
+            {data.content.createdAt}
+
+            <h2>Updated At</h2>
+            {data.content.updatedAt}
+
+            <h2>Tags</h2>
+            {#data.content.taxonomies}
+                <p>{?label}{label}{:else}{name}{/label}</p>
+                {:else}N/A
+            {/data.content.taxonomies}
+
+            <div class="buttons">
+                <a data-lky-btn href="admin{data.content.route}">View page</a>
+            </div>
+        </div>
+        <div class="right">
+            <div class="mediaContainer"><img src="{data.content.template.thumb}"/></div>
+        </div>
     </div>
 </section>
 
