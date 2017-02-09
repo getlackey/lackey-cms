@@ -1,6 +1,11 @@
 <div class="lackey-cms">
     <div data-lky-overlay></div>
     <div class="modal">
+        {?closeBtn}
+            <div data-lky-close>
+                ×
+            </div>
+        {/closeBtn}
         {+body/}
     </div>
 </div>

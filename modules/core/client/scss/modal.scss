@@ -11,6 +11,20 @@
         background: #fff;
         border: solid 1px #666666;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+
+        [data-lky-close] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 12px 20px;
+            font-size: 50px;
+            cursor: pointer;
+            line-height: 1;
+            color: #b1b1b1;
+            &:hover {
+                color: #303030;
+            }
+        }
     }
     .fullscreen {
         position: fixed;

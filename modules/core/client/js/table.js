@@ -274,7 +274,11 @@ class Table {
                 if (row.dataset.lkyTemplate) {
                     xhr.basedGet(row.dataset.lkyHref + '.json', true)
                         .then((data) => {
-                            modal.open(row.dataset.lkyTemplate, JSON.parse(data), test);
+                            data = JSON.parse(data);
+                            modal.open(row.dataset.lkyTemplate, {
+                                data: data.data,
+                                closeBtn: true
+                            }, test);
                         });
                 } else {
                     window.location = row.dataset.lkyHref;
