@@ -32,7 +32,15 @@ lackey.bind('[data-lky-api]', 'click', (event, hook) => {
                 api
                     .delete(apiAction[1])
                     .then(() => {
-                        window.location.reload();
+                        growl({
+                            status: 'success',
+                            message: 'Deleted'
+                        });
+                        setTimeout(function () {
+                            //document.location.href = 'cms/user/';
+                            window.location.reload();
+                        }, 2000);
+
                     }, error => {
                         growl({
                             status: 'error',

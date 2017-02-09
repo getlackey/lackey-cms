@@ -137,12 +137,16 @@ class UserController extends CRUD {
         TaxonomyType
             .findBy('restrictive', true)
             .then(restrictive => {
-                res.css('css/cms/cms/profile.css');
-                res.js(['js/cms/cms/profile.js', 'js/cms/cms/context.js']);
-                res.print('cms/cms/profile', {
-                    profile: req.profile.toJSON(false),
-                    restrictive: restrictive
-                });
+                if (req.profile._doc.deleted) {
+                    res.redirect('cms/user');
+                } else {
+                    res.css('css/cms/cms/profile.css');
+                    res.js(['js/cms/cms/profile.js', 'js/cms/cms/context.js']);
+                    res.print('cms/cms/profile', {
+                        profile: req.profile.toJSON(false),
+                        restrictive: restrictive
+                    });
+                }
             });
     }
 
