@@ -31,9 +31,12 @@
 
     h2 {
         font-family: 'Roboto', sans-serif;
-        font-size: 1rem;
-        font-weight: normal;
-        margin-top: 1rem;
+        font-size: 0.8rem;
+        margin-bottom: 0.2rem;
+
+        &:not(:first-child) {
+            margin-top: 1.2rem;
+        }
     }
 
     .left {
@@ -43,6 +46,7 @@
         a.preview {
             display: inline-block;
             vertical-align: middle;
+            margin-left: 1rem;
 
             img {
                 margin-bottom: 2px;
@@ -57,7 +61,7 @@
             margin: 0 auto;
 
             img {
-                margin: 5rem auto 0 auto;
+                margin: 0 auto;
                 border: 1px solid #c8c8c8;
             }
 
@@ -69,7 +73,7 @@
 
     .buttons {
         display: block;
-        margin-top: 2rem;
+        margin-top: 2.8rem;
 
         input, button {
             &:focus {outline:0;}
