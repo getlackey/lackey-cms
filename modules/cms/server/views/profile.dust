@@ -1,80 +1,85 @@
 {>"cms/cms/main"/}
 
 {<body}
-<section data-lky-component="profile">
-    <h2>User profile</h2>
-    <form id="username">
-        <label>
-            Display name
-            <div>
-                <input type="hidden" name="id" value="{data.profile.id}"/>
-                <input name="name" type="text" value="{data.profile.name}"/>
-                <button type="submit">Save</button>
+<section data-lky-component="profile" class="context-user">
+    <h1>User profile</h1>
+
+    <hr />
+
+    <div class="flex">
+        <div class="left">
+            <img src="http://placehold.it/225x225?text=Profile" alt="" class="profile" />
+            <div class="details">
+                {#data.profile.identities}
+                    <div class="type">{type}</div>
+                    <div class="id">{id}</div>
+                {/data.profile.identities}
             </div>
-        </label>
-    </form>
-    <hr/>
-    <small>Changes to role and classifications are applied immediately</small><br/>
-    <h3>Identities</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            {#data.profile.identities}
-                <tr>
-                    <td>{type}</td>
-                    <td>{id}</td>
-                </tr>
-            {/data.profile.identities}
-        </tbody>
-    </table>
-    <h3>Roles</h3>
-    <ul class="badges">
-        {#data.profile.roles}
-            <li>
-                {?label}{label}{:else}{name}{/label}
-                <a data-lky-hook="action:remove-role" data-role="{name}" data-profile="{data.profile.id}">&times;</a>
-            </li>
-        {/data.profile.roles}
-        <li class="action" data-lky-hook="action:pick-role" data-profile="{data.profile.id}">Add</li>
-    </ul>
-    <h3>Classifications</h3>
-    {#data.restrictive}
-        <label>
-            <span>{?label}{label}{:else}{name}{/label}</span>
+        </div>
+
+        <div class="right">
+            <form id="username">
+                <label for="name">Display name (click to edit)</label>
+                <div class="name">
+                    <input type="hidden" name="id" value="{data.profile.id}"/>
+                    <input name="name" type="text" value="{data.profile.name}"/>
+                    <button class="trash" data-lky-btn data-lky-api="DELETE:/cms/user/{data.profile.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+
+            {! ------------------------ !}
+
+            <h2>Roles</h2>
             <ul class="badges">
-                {#data.profile.taxonomies taxname=name}
-                    {@eq key=taxname value=type.name}
-                        <li>
-                            {?label}{label}{:else}{name}{/label}
-                            <a  data-lky-hook="action:remove-taxonomy" data-lky-hook="action:remove-taxonomy" data-profile="{data.profile.id}" data-taxonomy="{name}" data-type="{taxname}">&times;</a>
-                        </li>
-                    {/eq}
-                {/data.profile.taxonomies}
-                <li class="action" data-lky-hook="action:pick-taxonomy" data-profile="{data.profile.id}" data-type="{name}" data-addable="{type.allowCreation}">Add</li>
+                {#data.profile.roles}
+                    <li>
+                        {?label}{label}{:else}{name}{/label}
+                        <a data-lky-hook="action:remove-role" data-role="{name}" data-profile="{data.profile.id}"></a>
+                    </li>
+                {/data.profile.roles}
+                <li class="action" data-lky-hook="action:pick-role" data-profile="{data.profile.id}">Add</li>
             </ul>
-        </label>
-    {/data.restrictive}
-    <h4>Inherited from the roles</h4>
-    {#data.profile.roles}
-        {?taxonomies}
-            {?taxonomies.length}
+
+            {! ------------------------ !}
+
+            <h2>Classifications</h2>
+            {#data.restrictive}
                 <label>
                     <span>{?label}{label}{:else}{name}{/label}</span>
                     <ul class="badges">
-                        {#taxonomies}
-                            <li class="disabled">{?label}{label}{:else}{name}{/label}</li>
-                        {/taxonomies}
+                        {#data.profile.taxonomies taxname=name}
+                            {@eq key=taxname value=type.name}
+                                <li>
+                                    {?label}{label}{:else}{name}{/label}
+                                    <a data-lky-hook="action:remove-taxonomy" data-lky-hook="action:remove-taxonomy" data-profile="{data.profile.id}" data-taxonomy="{name}" data-type="{taxname}"></a>
+                                </li>
+                            {/eq}
+                        {/data.profile.taxonomies}
+                        <li class="action" data-lky-hook="action:pick-taxonomy" data-profile="{data.profile.id}" data-type="{name}" data-addable="{type.allowCreation}">Add</li>
                     </ul>
                 </label>
-            {/taxonomies.length}
-        {/taxonomies}
-    {/data.profile.roles}
-     <button data-lky-btn data-lky-api="DELETE:/cms/user/{data.profile.id}" style="margin-top:10px;">Delete user</button>
+            {/data.restrictive}
+
+            {! ------------------------ !}
+
+            <h2>Inherited from the roles</h2>
+            {#data.profile.roles}
+                {?taxonomies}
+                    {?taxonomies.length}
+                        <label>
+                            <span>{?label}{label}{:else}{name}{/label}</span>
+                            <ul class="badges">
+                                {#taxonomies}
+                                    <li class="disabled">{?label}{label}{:else}{name}{/label}</li>
+                                {/taxonomies}
+                            </ul>
+                        </label>
+                    {/taxonomies.length}
+                {/taxonomies}
+            {/data.profile.roles}
+        </div>
+    </div>
 </section>
 <div data-lky-hook="settings.overlay"></div>
 {/body}

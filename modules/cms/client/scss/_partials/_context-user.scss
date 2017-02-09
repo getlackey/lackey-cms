@@ -1,0 +1,113 @@
+.context-user {
+    padding: 2rem 4rem;
+    margin: 0;
+    position: relative;
+
+    .flex {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        flex: 1 1 100%;
+    }
+
+    h2 {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
+        margin: 1rem 0;
+    }
+
+    hr {
+        border: {
+            bottom: 1px solid #c8c8c8;
+            left: 0;
+            right: 0;
+            top: 0;
+        }
+        position: absolute;
+        top: 190px;
+        width: 100%;
+        z-index: -1;
+    }
+
+    .left {
+        flex: 0 0 40%;
+        text-align: center;
+
+        .details {
+            margin-top: 2rem;
+
+            .type {
+                color: #c8c8c8;
+            }
+        }
+
+        .profile {
+            border-radius: 100%;
+            border: 1px solid #c8c8c8;
+            box-shadow: 0 0 15px 15px #ffffff;
+            z-index: 10;
+        }
+    }
+
+    .right {
+        flex: 0 0 60%;
+
+        .name {
+            display: flex;
+            margin-bottom: 4rem;
+
+            label {
+                flex: 1 1 100%;
+            }
+
+            input {
+                flex: 1 1 100%;
+                border: 0;
+                padding: 0;
+                margin: 0;
+                color: #6c6c6c;
+                font-size: 2rem;
+            }
+
+            button {
+                flex: 0 1 20%;
+                appearance: none;
+                background: $color-background-highlight;
+                border: 0;
+                padding: 0.3rem 1.5rem;
+                color: #ffffff;
+                font-size: 0.8rem;
+
+                &.trash {
+                    flex: 0 0 auto;
+                    padding: 0;
+                    margin: 0;
+                    appearance: none;
+                    background: #ffffff;
+                    border: 0;
+                    outline: none;
+                    cursor: pointer;
+                    margin-right: 1rem;
+                }
+            }
+        }
+
+        .badges {
+            display: flex;
+        }
+    }
+
+    label {
+        color: #bebebe;
+    }
+
+    input, button {
+        &:focus {outline:0;}
+    }
+}
