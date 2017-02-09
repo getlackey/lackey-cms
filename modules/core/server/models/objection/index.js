@@ -701,6 +701,7 @@ module.exports = Database
                                         columnsArray.forEach((column) => {
                                             let value = row[column],
                                                 parse;
+
                                             if (columns[column].parse) {
                                                 try {
                                                     parse = new Function('val', columns[column].parse); //eslint-disable-line no-new-func
@@ -722,6 +723,16 @@ module.exports = Database
                                                 value = {
                                                     date: (typeof value === 'string' ? new Date(value) : value).getTime()
                                                 };
+                                            }
+
+                                            if (!value && columns[column].default) {
+                                                value = columns[column].default;
+                                            }
+
+                                            if (columns[column].default) {
+                                                if (!value || Array.isArray(value) && value.length < 1) {
+                                                    value = columns[column].default;
+                                                }
                                             }
 
                                             if (value !== undefined) {

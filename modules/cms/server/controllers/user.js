@@ -115,7 +115,8 @@ class UserController extends CRUD {
             },
             taxonomies: {
                 label: 'Classification',
-                parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\''
+                parse: 'return arguments[0] ? arguments[0].map(function(r) { return r.label || r.name;}) : \'\'',
+                default: ['n/a']
             },
             lastActive: {
                 label: 'Last Active',
