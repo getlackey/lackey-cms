@@ -82,6 +82,7 @@
                 > select {
                     background: white;
                     border: 1px solid $color-background-highlight;
+                    border-radius: 0;
                     display: block;
                     width: 100%;
                     text-transform: none;
@@ -89,9 +90,6 @@
                     font-weight: normal;
                     padding: 7px 8px;
                     color: $color-light-gray;
-
-                    &:last-child { border-radius: 5px; }
-                    &:not(:last-child) { border-radius: 5px 5px 0 0; }
                 }
 
                 > input[type=url] {
@@ -304,7 +302,6 @@
                     cursor: pointer;
                     width: 100%;
                     padding: 0.6em 3em;
-                    border-radius: 0 0 5px 5px;
                 }
             }
             [data-lky-hook="settings.taxonomy"] {
