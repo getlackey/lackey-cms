@@ -1,39 +1,47 @@
 {> "cms/core/modal"/}
 
 {<body}
+<section data-lky-component="page-item" class="context-content">
+    <div class="flex">
+        <h1>Content</h1>
+        <button class="trash" data-lky-btn data-lky-api="DELETE:/cms/content/{data.content.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>
+    </div>
+    <div class="flex">
+        <div class="left">
+            <h2>Path</h2>
+            {data.content.route} <a class="preview" href="admin{data.content.route}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
 
-    <section data-lky-component="page-item">
-    <main>
-        <h2>Content - {data.content.route}</h2>
-        <h3>Template: </h3>
-        {data.content.template.name}
+            <h2>Template: </h2>
+            {data.content.template.name}
 
-        <h3>Type</h3>
-        {data.content.type}
+            <h2>Type</h2>
+            {data.content.type}
 
-        <h3>Author</h3>
-        {?data.content.author.name}{data.content.author.name}{:else}N/A{/data.content.author.name}
+            <h2>Author</h2>
+            {?data.content.author.name}{data.content.author.name}{:else}N/A{/data.content.author.name}
 
-        <h3>State</h3>
-        {data.content.state}
+            <h2>State</h2>
+            {data.content.state}
 
-        <h3>Created At</h3>
-        {data.content.createdAt}
+            <h2>Created At</h2>
+            {data.content.createdAt}
 
-        <h3>Updated At</h3>
-        {data.content.updatedAt}
+            <h2>Updated At</h2>
+            {data.content.updatedAt}
 
+            <h2>Tags</h2>
+            {#data.content.taxonomies}
+                <p>{?label}{label}{:else}{name}{/label}</p>
+                {:else}N/A
+            {/data.content.taxonomies}
 
-        <h3>Taxonomies</h3>
-        {#data.content.taxonomies}
-            <p>{?label}{label}{:else}{name}{/label}</p>
-        {/data.content.taxonomies}
-
-        <p style="margin-top: 25px;"><a data-lky-btn="" class="" href="admin{data.content.route}">Go to page</a> <button data-lky-btn data-lky-api="DELETE:/cms/content/{data.content.id}" style="margin-top:10px;">Delete item</button></p>
-    </main>
-    <aside>
-        <div class="mediaContainer"><img src="{data.content.template.thumb}"/></div>
-    </aside>
+            <div class="buttons">
+                <a data-lky-btn href="admin{data.content.route}">View page</a>
+            </div>
+        </div>
+        <div class="right">
+            <div class="mediaContainer"><img src="{data.content.template.thumb}"/></div>
+        </div>
+    </div>
 </section>
-<div data-lky-hook="settings.overlay"></div>
 {/body}

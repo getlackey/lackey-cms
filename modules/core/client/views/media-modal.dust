@@ -1,41 +1,42 @@
 {>"cms/core/modal"/}
 
 {<body}
-<section data-lky-component="media">
-    <main>
-        <h2>Media Item - {data.media.id}</h2>
+<section data-lky-component="media" class="context-media">
+    <div class="flex">
+        <h1>Media Item</h1>
+        <button class="trash" data-lky-api="DELETE:/cms/media/{data.media.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>
+    </div>
+    <div class="flex">
+        <div class="left">
 
-        <h3>Mime Type</h3>
-        <p>{data.media.mime}</p>
+            <h2>Mime Type</h2>
+            {data.media.mime}
 
-        <h3>Name</h3>
-        <p>{data.media.name}</p>
+            <h2>Media ID number</h2>
+            {data.media.id}
 
-        <h3>Source</h3>
-        <p><a href="{data.media.source}">{data.media.source}</a></p>
+            <h2>Filename</h2>
+            {data.media.name}
 
-        <h3>Attributes</h3>
-        {@iter context=data.media.attributes}
-        <p><strong>{key}</strong>: {value}</p>
-        {/iter}
+            <h2>Source</h2>
+            {data.media.source} <a class="preview" href="admin{data.media.source}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
 
-        <h3>Alternatives</h3>
-        {#data.media.alternatives}
-            <p>{type} - <a href="{src}">{src}</a></p>
-        {/data.media.alternatives}
-        <h3>Created At</h3>
-        <p>{data.media.createdAt}</p>
+            <h2>Attributes</h2>
+            {@iter context=data.media.attributes}
+            <strong>{key}</strong>: {value}
+            {/iter}
 
-        <button data-lky-btn data-lky-api="DELETE:/cms/media/{data.media.id}" style="margin-top:10px;">Delete item</button>
-    </main>
-    <aside>
-        <div class="mediaContainer">{data.media|media|s}</div>
-    </aside>
-
-    <hr/>
-
-
-
+            <h2>Alternatives</h2>
+            {#data.media.alternatives}
+                {type} - <a href="{src}">{src}</a>
+            {/data.media.alternatives}
+            
+            <h2>Created At</h2>
+            {data.media.createdAt}
+        </div>
+        <div class="right">
+            <div class="mediaContainer">{data.media|media|s}</div>
+        </div>
+    </div>
 </section>
-<div data-lky-hook="settings.overlay"></div>
 {/body}
