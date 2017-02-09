@@ -1,6 +1,5 @@
 .context-media {
     background: #ffffff;
-    margin: 4rem!important;
     flex: 1 1 100%;
 
     .flex {
@@ -59,6 +58,17 @@
 
         .mediaContainer {
             margin: 0 auto;
+
+            background-image:
+              -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #cccccc), color-stop(.25, transparent)),
+              -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #cccccc), color-stop(.25, transparent)),
+              -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #cccccc)),
+              -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #cccccc));
+
+            background-size: 10px 10px;
+            -webkit-background-size: 10px 10px;
+
+            background-position: 0 0, 5px 0, 5px -5px, 0px 5px;
 
             img {
                 margin: 0 auto;
