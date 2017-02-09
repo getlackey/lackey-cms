@@ -46,7 +46,7 @@
           <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-date-time" data-value="{@path root=values path=name/}" >Pick date</button>
         {:select}
           <select name="{name}">
-            <option value="">Please select</option>
+            <option value="">- Please select -</option>
             {#items}
               <option value="{value}" {@path root=values path=name eq=value}selected{/path}>{label}</option>
             {/items}
