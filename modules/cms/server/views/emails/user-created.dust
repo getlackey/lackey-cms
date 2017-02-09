@@ -1,2 +1,0 @@
-Set password with this funky link
-<a href="{host}/cms/user/password/token/{token}/{id}">{host}/cms/user/password/token/{token}/{id}</a>
