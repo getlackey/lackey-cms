@@ -54,7 +54,8 @@ module.exports = SUtils
 
             static get tableRowAction() {
                 return this._overriden('tableRowAction', {
-                    href: 'cms/taxonomy/{id}'
+                    href: 'cms/taxonomy/{id}',
+                    template: 'cms/core/taxonomy-modal'
                 });
             }
 

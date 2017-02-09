@@ -22,7 +22,8 @@ const
     qs = require('query-string'),
     xhr = require('core/client/js/xhr'),
     growl = require('cms/client/js/growl'),
-    api = require('core/client/js/api');
+    api = require('core/client/js/api'),
+    modal = require('core/client/js/modal');
 
 function replaceState(href) {
     let loc = document.location,
@@ -262,11 +263,23 @@ class Table {
     }
 
     rowActions() {
-        var rows = lackey.select('[data-lky-hook="tableRowLink"]');
+        var rows = lackey.select('[data-lky-hook="tableRowLink"]'),
+            test;
 
+        test = function () {
+            console.log('coo');
+        };
         rows.forEach((row) => {
             row.addEventListener('click', () => {
-                window.location = row.dataset.lkyHref;
+                if (row.dataset.lkyTemplate) {
+                    xhr.basedGet(row.dataset.lkyHref + '.json', true)
+                        .then((data) => {
+                            modal.open(row.dataset.lkyTemplate, JSON.parse(data), test);
+                        });
+                } else {
+                    window.location = row.dataset.lkyHref;
+                }
+
             });
         });
     }

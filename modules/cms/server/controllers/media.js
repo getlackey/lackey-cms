@@ -85,7 +85,8 @@ module.exports = SUtils
 
             static get tableRowAction() {
                 return this._overriden('tableRowAction', {
-                    href: 'cms/media/{id}'
+                    href: 'cms/media/{id}',
+                    template: 'cms/core/media-modal'
                 });
             }
 

@@ -148,7 +148,8 @@ module.exports = SUtils.waitForAs('contentCtrl',
 
             static get tableRowAction() {
                 return this._overriden('tableRowAction', {
-                    href: 'cms/content/{id}'
+                    href: 'cms/content/{id}',
+                    template: 'cms/core/content-modal'
                 });
             }
 
