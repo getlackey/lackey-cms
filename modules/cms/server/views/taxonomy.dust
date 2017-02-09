@@ -3,7 +3,7 @@
 {<body}
 <section data-lky-component="media">
     <main>
-        <h2>Taxonomy Item - {data.taxonomy.id}</h2>
+        <h2>Tag</h2>
 
         <h3>Name</h3>
         <p>{data.taxonomy.name}</p>
