@@ -77,7 +77,11 @@ class Media {
       }
       setup() {
             var self = this,
-                _original = JSON.parse(JSON.stringify(this.media));
+                _original = {};
+
+            if (this.media) {
+                  _original = JSON.parse(JSON.stringify(this.media));
+            }
 
             top.LackeyManager
                   .on('reset', event => {
