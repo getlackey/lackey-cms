@@ -1,4 +1,4 @@
-{>"cms/cms/main"/}
+{>"cms/core/modal"/}
 
 {<body}
 <section data-lky-component="media">
@@ -25,5 +25,4 @@
     <hr/>
 
 </section>
-<div data-lky-hook="settings.overlay"></div>
 {/body}

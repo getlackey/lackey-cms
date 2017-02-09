@@ -1,0 +1,42 @@
+{>"cms/core/modal"/}
+
+{<body}
+<section data-lky-component="media" class="context-media">
+    <div class="flex">
+        <h1>Media Item</h1>
+        <button class="trash" data-lky-api="DELETE:/cms/media/{data.media.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>
+    </div>
+    <div class="flex">
+        <div class="left">
+
+            <h2>Mime Type</h2>
+            {data.media.mime}
+
+            <h2>Media ID number</h2>
+            {data.media.id}
+
+            <h2>Filename</h2>
+            {data.media.name}
+
+            <h2>Source</h2>
+            {data.media.source} <a class="preview" href="admin{data.media.source}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
+
+            <h2>Attributes</h2>
+            {@iter context=data.media.attributes}
+            <strong>{key}</strong>: {value}
+            {/iter}
+
+            <h2>Alternatives</h2>
+            {#data.media.alternatives}
+                {type} - <a href="{src}">{src}</a>
+            {/data.media.alternatives}
+            
+            <h2>Created At</h2>
+            {data.media.createdAt}
+        </div>
+        <div class="right">
+            <div class="mediaContainer">{data.media|media|s}</div>
+        </div>
+    </div>
+</section>
+{/body}
