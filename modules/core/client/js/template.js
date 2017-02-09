@@ -28,6 +28,7 @@ var
     caseSwitch = require('core/shared/dust/switch'),
     youtube = require('core/shared/dust/youtube'),
     media = require('core/shared/dust/media'),
+    split = require('core/shared/dust/split'),
     dtf = require('core/shared/dust/dateTimeFormat'),
     log = require('core/shared/dust/log'),
     DustIntl = require('dust-intl'),
@@ -53,6 +54,7 @@ dtf(engine);
 log(engine);
 pretty(engine);
 media(engine);
+split(engine);
 
 engine.filters.base = value => base.base(basePath, value);
 

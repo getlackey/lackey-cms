@@ -16,8 +16,13 @@
             {data.media.id}
 
             <h2>Filename</h2>
-            {data.media.name}
-
+            {@split key=data.media.name delim="/"}
+                {#split}
+                    {@math key=split.length method="subtract" operand="1"}
+                        {@eq value=$idx}{.}{/eq}
+                    {/math}
+                {/split}
+            {/split}
             <h2>Source</h2>
             {data.media.source} <a class="preview" href="admin{data.media.source}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
 
@@ -30,7 +35,7 @@
             {#data.media.alternatives}
                 {type} - <a href="{src}">{src}</a>
             {/data.media.alternatives}
-            
+
             <h2>Created At</h2>
             {data.media.createdAt}
         </div>
