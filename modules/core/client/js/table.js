@@ -264,10 +264,11 @@ class Table {
 
     rowActions() {
         var rows = lackey.select('[data-lky-hook="tableRowLink"]'),
-            test;
+            callback,
+            self = this;
 
-        test = function () {
-            console.log('coo');
+        callback = function () {
+            self.api();
         };
         rows.forEach((row) => {
             row.addEventListener('click', () => {
@@ -278,7 +279,7 @@ class Table {
                             modal.open(row.dataset.lkyTemplate, {
                                 data: data.data,
                                 closeBtn: true
-                            }, test);
+                            }, callback);
                         });
                 } else {
                     window.location = row.dataset.lkyHref;
