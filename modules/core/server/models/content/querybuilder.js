@@ -232,10 +232,11 @@ module.exports = require(LACKEY_PATH)
              * @param   {[[Type]]} order [[Description]]
              * @returns {object}   [[Description]]
              */
-            run(user, page, limit) {
+            run(user, page, limit, order) {
 
                 let self = this,
-                    num_limit = limit || 10;
+                    num_limit = limit || 10,
+                    orders = [];
 
                 let countQuery = 'SELECT count(*) as "count" FROM ' + self._type,
                     query = 'SELECT ' + (self._type === 'media' ? 'source' : 'route') + ' FROM  ' + self._type;
@@ -249,14 +250,20 @@ module.exports = require(LACKEY_PATH)
                 query += ' WHERE ' + self._wheres.join(' AND ');
                 countQuery += ' WHERE ' + self._wheres.join(' AND ');
 
-                query += ' ORDER BY "createdAt" DESC ';
+                if (order) {
+                    Object.keys(order).forEach(function (key) {
+                        orders.push('"' + key + '" ' + order[key]);
+                    });
+                    query += ' ORDER BY ' + orders.join(', ') + ' ';
+                } else {
+                    query += ' ORDER BY "createdAt" DESC ';
+                }
 
                 if (page > 0) {
                     query += ' OFFSET ' + page * num_limit + ' ';
                 }
 
                 query += ' LIMIT ' + num_limit;
-
                 return Promise
                     .all([
                             SCli.sql(knex.raw(countQuery)).then((r) => r.rows),
