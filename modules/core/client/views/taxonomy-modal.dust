@@ -1,28 +1,29 @@
 {>"cms/core/modal"/}
 
 {<body}
-<section data-lky-component="media">
-    <main>
-        <h2>Tag</h2>
+<section data-lky-component="media" class="context-tag">
+     <div class="flex">
+        <h1>Tag Info</h1>
+    </div>
+     <div class="flex">
+         <div class="left">
+            <h2>Name</h2>
+            {data.taxonomy.name}
 
-        <h3>Name</h3>
-        <p>{data.taxonomy.name}</p>
+            <h2>Label</h2>
+            {data.taxonomy.label}
 
-        <h3>Label</h3>
-        <p>{data.taxonomy.label}</p>
+            <h2>Type</h2>
+            {data.taxonomy.type.name}
 
-        <h3>Type</h3>
-        <p>{data.taxonomy.type.name}</p>
-
-        <h3>Created At</h3>
-        <p>{data.taxonomy.createdAt}</p>
-    </main>
-
-    <aside>
-        <div class="mediaContainer">{data.media|media|s}</div>
-    </aside>
-
-    <hr/>
-
+            <h2>Created At</h2>
+            {data.taxonomy.createdAt}
+         </div>
+    </div>
+    <div class="flex">
+        <div class="right">
+            <div class="mediaContainer">{data.media|media|s}</div>
+        </div>
+    </div>
 </section>
 {/body}

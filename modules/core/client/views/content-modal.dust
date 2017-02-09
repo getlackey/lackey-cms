@@ -3,7 +3,7 @@
 {<body}
 <section data-lky-component="page-item" class="context-content">
     <div class="flex">
-        <h1>Content</h1>
+        <h1>Content Info</h1>
         <button class="trash" data-lky-btn data-lky-api="DELETE:/cms/content/{data.content.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>
     </div>
     <div class="flex">
