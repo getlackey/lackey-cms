@@ -12,7 +12,7 @@
             <h2>Mime Type</h2>
             {data.media.mime}
 
-            <h2>Media ID number</h2>
+            <h2>Media ID</h2>
             {data.media.id}
 
             <h2>Filename</h2>
