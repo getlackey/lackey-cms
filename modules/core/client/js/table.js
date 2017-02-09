@@ -45,6 +45,7 @@ class Table {
         this._advFilters = document.querySelectorAll('[data-filter]');
         this._selectFills = document.querySelectorAll('[data-selectfill]');
         this.pageNumber = 0;
+        this._modal = false;
         this.sorting();
         this.data = {};
         this.perPage = 10;
@@ -203,6 +204,14 @@ class Table {
                             .delete(apiAction[1])
                             .then(() => {
                                 self.removeItem(parseInt(itemId));
+                                if (self._modal) {
+                                    growl({
+                                        status: 'success',
+                                        message: 'Deleted'
+                                    });
+                                    top.document.body.removeChild(self._modal);
+                                    self._modal = false;
+                                }
                             }, error => {
                                 growl({
                                     status: 'error',
@@ -267,7 +276,8 @@ class Table {
             callback,
             self = this;
 
-        callback = function () {
+        callback = function (root) {
+            self._modal = root;
             self.api();
         };
         rows.forEach((row) => {
