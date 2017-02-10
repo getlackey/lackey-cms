@@ -152,7 +152,7 @@
                         flex-wrap: wrap;
                         align-items: center;
                         justify-content: space-around;
-
+                        max-width: 100%;
                         & + li {
                             padding-top: 20px;
                             margin-top: 22px;
@@ -185,6 +185,7 @@
                         }
                         div {
                             padding: 5px;
+                            max-width: 100%;
 
                             &[data-lky-block] {
                                 padding: 0;
@@ -202,6 +203,8 @@
                                 pre {
                                     font-size: 10px;
                                     color: $color-lackey-light-gray;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
                                 }
                             }
                         }
