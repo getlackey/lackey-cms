@@ -8,7 +8,7 @@
 
     <div class="flex">
         <div class="left">
-            <img src="http://placehold.it/225x225?text=Profile" alt="" class="profile" />
+            <img src="{user.image.source}" alt="" class="profile" />
             <div class="details">
                 {#data.profile.identities}
                     <div class="flex">
