@@ -145,10 +145,10 @@ module.exports = SUtils
                                             if (prev && prev._doc.shareString === req.query.preview) {
                                                 return data;
                                             }
-                                            return Promise.reject('403');
+                                            return Promise.reject('404');
                                         });
                             }
-                            return Promise.reject('403');
+                            return Promise.reject('404');
                         }
 
                         if (page.publishedAt && page.publishAt > Date.now() && !isAllowed) {
@@ -202,6 +202,8 @@ module.exports = SUtils
                         console.error(error.stack);
                         if (error === '403') {
                             return res.error403(req);
+                        } else if (error === '404') {
+                            return res.error404(req);
                         }
                         res.error(error);
                     });
