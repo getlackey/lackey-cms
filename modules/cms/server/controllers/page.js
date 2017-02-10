@@ -152,7 +152,7 @@ module.exports = SUtils
                         }
 
                         if (page.publishedAt && page.publishAt > Date.now() && !isAllowed) {
-                            return Promise.reject('403 - not published yet' + page.publishedAt);
+                            return Promise.reject('404');
                         }
 
                         return data;
