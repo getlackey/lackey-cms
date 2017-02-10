@@ -11,7 +11,7 @@
             <img src="http://placehold.it/225x225?text=Profile" alt="" class="profile" />
             <div class="details">
                 {#data.profile.identities}
-                    <div class="type">{type}</div>
+                    <div class="type">{@eq key=type value="email"}{:else}{type}{/eq}</div>
                     <div class="id">{id}</div>
                 {/data.profile.identities}
             </div>
