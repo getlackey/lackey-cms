@@ -41,10 +41,13 @@
 
         .details {
             margin-top: 2rem;
-            padding: 0 3rem;
+            padding: 0 4.68rem;
+            color: #6c6c6c;
+            font-size: 0.8rem;
 
-            .type {
-                color: #c8c8c8;
+            .flex {
+                justify-content: space-between;
+                margin-bottom: 1rem;
             }
         }
 
