@@ -179,7 +179,9 @@ module.exports = SUtils
             static get likeables() {
                 return {
                     route: 'lr',
+                    route: 'lr',
                     state: 'lr',
+                    name: 'lr',
                     type: 'lr'
                 };
             }
