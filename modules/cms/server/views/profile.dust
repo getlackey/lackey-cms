@@ -36,8 +36,7 @@
                 <ul class="badges">
                     {#data.profile.roles}
                     <li>
-                        {?label}{label}{:else}{name}{/label}
-                        <a data-lky-hook="action:remove-role" data-role="{name}" data-profile="{data.profile.id}"></a>
+                        <a data-lky-hook="action:remove-role" data-role="{name}" data-profile="{data.profile.id}">{?label}{label}{:else}{name}{/label}</a>
                     </li>
                     {/data.profile.roles}
                     <li class="action" data-lky-hook="action:pick-role" data-profile="{data.profile.id}">Add</li>
@@ -67,8 +66,7 @@
                     {#data.profile.taxonomies taxname=name}
                         {@eq key=taxname value=type.name}
                             <li>
-                                {?label}{label}{:else}{name}{/label}
-                                <a data-lky-hook="action:remove-taxonomy" data-lky-hook="action:remove-taxonomy" data-profile="{data.profile.id}" data-taxonomy="{name}" data-type="{taxname}"></a>
+                                <a data-lky-hook="action:remove-taxonomy" data-lky-hook="action:remove-taxonomy" data-profile="{data.profile.id}" data-taxonomy="{name}" data-type="{taxname}">{?label}{label}{:else}{name}{/label}</a>
                             </li>
                         {/eq}
                     {/data.profile.taxonomies}
