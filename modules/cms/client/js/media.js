@@ -83,17 +83,19 @@ class Media {
                   _original = JSON.parse(JSON.stringify(this.media));
             }
 
-            top.LackeyManager
-                  .on('reset', event => {
-                        if (_original) {
-                              this.media = _original;
-                              this.render();
-                        }
-                  });
-            top.LackeyManager.repository
-                  .on('apply', event => {
-                        _original = JSON.parse(JSON.stringify(this.media));
-                  });
+            if (top.LackeyManager) {
+                  top.LackeyManager
+                        .on('reset', event => {
+                              if (_original) {
+                                    this.media = _original;
+                                    this.render();
+                              }
+                        });
+                  top.LackeyManager.repository
+                        .on('apply', event => {
+                              _original = JSON.parse(JSON.stringify(this.media));
+                        });
+            }
       }
       render() {
             if (this.update) {
