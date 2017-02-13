@@ -9,7 +9,7 @@
     <div class="flex">
         <div class="left">
             <h2>Path</h2>
-            {data.content.route} <a class="preview" href="admin{data.content.route}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
+            {data.content.route} <a class="preview" href="{data.content.route}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
 
             <h2>Template: </h2>
             {data.content.template.name}
