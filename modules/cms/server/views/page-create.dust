@@ -9,6 +9,7 @@
             <input data-lky-input type="text" name="title" placeholder="Enter Page Title"/>
         </div>
 
+        <label class="choose">Choose page type</label>
         <table class="table" data-lky-table data-lky-table-hover>
             <thead>
                 <tr>
