@@ -23,7 +23,7 @@
             <div class="preview">
                 <label>Preview</label>
                 <figure>
-                    <img style="max-width: 250px;" src="{user.image.source}" data-lky-hook="avatar" data-lky-media="{admin.image|js}" />
+                    <img style="max-width: 250px;" src="{user.image.source}" data-lky-hook="avatar" data-lky-media="{user.image|js}" />
                 </figure>
             </div>
         </div>
