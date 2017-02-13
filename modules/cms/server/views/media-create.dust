@@ -1,0 +1,23 @@
+{>"cms/cms/main"/}
+
+{<body}
+<section data-lky-component="table">
+    <h2>Add Media</h2>
+    <form>
+       <div class="profile-photo">
+            <div class="upload">
+                <div id="imageDrop" data-dropzone>
+                    <span>Drop image here</span>
+                    <button id="fileIn" class="btn btn-block btn-primary" type="button">Choose image</button>
+                </div>
+            </div>
+
+            <div class="preview">
+                <figure>
+                    <img style="max-width: 250px;" src="" data-lky-hook="avatar" data-lky-media="" />
+                </figure>
+            </div>
+        </div>
+    </form>
+</section>
+{/body}

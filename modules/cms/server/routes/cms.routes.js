@@ -72,6 +72,8 @@ module.exports = (server) => {
             server.route('/cms/preview').post(server.aclAdmin, PageController.preview);
             server.route('/cms/content/create')
                 .get(server.aclAdmin, ContentController.createPage);
+            server.route('/cms/media/create')
+                .get(server.aclAdmin, MediaController.createPage);
 
             server.route('/cms/export/all')
                 .get( /*server.aclAdmin, */ CMSController.serialize);

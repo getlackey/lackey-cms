@@ -8,7 +8,7 @@
 
     <div class="flex">
         <div class="left">
-            <img src="{user.image.source}" alt="" class="profile" />
+            <img src="{data.profile.image.source}" alt="" class="profile" />
             <div class="details">
                 {#data.profile.identities}
                     <div class="flex">

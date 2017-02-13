@@ -107,6 +107,10 @@ module.exports = SUtils
                 return MediaModel;
             }
 
+            static get createLink() {
+                return 'cms/media/create';
+            }
+
             static set debug(value) {
                 __debug = value;
             }

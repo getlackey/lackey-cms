@@ -110,6 +110,13 @@ module.exports = SUtils
                 }
             }
 
+            static createPage(req, res) {
+                res.css('css/cms/cms/table.css');
+                res.js('js/cms/cms/new-media.js');
+                res.print('cms/cms/media-create', {
+                });
+            }
+
             static details(req, res) {
                 Model
                     .findById(req.params.media_id)

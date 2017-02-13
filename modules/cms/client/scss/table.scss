@@ -87,6 +87,62 @@
     }
 
 
+    .profile-photo {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        padding: 40px;
+        .upload {
+            flex: 1 1 auto;
+
+            [data-dropzone] {
+                border: 5px dashed #c8c8c8;
+                padding: 3.2rem;
+                text-align: center;
+                margin-top: 0.5rem;
+                margin-right: 3rem;
+
+                &.hover {
+                    border-color: $color-background-highlight;
+                    //background-color: #f1f1f1;
+                }
+
+                span {
+                    display: block;
+                    margin-bottom: 2rem;
+                    font-size: 1.5rem;
+                    color: #6c6c6c;
+                }
+
+                button {
+                    flex: 0 1 20%;
+                    appearance: none;
+                    background: $color-background-highlight;
+                    border: 0;
+                    padding: 0.5rem 1rem;
+                    color: #ffffff;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+
+        .preview {
+            flex: 0 0 auto;
+
+            figure {
+                border: 1px solid #c8c8c8;
+                text-align: center;
+                padding: 3rem;
+                margin-top: 0.5rem;
+                img {
+                    width: 110px;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+
     // TABLE STYLES //
 
     table {
