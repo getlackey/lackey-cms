@@ -38,6 +38,13 @@ class Modal {
                     lackey.bind(['[data-lky-overlay]', '[data-lky-close]'], 'click', () => {
                         resolve();
                     }, root);
+
+                    lackey.bind(top.document.body, 'keydown', (ev, element, remove) => {
+                        if (ev.keyCode === 27 && !ev.defaultPrevented) {
+                            remove();
+                            resolve();
+                        }
+                    }, root);
                 }).then((data) => {
                     top.document.body.removeChild(root);
                     return data;
