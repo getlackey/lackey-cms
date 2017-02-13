@@ -246,6 +246,24 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     });
             }
 
+            static delete(req, res) {
+                req.admin.isAllowed('allowedTemplate', req.content._template._doc.name)
+                    .then((allowed) => {
+                        if (allowed) {
+                            req.content
+                                .remove()
+                                .then(result => {
+                                    res.api(result);
+                                }, error => {
+                                    res.error(req, error);
+                                });
+                        } else {
+                            res.error(req, 'Insufficient Privileges');
+                        }
+                    });
+
+            }
+
         }
         return Promise.resolve(ContentCtrl);
     });
