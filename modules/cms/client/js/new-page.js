@@ -56,7 +56,7 @@ lackey.bind('form', 'submit', event => {
         pageTemplate = null;
 
     if (pageName.length === 0) {
-        return error('Please type page title');
+        return error('Please enter a page title');
     }
 
     lackey
