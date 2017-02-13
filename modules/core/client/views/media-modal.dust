@@ -24,7 +24,7 @@
                 {/split}
             {/split}
             <h2>Source</h2>
-            {data.media.source} <a class="preview" href="admin{data.media.source}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
+            {data.media.source} <a class="preview" href="{data.media.source}"><img src="img/cms/cms/svg/eye-filled.svg"/></a>
 
             <h2>Attributes</h2>
             {?data.media.attributes}
