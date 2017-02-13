@@ -98,6 +98,14 @@ function Manager() {
     overlay.addEventListener('click', () => {
         this.stack.clear();
     }, true);
+    top.document.body.addEventListener('keydown', ev => {
+        if (this.stack.length > 0 && ev.keyCode === 27 && !ev.defaultPrevented) {
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            this.stack.clear();
+        }
+    }, true);
 
     this.setupUI();
 
