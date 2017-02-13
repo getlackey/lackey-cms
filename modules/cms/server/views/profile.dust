@@ -26,7 +26,7 @@
                     <input type="hidden" name="id" value="{data.profile.id}"/>
                     <input name="name" type="text" value="{data.profile.name}"/>
                     <button type="submit">Save</button>
-                    <button class="trash" data-lky-btn data-lky-api="DELETE:/cms/user/{data.profile.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>
+                    {@ne key=admin.id value=data.profile.id}<button class="trash" data-lky-btn data-lky-api="DELETE:/cms/user/{data.profile.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>{/ne}
                 </div>
             </form>
 
