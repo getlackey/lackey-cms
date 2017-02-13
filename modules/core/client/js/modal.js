@@ -41,6 +41,9 @@ class Modal {
 
                     lackey.bind(top.document.body, 'keydown', (ev, element, remove) => {
                         if (ev.keyCode === 27 && !ev.defaultPrevented) {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+
                             remove();
                             resolve();
                         }
