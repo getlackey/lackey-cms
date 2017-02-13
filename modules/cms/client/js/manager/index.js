@@ -98,17 +98,8 @@ function Manager() {
     overlay.addEventListener('click', () => {
         this.stack.clear();
     }, true);
-    top.document.body.addEventListener('keydown', ev => {
-        if (this.stack.length > 0 && ev.keyCode === 27 && !ev.defaultPrevented) {
-            ev.preventDefault();
-            ev.stopPropagation();
-
-            this.stack.clear();
-        }
-    }, true);
 
     this.setupUI();
-
 }
 
 emit(Manager.prototype);
@@ -439,12 +430,12 @@ function showShareUrl(shareBox, urlInput, base, preview) {
 
 Manager.prototype.setupUI = function () {
 
-    let self = this;
+    let self = this,
+        settingsButton = lackey.hook('header.settings');
 
     userDrop();
 
-    lackey
-        .hook('header.settings')
+    settingsButton
         .addEventListener('click', this.onViewStructure.bind(this), true);
 
     lackey
@@ -460,6 +451,17 @@ Manager.prototype.setupUI = function () {
         .forEach(element => {
             element.style.display = 'block';
         });
+
+    top.document.body.addEventListener('keydown', ev => {
+        if (this.stack.length > 0 && ev.keyCode === 27 && !ev.defaultPrevented) {
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            this.stack.clear();
+        }
+    }, true);
+    this.stack.on('pick', () => settingsButton.focus());
+    this.stack.on('inspect', () => settingsButton.focus());
 
     this
         .current

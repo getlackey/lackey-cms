@@ -91,6 +91,7 @@ Stack.prototype.inspectStructure = function (structureController, tab) {
             });
 
         this._stack.push(structureController);
+        self.emit('inspect');
 
         return promise;
     } catch (e) {
@@ -112,6 +113,7 @@ Stack.prototype.pick = function (picker, pop) {
         });
 
     this._stack.push(picker);
+    self.emit('pick');
 
     return picker
         .promise
