@@ -30,6 +30,10 @@ module.exports = SUtils
                 return this._overriden('model', Model);
             }
 
+            static get title() {
+                return this._overriden('title', 'Tags');
+            }
+
             static get field() {
                 return this._overriden('field', 'taxonomy');
             }
