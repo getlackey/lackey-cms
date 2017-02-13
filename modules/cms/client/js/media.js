@@ -76,8 +76,7 @@ class Media {
             this.setup();
       }
       setup() {
-            var self = this,
-                _original = {};
+            var _original = {};
 
             if (this.media) {
                   _original = JSON.parse(JSON.stringify(this.media));
@@ -85,14 +84,14 @@ class Media {
 
             if (top.LackeyManager) {
                   top.LackeyManager
-                        .on('reset', event => {
+                        .on('reset', () => {
                               if (_original) {
                                     this.media = _original;
                                     this.render();
                               }
                         });
                   top.LackeyManager.repository
-                        .on('apply', event => {
+                        .on('apply', () => {
                               _original = JSON.parse(JSON.stringify(this.media));
                         });
             }

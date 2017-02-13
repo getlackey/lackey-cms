@@ -1,5 +1,5 @@
 /* jslint node:true, esnext:true, es6:true, browser:true, loopfunc:true*/
-/* eslint default-case:0 no-alert:0*/
+/* eslint no-param-reassign:0 no-alert:0 */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -196,29 +196,26 @@ class Table {
             let apiAction = hook.getAttribute('data-lky-api').split(':'),
                 itemId = apiAction[1].split('/').pop();
 
-            switch (apiAction[0]) {
-            case 'DELETE':
-                {
-                    if (confirm('Are you sure? There is no undo')) {
-                        api
-                            .delete(apiAction[1])
-                            .then(() => {
-                                self.removeItem(parseInt(itemId));
-                                if (self._modal) {
-                                    growl({
-                                        status: 'success',
-                                        message: 'Deleted'
-                                    });
-                                    top.document.body.removeChild(self._modal);
-                                    self._modal = false;
-                                }
-                            }, error => {
+            if (apiAction[0] === 'DELETE') {
+                if (confirm('Are you sure? There is no undo')) {
+                    api
+                        .delete(apiAction[1])
+                        .then(() => {
+                            self.removeItem(parseInt(itemId));
+                            if (self._modal) {
                                 growl({
-                                    status: 'error',
-                                    message: error.message || error.toString()
+                                    status: 'success',
+                                    message: 'Deleted'
                                 });
+                                top.document.body.removeChild(self._modal);
+                                self._modal = false;
+                            }
+                        }, error => {
+                            growl({
+                                status: 'error',
+                                message: error.message || error.toString()
                             });
-                    }
+                        });
                 }
             }
         });

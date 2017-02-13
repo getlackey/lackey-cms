@@ -1,4 +1,4 @@
-/* eslint no-cond-assign:0, no-new:0 */
+/* eslint no-cond-assign:0, no-new:0, no-use-before-define:0, no-continue:0 */
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
@@ -16,7 +16,6 @@
     See the License for the specific language governing permissions and
 */
 const
-    lackey = require('core/client/js'),
     debug = require('debug')('lackey-cms/modules/cms/client/js/block-editor');
 
 const commentPrefix = 'BLOCK:';

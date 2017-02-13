@@ -37,7 +37,7 @@ describe('lib/mailer/index', () => {
         return mailer({
                 from: 'test@example.com',
                 to: 'test@example.com',
-                template: 'cms/users/emails/confirm-email',
+                template: 'cms/users/emails/create-password',
                 subject: 'Hello world',
                 html: '<h1>Hello world</h1>',
                 text: 'Hello World'

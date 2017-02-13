@@ -91,6 +91,7 @@ describe('models/cms/server/models/template', () => {
                     },
                     selectable: true,
                     allowTaxonomies: [],
+                    editable: true,
                     thumb: null,
                     type: 'template',
                     prefix: '',

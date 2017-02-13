@@ -1,9 +1,10 @@
-
+/* jslint node:true, esnext:true */
+'use strict';
 const
   isYoutube = require('../../../cms/shared/youtube'),
   isVimeo = require('../../../cms/shared/vimeo');
 
-module.exports = (dust, config) => {
+module.exports = (dust) => {
   dust.filters.media = function (value) {
       var returnString = '';
       if (value.mime === 'video/youtube') {

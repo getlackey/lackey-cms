@@ -1,4 +1,4 @@
-/* eslint no-cond-assign:0, no-new:0 */
+/* eslint no-cond-assign:0, no-new:0 no-param-reassign:0 */
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
@@ -79,7 +79,7 @@ function Manager() {
 
     this.repository = new Repository(this);
     this.repository.on('changed', this.onChanged.bind(this));
-    this.repository.on('apply', event => {
+    this.repository.on('apply', () => {
         self.structureChanges = false;
     });
     this.repository.bubble(this, 'reset');

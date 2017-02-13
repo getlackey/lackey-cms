@@ -1,4 +1,4 @@
-/* eslint no-cond-assign:0, no-new:0 */
+/* eslint no-cond-assign:0, no-new:0, no-unused-vars:0 */
 /* jslint browser:true, node:true, esnext:true */
 'use strict';
 /*
