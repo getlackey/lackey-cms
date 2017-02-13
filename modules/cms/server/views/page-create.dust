@@ -1,29 +1,27 @@
 {>"cms/cms/main"/}
 
 {<body}
-<section data-lky-component="table">
-    <h2>Create Page</h2>
+<section data-lky-component="table" class="create-page">
+    <h1>Create Page</h1>
     <form>
-        <label>
-            <span>Title</span>
-            <input data-lky-input type="text" name="title" placeholder="Place your path here"/>
-        </label>
+        <div class="name">
+            <label>Title</label>
+            <input data-lky-input type="text" name="title" placeholder="Enter Page Title"/>
+        </div>
+
         <table class="table" data-lky-table data-lky-table-hover>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Preview</th>
                     <th>Template</th>
                     <th>Prefix</th>
                     <th><button data-lky-btn type="submit">Create</button></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
                 {#data.templates}
                     {@acl perm="allowedTemplate" method=name}
                     <tr>
-                        <td></td>
                         <td>
                             <img src="{thumb}"/>
                         </td>
@@ -36,22 +34,12 @@
                         <td>
                             <input type="radio" name="template" value="{id}"/>
                         </td>
-                        <td></td>
                     </tr>
                     {/acl}
                 {/data.templates}
             </tbody>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th><button data-lky-btn-inverted type="submit">Create</button></th>
-                    <th></th>
-                </tr>
-            </tfoot>
         </table>
+        <button data-lky-btn type="submit">Create</button>
     </form>
 </section>
 {/body}
