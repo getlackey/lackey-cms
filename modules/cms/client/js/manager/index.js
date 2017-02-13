@@ -460,8 +460,13 @@ Manager.prototype.setupUI = function () {
             this.stack.clear();
         }
     }, true);
-    this.stack.on('pick', () => settingsButton.focus());
-    this.stack.on('inspect', () => settingsButton.focus());
+    let focusIfNeeded = () => {
+        if (top.document.activeElement.nodeName === 'IFRAME') {
+            settingsButton.focus();
+        }
+    };
+    this.stack.on('pick', focusIfNeeded);
+    this.stack.on('inspect', focusIfNeeded);
 
     this
         .current
