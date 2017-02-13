@@ -145,6 +145,8 @@ class BlockEditor {
 
             BlockEditor.factory(block);
         }
+
+        BlockEditor.startRendering();
     }
 
     static factory(block) {
@@ -222,14 +224,18 @@ class BlockEditor {
     }
 
     static updateEditButton(block, bounds) {
-        BlockEditor.editButton.style.right = (document.body.clientWidth - bounds.right) + 'px';
-        BlockEditor.editButton.style.top = bounds.top + 'px';
+        BlockEditor.updateEditButtonPosition(bounds);
 
         if (BlockEditor.activeBlock !== block) {
             BlockEditor.editButton.setAttribute('data-target-change', '');
             reflow(BlockEditor.editButton);
             BlockEditor.editButton.removeAttribute('data-target-change');
         }
+    }
+
+    static updateEditButtonPosition(bounds) {
+        BlockEditor.editButton.style.right = (document.body.clientWidth - bounds.right) + 'px';
+        BlockEditor.editButton.style.top = bounds.top + 'px';
     }
 
     static _onEditButtonClick(ev) {
@@ -254,16 +260,42 @@ class BlockEditor {
     }
 
     static updateOverlay(block, bounds) {
-        BlockEditor.overlay.style.left = bounds.left + 'px';
-        BlockEditor.overlay.style.top = bounds.top + 'px';
-        BlockEditor.overlay.style.width = bounds.width + 'px';
-        BlockEditor.overlay.style.height = bounds.height + 'px';
+        BlockEditor.updateOverlayBounds(bounds);
 
         if (BlockEditor.activeBlock !== block) {
             BlockEditor.overlay.setAttribute('data-target-change', '');
             reflow(BlockEditor.overlay);
             BlockEditor.overlay.removeAttribute('data-target-change');
         }
+    }
+
+    static updateOverlayBounds(bounds) {
+        BlockEditor.overlay.style.left = bounds.left + 'px';
+        BlockEditor.overlay.style.top = bounds.top + 'px';
+        BlockEditor.overlay.style.width = bounds.width + 'px';
+        BlockEditor.overlay.style.height = bounds.height + 'px';
+    }
+
+
+    static startRendering() {
+        var render = () => {
+            if (BlockEditor.activeBlock) {
+                let bounds = BlockEditor.activeBlock.getAbsoluteBoundingRect();
+
+                if (BlockEditor.bounds && areBoundsEqual(BlockEditor.bounds, bounds)) {
+                    window.requestAnimationFrame(render);
+                    return;
+                }
+                BlockEditor.bounds = bounds;
+
+                BlockEditor.updateOverlayBounds(bounds);
+                BlockEditor.updateEditButtonPosition(bounds);
+            }
+
+            window.requestAnimationFrame(render);
+        };
+
+        render();
     }
 }
 BlockEditor.activeBlock = null;
@@ -293,6 +325,10 @@ function getAbsoluteBoundingRect(element) {
         top: rect.top + offsetY,
         width: rect.width
     };
+}
+
+function areBoundsEqual(a, b) {
+    return a.left === b.left && a.top === b.top && a.right === b.right && a.bottom === b.bottom;
 }
 
 function reflow(element) {
