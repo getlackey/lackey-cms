@@ -44,7 +44,12 @@ function postProcess(file, config) {
                     .s3PutObject(file.path, file.mime, uploadSettings)
                     .then((newLocation) => {
                         SCli.debug(__MODULE_NAME, 'S3 uploaded');
-                        file.path = newLocation;
+                        if(uploadSettings.proxyDomain) {
+                            file.path = newLocation.replace(uploadSettings.proxyDomain.original, uploadSettings.proxyDomain.replace);
+                        } else {
+                            file.path = newLocation;
+                        }
+
                         return SUtils.rimraf(path.dirname(oldPath));
                     });
             }
