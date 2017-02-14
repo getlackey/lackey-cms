@@ -1,4 +1,4 @@
-{>"cms/cms/main"/}
+{>"cms/core/modal"/}
 
 {<body}
 <section data-lky-component="table">
@@ -24,7 +24,7 @@
     </form>
     <h3 style="padding: 0 0 1rem 2rem;">Add external asset</h3>
     <form data-lky-hook="url.upload">
-        <input type="text" name="urlUpload" /> <button type="submit">Add</button>
+        <input style="margin-left: 2rem;width:450px;" type="text" name="urlUpload" /> <button data-lky-btn type="submit">Add</button>
     </form>
 </section>
 {/body}

@@ -25,6 +25,7 @@ const SUtils = require(LACKEY_PATH).utils,
     http = require('http'),
     https = require('https'),
     _ = require('lodash'),
+    nPath = require('path'),
     SCli = require(LACKEY_PATH).cli,
     Model = objection.Model,
     OCTET = 'application/octet-stream',
@@ -108,7 +109,11 @@ module.exports = SUtils
             }
 
             static get createLink() {
-                return 'cms/media/create';
+                return {
+                    template: 'cms/core/create-media-modal',
+                    href: 'cms/media/create',
+                    javascript: 'createMedia'
+                };
             }
 
             static set debug(value) {
@@ -155,8 +160,13 @@ module.exports = SUtils
                                 try {
                                     res.once('data', chunk => {
                                         try {
+                                            console.log(chunk);
                                             res.destroy();
                                             let m = fileType(chunk);
+
+                                            if (!m && !nPath.extname(path)) {
+                                                resolve('text/html');
+                                            }
                                             resolve(m ? m.mime : 'image/jpeg');
                                         } catch (e) {
                                             reject(e);
@@ -258,7 +268,7 @@ module.exports = SUtils
 
                         let main,
                             _list = [];
-
+                        console.log(list);
                         list.forEach((item) => {
                             if (!Array.isArray(item)) {
                                 return _list.push(item);
@@ -266,7 +276,7 @@ module.exports = SUtils
                             _list = _list.concat(item);
 
                         });
-
+                        console.log(list);
                         main = _list[0];
 
                         return {
@@ -313,7 +323,7 @@ module.exports = SUtils
                 let self = this,
                     isString = (typeof this._doc.source !== 'string'),
                     promise = Promise.resolve();
-
+                console.log(this._doc);
                 if (isString) {
                     promise = Media.mapSource(this._doc.source)
                         .then((mixin) => {
@@ -323,6 +333,7 @@ module.exports = SUtils
 
                 return promise
                     .then(() => {
+                        console.log(self._doc);
                         if (!self._doc.mime) {
                             return Media.lookupMime(self._doc.source)
                                 .then((mime) => {

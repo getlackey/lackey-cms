@@ -23,7 +23,8 @@ const
     xhr = require('core/client/js/xhr'),
     growl = require('cms/client/js/growl'),
     api = require('core/client/js/api'),
-    modal = require('core/client/js/modal');
+    modal = require('core/client/js/modal'),
+    createMedia = require('cms/client/js/new-media');
 
 function replaceState(href) {
     let loc = document.location,
@@ -47,6 +48,7 @@ class Table {
         this.pageNumber = 0;
         this._modal = false;
         this.sorting();
+        this.sort = {};
         this.data = {};
         this.perPage = 10;
         this.filter = '';
@@ -100,6 +102,17 @@ class Table {
                 return a.toLowerCase().indexOf(b.toLowerCase()) > -1;
             }
         };
+        this.applyJs = {
+            createMedia: (root) => {
+                createMedia(root, function () {
+                    self.getData().then(() => {
+                        if (self.sort.field) {
+                            self.sortData();
+                        }
+                    });
+                });
+            }
+        };
 
         for(var i = 0; i < self._selectFills.length; i += 1) {
             self._selectFills[i].addOption = function (option, val) {
@@ -150,6 +163,26 @@ class Table {
         let waiting = null;
 
         this.footerWidth();
+
+        lackey.bind('[data-lky-hook="open-modal"]', 'click', (event, hook) => {
+            event.preventDefault();
+            var applyJs = hook.dataset.lkyJavascript || false,
+                callback = function (root) {
+                self._modal = root;
+                self.api();
+                if (applyJs) {
+                    self.applyJs[applyJs](root);
+                }
+            };
+            if (hook.dataset.lkyTemplate) {
+                modal.open(hook.dataset.lkyTemplate, {
+                    closeBtn: true
+                }, callback);
+            } else {
+                window.location = hook.href;
+            }
+        });
+
         this.initialDraw()
             .then(() => {
                 self._search
@@ -447,8 +480,12 @@ class Table {
     }
 
     sortData(field, dir) {
-        var direction = dir || 'desc';
+        var direction = dir || this.sort.dir || 'desc';
 
+        field = field || this.sort.field;
+
+        this.sort.dir = direction;
+        this.sort.field = field;
         this.data.rows.sort(function (a, b) {
             var fieldA,
                 fieldB;

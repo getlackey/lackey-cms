@@ -21,51 +21,73 @@ const
     api = require('core/client/js/api'),
     growl = require('cms/client/js/growl'),
     Media = require('cms/client/js/media'),
-    userDrop = require('cms/client/js/manager/user.dropdown.js'),
     Upload = require('core/client/js/upload');
 
+module.exports = function (el, cb) {
+    var media,
+        dragdrop,
+        root = el || document,
+        callback = cb || function () {};
 
-var media,
-    dragdrop;
+    lackey
+        .select('[data-lky-media]', root)
+        .forEach((element) => {
+            media = new Media(element);
 
-userDrop();
-lackey
-    .select('[data-lky-media]').forEach((element) => {
-        media = new Media(element);
-        console.log('test');
-        let src = media.node.getAttribute('src');
+            media.input.addEventListener('change', function (event) {
+                media.upload.choice(event);
+            });
 
-        media.input.addEventListener('change', function (event) {
-            media.upload.choice(event);
+            document.querySelector('#fileIn').addEventListener('click', function () {
+                media.input.click();
+            });
+
+            media.upload.on('done', function (uploader, data) {
+                if (data && data.length && data[0].data) {
+                    media.set(data[0].data);
+                    media.notify();
+
+                    growl({
+                        status: 'success',
+                        message: 'File successfully uploaded'
+                    });
+                    callback(data[0].data);
+                }
+            });
         });
 
-        document.querySelector('#fileIn').addEventListener('click', function () {
-            media.input.click();
-        });
-
-        media.upload.on('done', function (uploader, data) {
-            if (data && data.length && data[0].data) {
+    dragdrop = new Upload(document.querySelector('#imageDrop'));
+    dragdrop.on('done', function (uploader, data) {
+          if (data && data.length && data[0].data) {
                 media.set(data[0].data);
                 media.notify();
-
                 growl({
                     status: 'success',
                     message: 'File successfully uploaded'
                 });
-
-            }
-        });
+                callback(data[0].data);
+          }
     });
 
-dragdrop = new Upload(document.querySelector('#imageDrop'));
-dragdrop.on('done', function (uploader, data) {
-      if (data && data.length && data[0].data) {
-            media.set(data[0].data);
-            media.notify();
-            growl({
-                status: 'success',
-                message: 'File successfully uploaded'
-            });
-      }
-});
-window.dragdrop = dragdrop;
+    lackey
+        .select('[data-lky-hook="url.upload"]', root)
+        .forEach(element => {
+            element.addEventListener('submit', (event) => {
+                event.preventDefault();
+                let value = element.querySelector('input[name=urlUpload]').value;
+                if (!value) {
+                    return;
+                }
+                api
+                    .create('/cms/media', {
+                        source: value
+                    })
+                    .then(() => {
+                        growl({
+                            status: 'success',
+                            message: 'Asset successfully added'
+                        });
+                    });
+            }, true);
+        });
+};

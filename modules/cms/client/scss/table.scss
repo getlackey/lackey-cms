@@ -36,7 +36,7 @@
         }
     }
 
-    input[type="search"] {
+    input[type="search"], input[type="text"] {
         border: 1px solid $color-background-highlight;
         color: $color-light-gray;
         border-radius: 30px;
@@ -91,7 +91,7 @@
         display: flex;
         justify-content: space-between;
         align-items: stretch;
-        padding: 40px;
+        padding: 10px 40px 40px;
         .upload {
             flex: 1 1 auto;
 
