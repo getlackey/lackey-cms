@@ -98,7 +98,7 @@ module.exports.block = (config, injectedChunk, context, bodies, params, dust) =>
       route = config.route,
       document,
       template = params.template || config.template,
-      isEdit = context.resolve(params.editMode) || context.get('edit'),
+      isEdit = params.editMode !== undefined ? params.editMode : context.get('edit'),
       editData;
 
     if (config.props) {

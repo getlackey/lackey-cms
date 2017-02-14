@@ -187,6 +187,44 @@ Manager.prototype.set = function (contentId, path, variant, value) {
         });
 };
 
+
+/**
+ * Gets content node
+ * @param   {Number} contentId [[Description]]
+ * @param   {String} path      [[Description]]
+ * @param   {String|null} variant   [[Description]]
+ * @param   {String|null} schema    [[Description]]
+ * @returns {Promise.<Mixed>}} [[Description]]
+ */
+Manager.prototype.getProperty = function (contentId, path, variant, schema) {
+
+    return this.repository
+        .get('content', contentId)
+        .then(content => {
+            let source = treeParser.get(content.props, path, variant, null, locale);
+            if (!source && schema) {
+                source = schema.newDoc();
+            }
+            return source;
+        });
+};
+
+/**
+ * Sets content node
+ * @param   {Number} contentId
+ * @param   {String} path
+ * @param   {String} variant
+ * @param   {Mixed} value
+ * @returns {Promise}
+ */
+Manager.prototype.setProperty = function (contentId, path, variant, value) {
+    return this
+        .update('content', contentId, function (content) {
+            treeParser.set(content.props, path, value, variant || '*', null, locale !== defaultLocale ? locale : '*');
+        });
+};
+
+
 /**
  * Inserts before
  * @param   {Number} contentId

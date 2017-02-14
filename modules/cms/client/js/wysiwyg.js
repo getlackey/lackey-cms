@@ -87,6 +87,16 @@ class Wysiwyg {
         this._contentId = element.getAttribute('data-lky-content');
         this._path = element.getAttribute('data-lky-path') || null;
 
+        this._isProperty = element.hasAttribute('data-lky-is-property');
+
+        if (this.isProperty) {
+            this._lackeyGet = top.LackeyManager.getProperty.bind(top.LackeyManager);
+            this._lackeySet = top.LackeyManager.setProperty.bind(top.LackeyManager);
+        } else {
+            this._lackeyGet = top.LackeyManager.get.bind(top.LackeyManager);
+            this._lackeySet = top.LackeyManager.set.bind(top.LackeyManager);
+        }
+
         this.setup();
 
     }
@@ -109,10 +119,15 @@ class Wysiwyg {
         return this._variant;
     }
 
+    get isProperty() {
+
+        debug('get isProperty');
+        return this._isProperty;
+    }
+
     setup() {
         let self = this;
-        top.LackeyManager
-            .get(this.id, this.path, this.variant)
+        self._lackeyGet(this.id, this.path, this.variant)
             .then(source => {
                 self._source = source;
                 self.render();
@@ -129,8 +144,7 @@ class Wysiwyg {
     reset() {
         let self = this;
         if (top) {
-            top.LackeyManager
-                .get(self.id, self.path, self.variant)
+            self._lackeyGet(self.id, self.path, self.variant)
                 .then(src => {
                     if (src) {
                         self._source = src;
@@ -159,7 +173,6 @@ class Wysiwyg {
             customButtons = customButtons.split(',');
         }
 
-
         if (this._element.hasAttribute('data-lky-singleline')) {
             //options.disableReturn = true;
             options.toolbar = {
@@ -173,6 +186,10 @@ class Wysiwyg {
             options.insert = {
                 buttons: ['image']
             };
+        }
+
+        if (self.isProperty) {
+            options.toolbar = false;
         }
 
         if (options.toolbar && Array.isArray(options.toolbar.buttons)) {
@@ -264,7 +281,7 @@ class Wysiwyg {
                 }
                 self._changed = true;
 
-                top.LackeyManager.set(self.id, self.path, self.variant, text);
+                self._lackeySet(self.id, self.path, self.variant, text);
 
             })
         };

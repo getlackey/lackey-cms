@@ -69,18 +69,25 @@ module.exports = dust => {
   dust.helpers.editable = function (chunk, context, bodies, params) {
 
     let
-      editMode = params.editMode,
+      editMode = params.editMode !== undefined ? params.editMode : context.get('edit'),
       content = params.content,
       id = content ? content.id + '' : '',
       layout = content ? content.layout : {},
       variant = params.variant,
       path = params.path || null,
+      property = params.property || null,
       parent = params.parent || null,
       type = params.type || 'doc',
       def = params.default || '',
       tag = params.tag || 'div',
       locale = context.get('locale'),
       route = params.route || '';
+
+    if (property) {
+      layout = content ? content.props : {};
+      params.path = property;
+      path = property;
+    }
 
     if (parent) {
       path = parent + '.' + path;
@@ -113,8 +120,12 @@ module.exports = dust => {
         chunk.write(' data-lky-variant="' + variant + '"');
       }
 
-      if (markdown.isInline(tag)) {
+      if (markdown.isInline(tag) || property) {
         chunk.write(' data-lky-singleline="true"');
+      }
+
+      if (property) {
+        chunk.write(' data-lky-is-property="true"');
       }
     }
 
