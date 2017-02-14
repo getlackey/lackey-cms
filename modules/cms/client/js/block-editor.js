@@ -62,7 +62,7 @@ class BlockEditor {
     edit() {
         var self = this;
 
-        top.LackeyManager.editBlock(self.block.path, self.block.template);
+        top.LackeyManager.editBlock(self.path, self.template);
     }
 
     getAbsoluteBoundingRect() {
