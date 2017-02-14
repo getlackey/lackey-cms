@@ -162,16 +162,22 @@ class BlockEditor {
         comments.forEach(comment => {
             var data = comment.data.substring(commentPrefix.length),
                 dataKind = data.match(/\w+/)[0],
-                parsedData = {}, block;
+                parsedData = {}, block, blockKey;
 
             parsedData = JSON.parse(data.substring(dataKind.length));
             comment.lackeyBlockData = parsedData;
 
-            if (parsedData.path) {
-                block = blocks[parsedData.path] || parsedData;
+            if (parsedData.path && parsedData.template) {
+                blockKey = parsedData.path + parsedData.template;
+
+                block = blocks[blockKey] || parsedData;
                 block[dataKind] = comment;
-                blocks[parsedData.path] = block;
+                blocks[blockKey] = block;
             } else {
+                if (parsedData.path && !parsedData.template) {
+                    console.warn('Block was rendered without a template! Path: ', parsedData.path);
+                }
+
                 comment.parentNode.removeChild(comment);
             }
         });
