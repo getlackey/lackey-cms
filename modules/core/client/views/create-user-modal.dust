@@ -1,0 +1,29 @@
+{>"cms/core/modal"/}
+
+{<body}
+<section data-lky-component="table">
+    <h2>New User</h2>
+    <form style="margin-top: 20px;" method="post">
+        <input type="hidden" value="{data.id}" name="id"/>
+        <label>
+            <span>Name</span>
+            <input data-lky-input type="text" name="name" value=""/>
+        </label>
+        <label>
+            <span>Email</span>
+            <input data-lky-input type="text" name="email" value=""/>
+        </label>
+        <label>
+            <span>Role</span>
+            <select name="role">
+                {#data.roles}
+                    <option value="{name}">{?label}{label}{:else}{name}{/label}</option>
+                {/data.roles}
+            </select>
+        </label>
+        <label>
+            <button data-lky-btn type="submit">Create</button>
+        </label>
+    </form>
+</section>
+{/body}

@@ -108,7 +108,11 @@ module.exports = SUtils
             }
 
             static get createLink() {
-                return 'cms/user/create';
+                return {
+                    href: 'cms/user/create',
+                    template: 'cms/core/create-user-modal',
+                    javascript: 'createUser'
+                };
             }
 
             constructor(data) {

@@ -21,9 +21,8 @@ var lackey = require('core/client/js'),
     growl = require('cms/client/js/growl');
 
 
-module.exports = function (el, cb) {
+module.exports = function (el) {
     var root = el || document,
-        callback = cb || function () {},
         name = lackey.select('input[name="title"]', root)[0],
         slug = lackey.select('input[name="slug"]', root)[0];
 

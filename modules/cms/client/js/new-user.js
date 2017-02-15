@@ -19,52 +19,58 @@ var lackey = require('core/client/js'),
     xhr = require('core/client/js/xhr'),
     growl = require('cms/client/js/growl');
 
-function error(message) {
-    growl({
-        status: 'error',
-        message: message
-    });
-}
+module.exports = function (el, cb) {
+    var root = el || document,
+        callback = cb || function () {};
 
-function success(message) {
-    growl({
-        status: 'success',
-        message: message
-    });
-}
-
-lackey.bind('form', 'submit', event => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    var name = document.querySelector('[name=name]').value,
-        email = document.querySelector('[name=email]').value,
-        role = document.querySelector('[name=role]').value;
-
-    if (!name) {
-        return error('Please enter a name');
-    }
-    if (!email) {
-        return error('Please enter an email');
-    }
-    if (!role) {
-        return error('Please chooose a role');
+    function error(message) {
+        growl({
+            status: 'error',
+            message: message
+        });
     }
 
-    return xhr.basedPost('/cms/user/create', {
-        name: name,
-        email: email,
-        role: role
-    })
-    .then(response => {
-        var data = JSON.parse(response);
-        if (data.status === 'success') {
-            success(data.msg);
-            document.querySelector('[name=name]').value = '';
-            document.querySelector('[name=email]').value = '';
-        } else {
-            error(data.msg);
+    function success(message) {
+        growl({
+            status: 'success',
+            message: message
+        });
+    }
+
+    lackey.bind('form', 'submit', event => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var name = document.querySelector('[name=name]').value,
+            email = document.querySelector('[name=email]').value,
+            role = document.querySelector('[name=role]').value;
+
+        if (!name) {
+            return error('Please enter a name');
         }
-    })
-    .catch(issue => error(issue));
-});
+        if (!email) {
+            return error('Please enter an email');
+        }
+        if (!role) {
+            return error('Please chooose a role');
+        }
+
+        return xhr.basedPost('/cms/user/create', {
+            name: name,
+            email: email,
+            role: role
+        })
+        .then(response => {
+            var data = JSON.parse(response);
+            if (data.status === 'success') {
+                success(data.msg);
+                callback();
+                document.querySelector('[name=name]').value = '';
+                document.querySelector('[name=email]').value = '';
+            } else {
+                error(data.msg);
+            }
+        })
+        .catch(issue => error(issue));
+    }, root);
+};

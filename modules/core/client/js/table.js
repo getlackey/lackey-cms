@@ -26,7 +26,8 @@ const
     modal = require('core/client/js/modal'),
     createMedia = require('cms/client/js/new-media'),
     editProfile = require('cms/client/js/profile'),
-    createContent = require('cms/client/js/new-page');
+    createContent = require('cms/client/js/new-page'),
+    createUser = require('cms/client/js/new-user');
 
 function replaceState(href) {
     let loc = document.location,
@@ -128,7 +129,10 @@ class Table {
                 });
             },
             createContent: (root) => {
-                createContent(root, function () {
+                createContent(root);
+            },
+            createUser: (root) => {
+                createUser(root, function () {
                     self.getData().then(() => {
                         if (self.sort.field) {
                             self.sortData();

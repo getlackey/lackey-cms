@@ -327,7 +327,7 @@ module.exports = SUtils
 
                 query.mime = {
                     $ne: 'text/html'
-                }
+                };
 
                 SCli.debug(__MODULE_NAME, '_preQuery after', JSON.stringify(query), JSON.stringify(opts));
 
