@@ -24,7 +24,8 @@ const
     growl = require('cms/client/js/growl'),
     api = require('core/client/js/api'),
     modal = require('core/client/js/modal'),
-    createMedia = require('cms/client/js/new-media');
+    createMedia = require('cms/client/js/new-media'),
+    editProfile = require('cms/client/js/profile');
 
 function replaceState(href) {
     let loc = document.location,
@@ -105,6 +106,19 @@ class Table {
         this.applyJs = {
             createMedia: (root) => {
                 createMedia(root, function () {
+                    self.getData().then(() => {
+                        if (self.sort.field) {
+                            self.sortData();
+                        }
+                    });
+                });
+            },
+            editProfile: (root, resolve, row) => {
+                editProfile(root, () => {
+                    this.getRowModal(row, function () {
+                        resolve();
+                    });
+
                     self.getData().then(() => {
                         if (self.sort.field) {
                             self.sortData();
@@ -302,31 +316,46 @@ class Table {
     }
 
     rowActions() {
-        var rows = lackey.select('[data-lky-hook="tableRowLink"]'),
-            callback,
-            self = this;
-
-        callback = function (root) {
-            self._modal = root;
-            self.api();
-        };
+        var self = this,
+            rows = lackey.select('[data-lky-hook="tableRowLink"]');
         rows.forEach((row) => {
-            row.addEventListener('click', () => {
+            row.addEventListener('click', function () {
                 if (row.dataset.lkyTemplate) {
-                    xhr.basedGet(row.dataset.lkyHref + '.json', true)
-                        .then((data) => {
-                            data = JSON.parse(data);
-                            modal.open(row.dataset.lkyTemplate, {
-                                data: data.data,
-                                closeBtn: true
-                            }, callback);
-                        });
+                   self.getRowModal(this);
                 } else {
                     window.location = row.dataset.lkyHref;
                 }
-
             });
         });
+    }
+
+    getRowModal(row, cb) {
+        var callback,
+            self = this,
+            js;
+
+        cb = cb || function () {};
+
+        callback = function (root, vars, resolve) {
+            self._modal = root;
+            self.api();
+            if (js) {
+                self.applyJs[js](root, resolve, row);
+            }
+        };
+
+         xhr.basedGet(row.dataset.lkyHref + '.json', true)
+            .then((data) => {
+                data = JSON.parse(data);
+                modal.open(row.dataset.lkyTemplate, {
+                    data: data.data,
+                    closeBtn: true
+                }, callback);
+                cb();
+                if (row.dataset.lkyJavascript) {
+                    js = row.dataset.lkyJavascript;
+                }
+            });
     }
 
     removeItem(id) {

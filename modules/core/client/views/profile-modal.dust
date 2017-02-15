@@ -1,0 +1,81 @@
+{>"cms/core/modal"/}
+
+{<body}
+<section data-lky-component="profile" class="context-user">
+    <h1>User profile</h1>
+
+    <hr />
+
+    <div class="flex">
+        <div class="left">
+            <img src="{data.profile.image.source}" alt="" class="profile" />
+            <div class="details">
+                {#data.profile.identities}
+                    <div class="flex">
+                        <label>{@eq key=type value="email"}{:else}{type}{/eq}</label>
+                        <div class="id">{id}</div>
+                    </div>
+                {/data.profile.identities}
+            </div>
+        </div>
+
+        <div class="right">
+            <form id="username">
+                <label for="name">Display name (click to edit)</label>
+                <div class="name">
+                    <input type="hidden" name="id" value="{data.profile.id}"/>
+                    <input name="name" type="text" value="{data.profile.name}"/>
+                    <button type="submit">Save</button>
+                    {@ne key=admin.id value=data.profile.id}<button class="trash" data-lky-btn data-lky-api="DELETE:/cms/user/{data.profile.id}"><img src="img/cms/cms/svg/bin-filled.svg"/></button>{/ne}
+                </div>
+            </form>
+
+            <h2>Roles</h2>
+            <div class="flex">
+                <label>Roles</label>
+                <ul class="badges">
+                    {#data.profile.roles}
+                    <li data-lky-hook="action:remove-role" data-role="{name}" data-profile="{data.profile.id}">
+                        <a>{?label}{label}{:else}{name}{/label}</a>
+                    </li>
+                    {/data.profile.roles}
+                    <li class="action" data-lky-hook="action:pick-role" data-profile="{data.profile.id}">Add</li>
+                </ul>
+            </div>
+
+            <div class="flex">
+                {#data.profile.roles}
+                    {?taxonomies}
+                        {?taxonomies.length}
+                            <label>Inherited from '{?label}{label}{:else}{name}{/label}'</label>
+                            <ul class="badges">
+                                {#taxonomies}
+                                    <li class="disabled">{?label}{label}{:else}{name}{/label}</li>
+                                {/taxonomies}
+                            </ul>
+                        {/taxonomies.length}
+                    {/taxonomies}
+                {/data.profile.roles}
+            </div>
+
+            <h2>Classifications</h2>
+            <div class="flex">
+                {#data.restrictive}
+                <label>{?label}{label}{:else}{name}{/label}</label>
+                <ul class="badges">
+                    {#data.profile.taxonomies taxname=name}
+                        {@eq key=taxname value=type.name}
+                            <li data-lky-hook="action:remove-taxonomy" data-lky-hook="action:remove-taxonomy" data-profile="{data.profile.id}" data-taxonomy="{name}" data-type="{taxname}">
+                                <a>{?label}{label}{:else}{name}{/label}</a>
+                            </li>
+                        {/eq}
+                    {/data.profile.taxonomies}
+                    <li class="action" data-lky-hook="action:pick-taxonomy" data-profile="{data.profile.id}" data-type="{name}" data-addable="{type.allowCreation}">Add</li>
+                </ul>
+                {/data.restrictive}
+            </div>
+        </div>
+    </div>
+</section>
+<div data-lky-hook="settings.overlay"></div>
+{/body}

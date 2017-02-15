@@ -47,7 +47,9 @@ class UserController extends CRUD {
 
     static get tableRowAction() {
         return this._overriden('tableRowAction', {
-            href: 'cms/user/{id}'
+            href: 'cms/user/{id}',
+            template: 'cms/core/profile-modal',
+            javascript: 'editProfile'
         });
     }
 

@@ -8,7 +8,7 @@
             pointer-events: none;
             box-shadow: 3px 23px 23px -2px rgba(0, 0, 0, 0.52);
             border-top: 10px solid $color-background-highlight;
-
+            z-index: 999999;
             > [data-lky-hook="settings.back"] {
                 width: 0px;
                 background: rgba(0, 0, 0, 0.25);

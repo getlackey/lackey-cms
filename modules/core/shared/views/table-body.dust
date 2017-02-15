@@ -1,5 +1,5 @@
 {#table.rows}
-<tr {?rowAction.href}data-lky-hook="tableRowLink" data-lky-href="{rowAction.href}" {?rowAction.template}data-lky-template="{rowAction.template}"{/rowAction.template}{/rowAction.href}>
+<tr {?rowAction.href}data-lky-hook="tableRowLink" data-lky-href="{rowAction.href}" {?rowAction.template}data-lky-template="{rowAction.template}"{/rowAction.template}{/rowAction.href} {?rowAction.javascript}data-lky-javascript="{rowAction.javascript}"{/rowAction.javascript}>
     {#columns}
     {^hide}
     <td title="{>"cms/core/table-value" value=value/}">
