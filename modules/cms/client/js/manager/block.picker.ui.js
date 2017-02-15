@@ -21,7 +21,7 @@ const Picker = require('cms/client/js/manager/picker.ui.js');
 /**
  * @class
  */
-class BlockPrickerUI extends Picker {
+class BlockPickerUI extends Picker {
 
     get template() {
 
@@ -39,4 +39,4 @@ class BlockPrickerUI extends Picker {
     }
 }
 
-module.exports = BlockPrickerUI;
+module.exports = BlockPickerUI;
