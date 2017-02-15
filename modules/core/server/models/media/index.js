@@ -318,6 +318,26 @@ module.exports = SUtils
                 });
             }
 
+            static _preQuery(innerQuery, options) {
+
+                let query = innerQuery ? JSON.parse(JSON.stringify(innerQuery)) : {},
+                    opts = options ? options : {};
+
+                SCli.debug(__MODULE_NAME, '_preQuery', JSON.stringify(innerQuery), JSON.stringify(opts));
+
+                query.mime = {
+                    $ne: 'text/html'
+                }
+
+                SCli.debug(__MODULE_NAME, '_preQuery after', JSON.stringify(query), JSON.stringify(opts));
+
+                return super
+                    ._preQuery(query, opts)
+                    .then(outputQuery => {
+                        return outputQuery;
+                    });
+            }
+
             _preSave() {
                 SCli.debug('lackey-cms/modules/media/server/models/media', 'preSave');
                 let self = this,
