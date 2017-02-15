@@ -5,7 +5,7 @@
 
     <div class="left">
         <h2>{title}</h2>
-        {?create}<a data-lky-btn {?create.javascript}data-lky-javascript={create.javascript}{/create.javascript} data-lky-hook="{?create.template}open-modal{/create.template}" {?create.template}data-lky-template="{create.template}"{/create.template} href="{?create.href}{create.href}{:else}{create}{/create.href}">Add New</a>{/create}
+        {?create}<a data-lky-btn {?create.javascript}data-lky-javascript={create.javascript}{/create.javascript} data-lky-hook="{?create.template}open-modal{/create.template}" {?create.template}data-lky-template="{create.template}"{/create.template} href="{?create.href}{create.href}{:else}{create}{/create.href}"  data-lky-href="{create.href}">Add New</a>{/create}
     </div>
     <div class="right">
         <input data-lky-hook="table.filter" type="search" placeholder="Search"/>

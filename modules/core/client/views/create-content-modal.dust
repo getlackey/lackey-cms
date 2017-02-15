@@ -1,0 +1,46 @@
+{>"cms/core/modal"/}
+
+{<body}
+<section data-lky-component="table" class="create-page">
+    <h1>Create Page</h1>
+    <form>
+        <div class="name">
+            <label>Title</label>
+            <input data-lky-input type="text" name="title" placeholder="Enter Page Title"/>
+        </div>
+
+        <label class="choose">Choose page type</label>
+        <table class="table" data-lky-table data-lky-table-hover>
+            <thead>
+                <tr>
+                    <th>Preview</th>
+                    <th>Template</th>
+                    <th>Prefix</th>
+                    <th><button data-lky-btn type="submit">Create</button></th>
+                </tr>
+            </thead>
+            <tbody data-lky-hook="table-body" data-lky-template="cms/core/table-body">
+                {#data.templates}
+
+                    <tr>
+                        <td>
+                            <img src="{thumb}"/>
+                        </td>
+                        <td>
+                            {name}
+                        </td>
+                        <td>
+                            <pre>{prefix}</pre>
+                        </td>
+                        <td>
+                            <input type="radio" name="template" value="{id}"/>
+                        </td>
+                    </tr>
+
+                {/data.templates}
+            </tbody>
+        </table>
+        <button data-lky-btn type="submit">Create</button>
+    </form>
+</section>
+{/body}

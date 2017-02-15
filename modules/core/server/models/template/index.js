@@ -181,13 +181,7 @@ module.exports = SUtils
             }
 
             canEdit(user) {
-                if (this.require.length === 0) {
-                    return Promise.resolve(true);
-                }
-                return Promise
-                    .all(this.require.map(perm => user.isAllowed('templates', perm)))
-                    .then(list => list.filter(result => result))
-                    .then(list => list.length > 0);
+                return user.isAllowed('allowedTemplate', this._doc.name) ;
             }
 
             diff(data) {

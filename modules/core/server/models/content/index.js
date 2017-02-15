@@ -115,7 +115,11 @@ module.exports = SUtils
             }
 
             static get createLink() {
-                return 'cms/content/create';
+                return {
+                    href: 'cms/content/create',
+                    template: 'cms/core/create-content-modal',
+                    javascript: 'createContent'
+                };
             }
 
             static get taxonomyRelationModel() {

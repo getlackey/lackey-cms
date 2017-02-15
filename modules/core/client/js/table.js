@@ -25,7 +25,8 @@ const
     api = require('core/client/js/api'),
     modal = require('core/client/js/modal'),
     createMedia = require('cms/client/js/new-media'),
-    editProfile = require('cms/client/js/profile');
+    editProfile = require('cms/client/js/profile'),
+    createContent = require('cms/client/js/new-page');
 
 function replaceState(href) {
     let loc = document.location,
@@ -115,10 +116,19 @@ class Table {
             },
             editProfile: (root, resolve, row) => {
                 editProfile(root, () => {
-                    this.getRowModal(row, function () {
+                    this.getModal(row, function () {
                         resolve();
                     });
 
+                    self.getData().then(() => {
+                        if (self.sort.field) {
+                            self.sortData();
+                        }
+                    });
+                });
+            },
+            createContent: (root) => {
+                createContent(root, function () {
                     self.getData().then(() => {
                         if (self.sort.field) {
                             self.sortData();
@@ -180,18 +190,8 @@ class Table {
 
         lackey.bind('[data-lky-hook="open-modal"]', 'click', (event, hook) => {
             event.preventDefault();
-            var applyJs = hook.dataset.lkyJavascript || false,
-                callback = function (root) {
-                self._modal = root;
-                self.api();
-                if (applyJs) {
-                    self.applyJs[applyJs](root);
-                }
-            };
             if (hook.dataset.lkyTemplate) {
-                modal.open(hook.dataset.lkyTemplate, {
-                    closeBtn: true
-                }, callback);
+                self.getModal(hook);
             } else {
                 window.location = hook.href;
             }
@@ -321,7 +321,7 @@ class Table {
         rows.forEach((row) => {
             row.addEventListener('click', function () {
                 if (row.dataset.lkyTemplate) {
-                   self.getRowModal(this);
+                   self.getModal(this);
                 } else {
                     window.location = row.dataset.lkyHref;
                 }
@@ -329,7 +329,7 @@ class Table {
         });
     }
 
-    getRowModal(row, cb) {
+    getModal(row, cb) {
         var callback,
             self = this,
             js;
