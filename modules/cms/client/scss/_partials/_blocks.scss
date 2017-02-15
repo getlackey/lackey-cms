@@ -3,7 +3,6 @@
     padding: 0;
 
     border: 2px solid $color-lackey-light-blue;
-    margin-bottom: 10px;
 
     [data-lky-icon] {
         flex: 0 0 auto;
@@ -70,32 +69,92 @@
 }
 
 [data-lky-add-block] {
+    margin: 0;
+    padding: 0;
     border: none;
+    outline: none;
+    background: transparent;
 
-    display: inline-block;
-    padding: 6px 10px;
-    margin: 20px 0;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 30px;
 
-    font-size: 12px;
-    font-weight: normal;
+    cursor: copy;
 
-    background-color: $color-lackey-blue;
-    cursor: pointer;
+    &:before {
+        content: "";
 
-    color: transparent;
-    opacity: 0.05;
+        position: absolute;
+        left: 0; right: 0;
+        top: 50%;
+        width: 100%;
+        height: 2px;
 
-    transition:
-        opacity 0.2s,
-        color 0.2s;
+        background-color: $color-lackey-blue;
+        pointer-events: none;
 
+        transform-origin: left;
+    }
+
+    &:after {
+        $circle-size: 1.25rem;
+        content: "";
+
+        position: absolute;
+        left: -$circle-size;
+        top: 50%;
+        width: $circle-size;
+        height: $circle-size;
+
+        background: {
+            image: url(../../../img/cms/cms/svg/ui/add-block.svg);
+            size: 100%;
+        }
+        border-radius: 100%;
+    }
+
+    li + li > & { margin-top: 5px; }
+
+    li:not(:hover) > & {
+        opacity: 0;
+
+        transition: opacity 0.3s $timing-material-accelerate;
+
+        &:before {
+            transform: translateY(-50%) scaleX(0.00001);
+
+            transition: transform 0s 0.3s;
+        }
+
+        &:after {
+            transform: translateY(-50%) scale(0.00001);
+
+            transition: transform 0s 0.3s;
+        }
+    }
     li:hover > & {
         opacity: 1;
-        color: white;
+
+        transition: opacity 0.1s;
+
+        &:before {
+            transform: translateY(-50%);
+
+            transition: transform 0.25s 0.25s $timing-material-sharp;
+        }
+
+        &:after {
+            transform: translateY(-50%);
+
+            transition: transform 0.3s $timing-material-decelerate;
+        }
     }
 }
 
-[data-lky-hook="settings.blocks"] {
+[data-lky-hook="lackey"] [data-lky-hook="main-area"] [data-lky-component="settings"] [data-lky-hook="settings.blocks"] {
+    display: flex;
+
     div {
         > ul > li {
             margin: 0 auto;

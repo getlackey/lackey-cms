@@ -5,7 +5,7 @@
             {:List}
                 <ul>
                     <li>
-                        <button data-lky-add-block="-1" data-lky-path="{itemPath}.items">Insert New Block</button>
+                        <button data-lky-add-block="-1" data-lky-path="{itemPath}.items"></button>
                     </li>
                 {#items}
                     {@templateData template=template}
@@ -15,7 +15,7 @@
                         </li>
                     {/templateData}
                     <li>
-                        <button data-lky-add-block={$idx} data-lky-path="{itemPath}.items">Insert New Block</button>
+                        <button data-lky-add-block={$idx} data-lky-path="{itemPath}.items"></button>
                     </li>
                 {/items}
                 </ul>
