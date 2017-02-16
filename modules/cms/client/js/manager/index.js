@@ -27,7 +27,9 @@ const
     StructureUI = require('cms/client/js/manager/structure.ui.js'),
     prefix = require('cms/client/js/iframe.resolve')(xhr.base, '', true),
     Stack = require('cms/client/js/manager/stack'),
-    userDrop = require('cms/client/js/manager/user.dropdown.js');
+    userDrop = require('cms/client/js/manager/user.dropdown.js'),
+    modal = require('core/client/js/modal'),
+    createContent = require('cms/client/js/new-page');
 
 let locale = 'en',
     defaultLocale = 'en';
@@ -402,6 +404,23 @@ Manager.prototype.onViewStructure = function (event) {
     this.showTab(event.target.getAttribute('data-lky-tab'));
 };
 
+Manager.prototype.contentModal = function (event) {
+    event.preventDefault();
+    var callback;
+        callback = function (root) {
+            createContent(root);
+
+        };
+    xhr.basedGet(this.getAttribute('href') + '.json', true)
+        .then((data) => {
+            data = JSON.parse(data);
+            modal.open('cms/core/create-content-modal', {
+                data: data.data,
+                closeBtn: true
+            }, callback);
+        });
+};
+
 Manager.prototype.onStructureChange = function () {
     this.repository.notify();
     this.preview();
@@ -479,6 +498,10 @@ Manager.prototype.setupUI = function () {
     lackey
         .hook('header.blocks')
         .addEventListener('click', this.onViewStructure.bind(this), true);
+
+    lackey
+        .hook('header.create')
+        .addEventListener('click', this.contentModal);
 
     this._changeUI = new ChangeUI(this.repository);
     lackey
