@@ -93,8 +93,6 @@
 
         background-color: $color-lackey-blue;
         pointer-events: none;
-
-        transform-origin: left;
     }
 
     &:after {
@@ -102,7 +100,7 @@
         content: "";
 
         position: absolute;
-        left: -$circle-size;
+        left: 50%;
         top: 50%;
         width: $circle-size;
         height: $circle-size;
@@ -114,9 +112,9 @@
         border-radius: 100%;
     }
 
-    li + li > & { margin-top: 5px; }
+    * + & { margin-top: 5px; }
 
-    li:not(:hover) > & {
+    &:not(:hover) {
         opacity: 0;
 
         transition: opacity 0.3s $timing-material-accelerate;
@@ -128,12 +126,12 @@
         }
 
         &:after {
-            transform: translateY(-50%) scale(0.00001);
+            transform: translate(-50%, -50%) scale(0.00001);
 
-            transition: transform 0s 0.3s;
+            transition: transform 0.3s $timing-material-accelerate;
         }
     }
-    li:hover > & {
+    &:hover {
         opacity: 1;
 
         transition: opacity 0.1s;
@@ -141,11 +139,11 @@
         &:before {
             transform: translateY(-50%);
 
-            transition: transform 0.25s 0.25s $timing-material-sharp;
+            transition: transform 0.25s 0.1s $timing-material-sharp;
         }
 
         &:after {
-            transform: translateY(-50%);
+            transform: translate(-50%, -50%);
 
             transition: transform 0.3s $timing-material-decelerate;
         }
