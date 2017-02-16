@@ -1,10 +1,20 @@
 {! Used by lackey-cms/modules/cms/client/views/structure/sections.dust !}
-{?label}<span>{label}</span>{/label}
-<div data-lky-block {?locked}data-lky-locked{/locked}>
+<figure data-lky-editable="{editable}"
+        data-lky-component="{type}"
+        data-lky-type="{template}"
+        {?index}data-lky-index="{index}"{/index}
+        {?index}data-lky-parent="{itemPath}.items"{/index}>
 
-    <img data-lky-icon src="{thumb}"/>
-    <div>
-        <img data-lky-bin data-lky-path="{itemPath}{?index}.items.{index}{/index}" data-lky-template="{template}" src="img/cms/cms/svg/bin.svg"/>
-        <img data-lky-cog data-lky-path="{itemPath}{?index}.items.{index}{/index}" data-lky-template="{template}" src="img/cms/cms/svg/cog.svg"/>
+    {?label}<label>{label}</label>{:else}<label>{name}</label>{/label}
+
+    <div data-lky-block {?locked}data-lky-locked{/locked}>
+        <img data-lky-icon src="{thumb}"/>
+
+        <div>
+            <img data-lky-bin data-lky-path="{itemPath}{?index}.items.{index}{/index}" data-lky-template="{template}" src="img/cms/cms/svg/bin.svg"/>
+            <img data-lky-cog data-lky-path="{itemPath}{?index}.items.{index}{/index}" data-lky-template="{template}" src="img/cms/cms/svg/cog.svg"/>
+        </div>
     </div>
-</div>
+
+    {?index}<button data-lky-add-block="{index}" data-lky-path="{itemPath}.items"></button>{/index}
+</figure>
