@@ -24,16 +24,57 @@ var _editButton,
     _overlay;
 
 class BlockEditor {
-    constructor(block) {
+    constructor(path, template, block) {
         debug('Constructor', block);
 
         var self = this;
+
+        self.path = 'layout.' + path;
+        self.localPath = path;
+        self.template = template;
+
+        if (!self.path || !self.template) {
+            throw new Error('Blocks must have both a path and template!');
+        }
 
         self.block = block;
         self.nodes = [];
         self.elements = [];
 
+        self.children = [];
+
         self.bind();
+    }
+
+    toString() {
+        var self = this;
+
+        return 'Block: ' + self.path + ', ' + self.template;
+    }
+
+    get parent() {
+        var self = this;
+
+        return self._parent ? self._parent : null;
+    }
+    set parent(newParent) {
+        var self = this;
+
+        if (self.parent) {
+            let myIndex = self.parent.children.indexOf(self);
+            self.parent.children.splice(myIndex, 1);
+        }
+
+        self._parent = newParent;
+
+        if (self.parent !== null) {
+            self.localPath = self.path.replace(self.parent.path + '.', '');
+
+            self.parent.children.push(self);
+            self.parent.sortChildren();
+        } else {
+            self.localPath = self.path;
+        }
     }
 
     bind() {
@@ -93,6 +134,14 @@ class BlockEditor {
         };
     }
 
+    sortChildren() {
+        var self = this;
+
+        self.children.sort((a, b) => {
+            return a.path > b.path ? 1 : -1;
+        });
+    }
+
     get isMouseOver() {
         var self = this;
 
@@ -125,6 +174,7 @@ class BlockEditor {
         self.checkMouseState(ev);
     }
 
+    // Static Properties / Methods.
 
     static init() {
         debug('init');
@@ -146,12 +196,13 @@ class BlockEditor {
             BlockEditor.factory(block);
         }
 
+        BlockEditor.assignParents();
         BlockEditor.startRendering();
     }
 
     static factory(block) {
         debug('factory', block);
-        return new BlockEditor(block);
+        return new BlockEditor(block.path, block.template, block);
     }
 
     static getBlocks(root) {
@@ -184,7 +235,6 @@ class BlockEditor {
 
         return blocks;
     }
-
     static getComments(root) {
         var foundComments = [];
         var elementPath = [root];
@@ -204,6 +254,41 @@ class BlockEditor {
         return foundComments;
     }
 
+    static assignParents() {
+        BlockEditor.rootBlocks = [];
+
+        BlockEditor.blocks.forEach(block => {
+            block.parent = BlockEditor.findParent(block);
+
+            if (block.parent === null) {
+                BlockEditor.rootBlocks.push(block);
+            }
+        });
+
+        BlockEditor.rootBlocks.sort((a, b) => {
+            return a > b ? 1 : -1;
+        });
+    }
+    static findParent(block) {
+        return BlockEditor.blocks.reduce((currentParent, currentBlock) => {
+            if (currentBlock === block) { return currentParent; }
+            if (currentParent && currentParent.path.length > currentBlock.path.length) { return currentParent; }
+
+            if (block.path.startsWith(currentBlock.path)) {
+                currentParent = currentBlock;
+            }
+
+            return currentParent;
+        }, null);
+    }
+
+    static get blocks() {
+        if (!BlockEditor._blocks) {
+            BlockEditor._blocks = [];
+        }
+
+        return BlockEditor._blocks;
+    }
 
     static setEditTarget(block, bounds) {
         BlockEditor.updateEditButton(block, bounds);
