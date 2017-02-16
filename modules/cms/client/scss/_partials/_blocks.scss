@@ -3,9 +3,12 @@
     padding: 0;
 
     border: 2px solid $color-lackey-light-blue;
+    background-color: #fff;
 
     [data-lky-icon] {
         flex: 0 0 auto;
+
+        cursor: move;
     }
 
     [data-lky-bin],
@@ -52,11 +55,18 @@
     }
 }
 
-[data-lky-hook="sections"] {
-    &:empty:after {
-        content: "Blocks cannot be added to this element.";
-    }
+figure[data-lky-component][data-lky-type],
+[data-lky-hook="lackey"] [data-lky-hook="main-area"] [data-lky-component="settings"] [data-lky-hook="settings.blocks"] figure[data-lky-component][data-lky-type] {
+    > label {
+        display: block;
+        margin: 5px 0px 3px;
 
+        color: $color-background-accent;
+        font-weight: 500;
+    }
+}
+
+[data-lky-hook="sections"] {
     > ul {
         > li {
             > span {
@@ -153,20 +163,78 @@
 [data-lky-hook="lackey"] [data-lky-hook="main-area"] [data-lky-component="settings"] [data-lky-hook="settings.blocks"] {
     display: flex;
 
-    div {
-        > ul > li {
-            margin: 0 auto;
-            text-align: center;
-            width: 225px;
+    > div {
+        max-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
 
-            &[data-lky-component][data-lky-type] > label {
-                margin-bottom: 3px;
+        &[data-lky-hook="sections"] {
+            &:empty:after {
+                content: "Blocks cannot be added to this element.";
             }
 
-            &:first-child:last-child > [data-lky-add-block] {
-                opacity: 1;
-                color: white;
+            > section.block-list {
+                > * {
+                    margin: 0 auto;
+                    width: 225px;
+                }
+            }
+        }
+
+        &[data-lky-hook="layout"] {
+            padding-top: 6.45rem;
+
+            > figure {
+                position: relative;
+                top: 0 !important; // Override style attribute.
+                left: 50% !important; // Override style attribute.
+                width: 1em;
+                box-sizing: content-box;
+
+                overflow: hidden;
+
+                font-size: ($settings-edit-width - 100px);
+                border: 2px solid $color-lackey-ligher-blue;
+
+                transform: translateX(-50%);
+
+                &.block {
+                    padding-bottom: 16px;
+                }
+
+                figure.block {
+                    position: absolute;
+                    margin: 0;
+                    padding: 0;
+
+                    border: 2px solid $color-lackey-blue;
+
+                    &[data-has-children] > figure { display: none; }
+                }
             }
         }
     }
+}
+
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+}
+.gu-hide {
+    display: none !important;
+}
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
 }

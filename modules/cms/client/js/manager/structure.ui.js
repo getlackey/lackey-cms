@@ -23,7 +23,8 @@ const
     api = require('core/client/js/api'),
     formatters = require('jsondiffpatch/src/formatters'),
     dateformat = require('dateformat'),
-    treeParser = require('cms/shared/treeparser');
+    treeParser = require('cms/shared/treeparser'),
+    dragula = require('dragula');
 
 let
     cache = {};
@@ -201,7 +202,6 @@ class StructureUI extends Emitter {
     }
 
     drawSections() {
-
         let
             context,
             self = this;
@@ -224,6 +224,15 @@ class StructureUI extends Emitter {
                 lackey.bind('[data-lky-cog]', 'click', self.inspectEvent.bind(self), root[0]);
                 lackey.bind('[data-lky-bin]', 'click', self.removeBlock.bind(self), root[0]);
                 lackey.bind('[data-lky-add-block]', 'click', self.addBlock.bind(self), root[0]);
+
+                let drake = dragula([root[0].querySelector('section.block-list')], {
+                    moves: (element, container, handle) => handle.hasAttribute('data-lky-icon'),
+                    accepts: (element, target, source, sibling) => !sibling || sibling.tagName !== 'BUTTON'
+                });
+
+                drake.on('drop', (element, target, source, before) => {
+                    self.moveBlock(element, before);
+                });
             });
     }
 
@@ -270,6 +279,45 @@ class StructureUI extends Emitter {
             .context()
             .then(context => {
                 treeParser.remove(context, path);
+                self.emit('changed');
+                return self.drawSections();
+            });
+    }
+
+    moveBlock(blockElement, beforeBlockElement) {
+        let self = this,
+            parentPath = blockElement.getAttribute('data-lky-parent'),
+            blockIndex = parseInt(blockElement.getAttribute('data-lky-index')),
+            blockPath = parentPath + '.' + blockIndex,
+            beforeBlockIndex,
+            beforeBlockPath;
+
+        if (beforeBlockElement) {
+            beforeBlockIndex = parseInt(beforeBlockElement.getAttribute('data-lky-index'));
+            beforeBlockPath = parentPath + '.' + beforeBlockIndex;
+
+            // We're gonna remove the block first, adjust the index for afterwards.
+            if (beforeBlockIndex > blockIndex) {
+                beforeBlockIndex -= 1;
+            }
+        }
+
+        return this
+            .options
+            .context()
+            .then(context => {
+                let insertIndex,
+                    block = treeParser.get(context, blockPath);
+
+                if (beforeBlockPath) {
+                    insertIndex = beforeBlockIndex - 1;
+                } else {
+                    insertIndex = treeParser.get(context, parentPath).length;
+                }
+
+                treeParser.remove(context, blockPath);
+                treeParser.insertAfter(context, parentPath + '.' + insertIndex, block);
+
                 self.emit('changed');
                 return self.drawSections();
             });
