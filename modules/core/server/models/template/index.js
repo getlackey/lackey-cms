@@ -175,13 +175,28 @@ module.exports = SUtils
                             .all(templates.map(template => template.canEdit(user).then(canEdit => canEdit ? template : null)));
                     })
                     .then(templates => {
+                        return Promise
+                            .all(templates.map(template => template.canCreate(user).then(canEdit => canEdit ? template : null)));
+                    })
+                    .then(templates => {
                         return templates
                             .filter(template => template !== null);
                     });
             }
 
             canEdit(user) {
-                return user.isAllowed('allowedTemplate', this._doc.name);
+                if (this.require.length === 0) {
+                    return Promise.resolve(true);
+                }
+                return Promise
+                    .all(this.require.map(perm => user.isAllowed('templates', perm)))
+                    .then(list => list.filter(result => result))
+                    .then(list => list.length > 0);
+
+            }
+
+            canCreate(user) {
+                return user.isAllowed('allowedTemplate', this._doc.name) ;
             }
 
             diff(data) {
