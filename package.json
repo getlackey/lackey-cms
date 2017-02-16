@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "1.0.0-beta-121",
+  "version": "1.0.0-beta-122",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -48,6 +48,7 @@
     "debug": "^2.2.0",
     "del": "^2.2.0",
     "ditoolkit": "^0.1.0",
+    "dragula": "^3.7.2",
     "dust-intl": "^1.1.1",
     "dust-naming-convention-filters": "^0.1.0",
     "dustjs-helpers": "^1.7.3",
