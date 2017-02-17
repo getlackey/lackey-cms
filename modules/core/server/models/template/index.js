@@ -196,7 +196,7 @@ module.exports = SUtils
             }
 
             canCreate(user) {
-                return user.isAllowed('allowedTemplate', this._doc.name) ;
+                return user.isAllowed('allowedTemplate', this._doc.name);
             }
 
             diff(data) {

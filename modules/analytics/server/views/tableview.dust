@@ -1,10 +1,41 @@
 {>"cms/cms/main"/}
 
 {<body}
-<section data-lky-component="table">
-    <input data-lky-hook="table.filter" type="search" placeholder="Find table items"/>
-    <a data-lky-btn class="tableAction" href="{route|base}.xlsx">Download as XLSX</a>
-    <h2>Analytics - {data.metric.name}</h2>
+<section data-lky-component="table" class="table-header">
+    <div class="left">
+        <h2>Analytics - {data.metric.name}</h2>
+    </div>
+    <div class="right">
+        <input data-lky-hook="table.filter" type="search" placeholder="Find table items"/>
+        <a class="overflow" data-lky-hook="table.actions"><img src="img/cms/cms/svg/overflow.svg" /></a>
+         <div class="overflow-menu">
+                    <a class="tableAction" href="{route|base}.xlsx">Export XLSX</a>
+                    {#tableActions}
+                        {?href}
+                            <a data-lky-btn class="tableAction" href="{href}">
+                                {?icon}
+                                    <img src="{icon}"/>
+                                {:else}
+                                    {label}
+                                {/icon}
+                            </a>
+                        {:else}
+                        {?api}
+                            <button data-lky-api="{api}">
+                        {:else}
+                            <button data-lky-hook="{hook}" data-lky-id="{id}">
+                        {/api}
+                            {?icon}
+                                <img src="{icon}"/>
+                            {:else}
+                                {label}
+                            {/icon}
+                            </button>
+                        {/href}
+                    {/tableActions}
+                </div>
+
+    </div>
     {>"cms/core/table" table=data.table/}
 </section>
 {/body}

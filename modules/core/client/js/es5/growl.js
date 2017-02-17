@@ -1,4 +1,4 @@
-/* jslint node:true, browser: true */
+/* jslint node:true, browser: true, esnext: true */
 'use strict';
 /*
     Copyright 2016 Enigma Marketing Services Limited
@@ -19,23 +19,65 @@
 var hideLength = 500,
     showTime = 3000;
 
-function Growl(message, status) {
+function Growl(message, status, type) {
     var self = this;
 
     self.message = message || '';
     self.status = status || 'info';
+    self.type = type;
 
     self.isShown = false;
+
 
     self.element = self.createElement();
 }
 
 Growl.prototype.createElement = function () {
     var self = this,
-        element = document.createElement('figure');
+        element = document.createElement('figure'),
+        opts = {};
 
     element.setAttribute('data-lky-growl', self.status);
     element.textContent = self.message;
+
+    if (self.type === 'yesno') {
+        opts.container = document.createElement('div');
+
+        opts.yes = document.createElement('button');
+        opts.yes.textContent = 'Yes';
+        opts.yes.addEventListener('click', function () {
+            self.hide();
+            self.resolve();
+        });
+        opts.no = document.createElement('button');
+        opts.no.textContent = 'No';
+        opts.no.addEventListener('click', function () {
+            self.hide();
+        });
+
+        opts.container.appendChild(opts.no);
+        opts.container.appendChild(opts.yes);
+        element.appendChild(opts.container);
+    } else if (self.type === 'input') {
+        opts.container = document.createElement('div');
+        opts.input = document.createElement('input');
+        opts.yes = document.createElement('button');
+        opts.yes.textContent = 'Ok';
+        opts.yes.addEventListener('click', function () {
+            self.hide();
+            self.resolve(element.querySelector('input').value);
+        });
+        opts.no = document.createElement('button');
+        opts.no.textContent = 'Cancel';
+        opts.no.addEventListener('click', function () {
+            self.hide();
+        });
+
+        opts.container.appendChild(opts.input);
+        opts.container.appendChild(opts.no);
+        opts.container.appendChild(opts.yes);
+        element.appendChild(opts.container);
+    }
 
     top.document.body.appendChild(element);
 
@@ -59,14 +101,19 @@ Growl.prototype.hide = function () {
     self.element.removeAttribute('data-visible');
 
     setTimeout(function () {
-        self.element.parentNode.removeChild(self.element);
+        if (self.element.parentNode) {
+            self.element.parentNode.removeChild(self.element);
+        }
+        if (self.type === 'info') {
+            self.resolve();
+        }
     }, hideLength);
 };
 
 
 var growlTimeout = null;
 var currentGrowl = null;
-function showGrowl(message, status) {
+function showGrowl(message, status, type) {
     var showDelay = 0;
 
     if (growlTimeout) {
@@ -79,24 +126,31 @@ function showGrowl(message, status) {
         showDelay = hideLength;
     }
 
-    currentGrowl = new Growl(message, status);
-
-    growlTimeout = setTimeout(function () {
-        currentGrowl.show();
+    currentGrowl = new Growl(message, status, type);
+    return new Promise(function (resolve, reject) {
+        currentGrowl.resolve = resolve;
+        currentGrowl.reject = reject;
 
         growlTimeout = setTimeout(function () {
-            currentGrowl.hide();
+            currentGrowl.show();
 
-            growlTimeout = null;
-            currentGrowl = null;
-        }, showTime);
-    }, showDelay);
+            if (type === 'info'){
+                growlTimeout = setTimeout(function () {
+                    currentGrowl.hide();
+
+                    growlTimeout = null;
+                    currentGrowl = null;
+                }, showTime);
+            }
+        }, showDelay);
+    });
 }
 
 
 module.exports = function (config) {
-    showGrowl(
+    return showGrowl(
         config.message || config || '',
-        config.status
+        config.status,
+        config.type || 'info'
     );
 };

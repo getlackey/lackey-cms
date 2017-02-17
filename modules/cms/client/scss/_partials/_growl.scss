@@ -14,7 +14,7 @@
     color: $color-white;
     background-color: $color-black;
     border-radius: 0.2em;
-    pointer-events: none;
+    //pointer-events: none;
     user-select: none;
 
     &:not([data-visible]) {
@@ -43,5 +43,29 @@
         content: "Error: ";
 
         color: $color-red;
+    }
+
+    div {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    button {
+        margin-left: 15px;
+        padding: 6px 10px;
+        border: none;
+        background: #00CBFF;
+        color: white;
+        min-width: 80px;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+    }
+
+    input {
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 5px 10px;
     }
 }

@@ -22,7 +22,8 @@ const
     template = require('core/client/js/template'),
     api = require('core/client/js/api'),
     Upload = require('core/client/js/upload'),
-    Autocomplete = require('cms/client/js/controls/autocomplete');
+    Autocomplete = require('cms/client/js/controls/autocomplete'),
+    growl = require('cms/client/js/growl');
 
 
 /**
@@ -93,17 +94,22 @@ class Gallery extends Emitter {
                     .select('[data-lky-hook="settings.open.url"]', self.node)
                     .forEach(element => {
                         element.addEventListener('click', () => {
-                            let value = prompt('Please enter URL');
-                            if (!value) {
-                                return;
-                            }
-                            api
-                                .create('/cms/media', {
-                                    source: value
-                                })
-                                .then(media => {
-                                    self.resolve(media);
-                                });
+                            growl({
+                                status: 'info',
+                                message: 'Please enter URL',
+                                type: 'input'
+                            }).then((value) => {
+                                if (!value) {
+                                    return;
+                                }
+                                api
+                                    .create('/cms/media', {
+                                        source: value
+                                    })
+                                    .then(media => {
+                                        self.resolve(media);
+                                    });
+                            });
                         }, true);
                     });
 

@@ -43,7 +43,7 @@ class Table {
         this._search = lackey.select('[data-lky-hook="table.filter"]')[0];
         this._root = element;
         this._initial = JSON.parse(element.getAttribute('data-lky-init'));
-        this._paging = JSON.parse(element.getAttribute('data-lky-paging'));
+        this._paging = element.getAttribute('data-lky-paging') ? JSON.parse(element.getAttribute('data-lky-paging')) : {};
         this._columns = JSON.parse(element.getAttribute('data-lky-columns'));
         this._apiEndpoint = element.getAttribute('data-lky-table');
         this._advFilters = document.querySelectorAll('[data-filter]');
@@ -248,26 +248,30 @@ class Table {
                 itemId = apiAction[1].split('/').pop();
 
             if (apiAction[0] === 'DELETE') {
-                if (confirm('Are you sure? There is no undo')) {
-                    api
-                        .delete(apiAction[1])
-                        .then(() => {
-                            self.removeItem(parseInt(itemId));
-                            if (self._modal) {
+                growl({
+                    status: 'info',
+                    message: 'Are you sure? There is no undo',
+                    type: 'yesno'
+                }).then(() => {
+                        api
+                            .delete(apiAction[1])
+                            .then(() => {
+                                self.removeItem(parseInt(itemId));
+                                if (self._modal) {
+                                    growl({
+                                        status: 'success',
+                                        message: 'Deleted'
+                                    });
+                                    top.document.body.removeChild(self._modal);
+                                    self._modal = false;
+                                }
+                            }, error => {
                                 growl({
-                                    status: 'success',
-                                    message: 'Deleted'
+                                    status: 'error',
+                                    message: error.message || error.toString()
                                 });
-                                top.document.body.removeChild(self._modal);
-                                self._modal = false;
-                            }
-                        }, error => {
-                            growl({
-                                status: 'error',
-                                message: error.message || error.toString()
                             });
-                        });
-                }
+                });
             }
         });
     }
