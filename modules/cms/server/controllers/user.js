@@ -200,6 +200,14 @@ class UserController extends CRUD {
         Role
             .find()
             .then(roles => {
+                return Promise
+                    .all(roles.map(role => role.canCreate(req.admin).then(canEdit => canEdit ? role : null)));
+            })
+            .then(roles => {
+                return roles
+                    .filter(role => role !== null);
+            })
+            .then(roles => {
                 res.css('css/cms/cms/table.css');
                 res.js('js/cms/cms/new-user.js');
                 res.print('cms/cms/user-create', {roles: roles});

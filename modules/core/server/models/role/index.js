@@ -177,6 +177,17 @@ module.exports = SUtils
                 return super.removeAll();
             }
 
+            canCreate(user) {
+                var can = false;
+                user._roles.forEach((role) => {
+                    console.log(this._doc.name, role.name);
+                    if (this._doc.name === role.name) {
+                        can = true;
+                    }
+                });
+                return can ? Promise.resolve(true) : user.isAllowed('addRoles', this._doc.name);
+            }
+
             _populate() {
                 return super
                     ._populate()
