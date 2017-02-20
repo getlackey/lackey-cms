@@ -436,7 +436,7 @@ module.exports = SUtils
                     builder.restrictDate();
                 }
 
-                if (options.textSearch && options.textSearch.length > 3) {
+                if (options.textSearch && options.textSearch.length > 2) {
                     builder.withTextSearch(options.textSearch, options.freeTextTaxonomies || []);
                 }
 
