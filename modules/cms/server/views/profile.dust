@@ -8,7 +8,12 @@
 
     <div class="flex">
         <div class="left">
-            <img src="{data.profile.image.source}" alt="" class="profile" />
+            {?admin.image.source}
+                <img src="{data.profile.image.source}" alt="" class="profile" />
+            {:else}
+                <img src="{@base}img/cms/cms/svg/ui/account.svg{/base}"/>
+            {/admin.image.source}
+            
             <div class="details">
                 {#data.profile.identities}
                     <div class="flex">
