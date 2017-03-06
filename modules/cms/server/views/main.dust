@@ -19,7 +19,7 @@
                 </section>
                 <ul data-lky-hook="menu.items">
                     <li>
-                        <a href="/admin"><img src="{@base}img/cms/cms/svg/ui/dashboard/homepage.svg{/base}">Homepage</a>
+                        <a href="admin"><img src="{@base}img/cms/cms/svg/ui/dashboard/homepage.svg{/base}">Homepage</a>
                     </li>
                     <li data-class="divider"></li>
                     {@acl perm="adminMenu" method="content"}

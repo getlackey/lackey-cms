@@ -16,7 +16,7 @@
                 <a class="tableAction" href="{route|base}.xlsx">Export XLSX</a>
                 {#tableActions}
                     {?href}
-                        <a data-lky-btn class="tableAction" href="{href}">
+                        <a class="tableAction" href="{href}">
                             {?icon}
                                 <img src="{icon}"/>
                             {:else}

@@ -57,6 +57,7 @@ class Table {
         this.filter = '';
         this.ready = false;
         this.advFilters = [];
+        this.qFilter = '';
         this.colCount = element.querySelectorAll('th').length;
         this.advFilters.add = function (filter) {
             var added = false;
@@ -418,10 +419,11 @@ class Table {
     }
 
     getDataPart(limit, offset) {
-        var path = this._apiEndpoint;
+        var self = this,
+            path = this._apiEndpoint;
 
         return api
-            .read(path + '?limit=' + limit + '&offset=' + offset + '&format=table');
+            .read(path + '?limit=' + limit + '&offset=' + offset + '&format=table' + self.qFilter);
     }
 
     pageq(options) {
@@ -650,6 +652,8 @@ class Table {
                 self._search.value = options[property];
             } else if (property === 'perPage') {
                 self.perPage = options[property];
+            } else {
+                self.qFilter = self.qFilter + '&' + property + '=' + options[property];
             }
         });
     }
