@@ -60,7 +60,7 @@ function handleLinkClick(ev) {
 
 window.addEventListener('load', () => {
     let links = document.querySelectorAll('a[href]');
-
+    top.document.title = 'Admin | ' + document.title;
     for (let i = 0; i < links.length; i += 1) {
         let link = links[i];
 
