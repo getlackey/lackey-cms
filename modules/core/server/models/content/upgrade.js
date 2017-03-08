@@ -50,9 +50,9 @@ module.exports = () => new Promise((resolve, reject) => {
                     if (errors) {
                         return reject(errors);
                     }
-                    GLOBAL.window = window;
-                    GLOBAL.navigator = window.navigator;
-                    GLOBAL.document = window.document;
+                    global.window = window;
+                    global.navigator = window.navigator;
+                    global.document = window.document;
                     format = require('prosemirror/dist/format');
                     parseFrom = format.parseFrom;
                     toMarkdown = require('prosemirror/dist/markdown').toMarkdown;

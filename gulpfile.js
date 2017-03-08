@@ -28,9 +28,9 @@ const gulp = require('gulp'),
     gulpJsdoc2md = require('gulp-jsdoc-to-markdown'),
     coveralls = require('gulp-coveralls');
 
-if (!GLOBAL.LACKEY_PATH) {
+if (!global.LACKEY_PATH) {
     /* istanbul ignore next */
-    GLOBAL.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/lib';
+    global.LACKEY_PATH = process.env.LACKEY_PATH || __dirname + '/lib';
 }
 
 gulp.task('sass:lint', function () {
