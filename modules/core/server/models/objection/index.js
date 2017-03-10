@@ -357,7 +357,6 @@ module.exports = Database
                     }
 
                     static where(cursor, query, operand) {
-
                         SCli.debug(__MODULE_NAME, 'where', this.model.tableName, JSON.stringify(query), operand);
 
                         let self = this,
@@ -455,7 +454,6 @@ module.exports = Database
                     }
 
                     static query(query, populate, options) {
-
                         let self = this;
                         SCli.debug(__MODULE_NAME, 'query', this.model.tableName);
                         if (!self.model) {
@@ -565,7 +563,6 @@ module.exports = Database
                      * @param   {object}   options
                      */
                     static table(inputQuery, inputColumns, options) {
-
                         SCli.debug(__MODULE_NAME, 'table', this.model.tableName, JSON.stringify(inputQuery), JSON.stringify(inputColumns), JSON.stringify(options));
                         let
                             query,
@@ -648,10 +645,13 @@ module.exports = Database
                                     queryOptions.textSearch = options.textSearch;
                                 }
 
+                                if (opt.taxonomies) {
+                                    queryOptions.taxonomies = options.taxonomies;
+                                }
+
                                 return self.query(query, populate, queryOptions);
                             })
                             .then((data) => {
-
                                 let rows = data.map((content) => {
                                     return content.toJSON();
                                 });

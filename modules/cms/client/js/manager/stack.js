@@ -126,10 +126,11 @@ Stack.prototype.pick = function (picker, pop) {
         });
 };
 
-Stack.prototype.pickArticle = function (route) {
+Stack.prototype.pickArticle = function (route, taxonomies) {
     return this
         .pick(new ArticlePicker({
             route: route,
+            taxonomies: (taxonomies) ? '&taxonomies=' + taxonomies : '',
             stack: this
         }), true);
 };

@@ -586,10 +586,11 @@ class StructureUI extends Emitter {
     pickArticle(settings, event, hook) {
         this.collapse();
         let self = this,
-            route = hook.getAttribute('data-value');
+            route = hook.getAttribute('data-value'),
+            taxonomies = hook.getAttribute('data-taxonomy');
 
         return this.options.stack
-            .pickArticle(route)
+            .pickArticle(route, taxonomies)
             .then(rt => {
                 if (rt !== null) {
                     settings[hook.getAttribute('data-name')] = rt;

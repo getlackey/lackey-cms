@@ -24,6 +24,7 @@ const SUtils = require(LACKEY_PATH).utils,
     objection = require('objection'),
     Model = objection.Model,
     languageTags = require('language-tags'),
+    knex = require('knex'),
     __MODULE_NAME = 'lackey-cms/modules/core/server/models/content';
 
 SCli.debug(__MODULE_NAME, 'REQUIRED');
@@ -33,13 +34,14 @@ module.exports = SUtils
         SUtils.cmsMod('core').model('taggable'),
         SUtils.cmsMod('core').model('user'),
         require('../taxonomy'),
+        require('../taxonomy-type'),
         require('../template'),
         require('../knex'),
         require('./querybuilder'),
         require(LACKEY_PATH).configuration()
 
     )
-    .then((Taggable, User, Taxonomy, Template, knexSchema, QueryBuilder, configuration) => {
+    .then((Taggable, User, Taxonomy, TaxonomyType, Template, knexSchema, QueryBuilder, configuration) => {
 
         SCli.debug(__MODULE_NAME, 'READY');
 
@@ -430,7 +432,6 @@ module.exports = SUtils
                 builder.withoutTaxonomies(options.excludeTaxonomies);
                 builder.withAuthor(options.requireAuthor);
                 builder.withoutIds(options.excludeIds);
-
                 if (!options.includeDrafts) {
                     builder.excludeDrafts();
                     builder.restrictDate();
@@ -443,6 +444,39 @@ module.exports = SUtils
                 return builder
                     .run(options.requestor, options.page, options.limit, options.order);
 
+            }
+
+            static query (query, populate, options) {
+                if (options.taxonomies) {
+                    return Promise.all(options.taxonomies.map((taxonomy) => {
+                        return TaxonomyType.findOneBy('name', taxonomy.type);
+                    })).then((responses) => {
+                        return Promise.all(responses.map((taxonomyType, index) => {
+                            return Taxonomy.model.query().where('name', options.taxonomies[index].value).where('taxonomyTypeId', taxonomyType._doc.id);
+                        }));
+                    }).then((responses) => {
+                        var taxonomies = [];
+
+                        responses.forEach((sets) => {
+                            sets.forEach((taxonomy) => {
+                                taxonomies.push(taxonomy.id);
+                            }) ;
+                        });
+                        return this.complexQuery({
+                                includeTaxonomies: [taxonomies],
+                                textSearch: options.textSearch,
+                                limit: options.limit
+                            }).then((d) => {
+                                return Promise.all(d.rows.map((row) => {
+                                    return this.findByRoute(row);
+                                })).then((res) => {
+                                    return res;
+                                });
+                            });
+                    });
+                } else {
+                    return super.query(query, populate, options);
+                }
             }
 
             canSee(user) {

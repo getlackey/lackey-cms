@@ -37,7 +37,7 @@
           <figure>Links to: <a target="_blank"></a></figure>
         {:article}
           <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
-          <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-article" data-value="{@path root=values path=name/}">Change Referred Page</button>
+          <button name="{name}" data-lky-btn data-name="{name}" data-taxonomy="{taxonomy|js|u}" data-lky-hook="action:pick-article" data-value="{@path root=values path=name/}">Change Referred Page</button>
         {:media}
           <input type="text" readonly class="form-control" value="{@path root=values path=name/}">
           <button name="{name}" data-lky-btn data-name="{name}" data-lky-hook="action:pick-media" data-value="{@path root=values path=name/}">Change Media</button>

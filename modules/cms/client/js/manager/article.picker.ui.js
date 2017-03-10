@@ -30,7 +30,7 @@ class ArticlePickerUI extends Picker {
 
     get uri() {
 
-        return '/cms/content?type=page&q=';
+        return '/cms/content?type=page' + this.options.taxonomies + '&q=';
     }
 
     selected(hook) {
