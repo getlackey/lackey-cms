@@ -29,9 +29,9 @@ const
     createContent = require('cms/client/js/new-page'),
     createUser = require('cms/client/js/new-user');
 
-function replaceState(href) {
+function replaceState(href, qFilter) {
     let loc = document.location,
-        url = loc.protocol + '//' + loc.host + loc.pathname + '?' + qs.stringify(href);
+        url = loc.protocol + '//' + loc.host + loc.pathname + '?' + qs.stringify(href) + qFilter;
     window.history.replaceState({}, document.title, url);
 }
 
@@ -514,7 +514,7 @@ class Table {
                 if (self.filter && self.filter.length > 2) {
                     push.q = self.filter;
                 }
-                replaceState(push);
+                replaceState(push, self.qFilter);
             });
     }
 
