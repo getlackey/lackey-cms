@@ -73,6 +73,9 @@ module.exports = (server) => {
                 .get(policy.loggedIn, AccountController.me)
                 .put(policy.loggedIn, AccountController.update);
 
+            server.route('/cms/account/token/login/:forgotPasswordToken/:forgotPasswordUid')
+                .get(policy.anonymous('/'), AccountController.loginValidate);
+
             server.route('/cms/account/token/:forgotPasswordToken/:forgotPasswordUid')
                 .get(policy.anonymous('/'), AccountController.forgotValidate)
                 .post(policy.anonymous('/'), AccountController.forgotSet);

@@ -133,19 +133,31 @@ module.exports = SUtils.waitForAs(__MODULE_NAME,
                         return user.validateToken(req.forgotPasswordToken, 'password');
                     })
                     .then(() => {
-//                        req.login(user, function (error) {
-//                            if (error) {
-//                                /* istanbul ignore next */
-//                                res.status(400).error(error);
-//                            } else {
-//                                SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
-//                                res.redirect('cms/account');
-//                            }
-//                        });
                         user.setType = 'Reset';
                         res.css('css/cms/cms/table.css');
                         res.js('js/cms/users/reset-password.js');
                         res.print('cms/users/set-password', user);
+                    }, (error) => {
+                        res.error(error);
+                    });
+            },
+            loginValidate: (req, res) => {
+                let user;
+                User.findById(req.forgotPasswordUid)
+                    .then((usr) => {
+                        user = usr;
+                        return user.invalidateToken(req.forgotPasswordToken);
+                    })
+                    .then(() => {
+                        req.login(user, function (error) {
+                            if (error) {
+                                /* istanbul ignore next */
+                                res.status(400).error(error);
+                            } else {
+                                SUtils.cmsMod('analytics').path('server/lib/collector').then(c => c.log('session:perday:' + user.id));
+                                res.redirect('/');
+                            }
+                        });
                     }, (error) => {
                         res.error(error);
                     });
