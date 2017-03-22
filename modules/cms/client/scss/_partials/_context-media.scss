@@ -59,6 +59,9 @@
         .mediaContainer {
             margin: 0 auto;
             text-align: center;
+            min-height: 21rem;
+            display: flex;
+            align-items: center;
 
             background-image:
               -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #cccccc), color-stop(.25, transparent)),
