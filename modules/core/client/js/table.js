@@ -188,6 +188,10 @@ class Table {
                 nav.addEventListener('mouseenter', mouseEnter);
             });
 
+        lackey.bind('button.reset', 'click', () => {
+           this.resetFilters();
+        });
+
         this.setupFilters();
         let waiting = null;
 
@@ -701,6 +705,23 @@ class Table {
         });
         self.cols = columns;
         self.selectFiller(self.data.rows.slice());
+    }
+
+    resetFilters() {
+        this.advFilters.splice(0,this.advFilters.length);
+
+        let buttons = document.querySelectorAll('[data-removefilter]'),
+            inputs = document.querySelectorAll('input[data-filter]'),
+            i;
+
+        for (i = 0; i < buttons.length; i += 1) {
+            buttons[i].click();
+        }
+        for (i = 0; i < inputs.length; i += 1) {
+            inputs[i].value = '';
+        }
+
+        this.pageq();
     }
 
     static init() {
