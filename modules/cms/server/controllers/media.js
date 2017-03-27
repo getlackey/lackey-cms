@@ -68,7 +68,8 @@ module.exports = SUtils
             static get tableConfig() {
                 return this._overriden('tableConfig', {
                     name: {
-                        label: 'Name'
+                        label: 'Name',
+                        parse: 'return arguments[0] ? arguments[0] : arguments[1].source.split(\'/\').pop()'
                     },
                     mime: {
                         label: 'Type'
