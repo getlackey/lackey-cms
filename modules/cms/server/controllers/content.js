@@ -54,7 +54,8 @@ module.exports = SUtils.waitForAs('contentCtrl',
                     },
                     state: {
                         name: 'Status',
-                        label: 'Status'
+                        label: 'Status',
+                         parse: 'return arguments[0] ? arguments[0] : \'draft\''
                     },
                     createdAt: {
                         label: 'Date Created',
