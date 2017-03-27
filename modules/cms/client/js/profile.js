@@ -52,6 +52,11 @@ module.exports = function (el, cb) {
                                 message: 'Added'
                             });
                             callback();
+                        }, error => {
+                            growl({
+                                status: 'error',
+                                message: 'Forbidden'
+                            });
                         });
                 }
                 return null;
@@ -88,6 +93,11 @@ module.exports = function (el, cb) {
                     message: 'Removed'
                 });
                 callback();
+            }, error => {
+                growl({
+                    status: 'error',
+                    message: 'Forbidden'
+                });
             });
     }, root);
 

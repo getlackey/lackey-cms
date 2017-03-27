@@ -156,6 +156,12 @@ class UserController extends CRUD {
         Role
             .findOneBy('name', req.roleName)
             .then(role => {
+                return role.canCreate(req.admin).then(canEdit => canEdit ? role : null);
+            })
+            .then(role => {
+                if (!role) {
+                    throw new Error('Not authorized to add role');
+                }
                 req.profile.addRole(role);
                 return req.profile.save();
             })
@@ -164,6 +170,7 @@ class UserController extends CRUD {
             }, error => {
                 console.error(error.message);
                 console.error(error.stack);
+                console.log(error);
                 return res.error(error);
             });
     }
@@ -185,6 +192,12 @@ class UserController extends CRUD {
         Role
             .findOneBy('name', req.roleName)
             .then(role => {
+                return role.canCreate(req.admin).then(canEdit => canEdit ? role : null);
+            })
+            .then(role => {
+                if (!role) {
+                    throw new Error('Not authorized to remove role');
+                }
                 req.profile.removeRole(role);
                 return req.profile.save();
             })
