@@ -35,6 +35,13 @@ if (loc.href.replace(/\/$/, '') !== previewPath.replace(/\/$/, '')) {
     }
 }
 
+function getBaseUri() {
+    var anchor = document.createElement('a');
+    anchor.href = '';
+
+    return anchor.origin + anchor.pathname;
+}
+
 function handleLinkClick(ev) {
     var location = document.location,
         anchor = ev.target;
@@ -52,7 +59,7 @@ function handleLinkClick(ev) {
 
         console.info('Overriding anchor navigation to admin page:', anchor.href);
 
-        top.document.location.href = location.origin + '/admin' + anchor.pathname + anchor.hash;
+        top.document.location.href = getBaseUri() + 'admin' + anchor.pathname + anchor.hash;
 
         return false;
     }
