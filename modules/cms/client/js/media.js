@@ -92,7 +92,7 @@ class Media {
                         });
                   top.LackeyManager.repository
                         .on('apply', () => {
-                              _original = JSON.parse(JSON.stringify(this.media));
+                              _original = Object.create(this.media || {});
                         });
             }
       }

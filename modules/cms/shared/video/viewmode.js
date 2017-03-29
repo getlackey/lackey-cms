@@ -79,6 +79,8 @@ function video_embed(md, options) {
       videoID = vine_parser(videoID);
     } else if (serviceLower === 'prezi') {
       videoID = prezi_parser(videoID);
+    } else if (serviceLower === 'htmlvideo') {
+      videoID = videoID;
     } else if (!options[serviceLower]) {
       return false;
     }
@@ -131,6 +133,8 @@ function video_url(service, videoID, options) {
     return '//player.vimeo.com/video/' + videoID;
   case 'vine':
     return '//vine.co/v/' + videoID + '/embed/' + options.vine.embed;
+  case 'htmlvideo':
+    return videoID;
   case 'prezi':
     return 'https://prezi.com/embed/' + videoID +
       '/?bgcolor=ffffff&amp;lock_to_path=0&amp;autoplay=0&amp;autohide_ctrls=0&amp;' +
@@ -144,8 +148,13 @@ function tokenize_video(md, options) {
     var videoID = md.utils.escapeHtml(tokens[idx].videoID);
     options.list = md.utils.escapeHtml(tokens[idx].list);
     var service = md.utils.escapeHtml(tokens[idx].service).toLowerCase();
+
+    if (service === 'htmlvideo') {
+        return '<div class="embed-responsive"><video controls><source src="' + videoID + '"></video></div>';
+    }
+
     return videoID === '' ? '' :
-      '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" id="' +
+      '<div class="embed-responsive"><iframe class="embed-responsive-item" id="' +
       service + 'player" type="text/html" width="' + (options[service].width) +
       '" height="' + (options[service].height) +
       '" src="' + options.url(service, videoID, options) +
@@ -171,6 +180,10 @@ var defaults = {
     embed: 'simple'
   },
   prezi: {
+    width: 550,
+    height: 400
+  },
+  htmlvideo: {
     width: 550,
     height: 400
   }

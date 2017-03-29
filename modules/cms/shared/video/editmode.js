@@ -40,11 +40,12 @@ function video_embed(md, options) {
         var videoID = match[2];
         var src = match[2];
         var serviceLower = service.toLowerCase();
-
         if (serviceLower === 'youtube') {
             videoID = youtube_parser(videoID);
         } else if (serviceLower === 'vimeo') {
             videoID = vimeo_parser(videoID);
+        } else if (serviceLower === 'htmlvideo') {
+            videoID = videoID;
         } else if (!options[serviceLower]) {
             return false;
         }
@@ -89,6 +90,8 @@ function video_url(service, videoID) {
         return 'https://img.youtube.com/vi/' + videoID + '/maxresdefault.jpg';
     case 'vimeo':
         return 'https://i.vimeocdn.com/video/' + videoID + '_600x400.jpg';
+    case 'htmlvideo':
+        return "http://placehold.it/350x150";
     }
 }
 
@@ -96,9 +99,11 @@ function tokenize_video(md) {
     function tokenize_return(tokens, idx) {
         var videoID = md.utils.escapeHtml(tokens[idx].videoID);
         var service = md.utils.escapeHtml(tokens[idx].service).toLowerCase();
+        if (service === 'htmlvideo') {
+            return '<video controls><source src="' + videoID + '"></video>';
+        }
         return videoID === '' ? '' :
-            '<img markdown-type=' + service + '" ' +
-            'markdown-src="' + md.utils.escapeHtml(tokens[idx].src) + '" ' +
+            '<img markdown-type="' + service + '" ' + 'markdown-src="' + md.utils.escapeHtml(tokens[idx].src) + '" ' +
             'src="' + video_url(service, videoID) +
             '">';
     }

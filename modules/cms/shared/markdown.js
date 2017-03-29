@@ -106,6 +106,10 @@ module.exports = {
                         prezi: {
                             width: 550,
                             height: 400
+                        },
+                        video: {
+                            width: 550,
+                            height: 400
                         }
                     }));
 

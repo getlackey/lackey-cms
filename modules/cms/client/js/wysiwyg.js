@@ -245,7 +245,7 @@ class Wysiwyg {
                             replacement: () => '<br />'
                         },
                         {
-                            filter: node => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'b', 'i', 'br', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
+                            filter: node => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'img', 'video', 'source', 'iframe', 'strong', 'em', 'sup', 'sub', 'ul', 'ol', 'li', 'a', 'b', 'i', 'br', 'blockquote'].indexOf(node.nodeName.toLowerCase()) === -1,
                             replacement: content => content
                         },
                         {
@@ -253,8 +253,16 @@ class Wysiwyg {
                             replacement: (content, node) => '!iframe[](' + node.src + ')'
                         },
                         {
+                            filter: 'source',
+                            replacement: (content, node) => {
+                                return node.src;
+                            }
+                        },
+                        {
                             filter: 'video',
-                            replacement: (content, node) => '!video[](' + node.src + ')'
+                            replacement: (content, node) => {
+                                return '@[htmlvideo](' + content + ')';
+                            }
                         },
                         {
                             filter: 'img',
