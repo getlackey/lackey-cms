@@ -43,14 +43,15 @@ function getBaseUri() {
 }
 
 function handleLinkClick(ev) {
-    var location = document.location,
-        anchor = ev.target;
+    var anchor = ev.target,
+        base,
+        baseless;
 
     if (ev.defaultPrevented) {
         return;
     }
 
-    if (anchor.host === location.host &&
+    if (anchor.host === document.location.host &&
         !anchor.pathname.match(/\.\w+/) &&
         !anchor.pathname.match(/\/admin/)) {
 
@@ -59,7 +60,14 @@ function handleLinkClick(ev) {
 
         console.info('Overriding anchor navigation to admin page:', anchor.href);
 
-        top.document.location.href = getBaseUri() + 'admin' + anchor.pathname + anchor.hash;
+        base = getBaseUri();
+        baseless = anchor.href;
+
+        if (baseless.indexOf(base) === 0) {
+            baseless = baseless.substring(base.length);
+        }
+
+        top.document.location.href = base + 'admin/' + baseless;
 
         return false;
     }
