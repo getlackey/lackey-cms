@@ -41,6 +41,11 @@
                     vertical-align: middle;
                 }
             }
+
+            &.active {
+                background-color: $color-background-accent;
+            }
+
             &[data-class="divider"] {
                 height: 1px;
                 border-top: 1px solid $color-washed;

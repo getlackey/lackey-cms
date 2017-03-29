@@ -23,27 +23,27 @@
                     </li>
                     <li data-class="divider"></li>
                     {@acl perm="adminMenu" method="content"}
-                        <li>
+                        <li {@eq key=route value="/cms/content"}class="active"{/eq}>
                             <a href="cms/content"><img src="{@base}img/cms/cms/svg/ui/dashboard/content.svg{/base}">Content</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="media"}
-                        <li>
+                        <li {@eq key=route value="/cms/media"}class="active"{/eq}>
                             <a href="cms/media"><img src="{@base}img/cms/cms/svg/ui/dashboard/media.svg{/base}">Media</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="tags"}
-                        <li>
+                        <li {@eq key=route value="/cms/taxonomy"}class="active"{/eq}>
                             <a href="cms/taxonomy"><img src="{@base}img/cms/cms/svg/ui/dashboard/tags.svg{/base}">Tags</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="users"}
-                        <li>
+                        <li {@eq key=route value="/cms/user"}class="active"{/eq}>
                             <a href="cms/user"><img src="{@base}img/cms/cms/svg/ui/dashboard/users.svg{/base}">Users</a>
                         </li>
                     {/acl}
                     {@acl perm="adminMenu" method="analytics"}
-                        <li>
+                        <li {@eq key=route value="/cms/analytics"}class="active"{/eq}>
                             <a href="cms/analytics"><img src="{@base}img/cms/cms/svg/ui/dashboard/analytics.svg{/base}">Analytics</a>
                         </li>
                     {/acl}
