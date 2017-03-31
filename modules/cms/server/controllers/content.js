@@ -127,6 +127,8 @@ module.exports = SUtils.waitForAs('contentCtrl',
                 req.body.templateId = 1 * req.body.templateId;
                 req.body.type = 'page';
 
+                req.body.authorId = req.admin._doc.id;
+
                 let self = this;
 
                 Template
