@@ -14,20 +14,6 @@ require:
 ##
 init:
 
-
-    # DEFAULT SYSTEM PAGES
-    Content:
-        -   type: page
-            template:
-                path: cms/cms/status
-                name: Version Status
-            route: /cms/status
-            state: published
-            layout:
-                type: Fields
-                title:
-                    abc
-
 Analytics:
     -
         name: Page Impressions
