@@ -98,4 +98,127 @@
             &:focus {outline:0;}
         }
     }
+
+    nav {
+        margin-top: 30px;
+        ul {
+
+            li {
+                display: inline-block;
+
+                &:not(:first-child) {
+                    margin-left: 20px;
+                }
+
+                a {
+                    color: #b7b7b7;
+                    text-decoration: none;
+                    font-size: 1.1rem;
+
+                    &[data-active] {
+                        color:#6c6c6c;
+                        border-bottom: solid 3px #00caff;
+                        padding-bottom: 3px;
+                    }
+                }
+
+            }
+        }
+    }
+
+    .local {
+        display: flex;
+        margin-top: 30px;
+        > div {
+            color: #aeaeae;
+            width: 50%;
+            padding: 0 40px;
+
+            > div.progress-container {
+
+                > div {
+                    margin-top: 15px;
+                    display: flex;
+                    align-items: center;
+                    > figure {
+                        width: 50px;
+                        height: 50px;
+
+                        img {
+                            width: 100%;
+                        }
+
+                        &.video {
+                            mask-image: url(../../../img/cms/cms/svg/video.svg);
+                            mask-size: 100% 100%;
+                            background-color: #c8c8c8;
+                        }
+                        &.application {
+                            mask-image: url(../../../img/cms/cms/svg/application.svg);
+                            mask-size: 100% 100%;
+                            background-color: #c8c8c8;
+                        }
+                    }
+
+
+                    > div {
+                        flex-grow: 1;
+                        margin-left: 25px;
+
+                         > p {
+                            color: #6c6c6c;
+                            span {
+                                color: #aeaeae;
+                            }
+                        }
+
+                        div.stats {
+                            display: flex;
+                            margin-top: 15px;
+                            p {
+                                width: 50%;
+                            }
+                        }
+                        .bytes {
+                            text-align: right;
+                        }
+
+                    }
+
+                    &:not(:first-child) {
+                        border-top: solid 1px #c8c8c8;
+                        padding-top: 15px;
+                    }
+                }
+            }
+
+            .progress-bar {
+                margin-top: 15px;
+                background-color: #dddddd;
+                border-radius: 7px;
+                figure {
+                    border-radius: 7px;
+                    background-color: #00caff;
+                    height: 6px;
+                }
+            }
+
+            &:first-child {
+                display: flex;
+                align-items: center;
+
+                > form {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .tabs {
+        section {
+            &:not(:first-child) {
+                display: none;
+            }
+        }
+    }
 }

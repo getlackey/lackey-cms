@@ -19,16 +19,113 @@
 const
     lackey = require('core/client/js'),
     api = require('core/client/js/api'),
-    xhr = require('core/client/js/xhr'),
     growl = require('cms/client/js/growl'),
     Media = require('cms/client/js/media'),
     Upload = require('core/client/js/upload');
+
+function bytesToSize (bytes) {
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) {
+        return '0 Byte';
+    }
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return parseFloat(bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+}
+
+function addFile (progressContainer, data) {
+    var fileDiv = document.createElement('div'),
+        fileFigure = document.createElement('figure'),
+        fileImg = document.createElement('img'),
+        fileTitle = document.createElement('p'),
+        fileSize = document.createElement('span'),
+        percentBar = document.createElement('div'),
+        percentBarFigure = document.createElement('figure'),
+        percentText = document.createElement('p'),
+        dataPerSecond = document.createElement('p'),
+        rightContainer = document.createElement('div'),
+        stats = document.createElement('div'),
+        reader = new FileReader(),
+        fileType= data.file.type.split('/')[0];
+
+    if (fileType == 'image') {
+        fileFigure.appendChild(fileImg);
+
+        reader.onload = function (e) {
+            fileDiv.querySelector('figure img').src = e.target.result;
+        };
+        reader.readAsDataURL(data.file);
+    } else {
+        fileFigure.classList.add(fileType);
+    }
+
+    dataPerSecond.classList.add('bytes');
+    percentBar.appendChild(percentBarFigure);
+    percentBarFigure.style.width = '0%';
+    percentBar.classList.add('progress-bar');
+    percentText.innerHTML = '0% done';
+    percentText.classList.add('percentage');
+    fileTitle.innerHTML = data.file.name + ' ';
+    fileSize.innerHTML = bytesToSize(data.file.size);
+    fileTitle.appendChild(fileSize);
+    stats.classList.add('stats');
+    stats.appendChild(percentText);
+    stats.appendChild(dataPerSecond);
+    rightContainer.appendChild(fileTitle);
+    rightContainer.appendChild(percentBar);
+    rightContainer.appendChild(stats);
+    fileDiv.appendChild(fileFigure);
+    fileDiv.appendChild(rightContainer);
+
+    fileDiv.setAttribute('id', data.guid);
+    fileDiv.setAttribute('data-time', new Date().getTime() / 1000);
+    fileDiv.setAttribute('data-percent', 0);
+
+    progressContainer.appendChild(fileDiv);
+}
+
+function onProgress (data) {
+    let guid = data.guid,
+        percent = Math.round(data.percent),
+        fileDiv = document.getElementById(guid),
+        bytesPerSecond = (((data.percent - fileDiv.getAttribute('data-percent')) / 100) * data.file.size) * (1 / ((new Date().getTime() / 1000) - fileDiv.getAttribute('data-time')));
+
+    fileDiv.setAttribute('data-time', new Date().getTime() / 1000);
+    fileDiv.setAttribute('data-percent', data.percent);
+    fileDiv.querySelector('.progress-bar figure').style.width = percent + '%';
+    fileDiv.querySelector('p.percentage').innerHTML = (percent == 100) ? 'Completed' : percent + '% done';
+    fileDiv.querySelector('p.bytes').innerHTML = (percent == 100) ? '' : bytesToSize(bytesPerSecond) + '/sec';
+}
 
 module.exports = function (el, cb) {
     var media,
         dragdrop,
         root = el || document,
-        callback = cb || function () {};
+        callback = cb || function () {},
+        progressContainer = el.querySelector('.progress-container');
+
+    lackey
+        .select('[data-tab-nav]', root)
+        .forEach((element) => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                let tab = document.querySelector('[data-tab=' + element.getAttribute('href') + ']');
+
+                lackey
+                    .select('[data-tab-nav]', root)
+                    .forEach((element) => {
+                        element.removeAttribute('data-active');
+                    });
+
+                lackey
+                    .select('[data-tab]', root)
+                    .forEach((element) => {
+                        element.style.display = 'none';
+                    });
+                tab.style.display = 'block';
+                element.setAttribute('data-active', '');
+            });
+        });
 
     lackey
         .select('[data-lky-media]', root)
@@ -41,6 +138,14 @@ module.exports = function (el, cb) {
 
             document.querySelector('#fileIn').addEventListener('click', function () {
                 media.input.click();
+            });
+
+            media.upload.on('fileAdded', function (uploader, data) {
+                addFile(progressContainer, data);
+            });
+
+            media.upload.on('data', function (uploader, data) {
+                onProgress(data);
             });
 
             media.upload.on('done', function (uploader, data) {
@@ -59,15 +164,22 @@ module.exports = function (el, cb) {
 
     dragdrop = new Upload(document.querySelector('#imageDrop'));
     dragdrop.on('done', function (uploader, data) {
-          if (data && data.length && data[0].data) {
-                media.set(data[0].data);
-                media.notify();
-                growl({
-                    status: 'success',
-                    message: 'File successfully uploaded'
-                });
-                callback(data[0].data);
-          }
+        if (data && data.length && data[0].data) {
+            media.set(data[0].data);
+            media.notify();
+            growl({
+                status: 'success',
+                message: 'File successfully uploaded'
+            });
+            callback(data[0].data);
+        }
+    });
+    dragdrop.on('data', function (uploader, data) {
+        onProgress(data);
+    });
+
+    dragdrop.on('fileAdded', function (uploader, data) {
+       addFile(progressContainer, data);
     });
 
     lackey

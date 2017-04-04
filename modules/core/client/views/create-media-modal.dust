@@ -1,30 +1,82 @@
 {>"cms/core/modal"/}
 
 {<body}
-<section data-lky-component="table">
-    <h2>Add Media</h2>
+<section data-lky-component="table" class="context-media">
+    <h1>Add Media</h1>
+    <nav>
+        <ul>
+            <li><a data-tab-nav data-active href="tab-1">Add from computer</a></li>
+            <li><a data-tab-nav href="tab-2">Add External URL</a></li>
+        </ul>
+    </nav>
+    <div class="tabs">
+        <section data-tab="tab-1">
+            <div class="local">
+                <div>
+                    <form>
+                       <div class="profile-photo">
+                            <div class="upload">
+                                <div id="imageDrop" data-dropzone>
+                                    <span>Drop file here</span>
+                                    <button id="fileIn" class="btn btn-block btn-primary" type="button">Choose file</button>
+                                </div>
+                            </div>
 
-    <h3 style="padding: 2rem 0 0 2rem;">Add local file</h3>
-    <form>
+                            <div class="preview" style="display:none;">
+                                <figure>
+                                    <img style="max-width: 250px;" src="" data-lky-hook="avatar" data-lky-media="" />
+                                </figure>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h4>Progress</h4>
+                    <div class="progress-container">
+<!--
+                       <div id="447e86dd-ac00-9fb9-bfe9-67519f6c89e1" data-time="1491235437.026" data-percent="100">
+                            <figure>
+                                <img src="http://placehold.it/150x150">
+                            </figure>
+                            <div>
+                                <p>City_720x200_3.jpg <span>156.08 KB</span></p>
+                                <div class="progress-bar">
+                                    <figure style="width: 75%;"></figure>
+                                </div>
+                                <div class="stats">
+                                    <p class="percentage">75% done</p>
+                                    <p class="bytes">2.5MB/sec</p></div>
+                            </div>
+                        </div>
 
-       <div class="profile-photo">
-            <div class="upload">
-                <div id="imageDrop" data-dropzone>
-                    <span>Drop file here</span>
-                    <button id="fileIn" class="btn btn-block btn-primary" type="button">Choose file</button>
+                        <div id="447e86dd-ac00-9fb9-bfe9-67519f6c89e1" data-time="1491235437.026" data-percent="100">
+                            <figure>
+                                <img src="http://placehold.it/150x150">
+                            </figure>
+                            <div>
+                                <p>City_720x200_3.jpg <span>156.08 KB</span></p>
+                                <div class="progress-bar">
+                                    <figure style="width: 75%;"></figure>
+                                </div>
+                                <div class="stats">
+                                    <p class="percentage">75% done</p>
+                                    <p class="bytes">2.5MB/sec</p></div>
+                            </div>
+                        </div>
+-->
+                    </div>
                 </div>
             </div>
 
-            <div class="preview">
-                <figure>
-                    <img style="max-width: 250px;" src="" data-lky-hook="avatar" data-lky-media="" />
-                </figure>
-            </div>
-        </div>
-    </form>
-    <h3 style="padding: 0 0 1rem 2rem;">Add external asset</h3>
-    <form data-lky-hook="url.upload">
-        <input style="margin-left: 2rem;width:450px;" type="text" name="urlUpload" /> <button data-lky-btn type="submit">Add</button>
-    </form>
+        </section>
+
+
+        <section data-tab="tab-2">
+            <h3 style="padding: 40px 0 1rem 2rem;">Add External URL</h3>
+            <form data-lky-hook="url.upload" style="margin-top:25px;">
+                <input style="margin-left: 2rem;width:450px;" type="text" name="urlUpload" /> <button data-lky-btn type="submit">Add</button>
+            </form>
+        </section>
+    </div>
 </section>
 {/body}

@@ -111,12 +111,14 @@ socket.on('media.more-data', (data) => {
         file = def.file,
         place = (isNaN(data.place) ? 0 : data.place) * 524288,
         newFile = file.slice(place, place + Math.min(524288, (file.size - place)));
+    def.update(data);
     def.reader.readAsBinaryString(newFile);
 });
 
 socket.on('media.uploaded', (data) => {
     var def = filesToUpload[data.guid];
     delete filesToUpload[data.guid];
+    def.update(data);
     def.resolve(data);
 });
 
@@ -136,6 +138,7 @@ Upload.prototype.choice = function (event) {
 
     this.files = files1.concat(files2);
 
+
     var promise = Promise.resolve(),
         next = this.files.shift(),
         uploaded = [];
@@ -151,8 +154,14 @@ Upload.prototype.choice = function (event) {
                             file: file,
                             reader: FReader,
                             resolve: resolve,
+                            update: function (data) {
+                                data.file = file;
+                                self.emit('data', data);
+                            },
                             reject: reject
                         };
+
+                        self.emit('fileAdded', {guid: GUID, file: file});
 
                         FReader.onload = function (event2) {
                             socket.emit('media.upload', {
