@@ -603,13 +603,12 @@ module.exports = Database
                             })
                             .then(count => {
                                 let opt = options || {};
-
                                 if (opt.limit && !opt.nolimit) {
                                     perPage = opt.limit;
                                 }
 
                                 if (opt.offset && !opt.nolimit) {
-                                    page = Math.floor(opt.offset / perPage) - 1;
+                                    //page = Math.floor(opt.offset / perPage) - 1;
                                 }
                                 table.paging = {
                                     total: count,

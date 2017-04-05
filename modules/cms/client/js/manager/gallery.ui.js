@@ -376,7 +376,7 @@ class Gallery extends Emitter {
             input = lackey.select('input[type="search"]', this.node)[0],
             currentPage = page || 1;
         api
-            .read('/cms/media?page=' + currentPage + '&q=' + encodeURI(input.value))
+            .read('/cms/media?page=' + currentPage + '&limit=6' + '&q=' + encodeURI(input.value))
             .then(list => {
                 return template.redraw(lackey.select('[data-lky-hook="settings.gallery"] [data-lky-template]', self.node)[0], list);
             })
