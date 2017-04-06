@@ -74,7 +74,7 @@
                 input:checked + span:before {
                     content: 'live';
                     padding: 5px 16px 0px 0px;
-                    color: $color-lackey-ligher-blue;
+                    color: $color-lackey-lighter-blue;
                 }
                 input:checked + span:after {
                     margin-left: #{$switch-width * 2 + 4};
