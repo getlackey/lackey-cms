@@ -22,6 +22,7 @@ const
     MediumEditor = require('medium-editor'),
     debug = require('debug')('lackey-cms/modules/cms/client/js/wysiwyg'),
     markdown = require('cms/shared/markdown'),
+    GalleryHref = require('cms/client/js/galleryhref'),
     Insert = require('medium-editor-vanilla-insert')({
         MediumEditor: MediumEditor
     }),
@@ -34,6 +35,7 @@ const
     ],
     buttons = inlineButtons.concat([
         'anchor',
+        'galleryhref',
         'quote',
         'orderedlist',
         'unorderedlist',
@@ -68,6 +70,10 @@ const
         unorderedlist: {
             name: 'unorderedlist',
             contentDefault: '<img src="img/cms/cms/svg/ui/editor/format-list-bulleted.svg" alt="Unordered List" />'
+        },
+        galleryhref: {
+            name: 'galleryhref',
+            contentDefault: '<img src="img/cms/cms/svg/ui/editor/insert-attachment.svg" alt="Insert Attachment" />'
         }
     };
 
@@ -235,7 +241,7 @@ class Wysiwyg {
         });
 
         options.extensions = {
-
+            galleryhref: new GalleryHref(),
             plain: new Plain({ label: '<img src="img/cms/cms/svg/ui/editor/format-clear.svg" alt="Remove Formatting" />' }),
             markdown: new MeMarkdown({
                 toMarkdownOptions: {
@@ -260,7 +266,7 @@ class Wysiwyg {
                         },
                         {
                             filter: 'video',
-                            replacement: (content, node) => {
+                            replacement: (content) => {
                                 return '@[htmlvideo](' + content + ')';
                             }
                         },
