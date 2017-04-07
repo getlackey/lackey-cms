@@ -2,6 +2,7 @@
 <figure data-lky-editable="{editable}"
         data-lky-component="{type}"
         data-lky-type="{template}"
+        data-lky-path="{itemPath}{?index}.items.{index}{/index}"
         {?index}data-lky-index="{index}"{/index}
         {?index}data-lky-parent="{itemPath}.items"{/index}>
 
