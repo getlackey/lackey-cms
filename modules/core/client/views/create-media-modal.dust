@@ -32,39 +32,7 @@
                 </div>
                 <div>
                     <h4>Progress</h4>
-                    <div class="progress-container">
-<!--
-                       <div id="447e86dd-ac00-9fb9-bfe9-67519f6c89e1" data-time="1491235437.026" data-percent="100">
-                            <figure>
-                                <img src="http://placehold.it/150x150">
-                            </figure>
-                            <div>
-                                <p>City_720x200_3.jpg <span>156.08 KB</span></p>
-                                <div class="progress-bar">
-                                    <figure style="width: 75%;"></figure>
-                                </div>
-                                <div class="stats">
-                                    <p class="percentage">75% done</p>
-                                    <p class="bytes">2.5MB/sec</p></div>
-                            </div>
-                        </div>
-
-                        <div id="447e86dd-ac00-9fb9-bfe9-67519f6c89e1" data-time="1491235437.026" data-percent="100">
-                            <figure>
-                                <img src="http://placehold.it/150x150">
-                            </figure>
-                            <div>
-                                <p>City_720x200_3.jpg <span>156.08 KB</span></p>
-                                <div class="progress-bar">
-                                    <figure style="width: 75%;"></figure>
-                                </div>
-                                <div class="stats">
-                                    <p class="percentage">75% done</p>
-                                    <p class="bytes">2.5MB/sec</p></div>
-                            </div>
-                        </div>
--->
-                    </div>
+                    <div class="progress-container"> </div>
                 </div>
             </div>
 
@@ -72,9 +40,10 @@
 
 
         <section data-tab="tab-2">
-            <h3 style="padding: 40px 0 1rem 2rem;">Add External URL</h3>
             <form data-lky-hook="url.upload" style="margin-top:25px;">
-                <input style="margin-left: 2rem;width:450px;" type="text" name="urlUpload" /> <button data-lky-btn type="submit">Add</button>
+                <p style="margin-top: 55px">Upload an externally hosted image by pasting the URL in the box below.</p>
+                <input style="margin: 2rem 1rem 2rem 0; width:450px; color: #333" placeholder="i.e. http://s3.amazon.com/filename" type="text" name="urlUpload" />
+                <button data-lky-btn type="submit">Add File</button>
             </form>
         </section>
     </div>
