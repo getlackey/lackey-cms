@@ -101,10 +101,11 @@
                 text-align: center;
                 margin-top: 0.5rem;
                 margin-right: 3rem;
+                width: 100%;
 
                 &.hover {
                     border-color: $color-background-highlight;
-                    //background-color: #f1f1f1;
+                    background-color: #f1f1f1;
                 }
 
                 span {
@@ -251,7 +252,6 @@
         > tfoot {
             text-align: left;
             td {
-                //padding: 50px;
                 padding-top: 20px;
                 text-align: left;
             }
