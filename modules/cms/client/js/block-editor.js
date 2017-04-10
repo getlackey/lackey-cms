@@ -193,10 +193,14 @@ class BlockEditor {
 
             if (!blocks.hasOwnProperty(blockPath)) { continue; }
 
-            BlockEditor.factory(block);
+            BlockEditor.blocks.push(BlockEditor.factory(block));
         }
 
         BlockEditor.assignParents();
+
+        BlockEditor.generateAbstractLayout()
+            .then(layout => top.LackeyManager.setBlockLayout(layout));
+
         BlockEditor.startRendering();
     }
 
@@ -387,6 +391,177 @@ class BlockEditor {
         };
 
         render();
+    }
+
+    static generateAbstractLayout() {
+        var container = top.document.createElement('figure');
+        container.setAttribute('class', 'layout');
+
+        return Promise.all(BlockEditor.rootBlocks.map(
+            block => BlockEditor.generateAbstractBlock(block)
+        ))
+        .then(blocks => blocks.forEach(block => container.insertBefore(block, null)))
+        .then(() => {
+            BlockEditor._normalizeAbstract(container);
+            return container;
+        });
+    }
+    static generateAbstractBlock(block, parentBounds) {
+        var container = top.document.createElement('figure'),
+            bounds = block.getAbsoluteBoundingRect(),
+            promise = Promise.resolve();
+        container.setAttribute('class', 'block');
+        container.setAttribute('data-lky-path', block.path);
+        container.setAttribute('data-lky-local-path', block.localPath);
+        container.setAttribute('data-lky-template', block.template);
+
+        container.bounds = {};
+
+        if (parentBounds) {
+            container.bounds.left = bounds.left - parentBounds.left;
+            container.bounds.top = bounds.top - parentBounds.top;
+        } else {
+            container.bounds.left = bounds.left;
+            container.bounds.top = bounds.top;
+        }
+
+        container.bounds.width = bounds.width;
+        container.bounds.height = bounds.height;
+
+        if (block.elements.length > 0) {
+            promise = promise
+                .then(() => BlockEditor.generateAbstractOutline(block, bounds))
+                .then(outlines => outlines.forEach(outline => container.insertBefore(outline, null)));
+        }
+
+        if (block.children.length > 0) {
+            container.setAttribute('data-has-children', '');
+
+            promise = promise
+                .then(() => Promise.all(block.children.map(
+                    child => BlockEditor.generateAbstractBlock(child, bounds)
+                )))
+                .then(children => children.forEach(child => container.insertBefore(child, null)));
+        }
+
+        return promise.then(() => container);
+    }
+    static generateAbstractOutline(block, bounds) {
+        var allElements = [],
+            outlines = [];
+
+        block.elements.forEach(element => {
+            let elementChildren = element.children;
+
+            for (let i = 0; i < elementChildren.length; i += 1) {
+                allElements.push(elementChildren[i]);
+            }
+        });
+
+        allElements.forEach(element => {
+            let outline = top.document.createElement('figure'),
+                elementBounds = getAbsoluteBoundingRect(element);
+
+            outline.setAttribute('class', 'element');
+            outline.bounds = {};
+
+            outline.bounds.left = elementBounds.left - bounds.left;
+            outline.bounds.top = elementBounds.top - bounds.top;
+            outline.bounds.width = elementBounds.width;
+            outline.bounds.height = elementBounds.height;
+
+            if (outline.bounds.width <= 15 || outline.bounds.height <= 15) {
+                outline.remove();
+            } else {
+                if (Math.abs(outline.bounds.left) < 5 &&
+                   Math.abs(outline.bounds.width - bounds.width) < 5) {
+                    outline.classList.add('full-width');
+                } else if (Math.abs(outline.bounds.left) < 5) {
+                    outline.classList.add('at-left');
+                }
+
+                if (Math.abs(outline.bounds.top) < 5 &&
+                   Math.abs(outline.bounds.height - bounds.height) < 5) {
+                    outline.classList.add('full-height');
+                } else if (Math.abs(outline.bounds.top) < 5) {
+                    outline.classList.add('at-top');
+                }
+
+                outlines.push(outline);
+            }
+        });
+
+        return outlines;
+    }
+
+    /*
+     * Finds the maximum bounds for the layout, then
+     * offsets all blocks to make the origin 0, 0, and
+     * applies em units in the range 0-1 for width.
+     */
+    static _normalizeAbstract(layout) {
+        var minX = Infinity,
+            maxX = -Infinity,
+            minY = Infinity,
+            scale = 1,
+            translateX = 0,
+            translateY = 0;
+
+        for (let i = 0; i < layout.children.length; i += 1) {
+            let block = layout.children[i];
+
+            if (block.bounds.left < minX) {
+                minX = block.bounds.left;
+            }
+            if (block.bounds.left + block.bounds.width > maxX) {
+                maxX = block.bounds.left + block.bounds.width;
+            }
+
+            if (block.bounds.top < minY) {
+                minY = block.bounds.top;
+            }
+        }
+
+        translateX = -minX;
+        translateY = -minY;
+        scale = 1 / (maxX - minX);
+
+        for (let i = 0; i < layout.children.length; i += 1) {
+            let block = layout.children[i];
+
+            block.bounds.left += translateX;
+            block.bounds.top += translateY;
+
+            block.bounds.left *= scale;
+            block.bounds.top *= scale;
+            block.bounds.width *= scale;
+            block.bounds.height *= scale;
+
+            block.style.left = block.bounds.left + 'em';
+            block.style.top = block.bounds.top + 'em';
+            block.style.width = block.bounds.width + 'em';
+            block.style.height = block.bounds.height + 'em';
+
+            BlockEditor._applyNormalizeChildren(block, scale);
+        }
+    }
+
+    static _applyNormalizeChildren(parent, scale) {
+        for (let i = 0; i < parent.children.length; i += 1) {
+            let block = parent.children[i];
+
+            block.bounds.left *= scale;
+            block.bounds.top *= scale;
+            block.bounds.width *= scale;
+            block.bounds.height *= scale;
+
+            block.style.left = block.bounds.left + 'em';
+            block.style.top = block.bounds.top + 'em';
+            block.style.width = block.bounds.width + 'em';
+            block.style.height = block.bounds.height + 'em';
+
+            BlockEditor._applyNormalizeChildren(block, scale);
+        }
     }
 }
 BlockEditor.activeBlock = null;

@@ -90,6 +90,8 @@ function Manager() {
     this.stack.on('transition', this.onStackChange.bind(this));
     this.structureChanges = false;
 
+    this.layout = null;
+    this.layoutListeners = [];
 
     overlay.addEventListener('mousewheel', (e) => {
         if (e.srcElement === overlay) {
@@ -367,7 +369,8 @@ Manager.prototype.showTab = function (tab, callback) {
                     type: 'content',
                     id: current.id,
                     context: () => Promise.resolve(self.current),
-                    stack: self.stack
+                    stack: self.stack,
+                    layoutProvider: self.getLayoutProvider.bind(self),
                 }, self.repository);
 
                 structureController.on('changed', self.onStructureChange.bind(self));
@@ -383,7 +386,40 @@ Manager.prototype.showTab = function (tab, callback) {
         }, error => console.error(error))
         .catch(error => {
             console.error(error);
+        })
+        .then(() => {
+            self.structureControllers.splice(self.structureControllers.indexOf(structureController), 1);
         });
+};
+
+Manager.prototype.setBlockLayout = function (layout) {
+    var self = this;
+
+    self.layout = layout;
+    self.layoutListeners.forEach(listener => listener());
+};
+
+Manager.prototype.getBlockLayout = function (path, templatePath) {
+    var self = this;
+
+    if (!path || !templatePath) {
+        return self.layout;
+    } else {
+        return self.layout.querySelector(
+            '[data-lky-local-path="' + path + '"][data-lky-template="' + templatePath + '"]'
+        );
+    }
+};
+
+Manager.prototype.getLayoutProvider = function (layoutListener) {
+    var self = this;
+
+    self.layoutListeners.push(layoutListener);
+
+    return {
+        destroy: () => self.layoutListeners.splice(self.layoutListeners.indexOf(layoutListener)),
+        get: self.getBlockLayout.bind(self)
+    };
 };
 
 /**

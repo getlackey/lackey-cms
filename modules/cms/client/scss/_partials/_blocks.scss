@@ -5,10 +5,20 @@
     border: 2px solid $color-lackey-light-blue;
     background-color: #fff;
 
+    transition: border-color 0.3s;
+
+    @at-root {
+        [data-lky-highlight] & {
+            border-color: $color-pink;
+        }
+    }
+
     [data-lky-icon] {
         flex: 0 0 auto;
 
-        cursor: move;
+        section.block-list & {
+            cursor: move;
+        }
     }
 
     [data-lky-bin],
@@ -29,12 +39,16 @@
 
     &[data-lky-locked] {
         border-color: transparentize($color-lackey-light-gray, 0.5);
+        > div { border-left-color: transparentize($color-lackey-light-gray, 0.5); }
 
         [data-lky-icon], [data-lky-bin] { opacity: 0.2; }
-        > div { border-left-color: transparentize($color-lackey-light-gray, 0.5); }
+        [data-lky-bin] {
+            cursor: default;
+            pointer-events: none;
+        }
     }
 
-    li[data-lky-editable]:not([data-lky-editable=true]) > & {
+    [data-lky-editable]:not([data-lky-editable=true]) > & {
         position: relative;
 
         &:after {
@@ -141,7 +155,8 @@ figure[data-lky-component][data-lky-type],
             transition: transform 0.3s $timing-material-accelerate;
         }
     }
-    &:hover {
+    &:hover,
+    &:first-child:last-child {
         opacity: 1;
 
         transition: opacity 0.1s;
@@ -182,24 +197,33 @@ figure[data-lky-component][data-lky-type],
         }
 
         &[data-lky-hook="layout"] {
-            padding-top: 6.45rem;
+            position: relative;
+            padding-top: 6.5rem;
+
+            &:before {
+                content: "Block Layout";
+
+                position: absolute;
+                top: calc(6.5rem - 1.35em);
+
+                font-size: 14px;
+                font-weight: 500;
+                color: $color-background-accent;
+            }
 
             > figure {
                 position: relative;
                 top: 0 !important; // Override style attribute.
-                left: 50% !important; // Override style attribute.
-                width: 1em;
+                left: 0 !important; // Override style attribute.
                 box-sizing: content-box;
 
-                overflow: hidden;
-
                 font-size: ($settings-edit-width - 100px);
-                border: 1px solid $color-lackey-lighter-blue;
 
-                transform: translateX(-50%);
-
+                &:not(.block) {
+                    width: 1em;
+                }
                 &.block {
-                    padding-bottom: 16px;
+                    border: 1px solid $color-lackey-blue;
                 }
 
                 figure.block {
@@ -207,9 +231,37 @@ figure[data-lky-component][data-lky-type],
                     margin: 0;
                     padding: 0;
 
-                    border: 2px solid $color-lackey-blue;
+                    border: 1px solid $color-lackey-blue;
+                    overflow: hidden;
+                    cursor: zoom-in;
 
-                    &[data-has-children] > figure { display: none; }
+                    transition: background-color 0.4s;
+
+                    &[data-lky-highlight] { background-color: $color-lackey-blue; }
+
+                    &[data-has-children] > figure.block { display: none; }
+                }
+
+                figure.element {
+                    position: absolute;
+                    margin: 0;
+                    padding: 0;
+
+                    pointer-events: none;
+                    border: 1px solid $color-lackey-lighter-blue;
+                    background-color: rgba($color-lackey-lighter-blue, 0.25);
+
+                    &.at-left { border-left-color: transparent; }
+                    &.full-width {
+                        border-left-color: transparent;
+                        border-right-color: transparent;
+                    }
+
+                    &.at-top { border-top-color: transparent; }
+                    &.full-height {
+                        border-top-color: transparent;
+                        border-bottom-color: transparent;
+                    }
                 }
             }
         }

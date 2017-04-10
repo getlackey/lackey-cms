@@ -221,6 +221,12 @@ class StructureUI extends Emitter {
                     }, self.node);
             })
             .then(root => {
+                if (self.options.layoutProvider) {
+                    self.layout = self.options.layoutProvider(self.layoutChanged.bind(self));
+
+                    self.drawLayout(self.layout);
+                }
+
                 lackey.bind('[data-lky-cog]', 'click', self.inspectEvent.bind(self), root[0]);
                 lackey.bind('[data-lky-bin]', 'click', self.removeBlock.bind(self), root[0]);
                 lackey.bind('[data-lky-add-block]', 'click', self.addBlock.bind(self), root[0]);
@@ -438,6 +444,9 @@ class StructureUI extends Emitter {
                         return Promise.resolve(template.expose || []);
 
                     },
+                    layoutProvider: self.options.layoutProvider,
+                    layoutPath: path,
+                    layoutTemplatePath: templatePath,
                     settingsDictionary: () => {
 
                         return Promise.resolve(template.props);
@@ -463,6 +472,91 @@ class StructureUI extends Emitter {
         lackey
             .select('[data-lky-hook="settings.diff"] div', this.node)[0]
             .innerHTML = this.repository.visualDiff();
+    }
+
+    layoutChanged() {
+        var self = this;
+
+        self.drawLayout(self.layout);
+    }
+
+    drawLayout(layout) {
+        var self = this,
+            sectionsRoot = lackey.hook('settings.blocks', self.node),
+            layoutContainer = lackey.hook('layout', sectionsRoot),
+            decoupledLayoutHTML,
+            decoupledLayout,
+            maxY,
+            yPad = 0;
+
+        decoupledLayoutHTML = layout.get(self.options.layoutPath, self.options.layoutTemplatePath).outerHTML;
+
+        layoutContainer.innerHTML = decoupledLayoutHTML;
+        decoupledLayout = layoutContainer.children[0];
+
+        maxY = parseFloat(decoupledLayout.style.height);
+        if (isNaN(maxY)) {
+            maxY = -Infinity;
+        }
+
+        for (let i = 0; i < decoupledLayout.children.length; i += 1) {
+            let block = decoupledLayout.children[i],
+                blockBottom = parseFloat(block.style.top) + parseFloat(block.style.height);
+
+            if (blockBottom > maxY) {
+                maxY = blockBottom;
+                yPad = 0.1;
+            }
+        }
+
+        decoupledLayout.style.height = (maxY + yPad) + 'em';
+
+        self.bindLayout();
+    }
+    bindLayout() {
+        var self = this,
+            sectionsRoot = lackey.hook('settings.blocks', self.node),
+            blocksContainer = lackey.hook('sections', sectionsRoot),
+            layoutContainer = lackey.hook('layout', sectionsRoot);
+
+        function getOffsetTopForFrom(element, container) {
+            var target = container.offsetParent,
+                offset = element.offsetTop;
+
+            element = element.offsetParent;
+
+            while (element !== null && element !== target) {
+                offset += element.offsetTop;
+
+                element = element.offsetParent;
+            }
+
+            return offset;
+        }
+
+        lackey.bind('figure.block', 'click', (ev, block) => {
+            let path = block.getAttribute('data-lky-local-path'),
+                blocksMiddle = blocksContainer.offsetHeight / 2,
+                layoutMiddle = layoutContainer.offsetHeight / 2;
+
+            lackey.select('[data-lky-component][data-lky-path="' + path + '"]', blocksContainer)
+                .forEach(el => {
+                    el.setAttribute('data-lky-highlight', '');
+                    setTimeout(() => el.removeAttribute('data-lky-highlight'), 800);
+
+                    blocksContainer.scrollTop =
+                        getOffsetTopForFrom(el, blocksContainer) +
+                        (el.offsetHeight / 2) - blocksMiddle;
+                });
+
+            block.setAttribute('data-lky-highlight', '');
+            setTimeout(() => block.removeAttribute('data-lky-highlight'), 800);
+
+            layoutContainer.scrollTop =
+                getOffsetTopForFrom(block, layoutContainer) +
+                (block.offsetHeight / 2) - layoutMiddle;
+
+        }, layoutContainer);
     }
 
     drawTaxonomy() {
@@ -758,6 +852,10 @@ class StructureUI extends Emitter {
 
             self.repository.off('changed', self._onRepositoryChanged);
             self.repository = null;
+
+            if (self.layout) {
+                self.layout.destroy();
+            }
         });
     }
 

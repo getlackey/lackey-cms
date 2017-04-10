@@ -503,7 +503,7 @@
                     background-color: $color-background-accent;
                 }
                 [data-lky-hook="settings.blocks"] {
-                    width: $settings-edit-width;
+                    width: #{$settings-edit-width * 2};
                     overflow-y: auto;
                 }
             }
