@@ -17,7 +17,7 @@
                        <div class="profile-photo">
                             <div class="upload">
                                 <div id="imageDrop" data-dropzone>
-                                    <span>Drop file here</span>
+                                    <span>Drop files here</span>
                                     <button id="fileIn" class="btn btn-block btn-primary" type="button">Choose file</button>
                                 </div>
                             </div>
