@@ -1,6 +1,5 @@
 # Lackey
 
- * ![Travis Status for Lackey](https://travis-ci.org/getlackey/lackey-cms.svg?branch=master)
  * [![Code Climate](https://codeclimate.com/github/getlackey/lackey-cms/badges/gpa.svg)](https://codeclimate.com/github/getlackey/lackey-cms) #11
  * [![Dependency Status](https://david-dm.org/getlackey/lackey-cms.svg)](https://david-dm.org/getlackey/lackey-cms) #12
  * ![](https://reposs.herokuapp.com/?path=getlackey/lackey-cms)
