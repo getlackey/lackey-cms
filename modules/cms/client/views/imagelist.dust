@@ -4,14 +4,15 @@
         data-lky-btn data-lky-hook="image" data-lky-media="{.|js}">
         <figure title="{mime}">
             {@eq key=type value="video"}
-                <video><source src="{source}"/></video>
+                {@youtube path=source}
+                    <img src="img/cms/cms/svg/youtube.svg"/>
+                {:else}
+                     <video><source src="{source}"/></video>
+                {/youtube}
+
             {:else}
                 {@eq key=type value="image"}
-                    {@youtube path=source}
-                        <img src="https://img.youtube.com/vi/{.}/maxresdefault.jpg"/>
-                    {:else}
-                        <img src="{source}"/>
-                    {/youtube}
+
                 {:else}
                     {@select key=mime}
                         {@eq value="application/pdf"}<img src="img/cms/cms/svg/pdf.svg"/>{/eq}
