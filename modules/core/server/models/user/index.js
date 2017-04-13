@@ -1126,7 +1126,6 @@ module.exports = SUtils
                     ])
                     .then(() => {
                         self._doc.deleted = true;
-                        self._doc.name = 'Deleted user ' + self._doc.id;
                         self._doc.hashedPassword = '';
                         self._doc.title = '';
                         self._doc.bio = '';

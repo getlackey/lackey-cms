@@ -353,7 +353,6 @@ describe('modules/core/server/models/user', () => {
             .then((user) => {
                 user.id.should.be.eql(savedUser.id);
                 user._doc.deleted.should.be.True;
-                user.name.should.be.eql('Deleted user ' + user.id);
             })
             .then(() => true)
             .should.be.finally.eql(true);
