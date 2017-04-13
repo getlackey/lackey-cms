@@ -12,6 +12,7 @@
 
             {:else}
                 {@eq key=type value="image"}
+                    <img src="{source}"/>
 
                 {:else}
                     {@select key=mime}
