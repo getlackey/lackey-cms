@@ -880,6 +880,22 @@ class StructureUI extends Emitter {
                             return item;
                         })
                     };
+                } else if (Array.isArray(value.items)) {
+                    return {
+                        type: 'select',
+                        name: key,
+                        label: value.label || key,
+                        items: value.items.map((item) => {
+                            if (typeof item === 'string') {
+                                return {
+                                    label: item,
+                                    value: item
+                                };
+                            }
+                            item.label = item.label || item.value;
+                            return item;
+                        })
+                    };
                 }
                 if (typeof value === 'object') {
                     if (value.default) {
@@ -888,8 +904,10 @@ class StructureUI extends Emitter {
                             data.values[key] = value.default;
                         }
                     }
+                    value.name = value.name || key;
                     return value;
                 }
+
                 return {
                     label: key,
                     name: key,
