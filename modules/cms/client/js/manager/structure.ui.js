@@ -894,7 +894,8 @@ class StructureUI extends Emitter {
                             }
                             item.label = item.label || item.value;
                             return item;
-                        })
+                        }),
+                        tooltip: value.tooltip || false
                     };
                 }
                 if (typeof value === 'object') {

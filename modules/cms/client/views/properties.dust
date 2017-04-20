@@ -29,7 +29,9 @@
 {#dictionary}
   <li>
     <label>
-      <span>{label}</span>
+      <span>{label}</span> {?tooltip}<div class="help-tip">
+                                <p>{tooltip}</p>
+                            </div>{/tooltip}
       {@switch key=type}
           <input type="{type}" class="form-control" value="{@path root=values path=name/}" name="{name}"/>
         {:url}
