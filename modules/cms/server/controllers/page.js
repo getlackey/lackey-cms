@@ -221,6 +221,8 @@ module.exports = SUtils
                     return PageController.populateTaxonomy(target, item, req);
                 case 'Content':
                     return PageController.populateContent(target, item, req, page);
+                case 'User':
+                    return PageController.populateUser(target, item, req, page);
                 default:
                     return Promise.resolve();
                 }
@@ -306,11 +308,12 @@ module.exports = SUtils
                     .then(taxonomies => {
 
                         excludeTaxonomies = taxonomies;
+
                         let
                             taxes = includeTaxonomies.filter(tax => !!tax),
                             exTaxes = excludeTaxonomies.filter(tax => !!tax),
                             pageNumber = item.page ? PageController.parse(item.page, req) : 0,
-                            author = (item.author && PageController.parse(item.author.if, req, page)) ? page.author : null,
+                            author = item.author ? PageController.parse(item.author, req, page) : null,
                             textSearch = item.textSearch ? PageController.parse(item.textSearch, req, page) : null;
 
                         return ContentModel
@@ -335,6 +338,23 @@ module.exports = SUtils
                             target[item.paging] = results.paging;
                         }
                     });
+            }
+
+            static populateUser(target, item) {
+                return User.find().then((users) => {
+                    return Promise.all(users.map((user) => {
+                        if (user.hasRole(item.role)) {
+                            return user;
+                        }
+                        return;
+
+                    }));
+                }).then((test) => {
+                    return test.filter((user) => user);
+                })
+                .then(results => {
+                    target[item.field] = results;
+                });
             }
 
             static populateTaxonomy(target, item, req) {
