@@ -353,7 +353,7 @@ module.exports = SUtils
                     return test.filter((user) => user);
                 })
                 .then(results => {
-                    target[item.field] = results;
+                    target[item.field] = results.sort((usera, userb) => usera.name > userb.name);
                 });
             }
 
