@@ -147,12 +147,34 @@
                     padding: 15px 0px;
                     margin: 0px;
 
+                    li.pagination {
+                        text-align: right;
+                        display: block;
+
+                        > ul > li {
+                            margin-top: 0;
+                            padding-top: 0;
+                            border-top: 0;
+                            display: inline-block;
+                            margin-left: 30px;
+                            vertical-align: middle;
+                        }
+
+                        &:hover {
+                            background: initial;
+                            color: initial;
+                            cursor: initial;
+                        }
+                    }
+
                     li {
                         display: flex;
                         flex-wrap: wrap;
                         align-items: center;
                         justify-content: space-around;
                         max-width: 100%;
+
+
                         & + li {
                             padding-top: 20px;
                             margin-top: 22px;
