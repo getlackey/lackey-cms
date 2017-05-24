@@ -24,12 +24,20 @@ module.exports = (dust) => {
       type = params.type,
       many = !!params.many,
       newContext,
-      taxonomies = [];
+      taxonomies = [],
+      post = context.get('post') || {};
+
+    if (post.preview) {
+        post.preview = JSON.parse(post.preview);
+    }
 
     if (type) {
       let found = false;
       if (data.content) {
         taxonomies = data.content.taxonomies || [];
+        if (post.preview && post.preview.contents.taxonomies) {
+          taxonomies = post.preview.contents.taxonomies;
+        }
       }
       if (data && data.content && data.content.template && data.content.template.taxonomies) {
         taxonomies = taxonomies.concat(data.content.template.taxonomies);
