@@ -32,7 +32,7 @@
     {> "cms/cms/partials/user" /}
     <div style="float:right;position:relative;">
     <img data-lky-hook="header.share" alt="Share" src="img/cms/cms/svg/share.svg" style="padding: 26px 10px 26px 0;float:right;cursor:pointer"/>
-    <p class="shareBox">Share Url: <input type="text"></p>
+    <p class="shareBox">Share URL: <input type="text"></p>
     </div>
     <button data-lky-hook="header.publish" style="border-right:none;padding-right:10px;">
         <label data-lky-switch>
