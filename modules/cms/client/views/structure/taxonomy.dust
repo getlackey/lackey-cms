@@ -10,3 +10,31 @@
         </div>
     </li>
 {/data}
+<li class="pagination">
+    <ul>
+    <li>
+    {paging.startNo}-
+    {@math key=paging.page method="multiply" operand=paging.perPage}
+        {@lte value=paging.total}
+            {@math key=paging.page method="multiply" operand=paging.perPage/}
+        {:else}
+            {paging.total}
+        {/lte}
+    {/math} of {paging.total}
+    </li>
+    <li>
+    {@math key=paging.page method="subtract" operand=1}
+        {@gt value=0}
+            <a href="#" data-lky-hook="table-paging" data-page="{@math key=paging.page method="subtract" operand=1 /}"><img src="img/cms/cms/svg/arrow-right.svg"/></a>
+        {/gt}
+    {/math}
+    </li>
+    <li>
+    {@math key=paging.page method="add" operand=1 }
+        {@lte value=paging.pages}
+            <a href="#" data-lky-hook="table-paging" data-page="{@math key=paging.page met"add" operand=1 /}"><img src="img/cms/cms/svg/arrow-left.svg"/></a>
+        {/lte}
+    {/math}
+    </li>
+    </ul>
+</li>

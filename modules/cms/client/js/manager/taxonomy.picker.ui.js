@@ -72,19 +72,25 @@ class TaxonomyPickerUI extends Picker {
         }
     }
 
-    query() {
-        super.query();
-        if (!this.addButton) {
-            return;
-        }
-        let
+    query(page) {
+        let self = this,
             input = lackey.select('input[type="search"]', this.node)[0],
-            value = input.value.replace(/^\s+|\s+$/g);
-        if (value.length >= 3) {
-            this.addButton.removeAttribute('disabled');
-        } else {
-            this.addButton.setAttribute('disabled', '');
-        }
+            currentPage = page || 1;
+        api
+            .read('/cms/taxonomy?type=' + this.options.type + '&page=' + currentPage + '&limit=10' + '&q=' + encodeURI(input.value))
+            .then(list => {
+                return template.redraw(lackey.select('[data-lky-hook="settings.picker"] [data-lky-template]', self.node)[0], list);
+            })
+            .then(nodes => {
+                lackey.bind('[data-lky-hook=table-paging]', 'click', (event, hook) => {
+                    event.preventDefault();
+                    var thisPage = hook.dataset.page;
+                    self.query(thisPage);
+                }, nodes[0]);
+                 lackey.bind('[data-lky-btn]', 'click', (event, hook) => {
+                    self.selected(hook);
+                }, nodes[0]);
+            });
     }
 
 }
