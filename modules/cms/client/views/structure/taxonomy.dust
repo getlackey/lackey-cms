@@ -32,7 +32,7 @@
     <li>
     {@math key=paging.page method="add" operand=1 }
         {@lte value=paging.pages}
-            <a href="#" data-lky-hook="table-paging" data-page="{@math key=paging.page met"add" operand=1 /}"><img src="img/cms/cms/svg/arrow-left.svg"/></a>
+           <a href="#" data-lky-hook="table-paging" data-page="{@math key=paging.page method="add" operand=1 /}"><img src="img/cms/cms/svg/arrow-left.svg"/></a>
         {/lte}
     {/math}
     </li>
