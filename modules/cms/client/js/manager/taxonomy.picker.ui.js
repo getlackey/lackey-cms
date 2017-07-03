@@ -19,6 +19,7 @@
 const
     Picker = require('cms/client/js/manager/picker.ui.js'),
     lackey = require('core/client/js'),
+    template = require('core/client/js/template'),
     api = require('core/client/js/api');
 
 /**
