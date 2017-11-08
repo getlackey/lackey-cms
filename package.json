@@ -1,6 +1,6 @@
 {
   "name": "lackey-cms",
-  "version": "1.0.0-beta-156",
+  "version": "1.0.0-beta-157",
   "description": "Lackey CMS",
   "main": "lib/index.js",
   "directories": {
@@ -104,7 +104,6 @@
     "minimatch": "^3.0.3",
     "mkdirp": "^0.5.1",
     "moment-timezone": "^0.5.5",
-    "newrelic": "^1.30.1",
     "nodemailer": "^2.3.0",
     "nodemailer-html-to-text": "^2.1.0",
     "nodemailer-sendinblue-transport": "^1.0.1",
